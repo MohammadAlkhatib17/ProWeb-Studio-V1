@@ -1,50 +1,48 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 export const revalidate = 60 * 60 * 24;
 
 export const metadata: Metadata = {
   title:
-    'Website laten maken in Nederland | 3D webdesign & hoge performance – ProWeb Studio',
+    "Website laten maken in Nederland | 3D webdesign & hoge performance – ProWeb Studio",
   description:
-    'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D-websites die scoren in Google en converteren. Maatwerk met Next.js, React Three Fiber en SEO-first aanpak.',
+    "Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D-websites die scoren in Google en converteren. Maatwerk met Next.js, React Three Fiber en SEO-first aanpak.",
   alternates: {
-    canonical: '/',
-    languages: { 'nl-NL': '/' },
+    canonical: "/",
+    languages: { "nl-NL": "/" },
   },
   openGraph: {
-    images: [
-      { url: '/og', width: 1200, height: 630 },
-    ],
+    images: [{ url: "/og", width: 1200, height: 630 }],
     title:
-      'Website laten maken in Nederland | 3D webdesign & hoge performance – ProWeb Studio',
+      "Website laten maken in Nederland | 3D webdesign & hoge performance – ProWeb Studio",
     description:
-      'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D-websites die scoren in Google en converteren. Maatwerk met Next.js, React Three Fiber en SEO-first aanpak.',
-    url: 'https://prowebstudio.nl/',
-    type: 'website',
-    locale: 'nl_NL',
+      "Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D-websites die scoren in Google en converteren. Maatwerk met Next.js, React Three Fiber en SEO-first aanpak.",
+    url: "https://prowebstudio.nl/",
+    type: "website",
+    locale: "nl_NL",
   },
   keywords: [
-    'website laten maken',
-    'website maken',
-    'maken van een website',
-    '3D website',
-    'webdesign Nederland',
+    "website laten maken",
+    "website maken",
+    "maken van een website",
+    "3D website",
+    "webdesign Nederland",
   ],
 };
 
-import HeroBackground from '@/components/HeroBackground';
-import dynamicImport from 'next/dynamic';
-import HeroCanvas from '@/components/HeroCanvas';
-const HeroScene = dynamicImport(() => import('@/three/HeroScene'), {
+import HeroBackground from "@/components/HeroBackground";
+import dynamicImport from "next/dynamic";
+import HeroCanvas from "@/components/HeroCanvas";
+const HeroScene = dynamicImport(() => import("@/three/HeroScene"), {
   ssr: false,
   loading: () => null,
 });
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
 // Dynamic import for 3D hexagonal prism scene with performance optimization
-const HexagonalPrism = dynamicImport(() => import('@/three/HexagonalPrism'), {
+const HexagonalPrism = dynamicImport(() => import("@/three/HexagonalPrism"), {
   ssr: false,
   loading: () => <div className="w-full h-full animate-pulse" />,
 });
@@ -244,21 +242,21 @@ export default function HomePage() {
                   <span className="text-gray-300">
                     <strong className="text-white">
                       Real-time 3D Rendering:
-                    </strong>{' '}
+                    </strong>{" "}
                     Vloeiende 60+ FPS experiences op elk device
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-cyan-400 text-xl mt-1">→</span>
                   <span className="text-gray-300">
-                    <strong className="text-white">WebGL & Three.js:</strong>{' '}
+                    <strong className="text-white">WebGL & Three.js:</strong>{" "}
                     Cutting-edge tech, maximale browser support
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-cyan-400 text-xl mt-1">→</span>
                   <span className="text-gray-300">
-                    <strong className="text-white">Performance First:</strong>{' '}
+                    <strong className="text-white">Performance First:</strong>{" "}
                     Geoptimaliseerd voor mobile en desktop
                   </span>
                 </li>
@@ -374,7 +372,7 @@ export default function HomePage() {
           Tijdens het project houden we u continu op de hoogte van de voortgang.
         </p>
         <p>
-          <strong>Zijn jullie websites zoekmachinevriendelijk?</strong>{' '}
+          <strong>Zijn jullie websites zoekmachinevriendelijk?</strong>{" "}
           Absoluut! Alle websites bouwen we met SEO-first architectuur,
           inclusief technische optimalisatie, snelheidsoptimalisatie en schema
           markup voor betere zichtbaarheid in Google.
@@ -382,7 +380,7 @@ export default function HomePage() {
         <p>
           <strong>
             Kunnen jullie ook mijn bestaande website optimaliseren?
-          </strong>{' '}
+          </strong>{" "}
           Ja, we voeren uitgebreide technische audits uit en ontwikkelen een op
           maat gemaakt verbeterplan om uw huidige website sneller, veiliger en
           conversiegerichter te maken.
@@ -405,15 +403,15 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'ProWeb Studio',
-            url: 'https://prowebstudio.nl',
-            logo: '/assets/logo/logo-proweb-lockup.svg',
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "ProWeb Studio",
+            url: "https://prowebstudio.nl",
+            logo: "/assets/logo/logo-proweb-lockup.svg",
             sameAs: [
-              'https://linkedin.com/company/proweb-studio',
-              'https://github.com/proweb-studio',
-              'https://twitter.com/prowebstudio_nl',
+              "https://linkedin.com/company/proweb-studio",
+              "https://github.com/proweb-studio",
+              "https://twitter.com/prowebstudio_nl",
             ],
           }),
         }}
@@ -422,14 +420,14 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'ProWeb Studio',
-            url: 'https://prowebstudio.nl',
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "ProWeb Studio",
+            url: "https://prowebstudio.nl",
             potentialAction: {
-              '@type': 'SearchAction',
-              target: 'https://prowebstudio.nl/?q={search_term_string}',
-              'query-input': 'required name=search_term_string',
+              "@type": "SearchAction",
+              target: "https://prowebstudio.nl/?q={search_term_string}",
+              "query-input": "required name=search_term_string",
             },
           }),
         }}

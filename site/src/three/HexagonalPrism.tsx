@@ -1,14 +1,14 @@
-'use client';
-import * as THREE from 'three';
-import React, { useRef, useMemo, useState, useEffect } from 'react';
-import { useFrame, Canvas } from '@react-three/fiber';
-import { useThreeDisposal } from '@/hooks/useThreeUtils';
+"use client";
+import * as THREE from "three";
+import React, { useRef, useMemo, useState, useEffect } from "react";
+import { useFrame, Canvas } from "@react-three/fiber";
+import { useThreeDisposal } from "@/hooks/useThreeUtils";
 
 function useReducedMotion() {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === "undefined") return false;
   return (
     window.matchMedia &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
 }
 
@@ -27,7 +27,7 @@ function AnimatedDodecahedron() {
 
     // Create sophisticated material with gradient effect
     const mat = new THREE.MeshPhysicalMaterial({
-      color: '#8b5cf6',
+      color: "#8b5cf6",
       metalness: 0.95,
       roughness: 0.1,
       clearcoat: 0.8,
@@ -40,13 +40,13 @@ function AnimatedDodecahedron() {
 
     // Inner core material
     const innerMat = new THREE.MeshPhysicalMaterial({
-      color: '#22d3ee',
+      color: "#22d3ee",
       metalness: 0.8,
       roughness: 0.2,
       clearcoat: 0.6,
       transparent: true,
       opacity: 0.6,
-      emissive: '#22d3ee',
+      emissive: "#22d3ee",
       emissiveIntensity: 0.1,
     });
 
@@ -119,7 +119,7 @@ function AnimatedDodecahedron() {
       // Inner core intensifies
       innerMat.emissiveIntensity = 0.3 + Math.sin(time * 6) * 0.2;
     } else {
-      mat.emissive.set('#000000');
+      mat.emissive.set("#000000");
       mat.emissiveIntensity = 0;
       mat.reflectivity = 0.9;
     }
@@ -148,7 +148,7 @@ function OrbitalRings() {
 
   const ringMaterial = useMemo(() => {
     return new THREE.MeshBasicMaterial({
-      color: '#22d3ee',
+      color: "#22d3ee",
       transparent: true,
       opacity: 0.3,
       blending: THREE.AdditiveBlending,
@@ -225,9 +225,9 @@ function GeometricParticles() {
     }
 
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    geo.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
 
     const mat = new THREE.PointsMaterial({
       size: 0.035, // Increased base particle size
@@ -274,8 +274,8 @@ export default function HexagonalPrism() {
       setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // WebGL context event handlers
@@ -285,21 +285,21 @@ export default function HexagonalPrism() {
 
     const handleContextLost = (event: Event) => {
       event.preventDefault();
-      console.warn('WebGL context lost, preventing default behavior');
+      console.warn("WebGL context lost, preventing default behavior");
     };
 
     const handleContextRestored = () => {
-      console.info('WebGL context restored, reinitializing...');
+      console.info("WebGL context restored, reinitializing...");
       // Force re-render by triggering a resize event
-      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event("resize"));
     };
 
-    canvas.addEventListener('webglcontextlost', handleContextLost);
-    canvas.addEventListener('webglcontextrestored', handleContextRestored);
+    canvas.addEventListener("webglcontextlost", handleContextLost);
+    canvas.addEventListener("webglcontextrestored", handleContextRestored);
 
     return () => {
-      canvas.removeEventListener('webglcontextlost', handleContextLost);
-      canvas.removeEventListener('webglcontextrestored', handleContextRestored);
+      canvas.removeEventListener("webglcontextlost", handleContextLost);
+      canvas.removeEventListener("webglcontextrestored", handleContextRestored);
     };
   }, []);
 
@@ -308,74 +308,74 @@ export default function HexagonalPrism() {
       <Canvas
         ref={canvasRef}
         dpr={isMobile ? [1, 1.5] : [1, 2]} // Clamp DPR on mobile
-      camera={{ fov: 45, position: [0, 0, 9] }}
-      gl={{ 
-        alpha: true, 
-        antialias: !isMobile, // Disable antialias on mobile
-        powerPreference: 'high-performance',
-        preserveDrawingBuffer: false,
-        stencil: false,
-        depth: true,
-      }}
-      onCreated={({ gl }) => {
-        gl.setClearAlpha(0);
-        
-        // Clamp pixel ratio for mobile stability
-        if (isMobile) {
-          gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-        }
-      }}
-      style={{ background: 'transparent' }}
-    >
-      <group scale={0.85}>
-        <AnimatedDodecahedron />
-        {!reduced && <OrbitalRings />}
-        {!reduced && <GeometricParticles />}
+        camera={{ fov: 45, position: [0, 0, 9] }}
+        gl={{
+          alpha: true,
+          antialias: !isMobile, // Disable antialias on mobile
+          powerPreference: "high-performance",
+          preserveDrawingBuffer: false,
+          stencil: false,
+          depth: true,
+        }}
+        onCreated={({ gl }) => {
+          gl.setClearAlpha(0);
 
-        {/* Professional lighting setup - enhanced for larger model */}
-        <ambientLight intensity={0.25} color="#a5f3fc" />
+          // Clamp pixel ratio for mobile stability
+          if (isMobile) {
+            gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+          }
+        }}
+        style={{ background: "transparent" }}
+      >
+        <group scale={0.85}>
+          <AnimatedDodecahedron />
+          {!reduced && <OrbitalRings />}
+          {!reduced && <GeometricParticles />}
 
-        {/* Key light - repositioned for larger scale */}
-        <directionalLight
-          position={[4, 4, 4]}
-          intensity={1.8}
-          color="#ffffff"
-        />
+          {/* Professional lighting setup - enhanced for larger model */}
+          <ambientLight intensity={0.25} color="#a5f3fc" />
 
-        {/* Fill light - enhanced */}
-        <directionalLight
-          position={[-3, 1.5, 3]}
-          intensity={1.0}
-          color="#22d3ee"
-        />
+          {/* Key light - repositioned for larger scale */}
+          <directionalLight
+            position={[4, 4, 4]}
+            intensity={1.8}
+            color="#ffffff"
+          />
 
-        {/* Rim lights for dramatic effect - adjusted for larger geometry */}
-        <pointLight
-          position={[5, 0, -3]}
-          intensity={1.5}
-          color="#8b5cf6"
-          distance={12}
-          decay={2}
-        />
+          {/* Fill light - enhanced */}
+          <directionalLight
+            position={[-3, 1.5, 3]}
+            intensity={1.0}
+            color="#22d3ee"
+          />
 
-        <pointLight
-          position={[-4, 4, 1.5]}
-          intensity={1.1}
-          color="#f0abfc"
-          distance={10}
-          decay={2}
-        />
+          {/* Rim lights for dramatic effect - adjusted for larger geometry */}
+          <pointLight
+            position={[5, 0, -3]}
+            intensity={1.5}
+            color="#8b5cf6"
+            distance={12}
+            decay={2}
+          />
 
-        {/* Accent lights - expanded range */}
-        <pointLight
-          position={[0, -6, 3]}
-          intensity={0.9}
-          color="#06b6d4"
-          distance={14}
-          decay={1.5}
-        />
-      </group>
-    </Canvas>
+          <pointLight
+            position={[-4, 4, 1.5]}
+            intensity={1.1}
+            color="#f0abfc"
+            distance={10}
+            decay={2}
+          />
+
+          {/* Accent lights - expanded range */}
+          <pointLight
+            position={[0, -6, 3]}
+            intensity={0.9}
+            color="#06b6d4"
+            distance={14}
+            decay={1.5}
+          />
+        </group>
+      </Canvas>
     </div>
   );
 }

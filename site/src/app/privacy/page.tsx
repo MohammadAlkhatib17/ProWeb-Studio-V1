@@ -1,32 +1,32 @@
-import type { Metadata } from 'next';
-import LegalContentLayout from '@/components/LegalContentLayout';
-import { siteConfig } from '@/config/site.config';
+import type { Metadata } from "next";
+import LegalContentLayout from "@/components/LegalContentLayout";
+import { siteConfig } from "@/config/site.config";
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 export const revalidate = 60 * 60 * 24;
 
 export const metadata: Metadata = {
-  title: 'Privacybeleid – ProWeb Studio',
+  title: "Privacybeleid – ProWeb Studio",
   description:
-    'Lees hoe wij met persoonsgegevens omgaan: welke data we verzamelen, waarom, bewaartermijnen en uw rechten.',
-  alternates: { 
-    canonical: '/privacy',
-    languages: { 'nl-NL': '/privacy' },
+    "Lees hoe wij met persoonsgegevens omgaan: welke data we verzamelen, waarom, bewaartermijnen en uw rechten.",
+  alternates: {
+    canonical: "/privacy",
+    languages: { "nl-NL": "/privacy" },
   },
   openGraph: {
-    title: 'Privacybeleid – ProWeb Studio',
+    title: "Privacybeleid – ProWeb Studio",
     description:
-      'Lees hoe wij met persoonsgegevens omgaan: welke data we verzamelen, waarom, bewaartermijnen en uw rechten.',
-    url: 'https://prowebstudio.nl/privacy',
-    type: 'website',
-    locale: 'nl_NL',
+      "Lees hoe wij met persoonsgegevens omgaan: welke data we verzamelen, waarom, bewaartermijnen en uw rechten.",
+    url: "https://prowebstudio.nl/privacy",
+    type: "website",
+    locale: "nl_NL",
   },
 };
 
 export default function PrivacyPage() {
   const name = siteConfig.name;
-  const baseUrl = siteConfig.url.replace(/\/+$/, '');
-  const contactEmail = siteConfig.contact?.inbox ?? 'contact@prowebstudio.nl';
+  const baseUrl = siteConfig.url.replace(/\/+$/, "");
+  const contactEmail = siteConfig.contact?.inbox ?? "contact@prowebstudio.nl";
   const today = new Date().toISOString().slice(0, 10);
 
   return (
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
       <h1>Privacybeleid</h1>
 
       <p>
-        Dit privacybeleid beschrijft hoe <strong>{name}</strong>{' '}
+        Dit privacybeleid beschrijft hoe <strong>{name}</strong>{" "}
         (&quot;wij&quot;, &quot;ons&quot; of &quot;onze&quot;) uw
         persoonsgegevens verwerkt in overeenstemming met de Algemene Verordening
         Gegevensbescherming (AVG/GDPR) en toepasselijke Nederlandse wetgeving.
@@ -43,7 +43,7 @@ export default function PrivacyPage() {
       <h2>1. Verwerkingsverantwoordelijke</h2>
       <p>
         <strong>{name}</strong> is de verwerkingsverantwoordelijke. Voor vragen
-        over dit beleid of uw rechten kunt u ons bereiken via{' '}
+        over dit beleid of uw rechten kunt u ons bereiken via{" "}
         <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
       </p>
 
@@ -97,7 +97,7 @@ export default function PrivacyPage() {
       <p>
         Wij gebruiken Plausible Analytics, een privacyvriendelijke, cookieloze
         analytische dienst. Er worden geen persoonsgegevens geprofileerd en er
-        is geen cross-site tracking. Meer informatie:{' '}
+        is geen cross-site tracking. Meer informatie:{" "}
         <a
           href="https://plausible.io/data-policy"
           target="_blank"
@@ -161,7 +161,7 @@ export default function PrivacyPage() {
         </li>
       </ul>
       <p>
-        U kunt uw rechten uitoefenen via{' '}
+        U kunt uw rechten uitoefenen via{" "}
         <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. Wij reageren
         binnen 30 dagen. U heeft ook het recht om een klacht in te dienen bij de
         Autoriteit Persoonsgegevens in Nederland.
@@ -181,7 +181,7 @@ export default function PrivacyPage() {
 
       <h2>12. Contact</h2>
       <p>
-        Vragen of verzoeken? Mail ons via{' '}
+        Vragen of verzoeken? Mail ons via{" "}
         <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
       </p>
 

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Sphere, Trail } from '@react-three/drei';
-import * as THREE from 'three';
-import Scene3D from '@/components/Scene3D';
+import { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Sphere, Trail } from "@react-three/drei";
+import * as THREE from "three";
+import Scene3D from "@/components/Scene3D";
 
 interface PlanetProps {
   radius: number;
@@ -23,7 +23,7 @@ function Planet({ radius, speed, distance, color }: PlanetProps) {
         groupRef.current.rotation.y = state.clock.elapsedTime * speed;
       }
     } catch (error) {
-      console.warn('Planet animation error:', error);
+      console.warn("Planet animation error:", error);
     }
   });
 

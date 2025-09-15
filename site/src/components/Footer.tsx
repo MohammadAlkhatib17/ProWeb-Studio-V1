@@ -1,44 +1,48 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { siteConfig } from '@/config/site.config';
-import Logo from '@/components/Logo';
+import { useState } from "react";
+import Link from "next/link";
+import { siteConfig } from "@/config/site.config";
+import Logo from "@/components/Logo";
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('sending');
-    setErrorMessage('');
+    setStatus("sending");
+    setErrorMessage("");
 
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      setErrorMessage('Voer een geldig e-mailadres in.');
-      setStatus('error');
+      setErrorMessage("Voer een geldig e-mailadres in.");
+      setStatus("error");
       return;
     }
 
     try {
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Er is iets misgegaan.');
+        throw new Error(data.error || "Er is iets misgegaan.");
       }
 
-      setStatus('success');
-      setEmail(''); // Clear input on success
+      setStatus("success");
+      setEmail(""); // Clear input on success
     } catch (error) {
-      setStatus('error');
-      setErrorMessage(error instanceof Error ? error.message : 'Onbekende fout.');
+      setStatus("error");
+      setErrorMessage(
+        error instanceof Error ? error.message : "Onbekende fout.",
+      );
     }
   };
 
@@ -118,25 +122,28 @@ export default function Footer() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  disabled={status === 'sending'}
+                  disabled={status === "sending"}
                 />
                 <button
                   type="submit"
                   className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-sm hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900 whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed"
-                  disabled={status === 'sending'}
+                  disabled={status === "sending"}
                 >
-                  {status === 'sending' ? 'Bezig...' : 'Inschrijven'}
+                  {status === "sending" ? "Bezig..." : "Inschrijven"}
                 </button>
               </div>
-              {status === 'success' && (
-                <p className="text-xs text-green-400">Bedankt voor je inschrijving!</p>
+              {status === "success" && (
+                <p className="text-xs text-green-400">
+                  Bedankt voor je inschrijving!
+                </p>
               )}
-              {status === 'error' && (
+              {status === "error" && (
                 <p className="text-xs text-red-400">{errorMessage}</p>
               )}
-              {status === 'idle' && (
+              {status === "idle" && (
                 <p className="text-xs text-gray-500">
-                  Geen spam, alleen waardevolle content. Uitschrijven kan altijd.
+                  Geen spam, alleen waardevolle content. Uitschrijven kan
+                  altijd.
                 </p>
               )}
             </form>
@@ -169,7 +176,7 @@ export default function Footer() {
           </a>
           <span aria-hidden>•</span>
           <a
-            href={`mailto:${siteConfig.contact?.inbox ?? 'contact@prowebstudio.nl'}`}
+            href={`mailto:${siteConfig.contact?.inbox ?? "contact@prowebstudio.nl"}`}
             aria-label="Contact per e-mail"
             className="hover:text-white transition-colors"
           >
@@ -178,19 +185,26 @@ export default function Footer() {
           {process.env.NEXT_PUBLIC_KVK && (
             <>
               <span aria-hidden>•</span>
-              <span className="text-white/70">KVK: {process.env.NEXT_PUBLIC_KVK}</span>
+              <span className="text-white/70">
+                KVK: {process.env.NEXT_PUBLIC_KVK}
+              </span>
             </>
           )}
           {process.env.NEXT_PUBLIC_BTW && (
             <>
               <span aria-hidden>•</span>
-              <span className="text-white/70">BTW: {process.env.NEXT_PUBLIC_BTW}</span>
+              <span className="text-white/70">
+                BTW: {process.env.NEXT_PUBLIC_BTW}
+              </span>
             </>
           )}
         </div>
 
         <div className="border-t border-cosmic-700 pt-8 mt-8 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} {siteConfig.name}. Alle rechten voorbehouden.</p>
+          <p>
+            &copy; {new Date().getFullYear()} {siteConfig.name}. Alle rechten
+            voorbehouden.
+          </p>
         </div>
       </div>
     </footer>

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 export default function ViewportHeightManager() {
   useEffect(() => {
@@ -8,7 +8,7 @@ export default function ViewportHeightManager() {
 
     const setVH = () => {
       const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
     };
 
     // Debounced version to prevent excessive calls and reflow loops
@@ -21,13 +21,13 @@ export default function ViewportHeightManager() {
     setVH();
 
     // Update on resize and orientation change with debouncing
-    window.addEventListener('resize', debouncedSetVH);
-    window.addEventListener('orientationchange', debouncedSetVH);
+    window.addEventListener("resize", debouncedSetVH);
+    window.addEventListener("orientationchange", debouncedSetVH);
 
     return () => {
       clearTimeout(timeoutId);
-      window.removeEventListener('resize', debouncedSetVH);
-      window.removeEventListener('orientationchange', debouncedSetVH);
+      window.removeEventListener("resize", debouncedSetVH);
+      window.removeEventListener("orientationchange", debouncedSetVH);
     };
   }, []);
 

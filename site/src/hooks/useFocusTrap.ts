@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, RefObject } from 'react';
+import { useEffect, useRef, RefObject } from "react";
 
 interface UseFocusTrapOptions {
   isActive: boolean;
@@ -10,7 +10,7 @@ interface UseFocusTrapOptions {
 
 export function useFocusTrap(
   containerRef: RefObject<HTMLElement>,
-  { isActive, restoreFocusOnClose = true, onEscape }: UseFocusTrapOptions
+  { isActive, restoreFocusOnClose = true, onEscape }: UseFocusTrapOptions,
 ) {
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
@@ -27,13 +27,13 @@ export function useFocusTrap(
     // Get all focusable elements within the container
     const getFocusableElements = (): HTMLElement[] => {
       const focusableSelectors = [
-        'button:not([disabled])',
-        'input:not([disabled])',
-        'select:not([disabled])',
-        'textarea:not([disabled])',
-        'a[href]',
+        "button:not([disabled])",
+        "input:not([disabled])",
+        "select:not([disabled])",
+        "textarea:not([disabled])",
+        "a[href]",
         '[tabindex]:not([tabindex="-1"])',
-      ].join(', ');
+      ].join(", ");
 
       return Array.from(container.querySelectorAll(focusableSelectors));
     };
@@ -71,12 +71,12 @@ export function useFocusTrap(
 
     // Handle keyboard events
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && onEscape) {
+      if (e.key === "Escape" && onEscape) {
         onEscape();
         return;
       }
 
-      if (e.key === 'Tab') {
+      if (e.key === "Tab") {
         handleTabKey(e);
       }
     };
@@ -85,11 +85,11 @@ export function useFocusTrap(
     focusFirstElement();
 
     // Add event listeners
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
 
     // Cleanup function
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
 
       // Restore focus to the previously focused element
       if (restoreFocusOnClose && previousFocusRef.current) {

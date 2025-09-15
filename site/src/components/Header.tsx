@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import Link from 'next/link';
-import { siteConfig } from '@/config/site.config';
-import Logo from '@/components/Logo';
-import Portal from '@/components/Portal';
-import { useMenuState } from '@/components/MenuStateProvider';
-import useFocusTrap from '@/hooks/useFocusTrap';
+import { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
+import { siteConfig } from "@/config/site.config";
+import Logo from "@/components/Logo";
+import Portal from "@/components/Portal";
+import { useMenuState } from "@/components/MenuStateProvider";
+import useFocusTrap from "@/hooks/useFocusTrap";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,12 +15,15 @@ export default function Header() {
   const toggleButtonRef = useRef<HTMLButtonElement>(null);
 
   // Stable backdrop click handler
-  const handleBackdropClick = useCallback((e: React.MouseEvent) => {
-    // Only close if the click target is the backdrop itself, not the menu panel
-    if (e.target === e.currentTarget) {
-      closeMenu();
-    }
-  }, [closeMenu]);
+  const handleBackdropClick = useCallback(
+    (e: React.MouseEvent) => {
+      // Only close if the click target is the backdrop itself, not the menu panel
+      if (e.target === e.currentTarget) {
+        closeMenu();
+      }
+    },
+    [closeMenu],
+  );
 
   // Focus management
   useFocusTrap(menuRef, {
@@ -32,8 +35,8 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -41,8 +44,8 @@ export default function Header() {
       <header
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? 'glass py-4 backdrop-blur-xl border-b border-cosmic-700/30'
-            : 'py-6'
+            ? "glass py-4 backdrop-blur-xl border-b border-cosmic-700/30"
+            : "py-6"
         }`}
       >
         <div className="max-w-6xl mx-auto px-6 flex items-center">
@@ -54,7 +57,7 @@ export default function Header() {
             >
               <Logo
                 variant="full"
-                size={isScrolled ? 'sm' : 'md'}
+                size={isScrolled ? "sm" : "md"}
                 withGlow={true}
                 className="transition-all duration-300"
               />
@@ -87,13 +90,13 @@ export default function Header() {
             aria-controls="mobile-menu"
           >
             <div
-              className={`w-6 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}
+              className={`w-6 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? "rotate-45 translate-y-1.5" : ""}`}
             />
             <div
-              className={`w-6 h-0.5 bg-white transition-opacity duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}
+              className={`w-6 h-0.5 bg-white transition-opacity duration-300 ${isMenuOpen ? "opacity-0" : ""}`}
             />
             <div
-              className={`w-6 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}
+              className={`w-6 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""}`}
             />
           </button>
         </div>
@@ -102,16 +105,14 @@ export default function Header() {
       {/* Mobile Menu Portal */}
       {isMenuOpen && (
         <Portal>
-          <div
-            className="fixed inset-0 z-[9999] flex justify-center items-start full-screen-mobile"
-          >
+          <div className="fixed inset-0 z-[9999] flex justify-center items-start full-screen-mobile">
             {/* Backdrop - Fully opaque without blur */}
             <div
               className="absolute inset-0 bg-slate-950"
               onClick={handleBackdropClick}
               aria-hidden="true"
             />
-            
+
             {/* Menu Content */}
             <div
               ref={menuRef}

@@ -7,7 +7,7 @@
     --cosmic-primary: 20, 140, 255;
     --cosmic-secondary: 255, 0, 255;
     --cosmic-accent: 0, 255, 255;
-    
+
     /* Mobile system tokens */
     --m-spacing-1: 0.5rem;
     --m-spacing-2: 0.75rem;
@@ -26,8 +26,8 @@
   body {
     @apply bg-cosmic-900 text-white overflow-x-hidden;
     font-feature-settings:
-      'rlig' 1,
-      'calt' 1;
+      "rlig" 1,
+      "calt" 1;
     line-height: 1.6;
     font-smooth: always;
     -webkit-font-smoothing: antialiased;
@@ -68,27 +68,27 @@
   .m-hero {
     min-height: var(--m-hero-min);
   }
-  
+
   .m-heading {
     font-size: var(--m-heading);
     line-height: 1.15;
     letter-spacing: -0.01em;
   }
-  
+
   .m-subhead {
     font-size: var(--m-subhead);
     line-height: 1.3;
   }
-  
+
   .m-body {
     font-size: var(--m-body);
     line-height: 1.55;
   }
-  
+
   .m-stack > * + * {
     margin-top: var(--m-spacing-3);
   }
-  
+
   .m-stack-lg > * + * {
     margin-top: var(--m-spacing-4);
   }
@@ -99,7 +99,7 @@
       min-height: clamp(46vh, 52vh, 58vh);
     }
   }
-  
+
   @media (max-width: 767px) {
     .m-hero--short {
       min-height: 85dvh;
@@ -293,7 +293,7 @@
 }
 
 .btn-hover-effect::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
@@ -377,7 +377,7 @@
     }
 
     .homepage-hero header .logo-wrapper::after {
-      content: '';
+      content: "";
       position: absolute;
       inset: -4px;
       background: radial-gradient(
@@ -413,6 +413,6 @@
 }
 
 /* Hide reCAPTCHA badge */
-.grecaptcha-badge { 
+.grecaptcha-badge {
   visibility: hidden !important;
 }

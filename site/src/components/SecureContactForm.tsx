@@ -1,61 +1,76 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { z } from 'zod';
-import { siteConfig } from '@/config/site.config';
-import CalEmbed from '@/components/CalEmbed';
-import Image from 'next/image';
+import { useState, useEffect, useRef } from "react";
+import { z } from "zod";
+import { siteConfig } from "@/config/site.config";
+import CalEmbed from "@/components/CalEmbed";
+import Image from "next/image";
 
 // Enhanced validation schema matching the API
 const contactSchema = z.object({
-  name: z.string()
-    .min(2, 'Naam moet minimaal 2 karakters zijn')
-    .max(100, 'Naam mag niet langer zijn dan 100 karakters')
-    .regex(/^[a-zA-ZÀ-ÿ\s\-'\.]+$/, 'Naam bevat ongeldige karakters'),
-  email: z.string()
-    .email('Ongeldig e-mailadres')
-    .max(254, 'E-mailadres te lang')
-    .refine(email => {
-      const disposableProviders = ['10minutemail', 'tempmail', 'guerrillamail', 'mailinator'];
-      return !disposableProviders.some(provider => email.includes(provider));
-    }, 'Tijdelijke e-mailadressen zijn niet toegestaan'),
-  phone: z.string()
+  name: z
+    .string()
+    .min(2, "Naam moet minimaal 2 karakters zijn")
+    .max(100, "Naam mag niet langer zijn dan 100 karakters")
+    .regex(/^[a-zA-ZÀ-ÿ\s\-'\.]+$/, "Naam bevat ongeldige karakters"),
+  email: z
+    .string()
+    .email("Ongeldig e-mailadres")
+    .max(254, "E-mailadres te lang")
+    .refine((email) => {
+      const disposableProviders = [
+        "10minutemail",
+        "tempmail",
+        "guerrillamail",
+        "mailinator",
+      ];
+      return !disposableProviders.some((provider) => email.includes(provider));
+    }, "Tijdelijke e-mailadressen zijn niet toegestaan"),
+  phone: z
+    .string()
     .optional()
-    .refine(phone => !phone || /^[\+]?[0-9\s\-\(\)]+$/.test(phone), 'Ongeldig telefoonnummer formaat'),
+    .refine(
+      (phone) => !phone || /^[\+]?[0-9\s\-\(\)]+$/.test(phone),
+      "Ongeldig telefoonnummer formaat",
+    ),
   projectTypes: z
     .array(z.string())
-    .min(1, 'Selecteer minimaal één projecttype')
-    .max(10, 'Te veel projecttypes geselecteerd'),
-  message: z.string()
-    .min(10, 'Bericht moet minimaal 10 karakters zijn')
-    .max(5000, 'Bericht te lang'),
+    .min(1, "Selecteer minimaal één projecttype")
+    .max(10, "Te veel projecttypes geselecteerd"),
+  message: z
+    .string()
+    .min(10, "Bericht moet minimaal 10 karakters zijn")
+    .max(5000, "Bericht te lang"),
   // Honeypot field (should remain empty)
   _honey: z.string().max(0).optional(),
 });
 
-type FormStatus = 'idle' | 'sending' | 'success' | 'error';
+type FormStatus = "idle" | "sending" | "success" | "error";
 
 // Declare reCAPTCHA global
 declare global {
   interface Window {
     grecaptcha: {
       ready: (callback: () => void) => void;
-      execute: (siteKey: string, options: { action: string }) => Promise<string>;
+      execute: (
+        siteKey: string,
+        options: { action: string },
+      ) => Promise<string>;
     };
   }
 }
 
 export default function SecureContactForm() {
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
+    name: "",
+    email: "",
+    phone: "",
     projectTypes: [] as string[],
-    message: '',
-    _honey: '', // Honeypot field
+    message: "",
+    _honey: "", // Honeypot field
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<FormStatus>('idle');
+  const [status, setStatus] = useState<FormStatus>("idle");
   const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
   const [formStartTime] = useState(Date.now());
   const formRef = useRef<HTMLFormElement>(null);
@@ -63,8 +78,8 @@ export default function SecureContactForm() {
   // Load reCAPTCHA script
   useEffect(() => {
     const loadRecaptcha = () => {
-      if (typeof window !== 'undefined' && !window.grecaptcha) {
-        const script = document.createElement('script');
+      if (typeof window !== "undefined" && !window.grecaptcha) {
+        const script = document.createElement("script");
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`;
         script.onload = () => {
           setRecaptchaLoaded(true);
@@ -82,64 +97,72 @@ export default function SecureContactForm() {
   const [userInteractions, setUserInteractions] = useState({
     mouseMovements: 0,
     keystrokes: 0,
-    formFocused: false
+    formFocused: false,
   });
 
   useEffect(() => {
     const handleMouseMove = () => {
-      setUserInteractions(prev => ({ ...prev, mouseMovements: prev.mouseMovements + 1 }));
+      setUserInteractions((prev) => ({
+        ...prev,
+        mouseMovements: prev.mouseMovements + 1,
+      }));
     };
 
     const handleKeyDown = () => {
-      setUserInteractions(prev => ({ ...prev, keystrokes: prev.keystrokes + 1 }));
+      setUserInteractions((prev) => ({
+        ...prev,
+        keystrokes: prev.keystrokes + 1,
+      }));
     };
 
     const handleFocus = () => {
-      setUserInteractions(prev => ({ ...prev, formFocused: true }));
+      setUserInteractions((prev) => ({ ...prev, formFocused: true }));
     };
 
     if (formRef.current) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('keydown', handleKeyDown);
-      formRef.current.addEventListener('focusin', handleFocus);
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("keydown", handleKeyDown);
+      formRef.current.addEventListener("focusin", handleFocus);
 
       // Capture the current ref value for cleanup
       const currentFormRef = formRef.current;
 
       return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('keydown', handleKeyDown);
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("keydown", handleKeyDown);
         if (currentFormRef) {
-          currentFormRef.removeEventListener('focusin', handleFocus);
+          currentFormRef.removeEventListener("focusin", handleFocus);
         }
       };
     }
-    
+
     // Return undefined for code paths without cleanup
     return undefined;
   }, []);
 
   const onChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
-    
+
     // Basic input sanitization on client side
     const sanitizedValue = value
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove script tags
-      .replace(/javascript:/gi, '') // Remove javascript: protocol
-      .replace(/on\w+\s*=/gi, ''); // Remove event handlers
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "") // Remove script tags
+      .replace(/javascript:/gi, "") // Remove javascript: protocol
+      .replace(/on\w+\s*=/gi, ""); // Remove event handlers
 
-    setForm(prev => ({ ...prev, [name]: sanitizedValue }));
-    
+    setForm((prev) => ({ ...prev, [name]: sanitizedValue }));
+
     // Clear field error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const onToggleType = (type: string) => {
-    setForm(prev => {
+    setForm((prev) => {
       const set = new Set(prev.projectTypes);
       if (set.has(type)) set.delete(type);
       else set.add(type);
@@ -151,19 +174,19 @@ export default function SecureContactForm() {
   const getRecaptchaToken = (): Promise<string> => {
     return new Promise((resolve, reject) => {
       if (!window.grecaptcha || !recaptchaLoaded) {
-        reject(new Error('reCAPTCHA not loaded'));
+        reject(new Error("reCAPTCHA not loaded"));
         return;
       }
 
       const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
       if (!siteKey) {
-        reject(new Error('reCAPTCHA site key not configured'));
+        reject(new Error("reCAPTCHA site key not configured"));
         return;
       }
 
       window.grecaptcha.ready(() => {
         window.grecaptcha
-          .execute(siteKey, { action: 'contact_form' })
+          .execute(siteKey, { action: "contact_form" })
           .then((token: string) => resolve(token))
           .catch((error: unknown) => reject(error));
       });
@@ -172,31 +195,34 @@ export default function SecureContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('sending');
+    setStatus("sending");
 
     // Basic bot detection checks
     const timeSpent = Date.now() - formStartTime;
     const minimumTimeExpected = 5000; // 5 seconds minimum
 
     if (timeSpent < minimumTimeExpected) {
-      console.warn('Form submitted too quickly');
-      setErrors({ general: 'Formulier te snel ingezonden. Probeer opnieuw.' });
-      setStatus('error');
+      console.warn("Form submitted too quickly");
+      setErrors({ general: "Formulier te snel ingezonden. Probeer opnieuw." });
+      setStatus("error");
       return;
     }
 
-    if (userInteractions.mouseMovements < 5 || userInteractions.keystrokes < 10) {
-      console.warn('Insufficient user interaction detected');
-      setErrors({ general: 'Onvoldoende gebruikersinteractie gedetecteerd.' });
-      setStatus('error');
+    if (
+      userInteractions.mouseMovements < 5 ||
+      userInteractions.keystrokes < 10
+    ) {
+      console.warn("Insufficient user interaction detected");
+      setErrors({ general: "Onvoldoende gebruikersinteractie gedetecteerd." });
+      setStatus("error");
       return;
     }
 
     // Check honeypot field
     if (form._honey && form._honey.length > 0) {
-      console.warn('Honeypot field filled');
-      setErrors({ general: 'Bot gedetecteerd.' });
-      setStatus('error');
+      console.warn("Honeypot field filled");
+      setErrors({ general: "Bot gedetecteerd." });
+      setStatus("error");
       return;
     }
 
@@ -209,7 +235,7 @@ export default function SecureContactForm() {
         if (!fieldErrors[path]) fieldErrors[path] = issue.message;
       }
       setErrors(fieldErrors);
-      setStatus('idle');
+      setStatus("idle");
       return;
     }
 
@@ -217,21 +243,24 @@ export default function SecureContactForm() {
 
     try {
       // Get reCAPTCHA token
-      let recaptchaToken = '';
+      let recaptchaToken = "";
       try {
         recaptchaToken = await getRecaptchaToken();
       } catch (error) {
-        console.error('reCAPTCHA error:', error);
-        setErrors({ general: 'reCAPTCHA verificatie mislukt. Probeer de pagina te vernieuwen.' });
-        setStatus('error');
+        console.error("reCAPTCHA error:", error);
+        setErrors({
+          general:
+            "reCAPTCHA verificatie mislukt. Probeer de pagina te vernieuwen.",
+        });
+        setStatus("error");
         return;
       }
 
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest', // CSRF protection
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest", // CSRF protection
         },
         body: JSON.stringify({
           ...form,
@@ -244,27 +273,30 @@ export default function SecureContactForm() {
 
       if (!response.ok) {
         if (response.status === 429) {
-          throw new Error('Te veel verzoeken. Probeer later opnieuw.');
+          throw new Error("Te veel verzoeken. Probeer later opnieuw.");
         }
-        throw new Error(data.error || 'Server responded with an error');
+        throw new Error(data.error || "Server responded with an error");
       }
 
-      setStatus('success');
+      setStatus("success");
       // Reset form after successful submission
       setForm({
-        name: '',
-        email: '',
-        phone: '',
+        name: "",
+        email: "",
+        phone: "",
         projectTypes: [],
-        message: '',
-        _honey: '',
+        message: "",
+        _honey: "",
       });
     } catch (error) {
-      console.error('Submission failed:', error);
-      setErrors({ 
-        general: error instanceof Error ? error.message : 'Er is een fout opgetreden. Probeer opnieuw.' 
+      console.error("Submission failed:", error);
+      setErrors({
+        general:
+          error instanceof Error
+            ? error.message
+            : "Er is een fout opgetreden. Probeer opnieuw.",
       });
-      setStatus('error');
+      setStatus("error");
     }
   };
 
@@ -284,16 +316,16 @@ export default function SecureContactForm() {
           <div className="space-y-8 sm:m-stack-lg">
             <div className="space-y-4">
               <h1 className="text-4xl lg:text-5xl font-bold text-white sm:m-heading sm:leading-tight">
-                Laten we jouw{' '}
+                Laten we jouw{" "}
                 <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                   digitale visie
-                </span>{' '}
+                </span>{" "}
                 realiseren
               </h1>
               <p className="text-lg text-gray-300 leading-relaxed max-w-prose sm:m-body">
                 Klaar om jouw online aanwezigheid naar het volgende niveau te
-                tillen? Vertel ons over jouw project en ontdek hoe ProWeb
-                Studio jouw digitale doelen kan realiseren.
+                tillen? Vertel ons over jouw project en ontdek hoe ProWeb Studio
+                jouw digitale doelen kan realiseren.
               </p>
             </div>
 
@@ -356,17 +388,30 @@ export default function SecureContactForm() {
                 </div>
               )}
 
-              {status === 'success' && (
+              {status === "success" && (
                 <div className="p-4 bg-green-500/20 border border-green-500/30 rounded-lg flex items-start gap-4">
                   <div className="flex-shrink-0">
-                    <svg className="w-6 h-6 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      className="w-6 h-6 text-green-300"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-green-200">Bericht succesvol verzonden!</h3>
+                    <h3 className="font-semibold text-green-200">
+                      Bericht succesvol verzonden!
+                    </h3>
                     <p className="text-sm text-green-300 mt-1">
-                      Bedankt voor je aanvraag. We hebben je bericht in goede orde ontvangen en nemen binnen 24 uur contact met je op.
+                      Bedankt voor je aanvraag. We hebben je bericht in goede
+                      orde ontvangen en nemen binnen 24 uur contact met je op.
                     </p>
                   </div>
                 </div>
@@ -374,7 +419,10 @@ export default function SecureContactForm() {
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-200">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-200"
+                  >
                     Naam *
                   </label>
                   <input
@@ -389,11 +437,16 @@ export default function SecureContactForm() {
                     maxLength={100}
                     autoComplete="name"
                   />
-                  {errors.name && <p className="text-red-400 text-sm">{errors.name}</p>}
+                  {errors.name && (
+                    <p className="text-red-400 text-sm">{errors.name}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-200">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-gray-200"
+                  >
                     E-mailadres *
                   </label>
                   <input
@@ -408,12 +461,17 @@ export default function SecureContactForm() {
                     maxLength={254}
                     autoComplete="email"
                   />
-                  {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
+                  {errors.email && (
+                    <p className="text-red-400 text-sm">{errors.email}</p>
+                  )}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-200">
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-200"
+                >
                   Telefoonnummer (optioneel)
                 </label>
                 <input
@@ -426,11 +484,13 @@ export default function SecureContactForm() {
                   placeholder="+31686412430"
                   autoComplete="tel"
                 />
-                {errors.phone && <p className="text-red-400 text-sm">{errors.phone}</p>}
+                {errors.phone && (
+                  <p className="text-red-400 text-sm">{errors.phone}</p>
+                )}
               </div>
 
               {/* Honeypot field - hidden from users */}
-              <div style={{ display: 'none' }}>
+              <div style={{ display: "none" }}>
                 <label htmlFor="_honey">Website (do not fill):</label>
                 <input
                   type="text"
@@ -449,14 +509,14 @@ export default function SecureContactForm() {
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { id: 'website', label: '🌐 Website' },
-                    { id: 'webshop', label: '🛒 Webshop' },
-                    { id: 'webapp', label: '⚡ Web App' },
-                    { id: 'mobile-app', label: '📱 Mobile App' },
-                    { id: 'seo', label: '🔍 SEO' },
-                    { id: 'hosting', label: '☁️ Hosting' },
-                    { id: 'maintenance', label: '🔧 Onderhoud' },
-                    { id: 'consulting', label: '💡 Consulting' },
+                    { id: "website", label: "🌐 Website" },
+                    { id: "webshop", label: "🛒 Webshop" },
+                    { id: "webapp", label: "⚡ Web App" },
+                    { id: "mobile-app", label: "📱 Mobile App" },
+                    { id: "seo", label: "🔍 SEO" },
+                    { id: "hosting", label: "☁️ Hosting" },
+                    { id: "maintenance", label: "🔧 Onderhoud" },
+                    { id: "consulting", label: "💡 Consulting" },
                   ].map((type) => (
                     <button
                       key={type.id}
@@ -464,8 +524,8 @@ export default function SecureContactForm() {
                       onClick={() => onToggleType(type.id)}
                       className={`p-3 rounded-lg border text-left transition-all ${
                         form.projectTypes.includes(type.id)
-                          ? 'bg-blue-500/30 border-blue-400 text-white'
-                          : 'bg-white/5 border-white/20 text-gray-300 hover:bg-white/10'
+                          ? "bg-blue-500/30 border-blue-400 text-white"
+                          : "bg-white/5 border-white/20 text-gray-300 hover:bg-white/10"
                       }`}
                     >
                       <span className="text-sm font-medium">{type.label}</span>
@@ -478,7 +538,10 @@ export default function SecureContactForm() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="message" className="block text-sm font-medium text-gray-200">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-gray-200"
+                >
                   Vertel ons over jouw project *
                 </label>
                 <textarea
@@ -493,7 +556,9 @@ export default function SecureContactForm() {
                   maxLength={5000}
                 />
                 <div className="flex justify-between items-center">
-                  {errors.message && <p className="text-red-400 text-sm">{errors.message}</p>}
+                  {errors.message && (
+                    <p className="text-red-400 text-sm">{errors.message}</p>
+                  )}
                   <p className="text-gray-400 text-xs ml-auto">
                     {form.message.length}/5000 karakters
                   </p>
@@ -503,10 +568,10 @@ export default function SecureContactForm() {
               <div className="space-y-4">
                 <button
                   type="submit"
-                  disabled={status === 'sending' || !recaptchaLoaded}
+                  disabled={status === "sending" || !recaptchaLoaded}
                   className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 hover:from-blue-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
                 >
-                  {status === 'sending' ? (
+                  {status === "sending" ? (
                     <span className="flex items-center justify-center gap-2">
                       <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                         <circle
@@ -527,17 +592,21 @@ export default function SecureContactForm() {
                       Versturen...
                     </span>
                   ) : (
-                    'Verstuur bericht'
+                    "Verstuur bericht"
                   )}
                 </button>
 
                 <p className="text-xs text-gray-400 text-center">
-                  Dit formulier is beveiligd met reCAPTCHA v3. Door te versturen ga je akkoord met onze{' '}
+                  Dit formulier is beveiligd met reCAPTCHA v3. Door te versturen
+                  ga je akkoord met onze{" "}
                   <a href="/privacy" className="text-blue-400 hover:underline">
                     privacyverklaring
-                  </a>{' '}
-                  en{' '}
-                  <a href="/voorwaarden" className="text-blue-400 hover:underline">
+                  </a>{" "}
+                  en{" "}
+                  <a
+                    href="/voorwaarden"
+                    className="text-blue-400 hover:underline"
+                  >
                     algemene voorwaarden
                   </a>
                   .

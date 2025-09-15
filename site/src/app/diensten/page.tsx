@@ -1,124 +1,132 @@
-import type { Metadata } from 'next';
-import dynamicImport from 'next/dynamic';
+import type { Metadata } from "next";
+import dynamicImport from "next/dynamic";
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 export const revalidate = 60 * 60 * 24;
 
-import { Suspense } from 'react';
-import Image from 'next/image';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { siteConfig } from '@/config/site.config';
-import FAQSchema from '@/components/FAQSchema';
+import { Suspense } from "react";
+import Image from "next/image";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { siteConfig } from "@/config/site.config";
+import FAQSchema from "@/components/FAQSchema";
 
 export const metadata: Metadata = {
-  title: 'Diensten – Webdesign, 3D websites, SEO & performance optimalisatie',
+  title: "Diensten – Webdesign, 3D websites, SEO & performance optimalisatie",
   description:
-    'Maatwerk webdesign & development met 3D-ervaringen, technische SEO, Core Web Vitals en headless CMS. Gericht op groei en resultaat.',
+    "Maatwerk webdesign & development met 3D-ervaringen, technische SEO, Core Web Vitals en headless CMS. Gericht op groei en resultaat.",
   alternates: {
-    canonical: '/diensten',
-    languages: { 'nl-NL': '/diensten' },
+    canonical: "/diensten",
+    languages: { "nl-NL": "/diensten" },
   },
   openGraph: {
-    title: 'Diensten – Webdesign, 3D websites, SEO & performance optimalisatie',
+    title: "Diensten – Webdesign, 3D websites, SEO & performance optimalisatie",
     description:
-      'Maatwerk webdesign & development met 3D-ervaringen, technische SEO, Core Web Vitals en headless CMS. Gericht op groei en resultaat.',
-    url: 'https://prowebstudio.nl/diensten',
-    type: 'website',
-    locale: 'nl_NL',
+      "Maatwerk webdesign & development met 3D-ervaringen, technische SEO, Core Web Vitals en headless CMS. Gericht op groei en resultaat.",
+    url: "https://prowebstudio.nl/diensten",
+    type: "website",
+    locale: "nl_NL",
   },
 };
 
-const ServicesPolyhedra = dynamicImport(() => import('@/three/ServicesPolyhedra'), {
-  ssr: false,
-  loading: () => (
-    <div className="h-96 bg-cosmic-900/50 animate-pulse rounded-lg" />
-  ),
-});
+const ServicesPolyhedra = dynamicImport(
+  () => import("@/three/ServicesPolyhedra"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-96 bg-cosmic-900/50 animate-pulse rounded-lg" />
+    ),
+  },
+);
 
 const services = [
   {
-    title: 'Fundamenten voor Digitale Dominantie',
+    title: "Fundamenten voor Digitale Dominantie",
     description:
-      'Uw website is het hart van uw digitale ecosysteem. Wij bouwen razendsnelle, veilige en schaalbare platformen die niet alleen vandaag indruk maken, maar ook klaar zijn voor de ambities van morgen. Dit is de technologische ruggengraat voor uw online groei.',
+      "Uw website is het hart van uw digitale ecosysteem. Wij bouwen razendsnelle, veilige en schaalbare platformen die niet alleen vandaag indruk maken, maar ook klaar zijn voor de ambities van morgen. Dit is de technologische ruggengraat voor uw online groei.",
     features: [
-      'Next.js & React Ontwikkeling',
-      'Headless CMS Integratie',
-      'Core Web Vitals Optimalisatie',
-      'Responsive Design',
+      "Next.js & React Ontwikkeling",
+      "Headless CMS Integratie",
+      "Core Web Vitals Optimalisatie",
+      "Responsive Design",
     ],
-    icon: '🚀',
+    icon: "🚀",
   },
   {
-    title: 'Meeslepende Ervaringen die Onderscheiden',
+    title: "Meeslepende Ervaringen die Onderscheiden",
     description:
-      'In een overvolle markt is differentiatie cruciaal. Wij gebruiken interactieve 3D-technologie niet als gimmick, maar als een krachtig middel om uw producten tot leven te brengen, uw merkverhaal te vertellen en een onvergetelijke, diepe connectie met uw publiek te smeden.',
+      "In een overvolle markt is differentiatie cruciaal. Wij gebruiken interactieve 3D-technologie niet als gimmick, maar als een krachtig middel om uw producten tot leven te brengen, uw merkverhaal te vertellen en een onvergetelijke, diepe connectie met uw publiek te smeden.",
     features: [
-      'WebGL & Three.js Experiences',
-      'Interactieve Product Configurators',
-      'Real-time 3D Visualisaties',
-      'Performance Optimalisatie',
+      "WebGL & Three.js Experiences",
+      "Interactieve Product Configurators",
+      "Real-time 3D Visualisaties",
+      "Performance Optimalisatie",
     ],
-    icon: '🎯',
+    icon: "🎯",
   },
   {
-    title: 'Data-gedreven Groei en Optimalisatie',
+    title: "Data-gedreven Groei en Optimalisatie",
     description:
-      'Een prachtige website is slechts het begin. Wij zetten data om in actie. Door continu te analyseren, te testen en te optimaliseren, transformeren we uw bezoekers in klanten en maximaliseren we de return on investment (ROI) van uw digitale platform.',
+      "Een prachtige website is slechts het begin. Wij zetten data om in actie. Door continu te analyseren, te testen en te optimaliseren, transformeren we uw bezoekers in klanten en maximaliseren we de return on investment (ROI) van uw digitale platform.",
     features: [
-      'Gebruikersdata Analyse',
-      'A/B Testing & Conversie Optimalisatie',
-      'SEO & Content Strategie',
-      'Analytics & Tracking',
+      "Gebruikersdata Analyse",
+      "A/B Testing & Conversie Optimalisatie",
+      "SEO & Content Strategie",
+      "Analytics & Tracking",
     ],
-    icon: '📈',
+    icon: "📈",
   },
 ];
 
 const dienstenFaqs = [
-  { 
-    question: 'Wat kost een moderne 3D-website ongeveer?', 
-    answer: 'We bieden pakketten vanaf €2.500, afhankelijk van 3D-complexiteit, content en integraties. Complexere projecten met uitgebreide 3D-ervaringen en maatwerk functionaliteiten starten vanaf €5.000.' 
+  {
+    question: "Wat kost een moderne 3D-website ongeveer?",
+    answer:
+      "We bieden pakketten vanaf €2.500, afhankelijk van 3D-complexiteit, content en integraties. Complexere projecten met uitgebreide 3D-ervaringen en maatwerk functionaliteiten starten vanaf €5.000.",
   },
-  { 
-    question: 'Werken jullie met KvK en BTW in Nederland?', 
-    answer: 'Ja, wij zijn in Nederland gevestigd, met KvK en BTW-registratie. Facturen zijn 100% zakelijk bruikbaar en voldoen aan alle Nederlandse administratieve eisen.' 
+  {
+    question: "Werken jullie met KvK en BTW in Nederland?",
+    answer:
+      "Ja, wij zijn in Nederland gevestigd, met KvK en BTW-registratie. Facturen zijn 100% zakelijk bruikbaar en voldoen aan alle Nederlandse administratieve eisen.",
   },
-  { 
-    question: 'Hoe snel kunnen jullie opleveren?', 
-    answer: 'Een MVP kan binnen 2–4 weken, projecten groter 6–10 weken afhankelijk van scope en assets. We werken in sprints en houden u wekelijks op de hoogte van de voortgang.' 
+  {
+    question: "Hoe snel kunnen jullie opleveren?",
+    answer:
+      "Een MVP kan binnen 2–4 weken, projecten groter 6–10 weken afhankelijk van scope en assets. We werken in sprints en houden u wekelijks op de hoogte van de voortgang.",
   },
-  { 
-    question: 'Bieden jullie onderhoud en SLA?', 
-    answer: 'Ja, we bieden onderhoudsplannen met updates, beveiligingspatches en performance monitoring op moderne hosting platforms zoals Vercel en Netlify.' 
+  {
+    question: "Bieden jullie onderhoud en SLA?",
+    answer:
+      "Ja, we bieden onderhoudsplannen met updates, beveiligingspatches en performance monitoring op moderne hosting platforms zoals Vercel en Netlify.",
   },
-  { 
-    question: 'Is SEO inbegrepen?', 
-    answer: 'Ja, technische SEO, sitemaps, OG images, en laadsnelheid optimalisatie zijn standaard inbegrepen. We zorgen voor optimale Core Web Vitals en zoekmachine vriendelijke code.' 
+  {
+    question: "Is SEO inbegrepen?",
+    answer:
+      "Ja, technische SEO, sitemaps, OG images, en laadsnelheid optimalisatie zijn standaard inbegrepen. We zorgen voor optimale Core Web Vitals en zoekmachine vriendelijke code.",
   },
 ];
 
 export default function Diensten() {
   // Generate JSON-LD schema for services
   const servicesSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
+    "@context": "https://schema.org",
+    "@type": "ItemList",
     itemListElement: services.map((service, index) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: index + 1,
       item: {
-        '@type': 'Service',
+        "@type": "Service",
         name: service.title,
         description: service.description,
         provider: {
-          '@type': 'Organization',
+          "@type": "Organization",
           name: siteConfig.name,
           url: siteConfig.url,
         },
         areaServed: {
-          '@type': 'Country',
-          name: 'Netherlands',
+          "@type": "Country",
+          name: "Netherlands",
         },
-        serviceType: service.features.join(', '),
+        serviceType: service.features.join(", "),
       },
     })),
   };

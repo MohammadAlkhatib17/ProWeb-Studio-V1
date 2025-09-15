@@ -1,72 +1,75 @@
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
 
 interface SitemapEntry {
   url: string;
   lastModified: Date;
   changeFrequency:
-    | 'always'
-    | 'hourly'
-    | 'daily'
-    | 'weekly'
-    | 'monthly'
-    | 'yearly'
-    | 'never';
+    | "always"
+    | "hourly"
+    | "daily"
+    | "weekly"
+    | "monthly"
+    | "yearly"
+    | "never";
   priority: number;
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
-  const baseUrl = SITE_URL.replace(/\/$/, ''); // Remove trailing slash
+  const SITE_URL =
+    process.env.SITE_URL ??
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    "https://prowebstudio.nl";
+  const baseUrl = SITE_URL.replace(/\/$/, ""); // Remove trailing slash
   const currentDate = new Date();
 
   // Define routes with their respective priorities and change frequencies
   const routes: Array<{
     path: string;
     priority: number;
-    changeFreq: SitemapEntry['changeFrequency'];
+    changeFreq: SitemapEntry["changeFrequency"];
     lastMod?: Date;
   }> = [
     {
-      path: '/',
+      path: "/",
       priority: 1.0,
-      changeFreq: 'weekly',
+      changeFreq: "weekly",
       lastMod: currentDate, // Homepage changes frequently
     },
     {
-      path: '/diensten',
+      path: "/diensten",
       priority: 0.9,
-      changeFreq: 'monthly',
-      lastMod: new Date('2024-12-01'), // Services page - updated monthly
+      changeFreq: "monthly",
+      lastMod: new Date("2024-12-01"), // Services page - updated monthly
     },
     {
-      path: '/werkwijze',
+      path: "/werkwijze",
       priority: 0.8,
-      changeFreq: 'monthly',
-      lastMod: new Date('2024-11-15'), // Work process page
+      changeFreq: "monthly",
+      lastMod: new Date("2024-11-15"), // Work process page
     },
     {
-      path: '/speeltuin',
+      path: "/speeltuin",
       priority: 0.7,
-      changeFreq: 'weekly',
-      lastMod: new Date('2024-12-15'), // Tech playground - updated with new demos
+      changeFreq: "weekly",
+      lastMod: new Date("2024-12-15"), // Tech playground - updated with new demos
     },
     {
-      path: '/contact',
+      path: "/contact",
       priority: 0.9,
-      changeFreq: 'monthly',
-      lastMod: new Date('2024-11-01'), // Contact page - high priority for conversions
+      changeFreq: "monthly",
+      lastMod: new Date("2024-11-01"), // Contact page - high priority for conversions
     },
     {
-      path: '/privacy',
+      path: "/privacy",
       priority: 0.3,
-      changeFreq: 'yearly',
-      lastMod: new Date('2024-05-25'), // GDPR compliance date
+      changeFreq: "yearly",
+      lastMod: new Date("2024-05-25"), // GDPR compliance date
     },
     {
-      path: '/voorwaarden',
+      path: "/voorwaarden",
       priority: 0.3,
-      changeFreq: 'yearly',
-      lastMod: new Date('2024-05-25'), // Terms and conditions
+      changeFreq: "yearly",
+      lastMod: new Date("2024-05-25"), // Terms and conditions
     },
   ];
 
@@ -74,33 +77,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const additionalRoutes: Array<{
     path: string;
     priority: number;
-    changeFreq: SitemapEntry['changeFrequency'];
+    changeFreq: SitemapEntry["changeFrequency"];
     lastMod?: Date;
   }> = [
     // Add specific service pages if they exist
     {
-      path: '/diensten/website-laten-maken',
+      path: "/diensten/website-laten-maken",
       priority: 0.8,
-      changeFreq: 'monthly',
-      lastMod: new Date('2024-12-01'),
+      changeFreq: "monthly",
+      lastMod: new Date("2024-12-01"),
     },
     {
-      path: '/diensten/3d-website-ontwikkeling',
+      path: "/diensten/3d-website-ontwikkeling",
       priority: 0.8,
-      changeFreq: 'monthly',
-      lastMod: new Date('2024-12-01'),
+      changeFreq: "monthly",
+      lastMod: new Date("2024-12-01"),
     },
     {
-      path: '/diensten/seo-optimalisatie',
+      path: "/diensten/seo-optimalisatie",
       priority: 0.8,
-      changeFreq: 'monthly',
-      lastMod: new Date('2024-12-01'),
+      changeFreq: "monthly",
+      lastMod: new Date("2024-12-01"),
     },
     {
-      path: '/diensten/webshop-laten-maken',
+      path: "/diensten/webshop-laten-maken",
       priority: 0.8,
-      changeFreq: 'monthly',
-      lastMod: new Date('2024-12-01'),
+      changeFreq: "monthly",
+      lastMod: new Date("2024-12-01"),
     },
     // Blog or portfolio entries could be added here dynamically
     // Example: blog posts, case studies, etc.

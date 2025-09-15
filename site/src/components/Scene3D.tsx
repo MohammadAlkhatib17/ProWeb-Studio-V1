@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Suspense, useEffect, useState, useRef } from 'react';
-import { Canvas, RootState } from '@react-three/fiber';
-import { Preload, AdaptiveDpr, PerformanceMonitor } from '@react-three/drei';
-import { useWebGLContextHandler } from '@/hooks/useThreeUtils';
+import { Suspense, useEffect, useState, useRef } from "react";
+import { Canvas, RootState } from "@react-three/fiber";
+import { Preload, AdaptiveDpr, PerformanceMonitor } from "@react-three/drei";
+import { useWebGLContextHandler } from "@/hooks/useThreeUtils";
 
 interface Scene3DProps {
   children: React.ReactNode;
@@ -25,8 +25,8 @@ export default function Scene3D({ children, onR3FReady }: Scene3DProps) {
       setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Use centralized WebGL context handling
@@ -39,33 +39,34 @@ export default function Scene3D({ children, onR3FReady }: Scene3DProps) {
 
     const handleContextLost = (event: Event) => {
       event.preventDefault();
-      console.warn('WebGL context lost, preventing default behavior');
+      console.warn("WebGL context lost, preventing default behavior");
     };
 
     const handleContextRestored = () => {
-      console.info('WebGL context restored, reinitializing...');
+      console.info("WebGL context restored, reinitializing...");
       // Force re-render by triggering a resize event
-      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event("resize"));
     };
 
-    canvas.addEventListener('webglcontextlost', handleContextLost);
-    canvas.addEventListener('webglcontextrestored', handleContextRestored);
+    canvas.addEventListener("webglcontextlost", handleContextLost);
+    canvas.addEventListener("webglcontextrestored", handleContextRestored);
 
     return () => {
-      canvas.removeEventListener('webglcontextlost', handleContextLost);
-      canvas.removeEventListener('webglcontextrestored', handleContextRestored);
+      canvas.removeEventListener("webglcontextlost", handleContextLost);
+      canvas.removeEventListener("webglcontextrestored", handleContextRestored);
     };
   }, [isMounted]);
 
   // Prevent hydration mismatch by only rendering after mount
   if (!isMounted) {
-    return (
-      <div className="absolute inset-0 z-0 pointer-events-none" />
-    );
+    return <div className="absolute inset-0 z-0 pointer-events-none" />;
   }
 
   return (
-    <div ref={containerRef} className="absolute inset-0 z-0 pointer-events-none">
+    <div
+      ref={containerRef}
+      className="absolute inset-0 z-0 pointer-events-none"
+    >
       <Canvas
         ref={canvasRef}
         camera={{ position: [0, 0, 5], fov: 45 }}
@@ -73,15 +74,15 @@ export default function Scene3D({ children, onR3FReady }: Scene3DProps) {
         gl={{
           antialias: !isMobile, // Disable antialias on mobile
           alpha: true,
-          powerPreference: 'high-performance',
+          powerPreference: "high-performance",
           preserveDrawingBuffer: false, // Avoid preserveDrawingBuffer
           stencil: false,
           depth: true,
         }}
         onCreated={(state) => {
           // Ensure canvas is properly initialized
-          state.gl.setClearColor('#000000', 0);
-          
+          state.gl.setClearColor("#000000", 0);
+
           // Clamp pixel ratio for mobile stability
           if (isMobile) {
             state.gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));

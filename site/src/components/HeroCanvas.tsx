@@ -1,7 +1,7 @@
-'use client';
-import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useState, useRef } from 'react';
-import { Preload } from '@react-three/drei';
+"use client";
+import { Canvas } from "@react-three/fiber";
+import { Suspense, useEffect, useState, useRef } from "react";
+import { Preload } from "@react-three/drei";
 
 type Props = { children: React.ReactNode; className?: string };
 
@@ -19,8 +19,8 @@ export default function HeroCanvas({ children, className }: Props) {
       setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // WebGL context event handlers
@@ -30,21 +30,21 @@ export default function HeroCanvas({ children, className }: Props) {
 
     const handleContextLost = (event: Event) => {
       event.preventDefault();
-      console.warn('WebGL context lost, preventing default behavior');
+      console.warn("WebGL context lost, preventing default behavior");
     };
 
     const handleContextRestored = () => {
-      console.info('WebGL context restored, reinitializing...');
+      console.info("WebGL context restored, reinitializing...");
       // Force re-render by triggering a resize event
-      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event("resize"));
     };
 
-    canvas.addEventListener('webglcontextlost', handleContextLost);
-    canvas.addEventListener('webglcontextrestored', handleContextRestored);
+    canvas.addEventListener("webglcontextlost", handleContextLost);
+    canvas.addEventListener("webglcontextrestored", handleContextRestored);
 
     return () => {
-      canvas.removeEventListener('webglcontextlost', handleContextLost);
-      canvas.removeEventListener('webglcontextrestored', handleContextRestored);
+      canvas.removeEventListener("webglcontextlost", handleContextLost);
+      canvas.removeEventListener("webglcontextrestored", handleContextRestored);
     };
   }, [isMounted]);
 
@@ -52,16 +52,16 @@ export default function HeroCanvas({ children, className }: Props) {
   if (!isMounted) {
     return (
       <div
-        className={`absolute inset-0 z-0 pointer-events-none ${className ?? ''}`}
-        style={{ width: '100%', height: '100%' }}
+        className={`absolute inset-0 z-0 pointer-events-none ${className ?? ""}`}
+        style={{ width: "100%", height: "100%" }}
       />
     );
   }
 
   return (
     <div
-      className={`absolute inset-0 z-0 pointer-events-none ${className ?? ''}`}
-      style={{ width: '100%', height: '100%' }}
+      className={`absolute inset-0 z-0 pointer-events-none ${className ?? ""}`}
+      style={{ width: "100%", height: "100%" }}
     >
       <Canvas
         ref={canvasRef}
@@ -70,7 +70,7 @@ export default function HeroCanvas({ children, className }: Props) {
         gl={{
           antialias: !isMobile, // Disable antialias on mobile
           alpha: true,
-          powerPreference: 'high-performance',
+          powerPreference: "high-performance",
           preserveDrawingBuffer: false, // Avoid preserveDrawingBuffer
           stencil: false,
           depth: true,
@@ -79,13 +79,13 @@ export default function HeroCanvas({ children, className }: Props) {
         performance={{ min: 0.5 }}
         onCreated={({ gl }) => {
           gl.setClearColor(0x000000, 0); // Fully transparent background
-          
+
           // Clamp pixel ratio for mobile stability
           if (isMobile) {
             gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
           }
         }}
-        style={{ background: 'transparent' }}
+        style={{ background: "transparent" }}
       >
         <Suspense fallback={null}>
           {children}

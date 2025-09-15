@@ -1,16 +1,16 @@
-'use client';
+"use client";
 // src/three/HelixKnot.tsx
-import { useRef, useMemo } from 'react';
-import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
-import { MeshTransmissionMaterial } from '@react-three/drei';
+import { useRef, useMemo } from "react";
+import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
+import { MeshTransmissionMaterial } from "@react-three/drei";
 
 type Props = {
   color?: string;
   speed?: number;
 };
 
-export default function HelixKnot({ color = '#8b5cf6', speed = 0.25 }: Props) {
+export default function HelixKnot({ color = "#8b5cf6", speed = 0.25 }: Props) {
   const ref = useRef<THREE.Mesh>(null!);
   const geom = useMemo(
     () => new THREE.TorusKnotGeometry(0.95, 0.22, 220, 32, 2, 3),

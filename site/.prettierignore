@@ -1,7 +1,26 @@
-# Ignore artifacts
-.next
+# Node modules and dependencies
 node_modules
+
+# Build outputs
+.next
+dist
+out
+
+# Test outputs
+coverage
+test-results
+**/*.snap
+
+# Deployment and IDE
+.vercel
+.vscode
+.idea
+
+# Minified files
+public/**/*.min.*
+
+# Package lock files
 package-lock.json
 
-# Ignore assets
+# Assets (keep the original exclusion)
 public/assets

@@ -1,47 +1,47 @@
-import type { Metadata } from 'next';
-import dynamicImport from 'next/dynamic';
+import type { Metadata } from "next";
+import dynamicImport from "next/dynamic";
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 export const revalidate = 60 * 60 * 24;
 
-import { Suspense } from 'react';
-import Image from 'next/image';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { Suspense } from "react";
+import Image from "next/image";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export const metadata: Metadata = {
-  title: 'Werkwijze – van intake tot launch, transparant en voorspelbaar',
+  title: "Werkwijze – van intake tot launch, transparant en voorspelbaar",
   description:
-    'Helder proces: intake & strategie, design, bouwen, launch & groei. Transparante communicatie en meetbare stappen.',
+    "Helder proces: intake & strategie, design, bouwen, launch & groei. Transparante communicatie en meetbare stappen.",
   alternates: {
-    canonical: '/werkwijze',
-    languages: { 'nl-NL': '/werkwijze' },
+    canonical: "/werkwijze",
+    languages: { "nl-NL": "/werkwijze" },
   },
   openGraph: {
-    title: 'Werkwijze – van intake tot launch, transparant en voorspelbaar',
+    title: "Werkwijze – van intake tot launch, transparant en voorspelbaar",
     description:
-      'Helder proces: intake & strategie, design, bouwen, launch & groei. Transparante communicatie en meetbare stappen.',
-    url: 'https://prowebstudio.nl/werkwijze',
-    type: 'website',
-    locale: 'nl_NL',
+      "Helder proces: intake & strategie, design, bouwen, launch & groei. Transparante communicatie en meetbare stappen.",
+    url: "https://prowebstudio.nl/werkwijze",
+    type: "website",
+    locale: "nl_NL",
   },
 };
 
-const OrbitSystem = dynamicImport(() => import('@/three/OrbitSystem'), {
+const OrbitSystem = dynamicImport(() => import("@/three/OrbitSystem"), {
   ssr: false,
   loading: () => <div className="h-96 bg-cosmic-900" />,
 });
 
 const steps = [
   {
-    name: 'Intake',
-    description: 'We duiken diep in jouw visie en doelstellingen',
+    name: "Intake",
+    description: "We duiken diep in jouw visie en doelstellingen",
   },
-  { name: 'Strategie', description: 'Data-gedreven plan voor maximale impact' },
-  { name: 'Design', description: 'Visueel ontwerp dat jouw merk versterkt' },
-  { name: 'Development', description: 'Clean code, gebouwd voor de toekomst' },
-  { name: 'QA', description: 'Rigoureus testen voor perfecte prestaties' },
-  { name: 'Launch', description: 'Soepele deployment en go-live begeleiding' },
-  { name: 'Groei', description: 'Continue optimalisatie en ondersteuning' },
+  { name: "Strategie", description: "Data-gedreven plan voor maximale impact" },
+  { name: "Design", description: "Visueel ontwerp dat jouw merk versterkt" },
+  { name: "Development", description: "Clean code, gebouwd voor de toekomst" },
+  { name: "QA", description: "Rigoureus testen voor perfecte prestaties" },
+  { name: "Launch", description: "Soepele deployment en go-live begeleiding" },
+  { name: "Groei", description: "Continue optimalisatie en ondersteuning" },
 ];
 
 export default function Werkwijze() {
@@ -80,7 +80,7 @@ export default function Werkwijze() {
               >
                 <div className="flex items-center mb-4">
                   <span className="text-2xl font-bold text-cyan-400 mr-3">
-                    {String(i + 1).padStart(2, '0')}
+                    {String(i + 1).padStart(2, "0")}
                   </span>
                   <h3 className="text-xl font-semibold">{step.name}</h3>
                 </div>
