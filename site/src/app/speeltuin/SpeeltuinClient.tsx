@@ -33,7 +33,7 @@ export default function SpeeltuinClient() {
   // Performance detection
   useEffect(() => {
     // Detect slow connections or low-end devices
-    const connection = (navigator as any).connection;
+    const connection = (navigator as { connection?: { effectiveType?: string } }).connection;
     const isSlowConnection = connection && (
       connection.effectiveType === 'slow-2g' || 
       connection.effectiveType === '2g' || 
@@ -106,14 +106,14 @@ export default function SpeeltuinClient() {
   };
 
   return (
-    <main className="relative py-12 md:py-16 lg:py-24 px-4 md:px-6 lg:px-8 overflow-x-hidden w-full max-w-full pt-safe pb-safe">
-      <div className="max-w-6xl mx-auto w-full overflow-x-hidden">
+    <main className="relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 overflow-x-hidden w-full max-w-full pt-safe pb-safe content-safe-top pt-20 md:pt-24">
+      <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto w-full overflow-x-hidden">
         {/* Hero Section */}
         <section className="text-center mb-12 md:mb-16 px-2 sm:px-0">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in break-words">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in break-words">
             Onze Expertise in Actie
           </h1>
-          <p className="text-base md:text-lg text-cyan-400 max-w-4xl mx-auto leading-relaxed animate-slide-up break-words">
+          <p className="text-base sm:text-lg md:text-xl text-cyan-400 max-w-4xl mx-auto leading-relaxed animate-slide-up break-words">
             Waarom u foto&apos;s laten zien als we de magie live kunnen
             demonstreren? Dit is geen portfolio; dit is onze interactieve
             tech-speeltuin. Hier heeft u de controle. Ervaar zelf de kracht van
@@ -245,11 +245,11 @@ export default function SpeeltuinClient() {
         {/* Technology Section */}
         <section className="mb-12 md:mb-16 lg:mb-24 px-2 sm:px-0">
           <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-xl xs:text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight break-words px-2 sm:px-0">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight break-words px-2 sm:px-0">
               De Technologie Achter de Magie
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             <div className="glass p-4 sm:p-6 md:p-8 rounded-xl">
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 WebGL/Three.js
@@ -286,17 +286,17 @@ export default function SpeeltuinClient() {
         {/* Final CTA */}
         <section className="py-8 sm:py-12 md:py-16 lg:py-24 px-4 md:px-6 lg:px-8 bg-cosmic-900 rounded-lg mx-2 sm:mx-0">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-xl xs:text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 leading-tight break-words">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight break-words">
               Klaar om uw eigen ervaring te bouwen?
             </h2>
-            <p className="text-sm sm:text-base md:text-lg mb-8 sm:mb-12 text-gray-300 max-w-3xl mx-auto leading-relaxed break-words">
+            <p className="text-base sm:text-lg md:text-xl mb-8 sm:mb-12 text-gray-300 max-w-3xl mx-auto leading-relaxed break-words">
               Wat u hier ziet is slechts een glimp van wat we kunnen realiseren.
               Laten we bespreken hoe we deze technologie kunnen inzetten om uw
               bedrijfsdoelen te bereiken.
             </p>
             <Link
               href="/contact"
-              className="touch-target inline-block px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 text-sm sm:text-base"
+              className="touch-target inline-block px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 text-base sm:text-lg"
             >
               Plan een strategiesessie
             </Link>

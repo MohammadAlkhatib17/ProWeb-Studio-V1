@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { useDeviceCapabilities } from './useDeviceCapabilities';
 
 export interface PerformanceMetrics {
   fps: number;
@@ -27,31 +28,31 @@ export interface PerformanceState {
 
 const QUALITY_PRESETS: Record<'low' | 'medium' | 'high', QualitySettings> = {
   low: {
-    particleCount: 500,
-    shadowResolution: 512,
+    particleCount: 200,
+    shadowResolution: 256,
     effectPasses: false,
     dpr: [1, 1],
-    bloomIntensity: 0.5,
+    bloomIntensity: 0.3,
     enablePostProcessing: false,
     enableShadows: false,
     maxLights: 2,
   },
   medium: {
-    particleCount: 1000,
+    particleCount: 750,
     shadowResolution: 1024,
     effectPasses: true,
     dpr: [1, 1.5],
-    bloomIntensity: 1.0,
+    bloomIntensity: 0.8,
     enablePostProcessing: true,
     enableShadows: true,
     maxLights: 4,
   },
   high: {
-    particleCount: 2000,
+    particleCount: 1500,
     shadowResolution: 2048,
     effectPasses: true,
     dpr: [1, 2],
-    bloomIntensity: 1.5,
+    bloomIntensity: 1.2,
     enablePostProcessing: true,
     enableShadows: true,
     maxLights: 6,
@@ -63,10 +64,26 @@ export function usePerformanceMonitor(
   targetFPS: number = 30,
   sampleSize: number = 60
 ) {
+  const { capabilities, optimizedSettings } = useDeviceCapabilities();
+  
+  // Initialize with device-optimized settings
+  const initialQuality = capabilities.isLowEndDevice ? 'low' : 
+                        capabilities.isMobile ? 'medium' : 'high';
+  
   const [performanceState, setPerformanceState] = useState<PerformanceState>({
     metrics: { fps: 60, frameTime: 16.67 },
-    qualityLevel: 'high',
-    settings: QUALITY_PRESETS.high,
+    qualityLevel: initialQuality,
+    settings: {
+      ...QUALITY_PRESETS[initialQuality],
+      // Override with device-optimized settings
+      dpr: optimizedSettings.dpr,
+      enableShadows: optimizedSettings.enableShadows,
+      enablePostProcessing: optimizedSettings.enablePostProcessing,
+      maxLights: optimizedSettings.maxLights,
+      shadowResolution: optimizedSettings.shadowMapSize,
+      bloomIntensity: optimizedSettings.bloomIntensity,
+      particleCount: optimizedSettings.particleCount,
+    },
     isThrottled: false,
   });
 
@@ -75,11 +92,15 @@ export function usePerformanceMonitor(
   const animationFrameRef = useRef<number>();
   const throttleTimeoutRef = useRef<NodeJS.Timeout>();
 
-  // Quality adjustment logic
+  // Enhanced quality adjustment logic with device awareness
   const adjustQuality = useCallback((fps: number, setState: React.Dispatch<React.SetStateAction<PerformanceState>>) => {
     setState(prev => {
       let newQualityLevel = prev.qualityLevel;
       let isThrottled = prev.isThrottled;
+
+      // Respect device capabilities - don't upgrade beyond device limits
+      const maxQualityForDevice = capabilities.isLowEndDevice ? 'low' : 
+                                  capabilities.isMobile ? 'medium' : 'high';
 
       // Downgrade quality if FPS is too low
       if (fps < targetFPS * 0.8) { // 80% of target FPS
@@ -92,7 +113,7 @@ export function usePerformanceMonitor(
         }
       }
       // Upgrade quality if FPS is consistently good and we're throttled
-      else if (fps > targetFPS * 1.2 && isThrottled) { // 120% of target FPS
+      else if (fps > targetFPS * 1.2 && isThrottled && prev.qualityLevel !== maxQualityForDevice) {
         // Clear any existing timeout
         if (throttleTimeoutRef.current) {
           clearTimeout(throttleTimeoutRef.current);
@@ -102,18 +123,29 @@ export function usePerformanceMonitor(
         throttleTimeoutRef.current = setTimeout(() => {
           setState(current => {
             let upgradeLevel = current.qualityLevel;
-            if (current.qualityLevel === 'low') {
+            if (current.qualityLevel === 'low' && maxQualityForDevice !== 'low') {
               upgradeLevel = 'medium';
-            } else if (current.qualityLevel === 'medium') {
+            } else if (current.qualityLevel === 'medium' && maxQualityForDevice === 'high') {
               upgradeLevel = 'high';
-              isThrottled = false; // Only remove throttling when reaching high
+              isThrottled = false;
+            }
+
+            // Don't upgrade beyond device capabilities
+            if (upgradeLevel !== maxQualityForDevice && upgradeLevel === 'high') {
+              upgradeLevel = maxQualityForDevice;
             }
 
             return {
               ...current,
               qualityLevel: upgradeLevel,
-              settings: QUALITY_PRESETS[upgradeLevel],
-              isThrottled: upgradeLevel !== 'high' ? current.isThrottled : false,
+              settings: {
+                ...QUALITY_PRESETS[upgradeLevel],
+                // Always respect device-optimized settings
+                dpr: optimizedSettings.dpr,
+                enableShadows: optimizedSettings.enableShadows,
+                enablePostProcessing: optimizedSettings.enablePostProcessing && QUALITY_PRESETS[upgradeLevel].enablePostProcessing,
+              },
+              isThrottled: upgradeLevel !== maxQualityForDevice,
             };
           });
         }, 5000);
@@ -127,14 +159,20 @@ export function usePerformanceMonitor(
         return {
           ...prev,
           qualityLevel: newQualityLevel,
-          settings: QUALITY_PRESETS[newQualityLevel],
+          settings: {
+            ...QUALITY_PRESETS[newQualityLevel],
+            // Always respect device-optimized settings
+            dpr: optimizedSettings.dpr,
+            enableShadows: optimizedSettings.enableShadows,
+            enablePostProcessing: optimizedSettings.enablePostProcessing && QUALITY_PRESETS[newQualityLevel].enablePostProcessing,
+          },
           isThrottled,
         };
       }
 
       return prev;
     });
-  }, []);
+  }, [targetFPS, capabilities, optimizedSettings]);
 
   // Performance measurement
   const measurePerformance = useCallback(() => {

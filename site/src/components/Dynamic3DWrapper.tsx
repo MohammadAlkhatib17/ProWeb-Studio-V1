@@ -290,7 +290,7 @@ export default function Dynamic3DWrapper({
   if (!hasWebGL || !shouldRender3D) {
     return (
       <div className={`${className} flex items-center justify-center bg-gradient-to-br from-gray-900 to-black`}>
-        <div className="text-center p-8">
+        <div className="text-center p-6 sm:p-7 md:p-8">
           <p className="text-gray-400">
             {!hasWebGL ? 'WebGL is not supported on this device' : '3D content is disabled due to performance or accessibility settings'}
           </p>

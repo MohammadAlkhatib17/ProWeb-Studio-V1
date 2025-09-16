@@ -27,6 +27,7 @@ import {
 import { BlendFunction, KernelSize } from 'postprocessing';
 import * as THREE from 'three';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 // Extend THREE to include TextGeometry
 extend({ TextGeometry });
@@ -1023,6 +1024,20 @@ export default function StudioAnwarScene({
   const config = getOptimizedConfig();
   const { isMobile } = getDeviceInfo();
   
+  // Enhance with our new device capabilities hook
+  const { capabilities, optimizedSettings } = useDeviceCapabilities();
+  
+  // Use the more sophisticated settings when available
+  const finalConfig = {
+    ...config,
+    // Override with more accurate settings from our enhanced hook
+    dpr: optimizedSettings.dpr,
+    enablePostProcessing: optimizedSettings.enablePostProcessing && config.enablePostProcessing,
+    shadowMapSize: optimizedSettings.shadowMapSize,
+    maxLights: Math.min(config.maxLights, optimizedSettings.maxLights),
+    bloomIntensity: Math.min(config.bloomIntensity, optimizedSettings.bloomIntensity),
+  };
+  
   return (
     <div
       style={{
@@ -1035,24 +1050,30 @@ export default function StudioAnwarScene({
     >
       <Canvas
         gl={{
-          antialias: !isMobile, // Disable antialiasing on mobile for performance
+          antialias: optimizedSettings.antialias && !isMobile, // Enhanced logic
           toneMapping: THREE.ACESFilmicToneMapping,
           outputColorSpace: THREE.SRGBColorSpace,
           powerPreference: 'high-performance',
           alpha: false, // Disable alpha for better performance
           preserveDrawingBuffer: false, // Disable for better performance
         }}
-        dpr={config.dpr as [number, number]}
-        camera={{ position: getCameraPosition(), fov: isMobile ? 60 : 50, near: 0.1, far: 100 }}
-        shadows={config.maxLights > 2} // Only enable shadows if we have enough performance
+        dpr={finalConfig.dpr as [number, number]}
+        camera={{ 
+          position: getCameraPosition(), 
+          fov: optimizedSettings.cameraFov, // Use enhanced FOV calculation
+          near: 0.1, 
+          far: 100 
+        }}
+        shadows={optimizedSettings.enableShadows && finalConfig.maxLights > 2}
         onCreated={(state) => {
-          // Optimize for mobile performance
-          if (isMobile) {
-            state.gl.setPixelRatio(Math.min(window.devicePixelRatio, config.dpr[1]));
-            // Set shadow map size
-            if (state.gl.shadowMap) {
-              state.gl.shadowMap.type = THREE.PCFSoftShadowMap;
-              // Note: Shadow map size is set per light, not globally
+          // Enhanced mobile optimization
+          if (capabilities.isMobile || capabilities.isLowEndDevice) {
+            state.gl.setPixelRatio(Math.min(window.devicePixelRatio, finalConfig.dpr[1]));
+            
+            // Configure shadows for mobile
+            if (state.gl.shadowMap && optimizedSettings.enableShadows) {
+              state.gl.shadowMap.type = capabilities.isLowEndDevice ? 
+                THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
             }
           }
         }}
