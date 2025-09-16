@@ -4,10 +4,16 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site.config';
 import Logo from '@/components/Logo';
+import MobileMenu from '@/components/navigation/MobileMenu';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const menuItems = siteConfig.navigation.map(item => ({
+    href: item.href,
+    label: item.name
+  }));
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -18,7 +24,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 w-full z-40 transition-all duration-300 ${
         isScrolled
           ? 'glass py-4 backdrop-blur-xl border-b border-cosmic-700/30'
           : 'py-6'
@@ -61,6 +67,8 @@ export default function Header() {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="md:hidden absolute right-6 flex flex-col gap-1 p-2 hover:bg-cosmic-800/50 rounded-lg transition-colors duration-300"
           aria-label="Toggle menu"
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-menu"
         >
           <div
             className={`w-6 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}
@@ -74,26 +82,13 @@ export default function Header() {
         </button>
       </div>
 
-      {isMenuOpen && (
-        <nav
-          aria-label="Mobile navigation"
-          className="md:hidden absolute top-full left-0 w-full glass backdrop-blur-xl border-t border-cosmic-700/60 animate-fade-in"
-        >
-          <div className="px-6 py-6 space-y-4">
-            {siteConfig.navigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="block font-medium text-gray-300 hover:text-white transition-all duration-300 py-3 hover:bg-cyan-500/5 rounded-lg px-3 relative group focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <span className="relative z-10">{item.name}</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-magenta-500/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </Link>
-            ))}
-          </div>
-        </nav>
-      )}
+      <div id="mobile-menu" className="md:hidden">
+        <MobileMenu 
+          open={isMenuOpen} 
+          onClose={() => setIsMenuOpen(false)} 
+          items={menuItems} 
+        />
+      </div>
     </header>
   );
 }
