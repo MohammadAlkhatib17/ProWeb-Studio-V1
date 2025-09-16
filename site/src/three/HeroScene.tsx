@@ -1,11 +1,11 @@
-"use client";
-import * as THREE from "three";
-import { useRef, useMemo } from "react";
-import { useFrame } from "@react-three/fiber";
-import ParallaxRig from "@/three/ParallaxRig";
-import StarsShell from "@/three/StarsShell";
-import FacetedSolid from "@/three/FacetedSolid";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+'use client';
+import * as THREE from 'three';
+import { useRef, useMemo } from 'react';
+import { useFrame } from '@react-three/fiber';
+import ParallaxRig from '@/three/ParallaxRig';
+import StarsShell from '@/three/StarsShell';
+import FacetedSolid from '@/three/FacetedSolid';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // Floating light particles
 function LightParticles({
@@ -39,8 +39,8 @@ function LightParticles({
 
   const geometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute("scale", new THREE.BufferAttribute(scales, 1));
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
     return geo;
   }, [positions, scales]);
 
@@ -160,7 +160,7 @@ export default function HeroScene() {
       {!reduced && <VolumetricLight />}
 
       {/* Subtle fog for depth - much lighter */}
-      <fog attach="fog" args={["#030015", 15, 35]} />
+      <fog attach="fog" args={['#030015', 15, 35]} />
     </>
   );
 }

@@ -1,11 +1,9 @@
-"use client";
+'use client';
 
-import * as THREE from "three";
-import { useMemo, useRef, useEffect, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { useThreeDisposal } from "@/hooks/useThreeUtils";
-import React from "react";
+import * as THREE from 'three';
+import { useMemo, useRef, useEffect, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // Custom shader for the glowing ribbon effect
 const ribbonVertexShader = `
@@ -36,19 +34,12 @@ interface RibbonProps {
 }
 
 function Ribbon({ curve, color, scrollRatio }: RibbonProps) {
-  const geom = useMemo(
-    () => new THREE.TubeGeometry(curve, 128, 0.01, 8, false),
-    [curve],
-  );
+  const geom = useMemo(() => new THREE.TubeGeometry(curve, 128, 0.01, 8, false), [curve]);
   const matRef = useRef<THREE.ShaderMaterial>(null!);
-
-  // Dispose geometry on unmount
-  useThreeDisposal([geom]);
 
   useFrame(({ clock }) => {
     if (matRef.current) {
-      matRef.current.uniforms.uTime.value =
-        clock.elapsedTime + scrollRatio * 5.0;
+      matRef.current.uniforms.uTime.value = clock.elapsedTime + scrollRatio * 5.0;
     }
   });
 
@@ -80,37 +71,19 @@ function Scene() {
     const points1 = [];
     for (let i = 0; i < 64; i++) {
       const angle = (i / 64) * Math.PI * 4;
-      points1.push(
-        new THREE.Vector3(
-          Math.sin(angle) * 1.5,
-          Math.cos(angle * 1.5) * 0.8,
-          Math.cos(angle) * 1.5,
-        ),
-      );
+      points1.push(new THREE.Vector3(Math.sin(angle) * 1.5, Math.cos(angle * 1.5) * 0.8, Math.cos(angle) * 1.5));
     }
 
     const points2 = [];
     for (let i = 0; i < 64; i++) {
       const angle = (i / 64) * Math.PI * 6;
-      points2.push(
-        new THREE.Vector3(
-          Math.cos(angle) * 1.2,
-          Math.sin(angle * 0.8) * 1.0,
-          Math.sin(angle) * 1.2,
-        ),
-      );
+      points2.push(new THREE.Vector3(Math.cos(angle) * 1.2, Math.sin(angle * 0.8) * 1.0, Math.sin(angle) * 1.2));
     }
-
+    
     const points3 = [];
     for (let i = 0; i < 64; i++) {
       const angle = (i / 64) * Math.PI * 8;
-      points3.push(
-        new THREE.Vector3(
-          Math.cos(angle * 0.5) * 1.8,
-          Math.sin(angle) * 1.2,
-          Math.cos(angle) * 1.0,
-        ),
-      );
+      points3.push(new THREE.Vector3(Math.cos(angle * 0.5) * 1.8, Math.sin(angle) * 1.2, Math.cos(angle) * 1.0));
     }
 
     return [
@@ -122,24 +95,23 @@ function Scene() {
 
   useEffect(() => {
     if (reduced) return;
-
+    
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       setScrollRatio(scrollTop / docHeight);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [reduced]);
+
 
   useFrame((_, delta) => {
     if (groupRef.current) {
       const baseRotationSpeed = reduced ? 0.05 : 0.1;
       const scrollRotationSpeed = reduced ? 0 : scrollRatio * 2.0;
-      groupRef.current.rotation.y +=
-        delta * (baseRotationSpeed + scrollRotationSpeed);
+      groupRef.current.rotation.y += delta * (baseRotationSpeed + scrollRotationSpeed);
       groupRef.current.rotation.x += delta * 0.08;
     }
   });
@@ -154,97 +126,11 @@ function Scene() {
 }
 
 export default function FlowingRibbons() {
-  const [isMobile, setIsMobile] = React.useState(false);
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
-
-  React.useEffect(() => {
-    // Detect mobile viewport
-    setIsMobile(window.innerWidth < 768);
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // WebGL context event handlers
-  React.useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const handleContextLost = (event: Event) => {
-      event.preventDefault();
-      console.warn("WebGL context lost, preventing default behavior");
-    };
-
-    const handleContextRestored = () => {
-      console.info("WebGL context restored, reinitializing...");
-      // Force re-render by triggering a resize event
-      window.dispatchEvent(new Event("resize"));
-    };
-
-    canvas.addEventListener("webglcontextlost", handleContextLost);
-    canvas.addEventListener("webglcontextrestored", handleContextRestored);
-
-    return () => {
-      canvas.removeEventListener("webglcontextlost", handleContextLost);
-      canvas.removeEventListener("webglcontextrestored", handleContextRestored);
-    };
-  }, []);
-
-  // Route cleanup - dispose resources on route change
-  React.useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Clean up any manual resources if needed
-      // R3F handles most cleanup automatically
-    };
-
-    const handleRouteChange = () => {
-      // Route change cleanup
-      handleBeforeUnload();
-    };
-
-    // Listen for page unload and route changes
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("popstate", handleRouteChange);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("popstate", handleRouteChange);
-      handleBeforeUnload();
-    };
-  }, []);
-
-  return (
-    <div className="absolute inset-0 z-0 pointer-events-none">
-      <Canvas
-        ref={canvasRef}
-        dpr={[1, 1.5]} // Clamp DPR for mobile stability
-        camera={{ position: [0, 0, 3], fov: 75 }}
-        gl={{
-          alpha: true,
-          antialias: !isMobile, // Disable antialias on mobile
-          powerPreference: "high-performance",
-          preserveDrawingBuffer: false,
-          stencil: false,
-          depth: true,
-        }}
-        onCreated={({ gl }) => {
-          gl.setClearAlpha(0);
-
-          // Clamp pixel ratio for mobile stability
-          if (isMobile) {
-            gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-          }
-        }}
-        style={{ background: "transparent" }}
-      >
-        <ambientLight intensity={0.2} />
-        <pointLight position={[10, 10, 10]} intensity={0.5} />
-        <Scene />
-      </Canvas>
-    </div>
-  );
+    return (
+        <Canvas camera={{ position: [0, 0, 3], fov: 75 }}>
+            <ambientLight intensity={0.2} />
+            <pointLight position={[10, 10, 10]} intensity={0.5} />
+            <Scene />
+        </Canvas>
+    )
 }

@@ -1,31 +1,31 @@
-import type { Metadata } from "next";
-import LegalContentLayout from "@/components/LegalContentLayout";
-import { siteConfig } from "@/config/site.config";
+import type { Metadata } from 'next';
+import LegalContentLayout from '@/components/LegalContentLayout';
+import { siteConfig } from '@/config/site.config';
 
-export const dynamic = "force-static";
+export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
 export const metadata: Metadata = {
-  title: "Algemene voorwaarden – ProWeb Studio",
+  title: 'Algemene voorwaarden – ProWeb Studio',
   description:
-    "Voorwaarden voor offertes, overeenkomsten, levering, betaling, intellectuele eigendom en aansprakelijkheid.",
-  alternates: {
-    canonical: "/voorwaarden",
-    languages: { "nl-NL": "/voorwaarden" },
+    'Voorwaarden voor offertes, overeenkomsten, levering, betaling, intellectuele eigendom en aansprakelijkheid.',
+  alternates: { 
+    canonical: '/voorwaarden',
+    languages: { 'nl-NL': '/voorwaarden' },
   },
   openGraph: {
-    title: "Algemene voorwaarden – ProWeb Studio",
+    title: 'Algemene voorwaarden – ProWeb Studio',
     description:
-      "Voorwaarden voor offertes, overeenkomsten, levering, betaling, intellectuele eigendom en aansprakelijkheid.",
-    url: "https://prowebstudio.nl/voorwaarden",
-    type: "website",
-    locale: "nl_NL",
+      'Voorwaarden voor offertes, overeenkomsten, levering, betaling, intellectuele eigendom en aansprakelijkheid.',
+    url: 'https://prowebstudio.nl/voorwaarden',
+    type: 'website',
+    locale: 'nl_NL',
   },
 };
 
 export default function VoorwaardenPage() {
   const name = siteConfig.name;
-  const contactEmail = siteConfig.contact?.inbox ?? "contact@prowebstudio.nl";
+  const contactEmail = siteConfig.contact?.inbox ?? 'contact@prowebstudio.nl';
   const phone = siteConfig.phone;
   const today = new Date().toISOString().slice(0, 10);
 
@@ -48,7 +48,7 @@ export default function VoorwaardenPage() {
       <h2>2. Overeenkomst</h2>
       <p>
         Een overeenkomst komt tot stand door schriftelijke bevestiging van de
-        opdracht door beide partijen, of door aanvang van de werkzaamheden door{" "}
+        opdracht door beide partijen, of door aanvang van de werkzaamheden door{' '}
         {name}.
       </p>
 
@@ -118,7 +118,7 @@ export default function VoorwaardenPage() {
         </p>
         <p className="text-sm space-y-1">
           <span className="block">
-            E-mail:{" "}
+            E-mail:{' '}
             <a
               href={`mailto:${contactEmail}`}
               className="text-cyan-400 hover:text-cyan-300"
@@ -127,7 +127,7 @@ export default function VoorwaardenPage() {
             </a>
           </span>
           <span className="block">
-            Telefoon:{" "}
+            Telefoon:{' '}
             <a
               href={`tel:${phone}`}
               className="text-cyan-400 hover:text-cyan-300"

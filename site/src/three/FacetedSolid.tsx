@@ -1,11 +1,11 @@
-"use client";
-import * as THREE from "three";
-import { useRef, useMemo, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+'use client';
+import * as THREE from 'three';
+import { useRef, useMemo, useState } from 'react';
+import { useFrame } from '@react-three/fiber';
 
 export default function FacetedSolid({
-  base = "#8b5cf6",
-  accent = "#22d3ee",
+  base = '#8b5cf6',
+  accent = '#22d3ee',
   metalness = 0.85,
   roughness = 0.15,
   spin = 0.85,
@@ -21,11 +21,8 @@ export default function FacetedSolid({
 
   const { geometry, material } = useMemo(() => {
     // Create a more complex geometry with subdivision
-    const originalGeom = new THREE.IcosahedronGeometry(1.2, 1);
-    const baseGeom = originalGeom.index
-      ? originalGeom.toNonIndexed()
-      : originalGeom;
-    const pos = baseGeom.getAttribute("position") as THREE.BufferAttribute;
+    const baseGeom = new THREE.IcosahedronGeometry(1.2, 1).toNonIndexed();
+    const pos = baseGeom.getAttribute('position') as THREE.BufferAttribute;
     const v = new THREE.Vector3();
 
     // Enhanced beveling for more depth
@@ -36,7 +33,7 @@ export default function FacetedSolid({
     baseGeom.computeVertexNormals();
 
     // Enforce flat shading with improved normal calculation
-    const nAttr = baseGeom.getAttribute("normal") as THREE.BufferAttribute;
+    const nAttr = baseGeom.getAttribute('normal') as THREE.BufferAttribute;
     const nArr = nAttr.array as Float32Array;
     for (let i = 0; i < nArr.length; i += 9) {
       const nx = (nArr[i] + nArr[i + 3] + nArr[i + 6]) / 3;
@@ -59,7 +56,7 @@ export default function FacetedSolid({
     );
     const c0 = new THREE.Color(base);
     const c1 = new THREE.Color(accent);
-    const c2 = new THREE.Color("#f0abfc"); // Additional magenta accent
+    const c2 = new THREE.Color('#f0abfc'); // Additional magenta accent
     const tmpN = new THREE.Vector3();
     const tmpP = new THREE.Vector3();
 
@@ -80,7 +77,7 @@ export default function FacetedSolid({
 
       colorAttr.setXYZ(i, col.r, col.g, col.b);
     }
-    baseGeom.setAttribute("color", colorAttr);
+    baseGeom.setAttribute('color', colorAttr);
 
     // Enhanced material with physical properties
     const mat = new THREE.MeshPhysicalMaterial({
@@ -115,10 +112,10 @@ export default function FacetedSolid({
     // Interactive hover effect
     if (hovered) {
       mesh.current.rotation.y += dt * 0.5;
-      material.emissive = new THREE.Color("#22d3ee");
+      material.emissive = new THREE.Color('#22d3ee');
       material.emissiveIntensity = 0.2;
     } else {
-      material.emissive = new THREE.Color("#000000");
+      material.emissive = new THREE.Color('#000000');
       material.emissiveIntensity = 0;
     }
   });

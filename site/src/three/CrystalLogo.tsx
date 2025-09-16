@@ -1,10 +1,9 @@
-"use client";
+'use client';
 // src/three/CrystalLogo.tsx
-import { MeshTransmissionMaterial } from "@react-three/drei";
-import * as THREE from "three";
-import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { useThreeDisposal } from "@/hooks/useThreeUtils";
+import { MeshTransmissionMaterial } from '@react-three/drei';
+import * as THREE from 'three';
+import { useMemo, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 
 type CrystalProps = {
   tint?: string;
@@ -14,16 +13,13 @@ type CrystalProps = {
 };
 
 export function CrystalLogo({
-  tint = "#a78bfa",
+  tint = '#a78bfa',
   roughness = 0.2,
   thickness = 0.6,
   rotationSpeed = 0.25,
 }: CrystalProps) {
   const ref = useRef<THREE.Mesh>(null!);
   const geom = useMemo(() => new THREE.IcosahedronGeometry(1.1, 1), []);
-
-  // Dispose geometry on unmount
-  useThreeDisposal([geom]);
 
   useFrame((_, delta) => {
     if (!ref.current) return;

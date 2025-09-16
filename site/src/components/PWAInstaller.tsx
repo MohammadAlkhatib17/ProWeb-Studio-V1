@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface PWAInstallProps {
   onInstallPrompt?: () => void;
@@ -8,39 +8,31 @@ interface PWAInstallProps {
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
 export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
-  const [deferredPrompt, setDeferredPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
     // Register service worker
-    if ("serviceWorker" in navigator) {
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register("/sw.js")
+        .register('/sw.js')
         .then((registration) => {
-          console.log("Service Worker registered:", registration);
-
+          console.log('Service Worker registered:', registration);
+          
           // Handle updates
-          registration.addEventListener("updatefound", () => {
+          registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
             if (newWorker) {
-              newWorker.addEventListener("statechange", () => {
-                if (
-                  newWorker.state === "installed" &&
-                  navigator.serviceWorker.controller
-                ) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                   // New version available
-                  if (
-                    confirm(
-                      "Een nieuwe versie van de website is beschikbaar. Vernieuwen?",
-                    )
-                  ) {
-                    newWorker.postMessage({ type: "SKIP_WAITING" });
+                  if (confirm('Een nieuwe versie van de website is beschikbaar. Vernieuwen?')) {
+                    newWorker.postMessage({ type: 'SKIP_WAITING' });
                     window.location.reload();
                   }
                 }
@@ -49,7 +41,7 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
           });
         })
         .catch((error) => {
-          console.error("Service Worker registration failed:", error);
+          console.error('Service Worker registration failed:', error);
         });
     }
 
@@ -63,13 +55,13 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
 
     // Check if already installed
     const checkIfInstalled = () => {
-      if (window.matchMedia("(display-mode: standalone)").matches) {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
         setIsInstalled(true);
       }
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    window.addEventListener("appinstalled", () => {
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', () => {
       setIsInstalled(true);
       setIsInstallable(false);
     });
@@ -77,10 +69,7 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
     checkIfInstalled();
 
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt,
-      );
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
   }, [onInstallPrompt]);
 
@@ -89,26 +78,26 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
 
     deferredPrompt.prompt();
     const choiceResult = await deferredPrompt.userChoice;
-
-    if (choiceResult.outcome === "accepted") {
-      console.log("PWA installation accepted");
+    
+    if (choiceResult.outcome === 'accepted') {
+      console.log('PWA installation accepted');
     } else {
-      console.log("PWA installation declined");
+      console.log('PWA installation declined');
     }
-
+    
     setDeferredPrompt(null);
     setIsInstallable(false);
   };
 
   // Performance monitoring
   useEffect(() => {
-    if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       // Send performance marks to service worker
       const sendPerformanceMark = (name: string, duration: number) => {
         navigator.serviceWorker.controller?.postMessage({
-          type: "PERFORMANCE_MARK",
+          type: 'PERFORMANCE_MARK',
           name,
-          duration,
+          duration
         });
       };
 
@@ -119,11 +108,11 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
         }
       });
 
-      observer.observe({ entryTypes: ["measure", "navigation"] });
+      observer.observe({ entryTypes: ['measure', 'navigation'] });
 
       return () => observer.disconnect();
     }
-
+    
     return undefined;
   }, []);
 
@@ -140,12 +129,8 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
-            <svg
-              className="w-6 h-6 text-blue-600"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+            <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
             </svg>
           </div>
           <div className="flex-1 min-w-0">

@@ -1,10 +1,9 @@
 // /src/three/PortalScene.tsx
-"use client";
+'use client';
 
-import * as THREE from "three";
-import React, { useMemo, useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useThreeDisposal } from "@/hooks/useThreeUtils";
+import * as THREE from 'three';
+import React, { useMemo, useRef } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 
 type Props = { scale?: number; effects?: boolean };
 
@@ -16,10 +15,10 @@ type Props = { scale?: number; effects?: boolean };
  */
 
 function useReducedMotion() {
-  if (typeof window === "undefined") return false;
+  if (typeof window === 'undefined') return false;
   return (
     window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
   );
 }
 
@@ -120,9 +119,6 @@ function Blade({
     [angle, width, innerR, outerR, c1, c2],
   );
 
-  // Dispose material on unmount
-  useThreeDisposal([mat]);
-
   useFrame((state) => {
     mat.uniforms.uTime.value = state.clock.elapsedTime;
   });
@@ -163,8 +159,8 @@ function Aperture({
   });
 
   // إعدادات لونية
-  const c1 = useMemo(() => new THREE.Color("#0bdad6"), []);
-  const c2 = useMemo(() => new THREE.Color("#b14df0"), []);
+  const c1 = useMemo(() => new THREE.Color('#0bdad6'), []);
+  const c2 = useMemo(() => new THREE.Color('#b14df0'), []);
 
   const bladeNodes = useMemo(() => {
     const nodes: JSX.Element[] = [];
@@ -213,16 +209,13 @@ function StarSwarm({
     () =>
       new THREE.PointsMaterial({
         size: reduced ? 0.008 : 0.014,
-        color: "#a5f3fc",
+        color: '#a5f3fc',
         transparent: true,
         opacity: 0.75,
         depthWrite: false,
       }),
     [reduced],
   );
-
-  // Dispose resources on unmount
-  useThreeDisposal([geom, mat]);
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
@@ -236,7 +229,7 @@ function StarSwarm({
     return arr;
   }, [count, radius]);
   React.useEffect(() => {
-    geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     return () => geom.dispose();
   }, [geom, positions]);
   const ref = useRef<THREE.Points>(null!);
@@ -282,10 +275,6 @@ function EnergyRings() {
     });
     return m;
   }, []);
-
-  // Dispose material on unmount
-  useThreeDisposal([mat]);
-
   useFrame((_, dt) => (mat.uniforms.uTime.value += dt));
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]}>
@@ -329,9 +318,6 @@ function EnergyCore() {
     [],
   );
 
-  // Dispose material on unmount
-  useThreeDisposal([mat]);
-
   useFrame((s) => {
     mat.uniforms.uTime.value = s.clock.elapsedTime;
   });
@@ -347,80 +333,24 @@ function EnergyCore() {
 export default function PortalScene({ scale = 0.58, effects = true }: Props) {
   const reduced = useReducedMotion();
   const enableFx = effects && !reduced;
-  const [isMobile, setIsMobile] = React.useState(false);
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
-
-  React.useEffect(() => {
-    // Detect mobile viewport
-    setIsMobile(window.innerWidth < 768);
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // WebGL context event handlers
-  React.useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const handleContextLost = (event: Event) => {
-      event.preventDefault();
-      console.warn("WebGL context lost, preventing default behavior");
-    };
-
-    const handleContextRestored = () => {
-      console.info("WebGL context restored, reinitializing...");
-      // Force re-render by triggering a resize event
-      window.dispatchEvent(new Event("resize"));
-    };
-
-    canvas.addEventListener("webglcontextlost", handleContextLost);
-    canvas.addEventListener("webglcontextrestored", handleContextRestored);
-
-    return () => {
-      canvas.removeEventListener("webglcontextlost", handleContextLost);
-      canvas.removeEventListener("webglcontextrestored", handleContextRestored);
-    };
-  }, []);
 
   return (
-    <div className="absolute inset-0 z-0 pointer-events-none">
-      <Canvas
-        ref={canvasRef}
-        dpr={isMobile ? [1, 1.5] : [1, 2]} // Clamp DPR on mobile
-        camera={{ fov: 45, position: [0, 0, 3.4] }}
-        gl={{
-          alpha: true,
-          antialias: !isMobile, // Disable antialias on mobile
-          powerPreference: "high-performance",
-          preserveDrawingBuffer: false,
-          stencil: false,
-          depth: true,
-        }}
-        onCreated={({ gl }) => {
-          gl.setClearAlpha(0); // خلفية شفافة تمامًا
-
-          // Clamp pixel ratio for mobile stability
-          if (isMobile) {
-            gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-          }
-        }}
-        style={{ background: "transparent" }}
-      >
-        <group scale={scale}>
-          {enableFx && <StarSwarm />}
-          {enableFx && <EnergyRings />}
-          {/* ترتيب: قلب الطاقة ثم القزحية فوقه */}
-          <EnergyCore />
-          <Aperture blades={enableFx ? 12 : 6} reduced={!enableFx} />
-          <ambientLight intensity={0.5} />
-          <pointLight position={[0, 0, 3]} intensity={0.9} color={"#a5f3fc"} />
-        </group>
-      </Canvas>
-    </div>
+    <Canvas
+      dpr={[1, 2]}
+      camera={{ fov: 45, position: [0, 0, 3.4] }}
+      gl={{ alpha: true, antialias: true }}
+      onCreated={({ gl }) => gl.setClearAlpha(0)} // خلفية شفافة تمامًا
+      style={{ background: 'transparent' }}
+    >
+      <group scale={scale}>
+        {enableFx && <StarSwarm />}
+        {enableFx && <EnergyRings />}
+        {/* ترتيب: قلب الطاقة ثم القزحية فوقه */}
+        <EnergyCore />
+        <Aperture blades={enableFx ? 12 : 6} reduced={!enableFx} />
+        <ambientLight intensity={0.5} />
+        <pointLight position={[0, 0, 3]} intensity={0.9} color={'#a5f3fc'} />
+      </group>
+    </Canvas>
   );
 }

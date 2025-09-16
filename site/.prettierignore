@@ -1,26 +1,7 @@
-# Node modules and dependencies
-node_modules
-
-# Build outputs
+# Ignore artifacts
 .next
-dist
-out
-
-# Test outputs
-coverage
-test-results
-**/*.snap
-
-# Deployment and IDE
-.vercel
-.vscode
-.idea
-
-# Minified files
-public/**/*.min.*
-
-# Package lock files
+node_modules
 package-lock.json
 
-# Assets (keep the original exclusion)
+# Ignore assets
 public/assets

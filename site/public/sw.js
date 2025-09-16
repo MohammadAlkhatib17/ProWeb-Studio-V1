@@ -1,51 +1,57 @@
 // Service Worker for ProWeb Studio PWA
 // Version 1.0.0
 
-const CACHE_NAME = "prowebstudio-v1";
-const STATIC_CACHE = "prowebstudio-static-v1";
-const DYNAMIC_CACHE = "prowebstudio-dynamic-v1";
-const THREE_CACHE = "prowebstudio-three-v1";
+const CACHE_NAME = 'prowebstudio-v1';
+const STATIC_CACHE = 'prowebstudio-static-v1';
+const DYNAMIC_CACHE = 'prowebstudio-dynamic-v1';
+const THREE_CACHE = 'prowebstudio-three-v1';
 
 // Assets to cache on install
 const STATIC_ASSETS = [
-  "/",
-  "/manifest.json",
-  "/assets/logo/logo-proweb-icon.svg",
-  "/assets/logo/logo-proweb-lockup.svg",
-  "/offline.html", // We'll create this
+  '/',
+  '/manifest.json',
+  '/assets/logo/logo-proweb-icon.svg',
+  '/assets/logo/logo-proweb-lockup.svg',
+  '/offline.html', // We'll create this
+];
+
+// Three.js and heavy assets to cache strategically
+const THREE_ASSETS = [
+  '/_next/static/chunks/three.js',
+  // Three.js chunks will be dynamically identified and cached
 ];
 
 // Routes to cache with stale-while-revalidate strategy
 const CACHED_ROUTES = [
-  "/",
-  "/diensten",
-  "/werkwijze",
-  "/contact",
-  "/speeltuin",
+  '/',
+  '/diensten',
+  '/werkwijze',
+  '/contact',
+  '/speeltuin',
 ];
 
 // Install event - cache essential assets
-self.addEventListener("install", (event) => {
-  console.log("Service Worker: Installing...");
-
+self.addEventListener('install', (event) => {
+  console.log('Service Worker: Installing...');
+  
   event.waitUntil(
     Promise.all([
       // Cache static assets
       caches.open(STATIC_CACHE).then((cache) => {
-        console.log("Service Worker: Caching static assets");
+        console.log('Service Worker: Caching static assets');
         return cache.addAll(STATIC_ASSETS);
       }),
-
+      
       // Skip waiting to activate immediately
-      self.skipWaiting(),
-    ]),
+      self.skipWaiting()
+    ])
   );
 });
 
 // Activate event - clean up old caches
-self.addEventListener("activate", (event) => {
-  console.log("Service Worker: Activating...");
-
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker: Activating...');
+  
   event.waitUntil(
     Promise.all([
       // Clean up old caches
@@ -53,32 +59,32 @@ self.addEventListener("activate", (event) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (
-              cacheName !== CACHE_NAME &&
-              cacheName !== STATIC_CACHE &&
+              cacheName !== CACHE_NAME && 
+              cacheName !== STATIC_CACHE && 
               cacheName !== DYNAMIC_CACHE &&
               cacheName !== THREE_CACHE
             ) {
-              console.log("Service Worker: Deleting old cache:", cacheName);
+              console.log('Service Worker: Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
-          }),
+          })
         );
       }),
-
+      
       // Take control of all pages
-      self.clients.claim(),
-    ]),
+      self.clients.claim()
+    ])
   );
 });
 
 // Fetch event - implement caching strategies
-self.addEventListener("fetch", (event) => {
+self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
-
+  
   // Skip non-GET requests
-  if (request.method !== "GET") return;
-
+  if (request.method !== 'GET') return;
+  
   // Skip cross-origin requests (except for specific CDNs)
   if (url.origin !== self.location.origin) {
     return;
@@ -103,28 +109,29 @@ async function handleRequest(request) {
     }
 
     // Strategy 3: Network First for API calls
-    if (pathname.startsWith("/api/")) {
+    if (pathname.startsWith('/api/')) {
       return await networkFirst(request, DYNAMIC_CACHE);
     }
 
     // Strategy 4: Stale While Revalidate for pages
-    if (CACHED_ROUTES.includes(pathname) || pathname.startsWith("/_next/")) {
+    if (CACHED_ROUTES.includes(pathname) || pathname.startsWith('/_next/')) {
       return await staleWhileRevalidate(request, DYNAMIC_CACHE);
     }
 
     // Strategy 5: Network Only for everything else
     return await fetch(request);
+
   } catch (error) {
-    console.log("Service Worker: Fetch failed, serving offline page:", error);
-
+    console.log('Service Worker: Fetch failed, serving offline page:', error);
+    
     // Return offline page for navigation requests
-    if (request.destination === "document") {
-      const offlineResponse = await caches.match("/offline.html");
-      return offlineResponse || new Response("Offline", { status: 503 });
+    if (request.destination === 'document') {
+      const offlineResponse = await caches.match('/offline.html');
+      return offlineResponse || new Response('Offline', { status: 503 });
     }
-
+    
     // Return a generic offline response for other requests
-    return new Response("Offline", { status: 503 });
+    return new Response('Offline', { status: 503 });
   }
 }
 
@@ -134,7 +141,7 @@ async function cacheFirst(request, cacheName) {
   if (cachedResponse) {
     return cachedResponse;
   }
-
+  
   const networkResponse = await fetch(request);
   const cache = await caches.open(cacheName);
   cache.put(request, networkResponse.clone());
@@ -156,43 +163,43 @@ async function networkFirst(request, cacheName) {
 async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
-
+  
   const networkResponsePromise = fetch(request).then((networkResponse) => {
     cache.put(request, networkResponse.clone());
     return networkResponse;
   });
-
+  
   return cachedResponse || networkResponsePromise;
 }
 
 // Utility functions
 function isStaticAsset(pathname) {
   return (
-    pathname.startsWith("/assets/") ||
-    pathname.endsWith(".svg") ||
-    pathname.endsWith(".png") ||
-    pathname.endsWith(".jpg") ||
-    pathname.endsWith(".jpeg") ||
-    pathname.endsWith(".webp") ||
-    pathname.endsWith(".avif") ||
-    pathname.includes("/manifest.json")
+    pathname.startsWith('/assets/') ||
+    pathname.endsWith('.svg') ||
+    pathname.endsWith('.png') ||
+    pathname.endsWith('.jpg') ||
+    pathname.endsWith('.jpeg') ||
+    pathname.endsWith('.webp') ||
+    pathname.endsWith('.avif') ||
+    pathname.includes('/manifest.json')
   );
 }
 
 function isThreeAsset(pathname) {
   return (
-    pathname.includes("three") ||
-    pathname.includes("@react-three") ||
-    pathname.includes("chunks/three") ||
-    pathname.includes("chunks/vendor") // Three.js often in vendor chunks
+    pathname.includes('three') ||
+    pathname.includes('@react-three') ||
+    pathname.includes('chunks/three') ||
+    pathname.includes('chunks/vendor') // Three.js often in vendor chunks
   );
 }
 
 // Background sync for offline actions
-self.addEventListener("sync", (event) => {
-  console.log("Service Worker: Background sync triggered:", event.tag);
-
-  if (event.tag === "contact-form") {
+self.addEventListener('sync', (event) => {
+  console.log('Service Worker: Background sync triggered:', event.tag);
+  
+  if (event.tag === 'contact-form') {
     event.waitUntil(syncContactForm());
   }
 });
@@ -203,67 +210,67 @@ async function syncContactForm() {
   try {
     const offlineSubmissions = await getOfflineSubmissions();
     for (const submission of offlineSubmissions) {
-      await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(submission),
+      await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submission)
       });
       await removeOfflineSubmission(submission.id);
     }
   } catch (error) {
-    console.log("Service Worker: Failed to sync contact form:", error);
+    console.log('Service Worker: Failed to sync contact form:', error);
   }
 }
 
 // Push notification support
-self.addEventListener("push", (event) => {
-  console.log("Service Worker: Push notification received");
-
+self.addEventListener('push', (event) => {
+  console.log('Service Worker: Push notification received');
+  
   const options = {
-    body: event.data ? event.data.text() : "New update available",
-    icon: "/assets/logo/logo-proweb-icon.svg",
-    badge: "/assets/logo/logo-proweb-icon.svg",
+    body: event.data ? event.data.text() : 'New update available',
+    icon: '/assets/logo/logo-proweb-icon.svg',
+    badge: '/assets/logo/logo-proweb-icon.svg',
     vibrate: [100, 50, 100],
     data: {
-      url: "/",
+      url: '/'
     },
     actions: [
       {
-        action: "open",
-        title: "Open Website",
+        action: 'open',
+        title: 'Open Website'
       },
       {
-        action: "close",
-        title: "Close",
-      },
-    ],
+        action: 'close',
+        title: 'Close'
+      }
+    ]
   };
-
-  event.waitUntil(self.registration.showNotification("ProWeb Studio", options));
+  
+  event.waitUntil(
+    self.registration.showNotification('ProWeb Studio', options)
+  );
 });
 
 // Handle notification clicks
-self.addEventListener("notificationclick", (event) => {
-  console.log("Service Worker: Notification clicked");
-
+self.addEventListener('notificationclick', (event) => {
+  console.log('Service Worker: Notification clicked');
+  
   event.notification.close();
-
-  if (event.action === "open" || !event.action) {
-    event.waitUntil(clients.openWindow(event.notification.data?.url || "/"));
+  
+  if (event.action === 'open' || !event.action) {
+    event.waitUntil(
+      clients.openWindow(event.notification.data?.url || '/')
+    );
   }
 });
 
 // Performance monitoring
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "PERFORMANCE_MARK") {
-    console.log(
-      "Service Worker: Performance mark:",
-      event.data.name,
-      event.data.duration,
-    );
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'PERFORMANCE_MARK') {
+    console.log('Service Worker: Performance mark:', event.data.name, event.data.duration);
   }
-
-  if (event.data && event.data.type === "SKIP_WAITING") {
+  
+  if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
 });
@@ -271,11 +278,11 @@ self.addEventListener("message", (event) => {
 // Cache size management
 async function cleanupCaches() {
   const cacheNames = await caches.keys();
-
+  
   for (const cacheName of cacheNames) {
     const cache = await caches.open(cacheName);
     const requests = await cache.keys();
-
+    
     // Limit cache size to prevent storage bloat
     if (requests.length > 100) {
       const oldestRequests = requests.slice(0, requests.length - 50);
@@ -295,9 +302,9 @@ async function getOfflineSubmissions() {
   return [];
 }
 
-async function removeOfflineSubmission() {
+async function removeOfflineSubmission(id) {
   // Implement IndexedDB delete operation
   return true;
 }
 
-console.log("Service Worker: Loaded successfully");
+console.log('Service Worker: Loaded successfully');

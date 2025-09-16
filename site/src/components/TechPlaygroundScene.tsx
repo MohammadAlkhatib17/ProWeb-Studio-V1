@@ -3,8 +3,8 @@
 // Where light becomes meaning, and meaning becomes art
 // ------------------------------------------------------------
 
-import * as React from "react";
-import { Canvas, useFrame, useThree, extend } from "@react-three/fiber";
+import * as React from 'react';
+import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
 import {
   OrbitControls,
   Float,
@@ -16,17 +16,17 @@ import {
   Preload,
   AdaptiveDpr,
   Line as DreiLine,
-} from "@react-three/drei";
+} from '@react-three/drei';
 import {
   EffectComposer,
   Bloom,
   Vignette,
   ChromaticAberration,
   DepthOfField,
-} from "@react-three/postprocessing";
-import { BlendFunction, KernelSize } from "postprocessing";
-import * as THREE from "three";
-import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
+} from '@react-three/postprocessing';
+import { BlendFunction, KernelSize } from 'postprocessing';
+import * as THREE from 'three';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 // Extend THREE to include TextGeometry
 extend({ TextGeometry });
@@ -34,30 +34,30 @@ extend({ TextGeometry });
 // ---------- Sacred Geometry & Brand Colors ----------
 const PALETTES = {
   anwar: {
-    bg: "#030015",
-    primary: "#00D9FF",
-    secondary: "#7A5CFF",
-    accent: "#FF2BD6",
-    glow: "#FFFFFF",
-    crystal: "#E0F7FF",
-    dust: "#4A90E2",
+    bg: '#030015',
+    primary: '#00D9FF',
+    secondary: '#7A5CFF',
+    accent: '#FF2BD6',
+    glow: '#FFFFFF',
+    crystal: '#E0F7FF',
+    dust: '#4A90E2',
   },
   sunfire: {
-    bg: "#0A0502",
-    primary: "#FFB200",
-    secondary: "#FF6A00",
-    accent: "#FFE5B4",
-    glow: "#FFF5E6",
-    crystal: "#FFD700",
-    dust: "#FF8C42",
+    bg: '#0A0502',
+    primary: '#FFB200',
+    secondary: '#FF6A00',
+    accent: '#FFE5B4',
+    glow: '#FFF5E6',
+    crystal: '#FFD700',
+    dust: '#FF8C42',
   },
 } as const;
 
 // ---------- Types ----------
 export type StudioAnwarSceneProps = {
-  materialMode?: "crystal" | "energy";
+  materialMode?: 'crystal' | 'energy';
   palette?: keyof typeof PALETTES;
-  animationState?: "idle" | "active" | "perpetual";
+  animationState?: 'idle' | 'active' | 'perpetual';
   interactionHeat?: number;
   autoRotate?: boolean;
 };
@@ -109,7 +109,7 @@ const createCalligraphicPaths = () => {
   };
 
   return Object.values(letterPaths).map(
-    (points) => new THREE.CatmullRomCurve3(points, false, "catmullrom", 0.5),
+    (points) => new THREE.CatmullRomCurve3(points, false, 'catmullrom', 0.5),
   );
 };
 
@@ -120,7 +120,7 @@ function CrystalPrism({
   pulseRef,
   transitionRef,
 }: {
-  mode: "crystal" | "energy";
+  mode: 'crystal' | 'energy';
   colors: (typeof PALETTES)[keyof typeof PALETTES];
   pulseRef: React.MutableRefObject<number>;
   transitionRef: React.MutableRefObject<number>;
@@ -168,7 +168,7 @@ function CrystalPrism({
   return (
     <group>
       <mesh ref={meshRef} geometry={outerGeo}>
-        {mode === "crystal" ? (
+        {mode === 'crystal' ? (
           <MeshTransmissionMaterial
             color={colors.crystal}
             transmission={1}
@@ -708,9 +708,9 @@ function SceneContent({
 
   // Enhanced animation state handling
   React.useEffect(() => {
-    if (animationState === "active" || animationState === "perpetual") {
+    if (animationState === 'active' || animationState === 'perpetual') {
       setShowReveal(true);
-    } else if (animationState === "idle") {
+    } else if (animationState === 'idle') {
       setShowReveal(false);
     }
   }, [animationState]);
@@ -735,7 +735,7 @@ function SceneContent({
 
   const handleRevealComplete = React.useCallback(() => {
     // Only hide if not in perpetual mode
-    if (animationState !== "perpetual") {
+    if (animationState !== 'perpetual') {
       setShowReveal(false);
     }
   }, [animationState]);
@@ -794,7 +794,7 @@ function SceneContent({
         <CalligraphicReveal
           colors={colors}
           onComplete={handleRevealComplete}
-          perpetual={animationState === "perpetual"}
+          perpetual={animationState === 'perpetual'}
         />
       )}
 
@@ -829,83 +829,32 @@ function SceneContent({
 
 // ---------- Main Component Export ----------
 export default function StudioAnwarScene({
-  materialMode = "crystal",
-  palette = "anwar",
-  animationState = "idle",
+  materialMode = 'crystal',
+  palette = 'anwar',
+  animationState = 'idle',
   interactionHeat = 0,
   autoRotate = false,
 }: StudioAnwarSceneProps) {
-  const [isMobile, setIsMobile] = React.useState(false);
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
-
-  React.useEffect(() => {
-    // Detect mobile viewport
-    setIsMobile(window.innerWidth < 768);
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // WebGL context event handlers
-  React.useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const handleContextLost = (event: Event) => {
-      event.preventDefault();
-      console.warn("WebGL context lost, preventing default behavior");
-    };
-
-    const handleContextRestored = () => {
-      console.info("WebGL context restored, reinitializing...");
-      // Force re-render by triggering a resize event
-      window.dispatchEvent(new Event("resize"));
-    };
-
-    canvas.addEventListener("webglcontextlost", handleContextLost);
-    canvas.addEventListener("webglcontextrestored", handleContextRestored);
-
-    return () => {
-      canvas.removeEventListener("webglcontextlost", handleContextLost);
-      canvas.removeEventListener("webglcontextrestored", handleContextRestored);
-    };
-  }, []);
-
   return (
     <div
       style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
+        position: 'relative',
+        width: '100%',
+        height: '100%',
         minHeight: 600,
         background: `radial-gradient(ellipse at center, ${PALETTES[palette].bg}00 0%, ${PALETTES[palette].bg} 100%)`,
       }}
-      className="z-0"
     >
       <Canvas
-        ref={canvasRef}
         gl={{
-          antialias: !isMobile, // Disable antialias on mobile
+          antialias: true,
           toneMapping: THREE.ACESFilmicToneMapping,
           outputColorSpace: THREE.SRGBColorSpace,
-          powerPreference: "high-performance",
-          preserveDrawingBuffer: false,
-          stencil: false,
-          depth: true,
+          powerPreference: 'high-performance',
         }}
-        dpr={isMobile ? [1, 1.5] : [1, 2]} // Clamp DPR on mobile
+        dpr={[1, 2]}
         camera={{ position: [5, 3, 8], fov: 50, near: 0.1, far: 100 }}
-        shadows={!isMobile} // Disable shadows on mobile
-        onCreated={({ gl }) => {
-          // Clamp pixel ratio for mobile stability
-          if (isMobile) {
-            gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-          }
-        }}
+        shadows
       >
         <React.Suspense fallback={null}>
           <SceneContent
@@ -921,17 +870,17 @@ export default function StudioAnwarScene({
       {/* Brand Signature */}
       <div
         style={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 20,
-          left: "50%",
-          transform: "translateX(-50%)",
+          left: '50%',
+          transform: 'translateX(-50%)',
           color: PALETTES[palette].primary,
-          fontFamily: "system-ui, -apple-system, sans-serif",
-          fontSize: "12px",
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+          fontSize: '12px',
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
           opacity: 0.6,
-          pointerEvents: "none",
+          pointerEvents: 'none',
           textShadow: `0 0 20px ${PALETTES[palette].primary}50`,
         }}
       >

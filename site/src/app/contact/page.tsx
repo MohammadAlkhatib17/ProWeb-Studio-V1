@@ -1,24 +1,24 @@
-import type { Metadata } from "next";
-import SecureContactForm from "@/components/SecureContactForm";
+import type { Metadata } from 'next';
+import SecureContactForm from '@/components/SecureContactForm';
 
-export const dynamic = "force-static";
+export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
 export const metadata: Metadata = {
-  title: "Contact – Start het gesprek met ProWeb Studio",
+  title: 'Contact – Start het gesprek met ProWeb Studio',
   description:
-    "Vertel ons over uw project. Reactie binnen één werkdag. Afspraak via video of op locatie in Nederland.",
+    'Vertel ons over uw project. Reactie binnen één werkdag. Afspraak via video of op locatie in Nederland.',
   alternates: {
-    canonical: "/contact",
-    languages: { "nl-NL": "/contact" },
+    canonical: '/contact',
+    languages: { 'nl-NL': '/contact' },
   },
   openGraph: {
-    title: "Contact – Start het gesprek met ProWeb Studio",
+    title: 'Contact – Start het gesprek met ProWeb Studio',
     description:
-      "Vertel ons over uw project. Reactie binnen één werkdag. Afspraak via video of op locatie in Nederland.",
-    url: "https://prowebstudio.nl/contact",
-    type: "website",
-    locale: "nl_NL",
+      'Vertel ons over uw project. Reactie binnen één werkdag. Afspraak via video of op locatie in Nederland.',
+    url: 'https://prowebstudio.nl/contact',
+    type: 'website',
+    locale: 'nl_NL',
   },
 };
 
@@ -45,8 +45,7 @@ export default function ContactPage() {
             <strong>Afspraak plannen:</strong> direct via onze agenda.
           </li>
           <li>
-            <strong>E‑mail/telefoon:</strong> contact@prowebstudio.nl —
-            +31686412430.
+            <strong>E‑mail/telefoon:</strong> contact@prowebstudio.nl — +31686412430.
           </li>
         </ul>
         <h2>Wat gebeurt er daarna?</h2>
@@ -71,28 +70,28 @@ export default function ContactPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
             mainEntity: [
               {
-                "@type": "Question",
-                name: "Hoe snel reageren jullie?",
+                '@type': 'Question',
+                name: 'Hoe snel reageren jullie?',
                 acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Binnen één werkdag.",
+                  '@type': 'Answer',
+                  text: 'Binnen één werkdag.',
                 },
               },
               {
-                "@type": "Question",
-                name: "Kunnen we NDA tekenen?",
-                acceptedAnswer: { "@type": "Answer", text: "Ja, op verzoek." },
+                '@type': 'Question',
+                name: 'Kunnen we NDA tekenen?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Ja, op verzoek.' },
               },
               {
-                "@type": "Question",
-                name: "Werken jullie remote of op locatie?",
+                '@type': 'Question',
+                name: 'Werken jullie remote of op locatie?',
                 acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Beide opties zijn mogelijk.",
+                  '@type': 'Answer',
+                  text: 'Beide opties zijn mogelijk.',
                 },
               },
             ],

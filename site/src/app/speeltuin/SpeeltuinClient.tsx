@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useState, useCallback, useEffect } from "react";
-import TechPlaygroundScene from "@/components/TechPlaygroundScene";
+import Link from 'next/link';
+import { useState, useCallback, useEffect } from 'react';
+import TechPlaygroundScene from '@/components/TechPlaygroundScene';
 
 export default function SpeeltuinClient() {
   // Enhanced state management for the 3D scene
-  const [material, setMaterial] = useState<"crystal" | "energy">("crystal");
-  const [palette, setPalette] = useState<"anwar" | "sunfire">("anwar");
+  const [material, setMaterial] = useState<'crystal' | 'energy'>('crystal');
+  const [palette, setPalette] = useState<'anwar' | 'sunfire'>('anwar');
   const [animationState, setAnimationState] = useState<
-    "idle" | "active" | "perpetual"
-  >("idle");
+    'idle' | 'active' | 'perpetual'
+  >('idle');
   const [interactionHeat, setInteractionHeat] = useState(0);
 
   // Enhanced interaction tracking
@@ -22,24 +22,24 @@ export default function SpeeltuinClient() {
   }, []);
 
   const handleMaterialToggle = useCallback(() => {
-    setMaterial((prev) => (prev === "crystal" ? "energy" : "crystal"));
+    setMaterial((prev) => (prev === 'crystal' ? 'energy' : 'crystal'));
     setInteractionHeat((prev) => Math.min(1, prev + 0.3));
   }, []);
 
   const handlePaletteToggle = useCallback(() => {
-    setPalette((prev) => (prev === "anwar" ? "sunfire" : "anwar"));
+    setPalette((prev) => (prev === 'anwar' ? 'sunfire' : 'anwar'));
     setInteractionHeat((prev) => Math.min(1, prev + 0.3));
   }, []);
 
   const handleAnimationToggle = useCallback(() => {
     setAnimationState((prev) => {
-      if (prev === "idle") {
+      if (prev === 'idle') {
         setInteractionHeat(1);
-        return "active";
-      } else if (prev === "active") {
-        return "perpetual";
+        return 'active';
+      } else if (prev === 'active') {
+        return 'perpetual';
       } else {
-        return "idle";
+        return 'idle';
       }
     });
   }, []);
@@ -47,14 +47,14 @@ export default function SpeeltuinClient() {
   // Dynamic button text based on animation state
   const getAnimationButtonText = () => {
     switch (animationState) {
-      case "idle":
-        return "Start Animatie";
-      case "active":
-        return "Eeuwige Modus";
-      case "perpetual":
-        return "Stop Animatie";
+      case 'idle':
+        return 'Start Animatie';
+      case 'active':
+        return 'Eeuwige Modus';
+      case 'perpetual':
+        return 'Stop Animatie';
       default:
-        return "Start Animatie";
+        return 'Start Animatie';
     }
   };
 
@@ -62,23 +62,23 @@ export default function SpeeltuinClient() {
   const getInteractionStyling = (baseClasses: string) => {
     const heatLevel = Math.floor(interactionHeat * 3);
     const heatStyles = [
-      "",
-      "ring-2 ring-cyan-400/30",
-      "ring-2 ring-cyan-400/60 shadow-cyan-400/20",
-      "ring-4 ring-cyan-400 shadow-lg shadow-cyan-400/40 scale-105",
+      '',
+      'ring-2 ring-cyan-400/30',
+      'ring-2 ring-cyan-400/60 shadow-cyan-400/20',
+      'ring-4 ring-cyan-400 shadow-lg shadow-cyan-400/40 scale-105',
     ];
     return `${baseClasses} ${heatStyles[heatLevel]} transition-all duration-500`;
   };
 
   return (
-    <main className="relative py-24 px-4 sm:px-5 sm:m-hero">
+    <main className="relative py-24 px-6">
       <div className="max-w-6xl mx-auto">
         {/* Hero Section */}
-        <section className="text-center mb-16 sm:m-stack-lg">
-          <h1 className="text-4xl md:text-6xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in sm:m-heading sm:leading-tight">
+        <section className="text-center mb-16">
+          <h1 className="text-4xl md:text-6xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in">
             Onze Expertise in Actie
           </h1>
-          <p className="text-xl text-cyan-400 max-w-4xl max-w-prose mx-auto leading-relaxed animate-slide-up sm:m-subhead">
+          <p className="text-xl text-cyan-400 max-w-4xl mx-auto leading-relaxed animate-slide-up">
             Waarom u foto&apos;s laten zien als we de magie live kunnen
             demonstreren? Dit is geen portfolio; dit is onze interactieve
             tech-speeltuin. Hier heeft u de controle. Ervaar zelf de kracht van
@@ -98,11 +98,11 @@ export default function SpeeltuinClient() {
             <button
               onClick={handleMaterialToggle}
               className={getInteractionStyling(
-                "px-6 py-3 text-sm font-medium border-2 border-cyan-400/40 bg-cosmic-800/60 backdrop-blur-sm rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/25 hover:scale-105 relative group",
+                'px-6 py-3 text-sm font-medium border-2 border-cyan-400/40 bg-cosmic-800/60 backdrop-blur-sm rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/25 hover:scale-105 relative group',
               )}
             >
               <span className="relative z-10">
-                {material === "crystal" ? "🔮 Crystal Mode" : "⚡ Energy Mode"}
+                {material === 'crystal' ? '🔮 Crystal Mode' : '⚡ Energy Mode'}
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
             </button>
@@ -110,13 +110,13 @@ export default function SpeeltuinClient() {
             <button
               onClick={handlePaletteToggle}
               className={getInteractionStyling(
-                "px-6 py-3 text-sm font-medium border-2 border-cyan-400/40 bg-cosmic-800/60 backdrop-blur-sm rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/25 hover:scale-105 relative group",
+                'px-6 py-3 text-sm font-medium border-2 border-cyan-400/40 bg-cosmic-800/60 backdrop-blur-sm rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/25 hover:scale-105 relative group',
               )}
             >
               <span className="relative z-10">
-                {palette === "anwar"
-                  ? "🌊 Anwar Palette"
-                  : "🌅 Sunfire Palette"}
+                {palette === 'anwar'
+                  ? '🌊 Anwar Palette'
+                  : '🌅 Sunfire Palette'}
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-orange-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
             </button>
@@ -124,16 +124,16 @@ export default function SpeeltuinClient() {
             <button
               onClick={handleAnimationToggle}
               className={`px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-300 hover:scale-105 relative overflow-hidden group ${
-                animationState === "idle"
-                  ? "bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black shadow-lg hover:shadow-2xl hover:shadow-cyan-500/25"
-                  : animationState === "active"
-                    ? "bg-gradient-to-r from-green-400 to-emerald-500 text-black shadow-lg hover:shadow-2xl hover:shadow-green-500/25"
-                    : "bg-gradient-to-r from-red-400 to-pink-500 text-white shadow-lg hover:shadow-2xl hover:shadow-red-500/25"
+                animationState === 'idle'
+                  ? 'bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black shadow-lg hover:shadow-2xl hover:shadow-cyan-500/25'
+                  : animationState === 'active'
+                    ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-black shadow-lg hover:shadow-2xl hover:shadow-green-500/25'
+                    : 'bg-gradient-to-r from-red-400 to-pink-500 text-white shadow-lg hover:shadow-2xl hover:shadow-red-500/25'
               }`}
             >
               <span className="relative z-10">{getAnimationButtonText()}</span>
               <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              {animationState === "perpetual" && (
+              {animationState === 'perpetual' && (
                 <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               )}
             </button>
@@ -145,8 +145,8 @@ export default function SpeeltuinClient() {
                   key={i}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     i < Math.floor(interactionHeat * 3) + 1
-                      ? "bg-cyan-400 shadow-lg shadow-cyan-400/50"
-                      : "bg-gray-600/30"
+                      ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
+                      : 'bg-gray-600/30'
                   }`}
                 />
               ))}
@@ -158,21 +158,21 @@ export default function SpeeltuinClient() {
             <p
               className={`text-sm transition-all duration-500 ${
                 interactionHeat > 0.7
-                  ? "text-cyan-300 glow-text"
+                  ? 'text-cyan-300 glow-text'
                   : interactionHeat > 0.3
-                    ? "text-cyan-400"
-                    : "text-gray-400"
+                    ? 'text-cyan-400'
+                    : 'text-gray-400'
               }`}
             >
-              {animationState === "perpetual"
-                ? "🌟 Scene eternally alive with endless motion"
-                : animationState === "active"
-                  ? "✨ Animation sequence active"
+              {animationState === 'perpetual'
+                ? '🌟 Scene eternally alive with endless motion'
+                : animationState === 'active'
+                  ? '✨ Animation sequence active'
                   : interactionHeat > 0.5
-                    ? "🔥 High interaction energy detected"
+                    ? '🔥 High interaction energy detected'
                     : interactionHeat > 0.2
-                      ? "⚡ Scene responding to your touch"
-                      : "🎭 Scene ready for your interaction"}
+                      ? '⚡ Scene responding to your touch'
+                      : '🎭 Scene ready for your interaction'}
             </p>
           </div>
         </section>
