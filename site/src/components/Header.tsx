@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site.config';
 import Logo from '@/components/Logo';
-import LogoDock from '@/components/brand/LogoDock';
 import MobileMenu from '@/components/navigation/MobileMenu';
 
 export default function Header() {
@@ -32,15 +31,25 @@ export default function Header() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center">
-        <div className="absolute left-6">
-          <LogoDock href="/">
+        <div className="absolute left-3 md:left-6">
+          <Link
+            href="/"
+            className="group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded-lg p-1 -m-1"
+            aria-label="ProWeb Studio Homepage"
+          >
             <Logo
               variant="full"
               size={isScrolled ? 'sm' : 'md'}
               withGlow={true}
-              className="transition-all duration-300"
+              className="transition-all duration-300 md:block hidden"
             />
-          </LogoDock>
+            <Logo
+              variant="full"
+              size="md"
+              withGlow={true}
+              className="transition-all duration-300 md:hidden block"
+            />
+          </Link>
         </div>
 
         <nav
