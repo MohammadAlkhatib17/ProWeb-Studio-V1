@@ -35,7 +35,12 @@ export const metadata: Metadata = {
 
 import HeroBackground from '@/components/HeroBackground';
 import dynamicImport from 'next/dynamic';
-import HeroCanvas from '@/components/HeroCanvas';
+
+const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
+  ssr: false,
+  loading: () => null,
+});
+
 const HeroScene = dynamicImport(() => import('@/three/HeroScene'), {
   ssr: false,
   loading: () => null,

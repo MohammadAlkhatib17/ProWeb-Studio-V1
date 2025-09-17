@@ -9,6 +9,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CursorTrail from '@/components/CursorTrail';
 import SEOSchema from '@/components/SEOSchema';
+import { WebVitalsReporter } from '@/components/WebVitalsReporter';
 import { initProductionEnvValidation } from '@/lib/env.server';
 
 // Initialize environment validation for production deployments
@@ -197,6 +198,10 @@ export default function RootLayout({
   return (
     <html lang="nl-NL">
       <head>
+        <link rel="preconnect" href="https://plausible.io" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://plausible.io" />
+        <link rel="preconnect" href="https://cal.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://cal.com" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />
@@ -211,6 +216,7 @@ export default function RootLayout({
         <CursorTrail />
 
         <SEOSchema pageType="homepage" />
+        <WebVitalsReporter />
 
         <Script
           defer
