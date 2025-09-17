@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: '/og',
+        url: `${SITE_URL}/og`,
         width: 1200,
         height: 630,
         alt: `${siteConfig.name} - ${siteConfig.tagline}`,
@@ -101,7 +101,7 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [
       {
-        url: '/og',
+        url: `${SITE_URL}/og`,
         width: 1200,
         height: 630,
         alt: `${siteConfig.name} - ${siteConfig.tagline}`,
