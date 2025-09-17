@@ -52,10 +52,7 @@ export function withPerformanceMonitoring<T extends Record<string, unknown>>(
               const endTime = performance.now();
               const renderTime = endTime - startTime;
               
-              // Log performance metrics
-              console.log(`3D Component ${componentName} render time: ${renderTime}ms`);
-              
-              // Send to analytics if needed
+              // Send to analytics if needed - only keep performance warnings
               if (renderTime > 100) {
                 console.warn(`Slow 3D component render: ${componentName} took ${renderTime}ms`);
               }

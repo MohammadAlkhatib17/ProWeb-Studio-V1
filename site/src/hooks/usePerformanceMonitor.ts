@@ -154,8 +154,6 @@ export function usePerformanceMonitor(
       }
 
       if (newQualityLevel !== prev.qualityLevel) {
-        console.log(`Performance: Adjusting quality from ${prev.qualityLevel} to ${newQualityLevel} (FPS: ${fps.toFixed(1)})`);
-        
         return {
           ...prev,
           qualityLevel: newQualityLevel,

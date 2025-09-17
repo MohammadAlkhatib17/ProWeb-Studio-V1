@@ -59,7 +59,6 @@ export async function POST(req: NextRequest) {
     // 4. Handle Brevo API Response
     if (response.status === 201 || response.status === 204) {
       // 201: Contact created, 204: Contact already existed but was added to the list
-      console.log(`[Newsletter Subscription] Successfully added ${email} to list ID ${listId}.`);
       const res = NextResponse.json({ ok: true, message: 'Successfully subscribed!' });
       res.headers.set('Cache-Control', 'no-store');
       return res;

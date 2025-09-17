@@ -22,8 +22,6 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
-          console.log('Service Worker registered:', registration);
-          
           // Handle updates
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
@@ -77,13 +75,7 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
     if (!deferredPrompt) return;
 
     deferredPrompt.prompt();
-    const choiceResult = await deferredPrompt.userChoice;
-    
-    if (choiceResult.outcome === 'accepted') {
-      console.log('PWA installation accepted');
-    } else {
-      console.log('PWA installation declined');
-    }
+    await deferredPrompt.userChoice;
     
     setDeferredPrompt(null);
     setIsInstallable(false);

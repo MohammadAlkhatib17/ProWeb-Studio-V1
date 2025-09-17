@@ -1,8 +1,15 @@
 {
   "dependencies": {
-    "@upstash/ratelimit": "^2.0.6",
-    "@upstash/redis": "^1.35.3",
-    "@vercel/analytics": "^1.5.0",
-    "@vercel/og": "^0.8.5"
+    "fontfaceobserver": "^2.3.0"
+  },
+  "scripts": {
+    "optimize-images": "bash scripts/optimize-images.sh",
+    "subset-fonts": "bash scripts/subset-fonts.sh",
+    "optimize-fonts": "npm run subset-fonts"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.0",
+    "sharp-cli": "^4.1.1",
+    "fonttools": "^4.38.0"
   }
 }
