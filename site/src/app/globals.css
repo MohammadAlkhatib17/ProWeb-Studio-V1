@@ -7,14 +7,30 @@
     --cosmic-primary: 20, 140, 255;
     --cosmic-secondary: 255, 0, 255;
     --cosmic-accent: 0, 255, 255;
+    /* App background variables for consistent theming */
+    --app-bg-color: #000d1a; /* cosmic-900 equivalent */
+    --app-bg-gradient: radial-gradient(circle at 50% 30%, rgba(20, 140, 255, 0.1) 0%, rgba(255, 0, 255, 0.05) 40%, transparent 70%);
   }
 
   * {
     @apply border-slate-800;
   }
 
+  /* Root background applied to html and body for consistent coverage */
+  html, body {
+    min-height: 100%;
+    background-color: var(--app-bg-color);
+    background-image: var(--app-bg-gradient);
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+    background-attachment: fixed;
+    /* Prevent subtle scroll gaps on mobile */
+    overscroll-behavior-y: none;
+  }
+
   body {
-    @apply bg-cosmic-900 text-white overflow-x-hidden;
+    @apply text-white overflow-x-hidden;
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
@@ -22,6 +38,11 @@
     font-smooth: always;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Ensure main wrapper doesn't cut off background */
+  main {
+    min-height: 100%;
   }
 
   h1,
