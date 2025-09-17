@@ -10,6 +10,10 @@ import Footer from '@/components/Footer';
 import CursorTrail from '@/components/CursorTrail';
 import LocalBusinessSchema from '@/components/LocalBusinessSchema';
 import SEOSchema from '@/components/SEOSchema';
+import { initProductionEnvValidation } from '@/lib/env.server';
+
+// Initialize environment validation for production deployments
+initProductionEnvValidation();
 
 const inter = Inter({ subsets: ['latin', 'latin-ext'], display: 'swap' });
 

@@ -165,13 +165,9 @@ export async function middleware(req: NextRequest) {
     response.headers.set(key, value);
   });
   
-  // 6. Additional headers for API routes
-  if (path.startsWith('/api/')) {
-    response.headers.set('X-API-Version', '1.0');
-    response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-    response.headers.set('Pragma', 'no-cache');
-    response.headers.set('Expires', '0');
-  }
+  // Note: API headers (X-API-Version, Cache-Control, Pragma, Expires) are now
+  // exclusively handled in next.config.mjs under async headers() for /api/:path*
+  // to avoid duplication and ensure single source of truth
   
   return response;
 }
