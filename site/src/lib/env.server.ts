@@ -15,10 +15,13 @@ interface EnvValidationResult {
 const CRITICAL_ENV_VARS = [
   'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
   'RECAPTCHA_SECRET_KEY',
-  'NEXT_PUBLIC_SITE_URL',
-  'SITE_URL',
   'CONTACT_INBOX',
 ] as const;
+
+/**
+ * URL variables - at least one is required
+ */
+const URL_VARS = ['NEXT_PUBLIC_SITE_URL', 'SITE_URL'] as const;
 
 /**
  * Optional but recommended environment variables
@@ -51,6 +54,16 @@ export function validateProductionEnv(): EnvValidationResult {
     }
   }
 
+  // Check URL variables - at least one must be present
+  const hasUrl = URL_VARS.some(envVar => {
+    const value = process.env[envVar];
+    return value && value.trim() !== '';
+  });
+  
+  if (!hasUrl) {
+    missing.push('SITE_URL or NEXT_PUBLIC_SITE_URL');
+  }
+
   // Check recommended environment variables
   for (const envVar of RECOMMENDED_ENV_VARS) {
     const value = process.env[envVar];
@@ -68,7 +81,6 @@ export function validateProductionEnv(): EnvValidationResult {
       console.error(`   ❌ ${envVar}`);
     });
     console.error('   Check your Vercel environment variables configuration.');
-    console.error('   Reference: site/.env.example for complete list.');
   }
 
   if (warnings.length > 0) {
@@ -90,10 +102,16 @@ export function validateProductionEnv(): EnvValidationResult {
  * Initialize environment validation - call once during app startup
  * Safe to call multiple times, will only validate once in production
  */
-let hasValidated = false;
+let hasLogged = false;
 export function initProductionEnvValidation(): void {
-  if (hasValidated) return;
-  
-  hasValidated = true;
-  validateProductionEnv();
+  // Only validate in production runtime, not during build
+  if (process.env.NODE_ENV === 'production' && !hasLogged && typeof window === 'undefined') {
+    // Additional check to avoid logging during build
+    if (!process.env.NEXT_PHASE || process.env.NEXT_PHASE === 'phase-production-server') {
+      hasLogged = true;
+      validateProductionEnv();
+    }
+  } else if (process.env.NODE_ENV !== 'production') {
+    validateProductionEnv();
+  }
 }
