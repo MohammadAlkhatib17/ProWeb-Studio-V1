@@ -400,40 +400,6 @@ export default function HomePage() {
       >
         <h2 className="sr-only">Structured data</h2>
       </section>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'ProWeb Studio',
-            url: 'https://prowebstudio.nl',
-            logo: '/assets/logo/logo-proweb-lockup.svg',
-            sameAs: [
-              'https://linkedin.com/company/proweb-studio',
-              'https://github.com/proweb-studio',
-              'https://twitter.com/prowebstudio_nl',
-            ],
-          }),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'ProWeb Studio',
-            url: 'https://prowebstudio.nl',
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: 'https://prowebstudio.nl/?q={search_term_string}',
-              'query-input': 'required name=search_term_string',
-            },
-          }),
-        }}
-      />
     </main>
   );
 }
