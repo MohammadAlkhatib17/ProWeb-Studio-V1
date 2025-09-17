@@ -11,6 +11,8 @@ import CursorTrail from '@/components/CursorTrail';
 import SEOSchema from '@/components/SEOSchema';
 import { WebVitalsReporter } from '@/components/WebVitalsReporter';
 import { initProductionEnvValidation } from '@/lib/env.server';
+import BackgroundLayer from '@/components/layout/BackgroundLayer';
+import HeroBackground from '@/components/HeroBackground';
 
 // Initialize environment validation for production deployments
 initProductionEnvValidation();
@@ -206,7 +208,19 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-transparent`}>
+        <BackgroundLayer />
+        {/**
+         * Global cosmic background placed at the root, behind all content.
+         * Why: Some routes add a safe top padding for the sticky header. When
+         * the first section provides its own background (e.g. hero/canvas),
+         * that padding area could expose a different root color/gradient,
+         * creating a visible dark band beneath the header. Rendering the
+         * nebula/star background globally ensures a single, consistent
+         * backdrop from the very top across all pages while keeping header
+         * wrappers fully transparent.
+         */}
+        <HeroBackground />
         <a href="#main" className="skip-to-content">
           Ga naar hoofdinhoud
         </a>

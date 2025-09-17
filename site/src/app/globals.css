@@ -16,15 +16,14 @@
     @apply border-slate-800;
   }
 
-  /* Root background applied to html and body for consistent coverage */
+  /* Root elements transparent; BackgroundLayer handles painting */
   html, body {
     min-height: 100%;
-    background-color: var(--app-bg-color);
-    background-image: var(--app-bg-gradient);
+    background-color: transparent;
+    background-image: none;
     background-repeat: no-repeat;
-    background-position: center top;
-    background-size: cover;
-    background-attachment: fixed;
+    background-position: initial;
+    background-size: auto;
     /* Prevent subtle scroll gaps on mobile */
     overscroll-behavior-y: none;
   }

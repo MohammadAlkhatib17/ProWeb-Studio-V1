@@ -33,7 +33,6 @@ export const metadata: Metadata = {
   ],
 };
 
-import HeroBackground from '@/components/HeroBackground';
 import dynamicImport from 'next/dynamic';
 
 const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
@@ -100,7 +99,7 @@ export default function HomePage() {
 
         {/* 3D Portal Scene */}
         <div className="absolute inset-0">
-          <HeroBackground />
+          {/* Global HeroBackground is now rendered in RootLayout to unify the top edge site-wide. */}
           <HeroCanvas>
             <HeroScene />
           </HeroCanvas>

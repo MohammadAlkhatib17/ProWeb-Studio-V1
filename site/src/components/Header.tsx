@@ -24,10 +24,10 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 w-full z-40 transition-all duration-300 ${
+      className={`fixed top-0 w-full z-40 transition-all duration-300 bg-transparent ${
         isScrolled
           ? 'glass py-4 backdrop-blur-xl border-b border-cosmic-700/30'
-          : 'py-6 bg-transparent'
+          : 'py-6'
       }`}
       style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}
     >
