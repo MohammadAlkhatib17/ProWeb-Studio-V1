@@ -13,6 +13,7 @@ import { WebVitalsReporter } from '@/components/WebVitalsReporter';
 import { initProductionEnvValidation } from '@/lib/env.server';
 import BackgroundLayer from '@/components/layout/BackgroundLayer';
 import HeroBackground from '@/components/HeroBackground';
+import TopVignetteOverlay from '@/components/layout/TopVignetteOverlay';
 
 // Initialize environment validation for production deployments
 initProductionEnvValidation();
@@ -220,7 +221,9 @@ export default function RootLayout({
          * backdrop from the very top across all pages while keeping header
          * wrappers fully transparent.
          */}
-        <HeroBackground />
+  <HeroBackground />
+  {/* Global top vignette to unify luminance behind the header across routes */}
+  <TopVignetteOverlay />
         <a href="#main" className="skip-to-content">
           Ga naar hoofdinhoud
         </a>
