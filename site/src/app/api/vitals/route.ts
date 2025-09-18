@@ -19,7 +19,9 @@ export async function POST(request: NextRequest) {
     // Early return if no Plausible domain configured
     const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
     if (!plausibleDomain) {
-      return NextResponse.json({ success: true });
+      const response = NextResponse.json({ success: true });
+      response.headers.set('Cache-Control', 'no-store');
+      return response;
     }
 
     // Send to Plausible as custom event
@@ -45,9 +47,13 @@ export async function POST(request: NextRequest) {
       // Silently fail - don't throw errors for analytics
     });
 
-    return NextResponse.json({ success: true });
+    const response = NextResponse.json({ success: true });
+    response.headers.set('Cache-Control', 'no-store');
+    return response;
   } catch {
     // Silently handle errors to avoid affecting user experience
-    return NextResponse.json({ success: true });
+    const response = NextResponse.json({ success: true });
+    response.headers.set('Cache-Control', 'no-store');
+    return response;
   }
 }

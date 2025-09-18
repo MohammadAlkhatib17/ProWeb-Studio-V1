@@ -10,7 +10,7 @@ import time
 from urllib.parse import urljoin
 
 # Configuration
-BASE_URL = "http://localhost:3000"
+BASE_URL = "http://localhost:3002"
 TIMEOUT = 10
 
 # Test routes and their expected characteristics
@@ -20,6 +20,7 @@ TEST_ROUTES = [
     {"path": "/contact", "type": "html", "description": "Contact page"},
     {"path": "/diensten", "type": "html", "description": "Services page"},
     {"path": "/over-ons", "type": "html", "description": "About page"},
+    {"path": "/speeltuin", "type": "html", "description": "Speeltuin page (should have X-Robots-Tag)", "expect_robots_tag": "noindex, follow"},
     
     # API routes (should have no cache)
     {"path": "/api/contact", "type": "api", "description": "Contact form API"},
@@ -62,6 +63,7 @@ def test_route(route_info):
                 "etag": headers.get("etag", "NOT SET"),
                 "x-api-version": headers.get("x-api-version", "NOT SET"),
                 "x-security-version": headers.get("x-security-version", "NOT SET"),
+                "x-robots-tag": headers.get("x-robots-tag", "NOT SET"),
                 "pragma": headers.get("pragma", "NOT SET"),
                 "expires": headers.get("expires", "NOT SET"),
                 "vary": headers.get("vary", "NOT SET"),
@@ -113,6 +115,15 @@ def main():
             print(f"  ✅ Status: {result['status']}")
             cache_control = result["headers"].get("cache-control", "NOT SET")
             print(f"  📋 Cache-Control: {cache_control}")
+            
+            # Check X-Robots-Tag for speeltuin route
+            if route_info.get("expect_robots_tag"):
+                robots_tag = result["headers"].get("x-robots-tag", "NOT SET")
+                expected_tag = route_info["expect_robots_tag"]
+                if robots_tag == expected_tag:
+                    print(f"  🤖 X-Robots-Tag: ✅ {robots_tag} (correct)")
+                else:
+                    print(f"  🤖 X-Robots-Tag: ❌ Expected '{expected_tag}', got '{robots_tag}'")
         print()
         
         # Small delay to avoid overwhelming the server

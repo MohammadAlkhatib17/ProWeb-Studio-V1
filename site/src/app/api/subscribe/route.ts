@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   if (!apiKey || !listId) {
     console.error('Brevo API key or List ID is not configured in .env.local');
     const res = NextResponse.json(
-      { ok: false, error: 'Server configuration error.' },
+      { ok: false, error: 'Service tijdelijk niet beschikbaar. Probeer het later opnieuw.' },
       { status: 500 }
     );
     res.headers.set('Cache-Control', 'no-store');
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     if (!parsed.success) {
       const res = NextResponse.json(
-        { ok: false, error: parsed.error.issues[0].message },
+        { ok: false, error: 'Ongeldig e-mailadres opgegeven.' },
         { status: 400 }
       );
       res.headers.set('Cache-Control', 'no-store');
@@ -65,15 +65,21 @@ export async function POST(req: NextRequest) {
       return res;
     } else {
       const errorData = await response.json();
-      console.error(`[Brevo API Error] Status: ${response.status}`, errorData);
-      throw new Error(errorData.message || 'Failed to subscribe.');
+      console.error(`[Brevo API Error] Status: ${response.status}, Email: ${email}`, errorData);
+      // Don't expose Brevo API errors to client
+      const res = NextResponse.json(
+        { ok: false, error: 'Inschrijving mislukt. Probeer het later opnieuw.' },
+        { status: 500 }
+      );
+      res.headers.set('Cache-Control', 'no-store');
+      return res;
     }
 
   } catch (error) {
     console.error('[API/SUBSCRIBE] Error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+    // Always return generic error message to client
     const res = NextResponse.json(
-      { ok: false, error: errorMessage },
+      { ok: false, error: 'Inschrijving mislukt. Probeer het later opnieuw.' },
       { status: 500 }
     );
     res.headers.set('Cache-Control', 'no-store');

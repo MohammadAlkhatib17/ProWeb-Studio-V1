@@ -92,6 +92,7 @@ export const metadata: Metadata = {
       },
     ],
     locale: 'nl_NL',
+    alternateLocale: ['en_US', 'de_DE', 'fr_FR'],
     type: 'website',
     countryName: 'Netherlands',
     emails: [siteConfig.email],

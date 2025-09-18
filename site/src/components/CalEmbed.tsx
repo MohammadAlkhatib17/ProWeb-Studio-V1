@@ -1,19 +1,55 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { siteConfig } from '@/config/site.config';
+
+// Check if the Cal.com URL is valid (not a placeholder)
+function isValidCalcomUrl(url: string): boolean {
+  if (!url) return false;
+  
+  // Check for common placeholder patterns
+  const placeholderPatterns = [
+    'your-handle',
+    'your-username',
+    'placeholder',
+    'example',
+    'demo'
+  ];
+  
+  // Check if URL contains any placeholder patterns
+  const hasPlaceholder = placeholderPatterns.some(pattern => 
+    url.toLowerCase().includes(pattern)
+  );
+  
+  // Check if it's a proper cal.com URL format (basic validation)
+  const isProperFormat = url.startsWith('https://cal.com/') && url.length > 'https://cal.com/'.length;
+  
+  return !hasPlaceholder && isProperFormat;
+}
 
 export default function CalEmbed() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const url = siteConfig.links.calcom;
+  const isValidUrl = isValidCalcomUrl(url);
+
+  const handleClick = () => {
+    if (isValidUrl) {
+      setOpen(true);
+    } else {
+      // Route to contact page instead
+      router.push('/contact');
+    }
+  };
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={handleClick}
         className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-lg hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900"
       >
         Plan een call
       </button>
-      {open && (
+      {open && isValidUrl && (
         <div className="fixed inset-0 bg-black/70 z-50 grid place-items-center p-4">
           <div className="bg-cosmic-900 rounded-xl border border-cosmic-700/60 w-full max-w-3xl h-[80vh] overflow-hidden shadow-2xl">
             <div className="flex justify-between items-center p-3 border-b border-cosmic-700">

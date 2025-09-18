@@ -46,6 +46,18 @@ jobs:
       - name: Generate bundle analysis data
         run: npm --prefix site run analyze:generate
 
+      - name: Security quality gates
+        run: |
+          echo "🔒 Running security quality gates..."
+          
+          # Check CSP unsafe-eval
+          echo "🛡️ Checking CSP for unsafe-eval directive..."
+          node scripts/check-csp-unsafe-eval.js
+          
+          # Check environment variable consistency
+          echo "🔧 Checking environment variable consistency..."
+          node scripts/check-env-vars-consistency.js
+
   bundle-size-check:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'

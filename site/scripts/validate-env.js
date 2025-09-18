@@ -5,27 +5,8 @@
  * Fails the build if critical environment variables are missing or contain placeholder values
  */
 
-const CRITICAL_ENV_VARS = [
-  'SITE_URL',
-  'NEXT_PUBLIC_PLAUSIBLE_DOMAIN', 
-  'CONTACT_INBOX',
-  'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
-  'RECAPTCHA_SECRET_KEY'
-];
-
-const PLACEHOLDER_VALUES = [
-  'your_site_url_here',
-  'your_domain_here',
-  'your_email_here',
-  'your_recaptcha_site_key_here',
-  'your_recaptcha_secret_key_here',
-  'placeholder',
-  'example.com',
-  'test@example.com',
-  'localhost',
-  'changeme',
-  ''
-];
+// Import from shared module
+const { CRITICAL_ENV_VARS, PLACEHOLDER_VALUES } = require('../src/lib/env.required.cjs');
 
 /**
  * Check if a value is a placeholder or invalid

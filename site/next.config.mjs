@@ -1,6 +1,7 @@
 // @ts-check
 
 import nextBundleAnalyzer from '@next/bundle-analyzer';
+import { CRITICAL_ENV_VARS, PLACEHOLDER_VALUES } from './src/lib/env.required.mjs';
 
 const withBundleAnalyzer = nextBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -12,28 +13,6 @@ function validateProductionEnv() {
   if (process.env.NODE_ENV !== 'production') {
     return;
   }
-
-  const CRITICAL_ENV_VARS = [
-    'SITE_URL',
-    'NEXT_PUBLIC_PLAUSIBLE_DOMAIN', 
-    'CONTACT_INBOX',
-    'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
-    'RECAPTCHA_SECRET_KEY'
-  ];
-
-  const PLACEHOLDER_VALUES = [
-    'your_site_url_here',
-    'your_domain_here', 
-    'your_email_here',
-    'your_recaptcha_site_key_here',
-    'your_recaptcha_secret_key_here',
-    'placeholder',
-    'example.com',
-    'test@example.com',
-    'localhost',
-    'changeme',
-    ''
-  ];
 
   /**
    * @param {string} value
@@ -263,6 +242,9 @@ const nextConfig = {
         ],
       },
       // Contact form specific headers with comprehensive CSP-Report-Only
+      // 48h Monitoring Window: 2025-09-18 to 2025-09-20
+      // Purpose: Collect violations before enforcing stricter CSP
+      // Action Required: Review reports/security/csp-status.md after window closes
       {
         source: '/contact',
         headers: [
@@ -270,8 +252,10 @@ const nextConfig = {
             key: 'Content-Security-Policy-Report-Only', 
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com",
-              "script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com",
+              // Removed unsafe-eval - monitoring for violations
+              // If eval violations occur, review code for nonce/hash alternatives
+              "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com",
+              "script-src-elem 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
@@ -289,6 +273,39 @@ const nextConfig = {
           { key: 'Expect-CT', value: 'max-age=86400, enforce' },
         ],
       },
+      
+      /* ENFORCED CSP - READY TO ACTIVATE AFTER 48h WINDOW
+       * Uncomment the section below and comment out the Report-Only section above
+       * Only activate after reviewing violation reports in reports/security/csp-status.md
+       * 
+      {
+        source: '/contact',
+        headers: [
+          { 
+            key: 'Content-Security-Policy', 
+            value: [
+              "default-src 'self'",
+              // Strict script-src without unsafe directives
+              // Add specific nonces/hashes if inline scripts are required
+              "script-src 'self' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com",
+              "script-src-elem 'self' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "img-src 'self' data: https: blob:",
+              "media-src 'self' https:",
+              "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com",
+              "connect-src 'self' https://api.cal.com https://www.google-analytics.com https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "frame-ancestors 'none'",
+              "form-action 'self'",
+              "upgrade-insecure-requests"
+            ].join('; ')
+          },
+          { key: 'Expect-CT', value: 'max-age=86400, enforce' },
+        ],
+      },
+      */
     ];
   },
 

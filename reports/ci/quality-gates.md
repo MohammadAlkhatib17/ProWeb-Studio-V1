@@ -11,6 +11,7 @@ The CI pipeline implements several quality gates that must pass before code can 
 3. **Prettier Code Formatting** - Code must be properly formatted
 4. **Test Suite** - All tests must pass
 5. **Bundle Size Monitoring** - Bundle size increases must stay within acceptable limits
+6. **Security Quality Gates** - Critical security configurations must be maintained
 
 ## Quality Gate Thresholds
 
@@ -24,6 +25,62 @@ These gates block merges when code quality issues are detected:
 | ESLint | 0 errors | `code-quality-override` | All ESLint errors must be resolved (warnings allowed) |
 | Prettier | 0 diffs | `code-quality-override` | Code must be formatted according to Prettier rules |
 | Tests | 0 failures | `code-quality-override` | All unit tests must pass |
+
+### Security Quality Gates
+
+These gates protect against security configuration regressions:
+
+| Gate | Threshold | Override Label | Description |
+|------|-----------|----------------|-------------|
+| CSP unsafe-eval | 0 occurrences | `security-override` | Blocks re-introduction of unsafe-eval in CSP policies |
+| Environment Variable Consistency | 100% compliance | `security-override` | All env vars used in code must be declared in env.required.mjs |
+
+#### CSP unsafe-eval Protection
+
+The CSP unsafe-eval check scans configuration files for the `unsafe-eval` directive:
+
+- **Files Monitored**: `site/next.config.mjs`, `site/src/middleware.ts`
+- **Pattern Detection**: Regex patterns for CSP headers containing `unsafe-eval`
+- **Exception Handling**: Ignores commented code and documentation
+- **Purpose**: Prevents regression after intentional removal of unsafe-eval
+
+**Example Violation:**
+```javascript
+// This would trigger the quality gate
+'Content-Security-Policy': 'script-src \'self\' \'unsafe-eval\''
+```
+
+**Resolution Steps:**
+1. Remove `unsafe-eval` from CSP directives
+2. Use nonces, hashes, or `strict-dynamic` for dynamic scripts
+3. Refactor code to avoid `eval()` usage
+4. Check `reports/security/csp-status.md` for guidance
+
+#### Environment Variable Consistency
+
+The environment variable consistency check ensures that all environment variables used in code are properly declared:
+
+- **Files Scanned**: All `.ts`, `.tsx`, `.js`, `.jsx` files in `site/src/`
+- **Config Files**: `site/next.config.mjs`, `site/middleware.ts`
+- **Pattern Detection**: `process.env.VARIABLE_NAME` usage
+- **Validation**: Cross-reference with `site/src/lib/env.required.mjs`
+
+**Categories Validated:**
+- **Critical Variables**: Must be in `CRITICAL_ENV_VARS` array
+- **URL Variables**: Must be in `URL_VARS` array  
+- **Recommended Variables**: Must be in `RECOMMENDED_ENV_VARS` array
+
+**Example Violation:**
+```javascript
+// Code uses env var that's not declared in env.required.mjs
+const apiKey = process.env.NEW_API_KEY; // ❌ Not in any required list
+```
+
+**Resolution Steps:**
+1. Add missing variables to appropriate array in `env.required.mjs`
+2. Update `.env.example` with documentation
+3. Categorize as critical, URL, or recommended based on usage
+4. Ensure deployment validation covers the new variable
 
 ### Bundle Size Gate
 
@@ -47,7 +104,44 @@ The bundle size gate monitors JavaScript bundle sizes to prevent performance reg
 
 Sometimes legitimate changes may trigger quality gates that need to be overridden. Here's how to handle each scenario:
 
-### 1. Bundle Size Override
+### 1. Security Quality Gates Override
+
+Security overrides should be extremely rare and require thorough justification:
+
+**Step 1: Add the override label**
+```bash
+gh pr edit <PR_NUMBER> --add-label "security-override"
+```
+
+**Step 2: Document the justification**
+Security overrides require detailed explanation including:
+- Why the security check needs to be bypassed
+- Risk assessment and mitigation measures
+- Security team approval (if applicable)
+- Timeline for addressing the underlying issue
+
+**Example PR comment:**
+```markdown
+## Security Override Justification
+
+**Gate Triggered**: CSP unsafe-eval detection
+
+**Reason**: Critical third-party analytics integration requires eval() temporarily
+
+**Risk Assessment**: 
+- Limited to analytics script only
+- Sandboxed in dedicated CSP context
+- Monitored via CSP violation reports
+
+**Mitigation**:
+- Vendor working on eval-free version (ETA: 2 weeks)
+- Added extra CSP monitoring
+- Created follow-up issue #123 to remove override
+
+**Approval**: Security team approved (Slack thread: https://...)
+```
+
+### 2. Bundle Size Override
 
 When a bundle size increase is justified (new features, library updates, etc.):
 
@@ -86,7 +180,7 @@ This PR adds the new 3D model viewer component which requires additional Three.j
 Critical feature for Q4 portfolio showcase launch.
 ```
 
-### 2. Code Quality Override
+### 3. Code Quality Override
 
 For code quality gates (TypeScript, ESLint, Prettier, Tests):
 
@@ -127,6 +221,10 @@ npm run test
 
 # Build with bundle analysis
 npm run ci:build
+
+# Security quality gates
+node ../scripts/check-csp-unsafe-eval.js
+node ../scripts/check-env-vars-consistency.js
 ```
 
 ### Bundle Size Analysis
@@ -136,6 +234,15 @@ npm run ci:build
 
 # Compare with a specific bundle file
 npm run bundle:compare current-bundle.json baseline-bundle.json
+```
+
+### Security Checks
+```bash
+# Check for CSP unsafe-eval violations
+node scripts/check-csp-unsafe-eval.js
+
+# Check environment variable consistency
+node scripts/check-env-vars-consistency.js
 ```
 
 ## Troubleshooting Common Issues
@@ -237,6 +344,64 @@ npm run test -- path/to/test.spec.ts
 npm run test -- --reporter=verbose
 ```
 
+### Security Gate Issues
+
+**Problem**: CSP unsafe-eval detected
+
+**Common causes**:
+1. Third-party script using `eval()`
+2. Dynamic code generation
+3. Misconfigured CSP policy
+
+**Solutions**:
+```bash
+# Check which files contain unsafe-eval
+grep -r "unsafe-eval" site/next.config.mjs site/src/middleware.ts
+
+# Review CSP status and guidance
+cat reports/security/csp-status.md
+
+# Consider alternatives:
+# - Use nonces for inline scripts
+# - Implement strict-dynamic
+# - Refactor eval() usage to safer alternatives
+```
+
+**Problem**: Environment variable consistency failure
+
+**Common causes**:
+1. New env var used in code but not declared in `env.required.mjs`
+2. Removed env var still listed in required arrays
+3. Env var used in wrong category (critical vs recommended)
+
+**Solutions**:
+```bash
+# Identify unlisted variables
+node scripts/check-env-vars-consistency.js
+
+# Update env.required.mjs with missing variables
+# Edit site/src/lib/env.required.mjs and add to appropriate array:
+# - CRITICAL_ENV_VARS: Required for app to function
+# - URL_VARS: Site URL variants  
+# - RECOMMENDED_ENV_VARS: Optional but beneficial
+
+# Update .env.example with documentation
+# Add new variables with placeholder values and comments
+```
+
+**Example fix for env var consistency**:
+```javascript
+// site/src/lib/env.required.mjs
+export const CRITICAL_ENV_VARS = [
+  'SITE_URL',
+  'NEXT_PUBLIC_PLAUSIBLE_DOMAIN',
+  'CONTACT_INBOX',
+  'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
+  'RECAPTCHA_SECRET_KEY',
+  'NEW_API_KEY' // ← Add your new variable here
+];
+```
+
 ## Configuration Files
 
 ### Quality Gate Configuration
@@ -289,6 +454,9 @@ To modify quality gate thresholds:
 3. **Use dynamic imports** for large dependencies
 4. **Document bundle size increases** with clear justification
 5. **Review bundle analysis** when adding new dependencies
+6. **Validate CSP changes** against security requirements
+7. **Update env.required.mjs** when adding new environment variables
+8. **Test security gates locally** using the provided scripts
 
 ### For Reviewers
 
@@ -297,6 +465,9 @@ To modify quality gate thresholds:
 3. **Verify bundle size changes** are reasonable
 4. **Ensure proper documentation** for overrides
 5. **Consider long-term impact** of size increases
+6. **Scrutinize security overrides** - require security team approval
+7. **Validate environment variable changes** match actual usage
+8. **Check CSP modifications** don't introduce vulnerabilities
 
 ### For Maintainers
 
@@ -305,6 +476,9 @@ To modify quality gate thresholds:
 3. **Review override patterns** for improvements
 4. **Update documentation** when processes change
 5. **Educate team** on quality gate benefits
+6. **Regular security gate audits** to ensure effectiveness
+7. **Monitor CSP violation reports** for real-world issues
+8. **Maintain environment variable documentation** in sync with code
 
 ## Support
 

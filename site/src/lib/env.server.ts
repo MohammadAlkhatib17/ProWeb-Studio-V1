@@ -3,35 +3,14 @@
  * Validates critical environment variables and logs missing ones without breaking the app
  */
 
+// @ts-expect-error - importing from .mjs file
+import { CRITICAL_ENV_VARS, URL_VARS, RECOMMENDED_ENV_VARS } from './env.required.mjs';
+
 interface EnvValidationResult {
   missing: string[];
   warnings: string[];
   isValid: boolean;
 }
-
-/**
- * Critical environment variables required for production
- */
-const CRITICAL_ENV_VARS = [
-  'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
-  'RECAPTCHA_SECRET_KEY',
-  'CONTACT_INBOX',
-] as const;
-
-/**
- * URL variables - at least one is required
- */
-const URL_VARS = ['NEXT_PUBLIC_SITE_URL', 'SITE_URL'] as const;
-
-/**
- * Optional but recommended environment variables
- */
-const RECOMMENDED_ENV_VARS = [
-  'BREVO_SMTP_USER',
-  'BREVO_SMTP_PASS',
-  'NEXT_PUBLIC_PLAUSIBLE_DOMAIN',
-  'SITE_NAME',
-] as const;
 
 /**
  * Validates environment variables in production
@@ -47,7 +26,7 @@ export function validateProductionEnv(): EnvValidationResult {
   }
 
   // Check critical environment variables
-  for (const envVar of CRITICAL_ENV_VARS) {
+  for (const envVar of (CRITICAL_ENV_VARS as readonly string[])) {
     const value = process.env[envVar];
     if (!value || value.trim() === '') {
       missing.push(envVar);
@@ -55,7 +34,7 @@ export function validateProductionEnv(): EnvValidationResult {
   }
 
   // Check URL variables - at least one must be present
-  const hasUrl = URL_VARS.some(envVar => {
+  const hasUrl = (URL_VARS as readonly string[]).some((envVar: string) => {
     const value = process.env[envVar];
     return value && value.trim() !== '';
   });
@@ -65,7 +44,7 @@ export function validateProductionEnv(): EnvValidationResult {
   }
 
   // Check recommended environment variables
-  for (const envVar of RECOMMENDED_ENV_VARS) {
+  for (const envVar of (RECOMMENDED_ENV_VARS as readonly string[])) {
     const value = process.env[envVar];
     if (!value || value.trim() === '') {
       warnings.push(envVar);

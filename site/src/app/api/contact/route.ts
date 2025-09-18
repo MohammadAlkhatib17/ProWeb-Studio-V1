@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
     if (!parsed.success) {
       console.warn(`Invalid contact form submission from ${clientIP}:`, parsed.error.flatten());
       const res = NextResponse.json(
-        { ok: false, error: 'Validation failed', details: parsed.error.flatten() },
+        { ok: false, error: 'Formulier gegevens zijn ongeldig. Controleer alle velden en probeer opnieuw.' },
         { status: 400 },
       );
       res.headers.set('Cache-Control', 'no-store');
@@ -195,7 +195,7 @@ export async function POST(req: NextRequest) {
     if (!recaptchaValid) {
       console.warn(`reCAPTCHA verification failed from ${clientIP}`);
       const res = NextResponse.json(
-        { ok: false, error: 'reCAPTCHA verification failed' },
+        { ok: false, error: 'Beveiligingsverificatie mislukt. Probeer opnieuw.' },
         { status: 400 },
       );
       res.headers.set('Cache-Control', 'no-store');
@@ -241,8 +241,7 @@ export async function POST(req: NextRequest) {
     
     const res = NextResponse.json({ 
       ok: true,
-      message: 'Bericht succesvol verzonden',
-      messageId: info.messageId
+      message: 'Bericht succesvol verzonden'
     });
     res.headers.set('Cache-Control', 'no-store');
     return res;
@@ -250,13 +249,9 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Error sending contact email:', error);
     
-    // Don't expose internal errors to client
-    const errorMessage = error instanceof Error ? 
-      (process.env.NODE_ENV === 'development' ? error.message : 'Internal server error') :
-      'Unknown error occurred';
-    
+    // Always return generic error message to client
     const res = NextResponse.json(
-      { ok: false, error: 'Failed to send message', details: errorMessage },
+      { ok: false, error: 'Er is een fout opgetreden bij het verzenden van uw bericht. Probeer het later opnieuw.' },
       { status: 500 },
     );
     res.headers.set('Cache-Control', 'no-store');

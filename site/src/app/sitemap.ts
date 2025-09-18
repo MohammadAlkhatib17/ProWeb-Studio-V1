@@ -57,6 +57,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastMod: new Date('2025-08-01'), // Contact page - high priority for conversions
     },
     {
+      path: '/over-ons',
+      priority: 0.8,
+      changeFreq: 'monthly',
+      lastMod: new Date('2025-09-01'), // About us page
+    },
+    {
       path: '/privacy',
       priority: 0.3,
       changeFreq: 'yearly',
@@ -77,31 +83,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFreq: SitemapEntry['changeFrequency'];
     lastMod?: Date;
   }> = [
-    // Add specific service pages if they exist
-    {
-      path: '/diensten/website-laten-maken',
-      priority: 0.8,
-      changeFreq: 'monthly',
-      lastMod: new Date('2025-09-01'),
-    },
-    {
-      path: '/diensten/3d-website-ontwikkeling',
-      priority: 0.8,
-      changeFreq: 'monthly',
-      lastMod: new Date('2025-09-01'),
-    },
-    {
-      path: '/diensten/seo-optimalisatie',
-      priority: 0.8,
-      changeFreq: 'monthly',
-      lastMod: new Date('2025-09-01'),
-    },
-    {
-      path: '/diensten/webshop-laten-maken',
-      priority: 0.8,
-      changeFreq: 'monthly',
-      lastMod: new Date('2025-09-01'),
-    },
     // Blog or portfolio entries could be added here dynamically
     // Example: blog posts, case studies, etc.
   ];

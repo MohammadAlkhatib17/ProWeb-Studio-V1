@@ -169,6 +169,11 @@ export async function middleware(req: NextRequest) {
     response.headers.set(key, value);
   });
   
+  // 6. Apply X-Robots-Tag for speeltuin route
+  if (path === '/speeltuin' || path.startsWith('/speeltuin/')) {
+    response.headers.set('X-Robots-Tag', 'noindex, follow');
+  }
+  
   // Note: API headers (X-API-Version, Cache-Control, Pragma, Expires) are now
   // exclusively handled in next.config.mjs under async headers() for /api/:path*
   // to avoid duplication and ensure single source of truth

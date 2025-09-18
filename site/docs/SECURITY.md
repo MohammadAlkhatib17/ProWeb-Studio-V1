@@ -132,7 +132,78 @@ function sanitizeInput(input: string): string {
 - **Cross-Origin-*-Policy**: Same-origin restrictions
 - **Permissions-Policy**: Disabled unnecessary features
 
-### 5. Security Disclosure (`/.well-known/security.txt`)
+### 5. Static Asset Security
+
+#### SVG Security
+All SVG files shipped from the `public/` directory are first-party assets that have been pre-sanitized and are safe for direct inclusion in the application.
+
+**Current SVG Assets:**
+- `/logo-proweb-icon.svg` - Company logo icon
+- `/assets/logo/logo-proweb-icon.svg` - Logo icon variant
+- `/assets/logo/logo-proweb-lockup.svg` - Full logo lockup
+
+**Security Rationale:**
+- All SVGs are created in-house and do not contain user-generated content
+- Files are manually reviewed before deployment to ensure no malicious scripts
+- SVGs contain only safe presentation elements (paths, gradients, basic shapes)
+- No JavaScript, external references, or dynamic content is included
+
+**Future SVG Addition Procedure:**
+1. **Manual Review**: Inspect new SVG files for:
+   - Embedded JavaScript (`<script>` tags)
+   - External references (`href`, `xlink:href`)
+   - Data URIs or base64 encoded content
+   - Event handlers (`onclick`, `onload`, etc.)
+
+2. **Optional Build-Time Sanitization** (documented for future implementation):
+   ```bash
+   # Install SVGO for automated optimization and sanitization
+   npm install --save-dev svgo
+   
+   # Create svgo.config.js with security-focused settings
+   module.exports = {
+     plugins: [
+       'removeDoctype',
+       'removeXMLProcInst',
+       'removeComments',
+       'removeMetadata',
+       'removeScriptElement',
+       'removeStyleElement',
+       'removeHiddenElems',
+       'removeEmptyAttrs',
+       'removeEmptyText',
+       'removeEmptyContainers',
+       'removeUnknownsAndDefaults',
+       'removeUselessStrokeAndFill',
+       'removeViewBox',
+       'cleanupAttrs',
+       'cleanupNumericValues',
+       'convertColors',
+       'removeUnusedNS',
+       'cleanupIDs',
+       'removeUselessDefs',
+       'removeEditorsNSData',
+       'removeUselessIds',
+       'removeXMLNS'
+     ]
+   };
+   
+   # Add to package.json scripts:
+   "optimize-svg": "svgo --config svgo.config.js -f public/assets -o public/assets"
+   ```
+
+3. **Validation Checklist** for new SVGs:
+   - [ ] No `<script>` elements present
+   - [ ] No event handlers (onclick, onload, etc.)
+   - [ ] No external resource references
+   - [ ] No embedded stylesheets with unsafe content
+   - [ ] File size reasonable (< 50KB recommended)
+   - [ ] Valid XML structure
+
+**Content Security Policy Compliance:**
+SVG assets are served with the existing CSP policy that allows `img-src 'self'`, ensuring they can only be loaded from the same origin and preventing injection of external malicious SVGs.
+
+### 6. Security Disclosure (`/.well-known/security.txt`)
 
 RFC 9116 compliant security.txt file with:
 - Contact information for security reports
