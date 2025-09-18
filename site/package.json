@@ -26,6 +26,8 @@
     "bundle-stats": "npx bundle-stats .next/static/chunks/",
     "perf:test": "npm run build:prod && npm run lighthouse",
     "gen:icons": "tsx scripts/gen-icons.ts",
+    "optimize:images": "node scripts/optimize-images.js",
+    "verify:images": "node scripts/verify-optimized-images.js",
     "validate-env": "node scripts/validate-env.js",
     "analyze:generate": "node scripts/analyze-bundle-data.js",
     "bundle:compare": "node scripts/bundle-compare.js",

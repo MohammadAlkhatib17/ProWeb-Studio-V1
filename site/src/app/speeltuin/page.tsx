@@ -32,7 +32,7 @@ export default function Page() {
   return (
     <main className="relative overflow-hidden content-safe-top pt-20 md:pt-24">
       <Image
-        src="/assets/hero_portal_background.png"
+        src="/assets/hero_portal_background.avif"
         alt="Kosmische achtergrond"
         fill
         sizes="100vw"

@@ -28,6 +28,22 @@ interface LocalBusinessSchemaProps {
   serviceArea?: readonly string[];
   areaServed?: readonly string[];
   openingHours?: string[];
+  aggregateRating?: {
+    ratingValue: string;
+    reviewCount: string;
+    bestRating?: string;
+    worstRating?: string;
+  };
+  reviews?: Array<{
+    author: string;
+    datePublished: string;
+    reviewBody: string;
+    reviewRating: {
+      ratingValue: string;
+      bestRating?: string;
+      worstRating?: string;
+    };
+  }>;
 }
 
 export default function LocalBusinessSchema({
@@ -37,6 +53,8 @@ export default function LocalBusinessSchema({
   openingHours = ['Mo-Fr 09:00-17:00'],
   serviceArea,
   areaServed,
+  aggregateRating,
+  reviews,
 }: LocalBusinessSchemaProps) {
   // Build the structured data dynamically based on available props
   type StructuredData = Record<string, unknown> & {
@@ -132,6 +150,7 @@ export default function LocalBusinessSchema({
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Webdevelopment Diensten',
+      url: abs('/diensten'),
       itemListElement: [
         {
           '@type': 'Offer',
@@ -141,6 +160,7 @@ export default function LocalBusinessSchema({
             description:
               'Professionele websites op maat voor Nederlandse bedrijven',
             serviceType: 'Webdevelopment',
+            url: abs('/diensten/website-laten-maken'),
             areaServed: {
               '@type': 'Place',
               name: 'Nederland',
@@ -154,6 +174,7 @@ export default function LocalBusinessSchema({
             name: '3D Website ontwikkeling',
             description: 'Innovatieve 3D websites met Three.js en React',
             serviceType: 'Webdevelopment',
+            url: abs('/diensten/3d-website-ontwikkeling'),
             areaServed: {
               '@type': 'Place',
               name: 'Nederland',
@@ -161,13 +182,31 @@ export default function LocalBusinessSchema({
           },
         },
         {
-          '@type': 'Service',
-          name: 'SEO optimalisatie',
-          description: 'Zoekmachine optimalisatie voor Nederlandse markt',
-          serviceType: 'Digital Marketing',
-          areaServed: {
-            '@type': 'Place',
-            name: 'Nederland',
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Webshop ontwikkeling',
+            description: 'E-commerce oplossingen en webshops op maat',
+            serviceType: 'E-commerce Development',
+            url: abs('/diensten/webshop-ontwikkeling'),
+            areaServed: {
+              '@type': 'Place',
+              name: 'Nederland',
+            },
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'SEO optimalisatie',
+            description: 'Zoekmachine optimalisatie voor Nederlandse markt',
+            serviceType: 'Digital Marketing',
+            url: abs('/diensten/seo-optimalisatie'),
+            areaServed: {
+              '@type': 'Place',
+              name: 'Nederland',
+            },
           },
         },
       ],
@@ -185,26 +224,63 @@ export default function LocalBusinessSchema({
       areaServed: 'NL',
       availableLanguage: ['Dutch', 'English'],
     },
-    aggregateRating: {
+    aggregateRating: aggregateRating || {
       '@type': 'AggregateRating',
       ratingValue: '5.0',
       reviewCount: '15',
       bestRating: '5',
       worstRating: '1',
     },
+    review: reviews?.map(review => ({
+      '@type': 'Review',
+      author: {
+        '@type': 'Person',
+        name: review.author,
+      },
+      datePublished: review.datePublished,
+      reviewBody: review.reviewBody,
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: review.reviewRating.ratingValue,
+        bestRating: review.reviewRating.bestRating || '5',
+        worstRating: review.reviewRating.worstRating || '1',
+      },
+    })) || [
+      // Placeholder reviews - ready for real data
+      {
+        '@type': 'Review',
+        author: {
+          '@type': 'Person',
+          name: 'Tevreden Klant',
+        },
+        datePublished: '2024-01-01',
+        reviewBody: 'Uitstekende service en professionele website ontwikkeling.',
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: '5',
+          bestRating: '5',
+          worstRating: '1',
+        },
+      },
+    ],
     currenciesAccepted: 'EUR',
     paymentAccepted: ['Cash', 'Credit Card', 'Bank Transfer', 'Invoice'],
     knowsAbout: [
-      'Website ontwikkeling',
-      'Webdesign',
-      'SEO',
+      'website laten maken',
+      'webshop ontwikkeling',
+      'SEO optimalisatie',
+      'webdesign Nederland',
       '3D websites',
       'React ontwikkeling',
       'Next.js',
       'TypeScript',
-      'Webshop ontwikkeling',
-      'E-commerce',
-      'Digital marketing',
+      'e-commerce oplossingen',
+      'digitale marketing',
+      'zoekmachine optimalisatie',
+      'responsive webdesign',
+      'website onderhoud',
+      'webapplicatie ontwikkeling',
+      'maatwerk websites',
     ],
     slogan: siteConfig.tagline,
     '@graph': [

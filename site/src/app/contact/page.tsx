@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { headers } from 'next/headers';
 import SecureContactForm from '@/components/SecureContactForm';
 
 export const dynamic = 'force-static';
@@ -23,12 +24,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  // Get the nonce from the X-Nonce header set by middleware
+  const headersList = headers();
+  const nonce = headersList.get('X-Nonce') || '';
+
   return (
     <main className="content-safe-top pt-20 md:pt-24 relative overflow-hidden">
       {/* Full-bleed background to avoid top seam */}
       <Image
-        src="/assets/glowing_beacon_contact.png"
+        src="/assets/glowing_beacon_contact.avif"
         alt="Contact achtergrond"
         fill
         priority
@@ -79,6 +84,7 @@ export default function ContactPage() {
 
       <script
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',

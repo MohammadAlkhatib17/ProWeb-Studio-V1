@@ -98,23 +98,14 @@ function validateRequest(req: NextRequest): { valid: boolean; reason?: string } 
   return { valid: true };
 }
 
-function createSecurityHeaders(): Record<string, string> {
-  // Generate cryptographically secure nonce for CSP
-  const nonce = (globalThis.crypto && 'randomUUID' in globalThis.crypto)
-    ? globalThis.crypto.randomUUID()
-    : Math.random().toString(36).slice(2);
-  
+function createSecurityHeaders(nonce: string): Record<string, string> {
   return {
-    // Only keep non-duplicated headers here
-    // All security headers are now handled in next.config.mjs
-    
-    // TODO: Nonce for inline scripts (unique per request)
-    // Currently unused - will be consumed by CSP when switching from Report-Only to Enforce mode
-    // When enforced CSP is activated in next.config.mjs, this nonce will be used in:
+    // Nonce for inline scripts (unique per request)
+    // Used in CSP when switching from Report-Only to Enforce mode
+    // When enforced CSP is activated, this nonce will be used in:
     // - script-src directive: "script-src 'self' 'nonce-{nonce}' ..."
     // - Inline script tags: <script nonce="{nonce}">...</script>
     // This replaces 'unsafe-inline' directive for improved security
-    // See: /reports/security/csp-status.md for implementation roadmap
     'X-Nonce': nonce
   };
 }
@@ -168,15 +159,46 @@ export async function middleware(req: NextRequest) {
     });
   }
   
-  // 5. Apply Security Headers
+  // 5. Generate nonce for CSP
+  const nonce = (globalThis.crypto && 'randomUUID' in globalThis.crypto)
+    ? globalThis.crypto.randomUUID()
+    : Math.random().toString(36).slice(2);
+  
+  // 6. Apply Security Headers
   const response = NextResponse.next();
-  const securityHeaders = createSecurityHeaders();
+  const securityHeaders = createSecurityHeaders(nonce);
   
   Object.entries(securityHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
   
-  // 6. Apply X-Robots-Tag for speeltuin route
+  // 7. Apply Contact-specific CSP with nonce
+  if (path === '/contact') {
+    const cspValue = [
+      "default-src 'self'",
+      // ENFORCED: Using nonces for inline scripts - no unsafe-inline or unsafe-eval
+      `script-src 'self' 'nonce-${nonce}' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com`,
+      `script-src-elem 'self' 'nonce-${nonce}' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com`,
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: https: blob:",
+      "media-src 'self' https:",
+      "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com",
+      "connect-src 'self' https://api.cal.com https://www.google-analytics.com https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "frame-ancestors 'none'",
+      "form-action 'self'",
+      "upgrade-insecure-requests"
+    ].join('; ');
+    
+    response.headers.set('Content-Security-Policy', cspValue);
+    response.headers.set('Expect-CT', 'max-age=86400, enforce');
+    response.headers.set('X-XSS-Protection', '1; mode=block');
+    response.headers.set('X-Content-Type-Options', 'nosniff');
+  }
+  
+  // 8. Apply X-Robots-Tag for speeltuin route
   if (path === '/speeltuin' || path.startsWith('/speeltuin/')) {
     response.headers.set('X-Robots-Tag', 'noindex, follow');
   }

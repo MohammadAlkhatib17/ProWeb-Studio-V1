@@ -140,7 +140,7 @@ export default function Diensten() {
     <main className="pt-20 md:pt-24 relative overflow-hidden">
       {/* Full-bleed page background to unify top edge */}
       <Image
-        src="/assets/nebula_services_background.png"
+        src="/assets/nebula_services_background.avif"
         alt="Nebula achtergrond"
         fill
         priority

@@ -241,92 +241,13 @@ const nextConfig = {
           { key: 'Service-Worker-Allowed', value: '/' },
         ],
       },
-      // Contact form specific headers with comprehensive CSP-Report-Only
-      // 48h Monitoring Window: 2025-09-18 to 2025-09-20
-      // Purpose: Collect violations before enforcing stricter CSP
-      // Action Required: Review reports/security/csp-status.md after window closes
-      {
-        source: '/contact',
-        headers: [
-          { 
-            key: 'Content-Security-Policy-Report-Only', 
-            value: [
-              "default-src 'self'",
-              // Removed unsafe-eval - monitoring for violations
-              // If eval violations occur, review code for nonce/hash alternatives
-              "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com",
-              "script-src-elem 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: https: blob:",
-              "media-src 'self' https:",
-              "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com",
-              "connect-src 'self' https://api.cal.com https://www.google-analytics.com https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "frame-ancestors 'none'",
-              "form-action 'self'",
-              "upgrade-insecure-requests",
-              "report-uri /api/csp-report"
-            ].join('; ')
-          },
-          { key: 'Expect-CT', value: 'max-age=86400, enforce' },
-        ],
-      },
-      
-      /* ================================================================================================
-       * ENFORCED CSP FOR /CONTACT - READY TO TOGGLE AFTER MONITORING WINDOW
-       * ================================================================================================
-       * 
-       * STATUS: READY FOR ACTIVATION (currently commented out)
-       * TOGGLE: See reports/security/csp-status.md for exact switching instructions
-       * 
-       * ACTIVATION STEPS:
-       * 1. Verify 48h monitoring window completed (check CSP violation reports)
-       * 2. Uncomment this entire enforced CSP block (lines below)
-       * 3. Comment out the Report-Only CSP section above
-       * 4. Deploy and monitor for any functionality breaks
-       * 
-       * WHAT THIS ENFORCES:
-       * - Blocks unsafe-eval completely (no dynamic code execution)
-       * - Requires all scripts to be from allowed domains or inline with nonces
-       * - Prevents data exfiltration through unauthorized connections
-       * - Blocks clickjacking and code injection attacks
-       * 
-       * ROLLBACK: If issues occur, reverse steps 2-3 to return to report-only mode
-       * 
-      {
-        source: '/contact',
-        headers: [
-          { 
-            key: 'Content-Security-Policy', 
-            value: [
-              "default-src 'self'",
-              // ENFORCED: No unsafe-eval or unsafe-inline - all scripts must be explicit
-              // NOTE: If inline scripts are needed, add nonces using X-Nonce from middleware.ts
-              // Example: "script-src 'self' 'nonce-{DYNAMIC_NONCE}' https://trusted-domain.com"
-              "script-src 'self' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com",
-              "script-src-elem 'self' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // CSS inline allowed for styling
-              "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: https: blob:", // Allow all HTTPS images + data/blob URIs
-              "media-src 'self' https:",
-              "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com", // reCAPTCHA + Cal.com embeds
-              "connect-src 'self' https://api.cal.com https://www.google-analytics.com https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
-              "object-src 'none'", // Block plugins/embeds
-              "base-uri 'self'", // Prevent base tag hijacking
-              "frame-ancestors 'none'", // Prevent embedding this page
-              "form-action 'self'", // Forms can only submit to same origin
-              "upgrade-insecure-requests" // Force HTTPS for all resources
-            ].join('; ')
-          },
-          { key: 'Expect-CT', value: 'max-age=86400, enforce' },
-          // Additional security headers for contact form
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-        ],
-      },
-      */
+      // CSP FOR /CONTACT - NOW HANDLED IN MIDDLEWARE.TS WITH DYNAMIC NONCES
+      // The CSP headers for /contact are now set in middleware.ts to support
+      // dynamic nonce generation. This allows for secure inline scripts
+      // without using 'unsafe-inline' directive.
+      //
+      // Report-only and enforced CSP configurations have been moved to
+      // middleware.ts where nonces can be dynamically injected.
     ];
   },
 
