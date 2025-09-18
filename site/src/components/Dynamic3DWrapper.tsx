@@ -255,11 +255,13 @@ export default function Dynamic3DWrapper({
     
     // If performance drops significantly, disable enhancements
     if (performanceState.metrics.fps < 25 && progressiveEnhancement) {
+      console.log('Performance degraded, disabling enhancements');
       setProgressiveEnhancement(false);
     }
     
     // Re-enable enhancements if performance improves and stabilizes
     if (performanceState.metrics.fps > 40 && !progressiveEnhancement && performanceState.qualityLevel !== 'low') {
+      console.log('Performance improved, re-enabling enhancements');
       setProgressiveEnhancement(true);
     }
   }, [performanceState.metrics.fps, performanceState.qualityLevel, progressiveEnhancement, enablePerformanceMonitoring, shouldRender3D]);
@@ -270,10 +272,8 @@ export default function Dynamic3DWrapper({
 
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        // Performance monitoring without console logging
-        if (entry.entryType === 'measure' && entry.name.includes('three') && entry.duration > 16) {
-          // Only warn about slow operations (>16ms for 60fps target)
-          console.warn(`Slow 3D Performance: ${entry.name} took ${entry.duration}ms`);
+        if (entry.entryType === 'measure' && entry.name.includes('three')) {
+          console.log(`3D Performance: ${entry.name} took ${entry.duration}ms`);
         }
       }
     });

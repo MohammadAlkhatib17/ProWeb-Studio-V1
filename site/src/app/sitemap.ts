@@ -121,7 +121,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
 // This could be used if you have a CMS or database with dynamic content
 export async function generateDynamicSitemapEntries(): Promise<SitemapEntry[]> {
   // This is where you would fetch from your CMS, database, or API
+  // For example:
+  // const blogPosts = await fetchBlogPosts();
+  // const portfolioItems = await fetchPortfolioItems();
+
   const dynamicEntries: SitemapEntry[] = [];
+
+  // Example of how to add blog posts
+  /*
+  const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
+  blogPosts.forEach((post) => {
+    dynamicEntries.push({
+      url: `${SITE_URL}/blog/${post.slug}`,
+      lastModified: new Date(post.updatedAt),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    });
+  });
+  */
+
+  // Example of how to add portfolio/case study items
+  /*
+  const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
+  portfolioItems.forEach((item) => {
+    dynamicEntries.push({
+      url: `${SITE_URL}/portfolio/${item.slug}`,
+      lastModified: new Date(item.updatedAt),
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    });
+  });
+  */
 
   return dynamicEntries;
 }
