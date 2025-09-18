@@ -1,6 +1,6 @@
 'use client';
 import * as THREE from 'three';
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import ParallaxRig from '@/three/ParallaxRig';
 import StarsShell from '@/three/StarsShell';
@@ -44,6 +44,15 @@ function LightParticles({
     geo.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
     return geo;
   }, [positions, scales]);
+
+  // Dispose manually to avoid GPU memory leaks on unmount/remount
+  useEffect(() => {
+    return () => {
+      try {
+        geometry.dispose();
+      } catch {}
+    };
+  }, [geometry]);
 
   useFrame((state) => {
     if (!particles.current || reduced) return;

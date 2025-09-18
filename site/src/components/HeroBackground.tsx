@@ -3,9 +3,9 @@ export default function HeroBackground() {
   return (
     <picture className="fixed inset-0 -z-10 pointer-events-none">
       <source srcSet="/assets/hero/nebula_helix.avif" type="image/avif" />
-      <source srcSet="/assets/hero/nebula_helix.webp" type="image/webp" />
+      {/* Use a guaranteed existing PNG fallback to avoid 404s */}
       <img
-        src="/assets/hero/nebula_helix.jpg"
+        src="/assets/hero_portal_background.png"
         alt=""
         className="w-full h-full object-cover"
         loading="eager"

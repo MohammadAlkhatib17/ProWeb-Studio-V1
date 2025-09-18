@@ -28,6 +28,7 @@ import { BlendFunction, KernelSize } from 'postprocessing';
 import * as THREE from 'three';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
+import { WebGLContextRegistry } from '@/three/WebGLContextRegistry';
 
 // Extend THREE to include TextGeometry
 extend({ TextGeometry });
@@ -1100,29 +1101,74 @@ export default function StudioAnwarScene({
         }}
         shadows={optimizedSettings.enableShadows && finalConfig.maxLights > 2}
         onCreated={(state) => {
-          // WebGL context loss prevention and recovery
-          const canvas = state.gl.domElement;
-          
-          // Prevent context loss by preventing default behavior
-          canvas.addEventListener('webglcontextlost', (event) => {
-            console.warn('WebGL context lost, attempting recovery...');
-            event.preventDefault(); // Allow context restoration
-          });
-          
-          canvas.addEventListener('webglcontextrestored', () => {
-            console.log('WebGL context restored successfully');
-          });
+          const { gl } = state;
+          const canvas = gl.domElement as HTMLCanvasElement;
+          canvas.setAttribute('data-playground-canvas', '');
+          let lostTimer: number | null = null;
+
+          // Single-context guard
+          const renderer = gl as unknown as THREE.WebGLRenderer;
+          const ctxGetter = (renderer as unknown as { getContext?: () => WebGLRenderingContext | WebGL2RenderingContext }).getContext;
+          const ctx = typeof ctxGetter === 'function' ? ctxGetter() : null;
+          if (ctx) {
+            WebGLContextRegistry.claim({
+              ctx,
+              renderer,
+              canvas,
+              dispose: () => {
+                try { renderer.dispose(); } catch {}
+              },
+              label: 'playground',
+            });
+          }
+
+          const onLost = (event: Event) => {
+            event.preventDefault();
+            try {
+              (state as unknown as { setFrameloop?: (mode: 'never' | 'always' | 'demand') => void }).setFrameloop?.('never');
+            } catch {}
+            if (lostTimer) window.clearTimeout(lostTimer);
+            lostTimer = window.setTimeout(() => {
+              // Playground has no dedicated fallback; keep scene paused only
+            }, 140);
+            if (process.env.NODE_ENV !== 'production') {
+              console.info('[webgl] contextlost (playground)');
+            }
+          };
+          const onRestored = () => {
+            if (lostTimer) {
+              window.clearTimeout(lostTimer);
+              lostTimer = null;
+            }
+            try {
+              (state as unknown as { setFrameloop?: (mode: 'never' | 'always' | 'demand') => void }).setFrameloop?.('always');
+            } catch {}
+            if (process.env.NODE_ENV !== 'production') {
+              console.info('[webgl] contextrestored (playground)');
+            }
+          };
+
+          canvas.addEventListener('webglcontextlost', onLost as EventListener, { passive: false } as AddEventListenerOptions);
+          canvas.addEventListener('webglcontextrestored', onRestored as EventListener);
 
           // Enhanced mobile optimization
           if (capabilities.isMobile || capabilities.isLowEndDevice) {
             state.gl.setPixelRatio(Math.min(window.devicePixelRatio, finalConfig.dpr[1]));
-            
-            // Configure shadows for mobile
             if (state.gl.shadowMap && optimizedSettings.enableShadows) {
-              state.gl.shadowMap.type = capabilities.isLowEndDevice ? 
-                THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
+              state.gl.shadowMap.type = capabilities.isLowEndDevice ? THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
             }
           }
+
+          return () => {
+            canvas.removeEventListener('webglcontextlost', onLost as EventListener);
+            canvas.removeEventListener('webglcontextrestored', onRestored as EventListener);
+            if (lostTimer) {
+              window.clearTimeout(lostTimer);
+              lostTimer = null;
+            }
+            try { WebGLContextRegistry.release(renderer); } catch {}
+            try { (renderer as THREE.WebGLRenderer).dispose(); } catch {}
+          };
         }}
       >
         <React.Suspense fallback={null}>

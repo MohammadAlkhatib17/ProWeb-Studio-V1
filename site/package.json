@@ -17,6 +17,8 @@
     "lint:fix": "next lint --fix",
     "lint-staged": "lint-staged",
     "test": "vitest",
+  "test:sitemap": "vitest run src/app/__tests__/sitemap.unit.test.ts",
+  "test:redirects": "vitest run src/app/__tests__/redirects.integration.test.ts",
     "test:ui": "vitest --ui",
     "analyze": "ANALYZE=true next build",
     "build:analyze": "ANALYZE=true next build",
@@ -25,7 +27,9 @@
     "lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./reports/lighthouse.html --chrome-flags='--headless'",
     "bundle-stats": "npx bundle-stats .next/static/chunks/",
     "perf:test": "npm run build:prod && npm run lighthouse",
-    "gen:icons": "tsx scripts/gen-icons.ts"
+    "gen:icons": "tsx scripts/gen-icons.ts",
+    "test:pwa": "npm run build && NODE_ENV=production node scripts/test-pwa.js",
+    "test:webgl": "npm run build && node scripts/test-webgl.js"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,md}": [
@@ -76,7 +80,8 @@
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.5",
     "postcss": "^8.4.38",
-    "prettier": "^3.6.2",
+  "prettier": "^3.6.2",
+  "puppeteer": "^23.7.1",
     "tailwindcss": "^3.4.4",
     "tsx": "^4.19.2",
     "typescript": "^5.4.5",

@@ -1,6 +1,6 @@
 'use client';
 import * as THREE from 'three';
-import { useRef, useMemo, useState } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 
 export default function FacetedSolid({
@@ -96,6 +96,15 @@ export default function FacetedSolid({
 
     return { geometry: baseGeom, material: mat };
   }, [base, accent, metalness, roughness]);
+
+  useEffect(() => {
+    return () => {
+      try {
+        geometry.dispose();
+        material.dispose();
+      } catch {}
+    };
+  }, [geometry, material]);
 
   useFrame((state, dt) => {
     if (!mesh.current) return;

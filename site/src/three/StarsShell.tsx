@@ -1,6 +1,6 @@
 'use client';
 import * as THREE from 'three';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 
 type Props = {
@@ -130,6 +130,15 @@ export default function StarsShell({
       vertexColors: true,
     });
   }, [opacity]);
+
+  useEffect(() => {
+    return () => {
+      try {
+        (geo as THREE.BufferGeometry).dispose();
+        material.dispose();
+      } catch {}
+    };
+  }, [geo, material]);
 
   useFrame((state) => {
     if (!points.current) return;
