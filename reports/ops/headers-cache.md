@@ -115,7 +115,10 @@ Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=8640
 **Middleware Responsibilities (non-conflicting):**
 - Rate limiting with custom headers (`X-RateLimit-*`)
 - Bot detection and request validation
-- Nonce generation (`X-Nonce`)
+- Nonce generation (`X-Nonce`) - **Future CSP enforcement preparation**
+  - Generated per request for security
+  - Currently unused, will be consumed when switching CSP from Report-Only to Enforce mode
+  - Intended to replace 'unsafe-inline' in script-src directive
 - Security filtering and suspicious content detection
 
 **next.config.mjs Responsibilities (primary):**

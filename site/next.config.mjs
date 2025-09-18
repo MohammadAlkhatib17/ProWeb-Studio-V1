@@ -274,9 +274,26 @@ const nextConfig = {
         ],
       },
       
-      /* ENFORCED CSP - READY TO ACTIVATE AFTER 48h WINDOW
-       * Uncomment the section below and comment out the Report-Only section above
-       * Only activate after reviewing violation reports in reports/security/csp-status.md
+      /* ================================================================================================
+       * ENFORCED CSP FOR /CONTACT - READY TO TOGGLE AFTER MONITORING WINDOW
+       * ================================================================================================
+       * 
+       * STATUS: READY FOR ACTIVATION (currently commented out)
+       * TOGGLE: See reports/security/csp-status.md for exact switching instructions
+       * 
+       * ACTIVATION STEPS:
+       * 1. Verify 48h monitoring window completed (check CSP violation reports)
+       * 2. Uncomment this entire enforced CSP block (lines below)
+       * 3. Comment out the Report-Only CSP section above
+       * 4. Deploy and monitor for any functionality breaks
+       * 
+       * WHAT THIS ENFORCES:
+       * - Blocks unsafe-eval completely (no dynamic code execution)
+       * - Requires all scripts to be from allowed domains or inline with nonces
+       * - Prevents data exfiltration through unauthorized connections
+       * - Blocks clickjacking and code injection attacks
+       * 
+       * ROLLBACK: If issues occur, reverse steps 2-3 to return to report-only mode
        * 
       {
         source: '/contact',
@@ -285,24 +302,28 @@ const nextConfig = {
             key: 'Content-Security-Policy', 
             value: [
               "default-src 'self'",
-              // Strict script-src without unsafe directives
-              // Add specific nonces/hashes if inline scripts are required
+              // ENFORCED: No unsafe-eval or unsafe-inline - all scripts must be explicit
+              // NOTE: If inline scripts are needed, add nonces using X-Nonce from middleware.ts
+              // Example: "script-src 'self' 'nonce-{DYNAMIC_NONCE}' https://trusted-domain.com"
               "script-src 'self' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com",
               "script-src-elem 'self' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // CSS inline allowed for styling
               "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: https: blob:",
+              "img-src 'self' data: https: blob:", // Allow all HTTPS images + data/blob URIs
               "media-src 'self' https:",
-              "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com",
+              "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com", // reCAPTCHA + Cal.com embeds
               "connect-src 'self' https://api.cal.com https://www.google-analytics.com https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "frame-ancestors 'none'",
-              "form-action 'self'",
-              "upgrade-insecure-requests"
+              "object-src 'none'", // Block plugins/embeds
+              "base-uri 'self'", // Prevent base tag hijacking
+              "frame-ancestors 'none'", // Prevent embedding this page
+              "form-action 'self'", // Forms can only submit to same origin
+              "upgrade-insecure-requests" // Force HTTPS for all resources
             ].join('; ')
           },
           { key: 'Expect-CT', value: 'max-age=86400, enforce' },
+          // Additional security headers for contact form
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
       */

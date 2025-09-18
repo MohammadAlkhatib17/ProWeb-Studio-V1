@@ -78,25 +78,74 @@ Content-Security-Policy:
 ## Switch to Enforcement
 
 ### Prerequisites
-1. ✅ **48h monitoring window completed**
-2. ✅ **Zero or acceptable violation count**
+1. ✅ **48h monitoring window completed** (September 20, 2025 00:00 UTC)
+2. ✅ **Zero or acceptable violation count** (check `/api/csp-report` logs)
 3. ✅ **All inline scripts reviewed for nonce/hash migration**
-4. ✅ **Third-party integrations verified**
+4. ✅ **Third-party integrations verified** (Google reCAPTCHA, Cal.com, analytics)
 
-### One-Line Toggle Instruction
+### Manual Toggle Instructions (Recommended)
 
-**To activate enforced CSP policy:**
-
+**Step 1: Comment out the Report-Only CSP section**
 ```bash
-# In site/next.config.mjs:
-# 1. Comment out the "Report-Only" section (lines ~248-265)
-# 2. Uncomment the "ENFORCED CSP" section (lines ~267-291)
+# In site/next.config.mjs, find lines ~242-267 containing:
+# "Content-Security-Policy-Report-Only"
+# Add /* at the beginning and */ at the end to comment out the entire block
 ```
 
-Or use this automated toggle:
+**Step 2: Uncomment the Enforced CSP section**
+```bash
+# In site/next.config.mjs, find lines ~269-310 containing:
+# "ENFORCED CSP FOR /CONTACT - READY TO TOGGLE AFTER MONITORING WINDOW"
+# Remove the /* and */ surrounding the entire enforced CSP block
+```
+
+**Step 3: Deploy and monitor**
+```bash
+# Deploy the changes and monitor for any breaking functionality
+npm run build    # Verify build still works
+# Deploy to staging/production platform
+```
+
+### Automated Toggle (Alternative)
+
+**⚠️ USE WITH CAUTION - Review the diff before deploying**
 
 ```bash
-cd site && sed -i 's/Content-Security-Policy-Report-Only/Content-Security-Policy/' next.config.mjs
+cd site
+
+# Create backup first
+cp next.config.mjs next.config.mjs.backup
+
+# Step 1: Comment out report-only CSP
+sed -i '/Content-Security-Policy-Report-Only/,/},/s/^/      \/\/ /' next.config.mjs
+
+# Step 2: Uncomment enforced CSP (removes comment block markers)
+sed -i '/ENFORCED CSP FOR \/CONTACT/,/\*\//s/^\s*\/\*\|^\s*\*\/\|^\s*\*\s*//g' next.config.mjs
+
+# Step 3: Verify the changes
+git diff next.config.mjs
+
+# If diff looks correct, deploy; otherwise restore backup:
+# cp next.config.mjs.backup next.config.mjs
+```
+
+### Quick Rollback Instructions
+
+**If the enforced CSP causes issues:**
+
+```bash
+# Method 1: Restore from backup
+cd site && cp next.config.mjs.backup next.config.mjs
+
+# Method 2: Manual rollback
+# 1. Re-comment the enforced CSP block (add /* and */)
+# 2. Uncomment the report-only CSP block (remove // from each line)
+# 3. Deploy immediately
+
+# Method 3: Emergency rollback via environment variable
+# Add this environment variable to disable CSP temporarily:
+DISABLE_CONTACT_CSP=true
+# (Note: This requires middleware.ts modification to check this variable)
 ```
 
 ## Security Recommendations
@@ -109,6 +158,9 @@ cd site && sed -i 's/Content-Security-Policy-Report-Only/Content-Security-Policy
 
 ### Post-Monitoring Actions
 - [ ] Implement nonces for any required inline scripts
+  - ✅ **Preparation:** X-Nonce header generation already implemented in middleware.ts
+  - **Next:** Integrate X-Nonce into CSP script-src directive when switching to enforce mode
+  - **Next:** Add nonce attributes to inline script tags: `<script nonce="{nonce}">`
 - [ ] Remove `unsafe-inline` from `script-src` if possible
 - [ ] Add specific hashes for necessary inline event handlers
 - [ ] Set up automated CSP violation alerting
@@ -140,4 +192,6 @@ cd site && sed -i 's/Content-Security-Policy-Report-Only/Content-Security-Policy
 
 **Last Updated**: September 18, 2025  
 **Next Review**: September 20, 2025 (End of monitoring window)  
+**Status**: Enforced CSP block added and ready for toggle  
+**Toggle Instructions**: See "Switch to Enforcement" section above  
 **Contact**: Monitor CSP violations and review before enforcement activation

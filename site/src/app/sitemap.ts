@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { getRouteLastModified, SERVICE_ROUTES } from '@/lib/sitemap-utils';
 
 interface SitemapEntry {
   url: string;
@@ -20,59 +21,54 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const currentDate = new Date();
 
   // Define routes with their respective priorities and change frequencies
+  // lastMod will be computed from actual file modification times
   const routes: Array<{
     path: string;
     priority: number;
     changeFreq: SitemapEntry['changeFrequency'];
-    lastMod?: Date;
+    fallbackDate?: Date; // Optional fallback if mtime is unavailable
   }> = [
     {
       path: '/',
       priority: 1.0,
       changeFreq: 'weekly',
-      lastMod: currentDate, // Homepage changes frequently
+      fallbackDate: currentDate, // Homepage changes frequently
     },
     {
       path: '/diensten',
       priority: 0.9,
       changeFreq: 'monthly',
-      lastMod: new Date('2025-09-01'), // Services page - updated monthly
+      fallbackDate: new Date('2025-09-01'), // Services page fallback
     },
     {
       path: '/werkwijze',
       priority: 0.8,
       changeFreq: 'monthly',
-      lastMod: new Date('2025-08-15'), // Work process page
-    },
-    {
-      path: '/speeltuin',
-      priority: 0.7,
-      changeFreq: 'weekly',
-      lastMod: new Date('2025-09-15'), // Tech playground - updated with new demos
+      fallbackDate: new Date('2025-08-15'), // Work process page fallback
     },
     {
       path: '/contact',
       priority: 0.9,
       changeFreq: 'monthly',
-      lastMod: new Date('2025-08-01'), // Contact page - high priority for conversions
+      fallbackDate: new Date('2025-08-01'), // Contact page fallback
     },
     {
       path: '/over-ons',
       priority: 0.8,
       changeFreq: 'monthly',
-      lastMod: new Date('2025-09-01'), // About us page
+      fallbackDate: new Date('2025-09-01'), // About us page fallback
     },
     {
       path: '/privacy',
       priority: 0.3,
       changeFreq: 'yearly',
-      lastMod: new Date('2025-05-25'), // GDPR compliance date
+      fallbackDate: new Date('2025-05-25'), // GDPR compliance date fallback
     },
     {
       path: '/voorwaarden',
       priority: 0.3,
       changeFreq: 'yearly',
-      lastMod: new Date('2025-05-25'), // Terms and conditions
+      fallbackDate: new Date('2025-05-25'), // Terms and conditions fallback
     },
   ];
 
@@ -81,8 +77,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     path: string;
     priority: number;
     changeFreq: SitemapEntry['changeFrequency'];
-    lastMod?: Date;
+    fallbackDate?: Date;
   }> = [
+    // Add service sub-routes that share the same source file as /diensten
+    ...SERVICE_ROUTES.map(route => ({
+      path: route,
+      priority: 0.8,
+      changeFreq: 'monthly' as const,
+      fallbackDate: new Date('2025-09-01'),
+    })),
     // Blog or portfolio entries could be added here dynamically
     // Example: blog posts, case studies, etc.
   ];
@@ -92,7 +95,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return allRoutes.map((route) => ({
     url: `${baseUrl}${route.path}`,
-    lastModified: route.lastMod || currentDate,
+    lastModified: getRouteLastModified(route.path, route.fallbackDate),
     changeFrequency: route.changeFreq,
     priority: route.priority,
   }));

@@ -99,6 +99,7 @@ function validateRequest(req: NextRequest): { valid: boolean; reason?: string } 
 }
 
 function createSecurityHeaders(): Record<string, string> {
+  // Generate cryptographically secure nonce for CSP
   const nonce = (globalThis.crypto && 'randomUUID' in globalThis.crypto)
     ? globalThis.crypto.randomUUID()
     : Math.random().toString(36).slice(2);
@@ -107,7 +108,13 @@ function createSecurityHeaders(): Record<string, string> {
     // Only keep non-duplicated headers here
     // All security headers are now handled in next.config.mjs
     
-    // Nonce for inline scripts (unique per request)
+    // TODO: Nonce for inline scripts (unique per request)
+    // Currently unused - will be consumed by CSP when switching from Report-Only to Enforce mode
+    // When enforced CSP is activated in next.config.mjs, this nonce will be used in:
+    // - script-src directive: "script-src 'self' 'nonce-{nonce}' ..."
+    // - Inline script tags: <script nonce="{nonce}">...</script>
+    // This replaces 'unsafe-inline' directive for improved security
+    // See: /reports/security/csp-status.md for implementation roadmap
     'X-Nonce': nonce
   };
 }

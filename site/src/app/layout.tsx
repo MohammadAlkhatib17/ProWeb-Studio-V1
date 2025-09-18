@@ -156,7 +156,7 @@ export const metadata: Metadata = {
   },
   category: 'technology',
   classification: 'Business',
-  referrer: 'origin-when-cross-origin',
+  referrer: 'strict-origin-when-cross-origin',
   applicationName: siteConfig.name,
   appleWebApp: {
     capable: true,
