@@ -8,6 +8,7 @@ interface FAQItem {
 
 interface FAQSchemaProps {
   faqs?: FAQItem[];
+  id?: string;
 }
 
 export default function FAQSchema({
@@ -53,11 +54,12 @@ export default function FAQSchema({
         'Alle onze websites zijn volledig responsive en geoptimaliseerd voor alle apparaten - van smartphone tot desktop. Wij testen uitgebreid op verschillende schermformaten en browsers.',
     },
   ],
+  id,
 }: FAQSchemaProps) {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    '@id': `${siteConfig.url}#faq`,
+    '@id': id || `${siteConfig.url}#faq`,
     mainEntity: faqs.map((faq, index) => ({
       '@type': 'Question',
       '@id': `${siteConfig.url}#faq-${index + 1}`,
@@ -81,7 +83,7 @@ export default function FAQSchema({
     inLanguage: 'nl-NL',
     publisher: {
       '@type': 'Organization',
-      '@id': `${siteConfig.url}#business`,
+      '@id': `${siteConfig.url}#organization`,
       name: siteConfig.name,
       url: siteConfig.url,
     },

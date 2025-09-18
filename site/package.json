@@ -20,12 +20,18 @@
     "test:ui": "vitest --ui",
     "analyze": "ANALYZE=true next build",
     "build:analyze": "ANALYZE=true next build",
-    "build:prod": "NODE_ENV=production next build",
+    "build:prod": "NODE_ENV=production node scripts/validate-env.js && NODE_ENV=production next build",
     "dev:perf": "NODE_ENV=development PERFORMANCE_MONITORING=true next dev",
     "lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./reports/lighthouse.html --chrome-flags='--headless'",
     "bundle-stats": "npx bundle-stats .next/static/chunks/",
     "perf:test": "npm run build:prod && npm run lighthouse",
-    "gen:icons": "tsx scripts/gen-icons.ts"
+    "gen:icons": "tsx scripts/gen-icons.ts",
+    "validate-env": "node scripts/validate-env.js",
+    "analyze:generate": "node scripts/analyze-bundle-data.js",
+    "bundle:compare": "node scripts/bundle-compare.js",
+    "ci:quality-check": "npm run typecheck && npm run lint && npm run format:check && npm run test",
+    "ci:build": "npm run build:analyze && npm run analyze:generate",
+    "validate:regions": "node scripts/validate-regions.js"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,md}": [

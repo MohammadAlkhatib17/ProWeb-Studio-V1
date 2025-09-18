@@ -1,0 +1,192 @@
+{
+  "analysisMetadata": {
+    "generatedDate": "2025-09-18",
+    "nextJsVersion": "14.2.32",
+    "bundleAnalyzerVersion": "15.5.2",
+    "targetRoutes": ["/", "/diensten"],
+    "totalBundleSize": "3.22 MB",
+    "totalBundleSizeBytes": 3377152
+  },
+  "topChunks": [
+    {
+      "rank": 1,
+      "filename": "vendors-b4d2ca312d3396c4.js",
+      "sizeBytes": 1035188,
+      "sizeFormatted": "1010.93 KB",
+      "category": "vendors",
+      "description": "Core vendor libraries (React, Next.js, Framer Motion, etc.)"
+    },
+    {
+      "rank": 2,
+      "filename": "three.28fe42e6d1f97f5c.js",
+      "sizeBytes": 755928,
+      "sizeFormatted": "738.21 KB",
+      "category": "three-core",
+      "description": "Three.js core library"
+    },
+    {
+      "rank": 3,
+      "filename": "913-3d00645556b1377a.js",
+      "sizeBytes": 723705,
+      "sizeFormatted": "706.74 KB",
+      "category": "three-components",
+      "description": "3D components for diensten, over-ons, werkwijze routes"
+    },
+    {
+      "rank": 4,
+      "filename": "664-0b7500cac858a52b.js",
+      "sizeBytes": 723611,
+      "sizeFormatted": "706.65 KB",
+      "category": "three-components",
+      "description": "3D components for homepage route"
+    },
+    {
+      "rank": 5,
+      "filename": "polyfills-42372ed130431b0a.js",
+      "sizeBytes": 112604,
+      "sizeFormatted": "109.96 KB",
+      "category": "polyfills",
+      "description": "Browser compatibility polyfills"
+    }
+  ],
+  "routeAnalysis": {
+    "/": {
+      "totalSizeBytes": 1761312,
+      "totalSizeFormatted": "1.68 MB",
+      "hasThreeJs": true,
+      "threeJsComponents": ["HeroCanvas", "HeroScene", "HexagonalPrism"],
+      "chunks": ["webpack", "vendors", "main-app", "664", "app/page"]
+    },
+    "/diensten": {
+      "totalSizeBytes": 1761312,
+      "totalSizeFormatted": "1.68 MB", 
+      "hasThreeJs": true,
+      "threeJsComponents": ["ServicesPolyhedra"],
+      "chunks": ["webpack", "vendors", "main-app", "913", "app/diensten/page"]
+    },
+    "/contact": {
+      "totalSizeBytes": 1039836,
+      "totalSizeFormatted": "1015.12 KB",
+      "hasThreeJs": false,
+      "threeJsComponents": [],
+      "chunks": ["webpack", "vendors", "main-app", "app/contact/page"]
+    }
+  },
+  "threeJsAnalysis": {
+    "totalThreeJsSizeBytes": 2203244,
+    "totalThreeJsSizeFormatted": "2.1 MB",
+    "percentageOfTotal": 65.3,
+    "breakdown": {
+      "coreLibrary": {
+        "sizeBytes": 755928,
+        "sizeFormatted": "738.21 KB",
+        "percentage": 34.3
+      },
+      "customComponents": {
+        "sizeBytes": 1447316,
+        "sizeFormatted": "1.41 MB",
+        "percentage": 65.7
+      }
+    },
+    "components": {
+      "eager": [
+        "src/three/HeroScene.tsx",
+        "src/three/ParallaxRig.tsx",
+        "src/three/StarsShell.tsx",
+        "src/three/FacetedSolid.tsx",
+        "src/three/AboutScene.tsx",
+        "src/three/HelixKnot.tsx"
+      ],
+      "dynamic": [
+        "src/components/HeroCanvas.tsx",
+        "src/three/HexagonalPrism.tsx",
+        "src/three/ServicesPolyhedra.tsx"
+      ]
+    }
+  },
+  "optimizationOpportunities": {
+    "highImpact": [
+      {
+        "component": "src/components/SecureContactForm.tsx",
+        "currentStatus": "eager",
+        "proposedStrategy": "dynamic-import-on-interaction",
+        "estimatedSavingsKB": 100,
+        "risk": "low"
+      },
+      {
+        "component": "src/three/AboutScene.tsx",
+        "currentStatus": "eager",
+        "proposedStrategy": "route-based-dynamic-import",
+        "estimatedSavingsKB": 250,
+        "risk": "low"
+      }
+    ],
+    "mediumImpact": [
+      {
+        "component": "src/components/*Schema.tsx",
+        "currentStatus": "eager",
+        "proposedStrategy": "route-specific-chunks",
+        "estimatedSavingsKB": 40,
+        "risk": "minimal"
+      },
+      {
+        "component": "src/three/materials/MeshTransmissionMaterial",
+        "currentStatus": "bundled",
+        "proposedStrategy": "separate-material-chunk",
+        "estimatedSavingsKB": 125,
+        "risk": "low"
+      }
+    ]
+  },
+  "projectedOptimizations": {
+    "phase1": {
+      "targetReduction": "400-600 KB",
+      "targetPercentage": "12-18%",
+      "components": [
+        "SecureContactForm",
+        "Schema components",
+        "Debug components"
+      ]
+    },
+    "phase2": {
+      "targetReduction": "300-450 KB", 
+      "targetPercentage": "9-13%",
+      "components": [
+        "Advanced 3D materials",
+        "Route-specific 3D scenes"
+      ]
+    },
+    "totalOptimization": {
+      "targetReduction": "700-1050 KB",
+      "targetPercentage": "21-31%",
+      "newMainBundleSize": "1.1-1.2 MB"
+    }
+  },
+  "implementationPlan": {
+    "phase1": {
+      "priority": "immediate",
+      "effort": "low",
+      "changes": [
+        "Dynamic import SecureContactForm with interaction trigger",
+        "Route-split schema components",
+        "Environment-conditional debug loading"
+      ]
+    },
+    "phase2": {
+      "priority": "short-term",
+      "effort": "medium", 
+      "changes": [
+        "Advanced 3D material chunking",
+        "Route-specific 3D scene optimization"
+      ]
+    },
+    "phase3": {
+      "priority": "long-term",
+      "effort": "high",
+      "changes": [
+        "Feature-based code splitting architecture",
+        "Micro-frontend 3D module system"
+      ]
+    }
+  }
+}

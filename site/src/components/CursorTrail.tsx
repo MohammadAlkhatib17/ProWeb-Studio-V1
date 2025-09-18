@@ -1,20 +1,59 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
+import { useDeferredInit } from '@/hooks/useFirstInput';
+
+// Utility function to detect low-end devices
+function isLowEndDevice(): boolean {
+  if (typeof window === 'undefined') return false;
+  
+  // Check hardware concurrency (CPU cores)
+  const cores = navigator.hardwareConcurrency || 0;
+  if (cores > 0 && cores <= 2) return true;
+  
+  // Check memory (if available)
+  const memory = (navigator as any).deviceMemory;
+  if (memory && memory <= 2) return true;
+  
+  // Check connection type for mobile detection
+  const connection = (navigator as any).connection;
+  if (connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')) {
+    return true;
+  }
+  
+  return false;
+}
+
+// Throttle function for high-frequency events
+function throttle<T extends (...args: any[]) => void>(func: T, limit: number): T {
+  let inThrottle: boolean;
+  return ((...args: any[]) => {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  }) as T;
+}
 
 export default function CursorTrail() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particles = useRef<Array<{ x: number; y: number; life: number }>>([]);
   const mousePos = useRef({ x: 0, y: 0 });
   const animationRef = useRef<number>();
+  const cleanupRef = useRef<() => void>();
 
-  useEffect(() => {
+  const initializeCursorTrail = useCallback(() => {
     if (typeof window === 'undefined') return;
 
+    // Early return for reduced motion preference
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
     if (prefersReducedMotion) return;
+
+    // Early return for low-end devices
+    if (isLowEndDevice()) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -38,7 +77,10 @@ export default function CursorTrail() {
       });
       if (particles.current.length > 30) particles.current.shift();
     };
-    window.addEventListener('mousemove', handleMouseMove);
+
+    // Throttle mousemove to reduce INP impact
+    const throttledMouseMove = throttle(handleMouseMove, 16); // ~60fps
+    window.addEventListener('mousemove', throttledMouseMove, { passive: true });
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -64,10 +106,22 @@ export default function CursorTrail() {
     };
     animate();
 
-    return () => {
+    // Store cleanup function
+    cleanupRef.current = () => {
       window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousemove', throttledMouseMove);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, []);
+
+  // Defer cursor trail initialization until first user input
+  useDeferredInit(initializeCursorTrail, false, 2000);
+
+  useEffect(() => {
+    return () => {
+      if (cleanupRef.current) {
+        cleanupRef.current();
+      }
     };
   }, []);
 

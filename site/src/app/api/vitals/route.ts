@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
+export const preferredRegion = 'fra1';
 
 interface WebVitalMetric {
   name: string;

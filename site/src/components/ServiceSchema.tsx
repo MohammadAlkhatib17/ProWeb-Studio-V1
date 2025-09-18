@@ -26,7 +26,14 @@ export default function ServiceSchema({ services }: ServiceSchemaProps) {
     "provider": {
       "@id": `${SITE_URL.replace(/\/$/, '')}#organization`
     },
-    "areaServed": "NL",
+    "areaServed": {
+      "@type": "Place",
+      "name": "Netherlands",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "NL"
+      }
+    },
     "inLanguage": "nl-NL"
   }));
 

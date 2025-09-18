@@ -7,7 +7,6 @@ export const revalidate = 60 * 60 * 24;
 import { Suspense } from 'react';
 import Image from 'next/image';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { siteConfig } from '@/config/site.config';
 import FAQSchema from '@/components/FAQSchema';
 import BreadcrumbSchema from '@/components/BreadcrumbSchema';
 import ServiceSchema from '@/components/ServiceSchema';
@@ -107,23 +106,32 @@ export default function Diensten() {
   const servicesSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
+    '@id': `${SITE_URL}/diensten#services`,
+    inLanguage: 'nl-NL',
     itemListElement: services.map((service, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       item: {
         '@type': 'Service',
+        '@id': `${SITE_URL}/diensten#service-${index + 1}`,
         name: service.title,
         description: service.description,
         provider: {
-          '@type': 'Organization',
-          name: siteConfig.name,
-          url: siteConfig.url,
+          '@id': `${SITE_URL}#organization`,
         },
         areaServed: {
-          '@type': 'Country',
+          '@type': 'Place',
           name: 'Netherlands',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'NL',
+          },
         },
         serviceType: service.features.join(', '),
+        inLanguage: 'nl-NL',
+        hasFAQ: {
+          '@id': `${SITE_URL}/diensten#faq`,
+        },
       },
     })),
   };
@@ -171,7 +179,7 @@ export default function Diensten() {
           __html: JSON.stringify(servicesSchema),
         }}
       />
-      <FAQSchema faqs={dienstenFaqs} />
+      <FAQSchema faqs={dienstenFaqs} id={`${SITE_URL}/diensten#faq`} />
 
       {/* Hero section with 3D elements */}
       <section className="relative min-h-[75svh] md:min-h-[70vh] overflow-hidden flex items-center content-safe-top">

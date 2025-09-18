@@ -118,7 +118,14 @@ export default function SEOSchema({
       'Google Analytics',
       'Conversion optimalisatie',
     ],
-    areaServed: 'NL',
+    areaServed: {
+      '@type': 'Place',
+      name: 'Netherlands',
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'NL'
+      }
+    },
     serviceArea: { '@type': 'Place', address: { '@type': 'PostalAddress', addressCountry: 'NL' } },
     ...(hasAddress && {
       address: {
@@ -219,7 +226,14 @@ export default function SEOSchema({
         telephone: siteConfig.phone,
         email: siteConfig.email,
         contactType: 'Customer Service',
-        areaServed: 'NL',
+        areaServed: {
+          '@type': 'Place',
+          name: 'Netherlands',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'NL'
+          }
+        },
         availableLanguage: ['Dutch', 'English'],
         hoursAvailable: {
           '@type': 'OpeningHoursSpecification',
@@ -232,14 +246,28 @@ export default function SEOSchema({
         '@type': 'ContactPoint',
         telephone: siteConfig.phone,
         contactType: 'Sales',
-        areaServed: 'NL',
+        areaServed: {
+          '@type': 'Place',
+          name: 'Netherlands',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'NL'
+          }
+        },
         availableLanguage: ['Dutch', 'English'],
       },
       {
         '@type': 'ContactPoint',
         email: siteConfig.email,
         contactType: 'Technical Support',
-        areaServed: 'NL',
+        areaServed: {
+          '@type': 'Place',
+          name: 'Netherlands',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'NL'
+          }
+        },
         availableLanguage: ['Dutch', 'English'],
       },
     ],

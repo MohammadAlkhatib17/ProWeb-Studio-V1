@@ -6,6 +6,79 @@ const withBundleAnalyzer = nextBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
+// Build-time environment validation for production
+function validateProductionEnv() {
+  // Only validate in production builds
+  if (process.env.NODE_ENV !== 'production') {
+    return;
+  }
+
+  const CRITICAL_ENV_VARS = [
+    'SITE_URL',
+    'NEXT_PUBLIC_PLAUSIBLE_DOMAIN', 
+    'CONTACT_INBOX',
+    'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
+    'RECAPTCHA_SECRET_KEY'
+  ];
+
+  const PLACEHOLDER_VALUES = [
+    'your_site_url_here',
+    'your_domain_here', 
+    'your_email_here',
+    'your_recaptcha_site_key_here',
+    'your_recaptcha_secret_key_here',
+    'placeholder',
+    'example.com',
+    'test@example.com',
+    'localhost',
+    'changeme',
+    ''
+  ];
+
+  /**
+   * @param {string} value
+   * @returns {boolean}
+   */
+  function isPlaceholderValue(value) {
+    if (!value || typeof value !== 'string') return true;
+    
+    const normalizedValue = value.toLowerCase().trim();
+    
+    return PLACEHOLDER_VALUES.some(placeholder => 
+      normalizedValue === placeholder.toLowerCase() ||
+      normalizedValue.includes('placeholder') ||
+      normalizedValue.includes('example') ||
+      normalizedValue.includes('your_') ||
+      normalizedValue.includes('changeme') ||
+      normalizedValue === 'localhost:3000' ||
+      normalizedValue === 'http://localhost:3000'
+    );
+  }
+
+  const errors = [];
+  
+  for (const envVar of CRITICAL_ENV_VARS) {
+    const value = process.env[envVar];
+    
+    if (!value) {
+      errors.push(`${envVar} is not set`);
+    } else if (isPlaceholderValue(value)) {
+      errors.push(`${envVar} contains placeholder value: "${value}"`);
+    }
+  }
+
+  if (errors.length > 0) {
+    console.error('\n🚨 Build failed! Critical environment variables are missing or invalid:');
+    errors.forEach(error => console.error(`   ❌ ${error}`));
+    console.error('\n💡 Set the required environment variables in your deployment platform');
+    console.error('📚 See docs/DEPLOY_CHECKLIST.md for setup instructions\n');
+    throw new Error('Environment validation failed - missing or invalid critical environment variables');
+  }
+}
+
+// Run validation during build
+validateProductionEnv();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Disable powered by header for security
@@ -215,6 +288,24 @@ const nextConfig = {
           },
           { key: 'Expect-CT', value: 'max-age=86400, enforce' },
         ],
+      },
+    ];
+  },
+
+  // Domain redirects - Fallback for ensuring www redirects to apex domain
+  // Primary redirects should be configured at platform level (Vercel)
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.prowebstudio.nl',
+          },
+        ],
+        destination: 'https://prowebstudio.nl/:path*',
+        permanent: true,
       },
     ];
   },

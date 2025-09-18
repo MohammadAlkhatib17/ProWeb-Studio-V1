@@ -83,11 +83,91 @@ This checklist covers all stages for performance, SEO, security, and deployment 
 
 ## Stage 9: Production Deployment
 - [x] Configure production environment variables
+- [x] Set up build-time environment validation
 - [x] Set up Vercel deployment configuration
 - [x] Configure custom domains and SSL
 - [x] Test production build locally
 - [x] Deploy to production and verify
 - [x] Post-deployment smoke testing
+
+## 🔧 Build-Time Environment Validation
+
+### Overview
+A build-time validation system ensures critical environment variables are properly configured before deployment. The build will fail if required variables are missing or contain placeholder values.
+
+### Critical Environment Variables
+The following variables are validated during production builds:
+
+| Variable | Purpose | Example |
+|----------|---------|---------|
+| `SITE_URL` | Primary site URL for metadata and canonical links | `https://prowebstudio.nl` |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Domain for Plausible Analytics tracking | `prowebstudio.nl` |
+| `CONTACT_INBOX` | Email address for contact form submissions | `contact@prowebstudio.nl` |
+| `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | reCAPTCHA v3 site key for form protection | `6Lc...` |
+| `RECAPTCHA_SECRET_KEY` | reCAPTCHA v3 secret key (server-side) | `6Lc...` |
+
+### Validation Rules
+- **Missing Variables**: Build fails if any critical variable is unset
+- **Placeholder Detection**: Build fails if variables contain common placeholders:
+  - `your_*_here`, `placeholder`, `example.com`, `test@example.com`
+  - `localhost`, `changeme`, empty strings
+- **Format Validation**: 
+  - URLs must be valid and use HTTPS in production
+  - Email addresses must have valid format
+  - URLs should not end with trailing slashes
+
+### Usage
+
+#### Manual Validation
+```bash
+# Run validation independently
+npm run validate-env
+
+# Validate during production build
+npm run build:prod
+```
+
+#### Build Integration
+The validation runs automatically:
+1. **Pre-build script**: `scripts/validate-env.js` runs before Next.js build
+2. **Webpack integration**: Additional validation during Next.js build process
+3. **Development skip**: Validation only runs for `NODE_ENV=production`
+
+#### Example Output
+```bash
+🔍 Validating environment variables for production build...
+
+✅ SITE_URL: configured
+✅ NEXT_PUBLIC_PLAUSIBLE_DOMAIN: configured
+✅ CONTACT_INBOX: configured
+✅ NEXT_PUBLIC_RECAPTCHA_SITE_KEY: configured
+✅ RECAPTCHA_SECRET_KEY: configured
+
+✅ All critical environment variables are properly configured!
+   Build can proceed safely.
+```
+
+#### Failure Example
+```bash
+🚨 Build validation failed! Critical environment variables are missing or invalid:
+
+   ❌ SITE_URL contains placeholder value: "your_site_url_here"
+   ❌ CONTACT_INBOX is not set
+   ❌ RECAPTCHA_SECRET_KEY is not set
+
+💡 To fix this:
+   1. Set the required environment variables in your deployment platform
+   2. Ensure all values are real, not placeholders
+   3. For local development, copy .env.example to .env.local and fill in real values
+
+📚 See docs/DEPLOY_CHECKLIST.md for detailed setup instructions
+```
+
+### Setup Instructions
+1. **Vercel Dashboard**: Configure environment variables in Project Settings → Environment Variables
+2. **Local Development**: Copy `.env.example` to `.env.local` and fill in real values
+3. **CI/CD**: Ensure build environment has all required variables set
+4. **Testing**: Run `npm run validate-env` to test configuration
 
 ## Quality Gates
 Each stage must pass before proceeding:

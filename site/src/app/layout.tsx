@@ -14,6 +14,7 @@ import { initProductionEnvValidation } from '@/lib/env.server';
 import BackgroundLayer from '@/components/layout/BackgroundLayer';
 import HeroBackground from '@/components/HeroBackground';
 import TopVignetteOverlay from '@/components/layout/TopVignetteOverlay';
+import PWAServiceWorker from '@/components/PWAServiceWorker';
 
 // Initialize environment validation for production deployments
 initProductionEnvValidation();
@@ -248,6 +249,7 @@ export default function RootLayout({
 
         <SEOSchema pageType="homepage" />
         <WebVitalsReporter />
+        <PWAServiceWorker />
 
         <Script
           defer

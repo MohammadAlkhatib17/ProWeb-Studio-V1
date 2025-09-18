@@ -1,0 +1,21 @@
+{
+  "bundleSize": {
+    "thresholdPercent": 10,
+    "criticalRoutes": ["/", "/diensten"],
+    "excludePatterns": ["polyfills-*.js"],
+    "warningThresholdPercent": 5
+  },
+  "codeQuality": {
+    "blockOnTypeScriptErrors": true,
+    "blockOnESLintErrors": true,
+    "blockOnPrettierDiff": true,
+    "blockOnTestFailures": true
+  },
+  "overrides": {
+    "allowedLabels": {
+      "bundleSize": "bundle-size-override",
+      "codeQuality": "code-quality-override"
+    },
+    "requiresApproval": true
+  }
+}
