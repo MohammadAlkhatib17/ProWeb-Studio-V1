@@ -5,7 +5,6 @@ import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { siteConfig } from '@/config/site.config';
-import dynamic from 'next/dynamic';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CursorTrail from '@/components/CursorTrail';
@@ -213,7 +212,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const PWAInstaller = dynamic(() => import('@/components/PWAInstaller'), { ssr: false });
   return (
     <html lang="nl-NL">
       <head>
@@ -258,7 +256,6 @@ export default function RootLayout({
         />
         <Analytics />
         <SpeedInsights />
-        {process.env.NODE_ENV === 'production' ? <PWAInstaller /> : null}
       </body>
     </html>
   );

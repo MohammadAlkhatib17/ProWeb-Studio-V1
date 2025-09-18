@@ -19,16 +19,15 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: cd site && npm install
+        run: npm install --prefix site
 
       - name: Run linting and formatting checks
         run: |
-          cd site
-          npm run format:check
-          npm run lint
+          npm --prefix site run lint
+          npm --prefix site run format:check
 
       - name: Run tests
-        run: cd site && npm test
+        run: npm --prefix site test
 
       - name: Build project
-        run: cd site && npm run build
+        run: npm --prefix site run build

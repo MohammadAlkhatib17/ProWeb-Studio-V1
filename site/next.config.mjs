@@ -72,30 +72,6 @@ const nextConfig = {
   // Output optimization
   output: 'standalone',
 
-  async redirects() {
-    // Case-insensitive matching for specific legacy slugs only.
-    // We provide both with and without trailing slash to avoid double hops.
-    const rules = [
-      // website-laten-maken (any case)
-      { source: '/diensten/:kw([Ww][Ee][Bb][Ss][Ii][Tt][Ee]-[Ll][Aa][Tt][Ee][Nn]-[Mm][Aa][Kk][Ee][Nn])', destination: '/diensten', permanent: true },
-      { source: '/diensten/:kw([Ww][Ee][Bb][Ss][Ii][Tt][Ee]-[Ll][Aa][Tt][Ee][Nn]-[Mm][Aa][Kk][Ee][Nn])/', destination: '/diensten', permanent: true },
-
-      // 3d-website-ontwikkeling (case-insensitive letters; '3' is numeric)
-      { source: '/diensten/:kw(3[dD]-[Ww][Ee][Bb][Ss][Ii][Tt][Ee]-[Oo][Nn][Tt][Ww][Ii][Kk][Kk][Ee][Ll][Ii][Nn][Gg])', destination: '/diensten', permanent: true },
-      { source: '/diensten/:kw(3[dD]-[Ww][Ee][Bb][Ss][Ii][Tt][Ee]-[Oo][Nn][Tt][Ww][Ii][Kk][Kk][Ee][Ll][Ii][Nn][Gg])/', destination: '/diensten', permanent: true },
-
-      // seo-optimalisatie (any case)
-      { source: '/diensten/:kw([Ss][Ee][Oo]-[Oo][Pp][Tt][Ii][Mm][Aa][Ll][Ii][Ss][Aa][Tt][Ii][Ee])', destination: '/diensten', permanent: true },
-      { source: '/diensten/:kw([Ss][Ee][Oo]-[Oo][Pp][Tt][Ii][Mm][Aa][Ll][Ii][Ss][Aa][Tt][Ii][Ee])/', destination: '/diensten', permanent: true },
-
-      // webshop-laten-maken (any case)
-      { source: '/diensten/:kw([Ww][Ee][Bb][Ss][Hh][Oo][Pp]-[Ll][Aa][Tt][Ee][Nn]-[Mm][Aa][Kk][Ee][Nn])', destination: '/diensten', permanent: true },
-      { source: '/diensten/:kw([Ww][Ee][Bb][Ss][Hh][Oo][Pp]-[Ll][Aa][Tt][Ee][Nn]-[Mm][Aa][Kk][Ee][Nn])/', destination: '/diensten', permanent: true },
-    ];
-
-    return rules;
-  },
-
   async headers() {
     return [
       {

@@ -14,45 +14,104 @@ interface SitemapEntry {
   priority: number;
 }
 
-// Capture a deterministic build-time timestamp (UTC).
-const BUILD_TIME_ISO = new Date().toISOString();
-
-// Explicit allowlist with required metadata
-const ALLOWLIST: Array<{
-  path: string;
-  priority: number;
-  changeFreq: SitemapEntry['changeFrequency'];
-}> = [
-  { path: '/', priority: 1.0, changeFreq: 'weekly' },
-  { path: '/diensten', priority: 0.9, changeFreq: 'weekly' },
-  { path: '/contact', priority: 0.8, changeFreq: 'monthly' },
-  { path: '/werkwijze', priority: 0.7, changeFreq: 'monthly' },
-  { path: '/over-ons', priority: 0.7, changeFreq: 'monthly' },
-  { path: '/speeltuin', priority: 0.6, changeFreq: 'monthly' },
-  { path: '/privacy', priority: 0.3, changeFreq: 'yearly' },
-  { path: '/voorwaarden', priority: 0.3, changeFreq: 'yearly' },
-];
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseEnv = process.env.NEXT_PUBLIC_SITE_URL;
-  if (!baseEnv) {
-    // In case env is missing, still produce valid absolute URLs to avoid XML issues.
-    // Prefer explicit env in real deployments.
-    // eslint-disable-next-line no-console
-    console.warn('NEXT_PUBLIC_SITE_URL is not set; falling back to https://prowebstudio.nl');
-  }
-  const baseUrl = (baseEnv || 'https://prowebstudio.nl').replace(/\/$/, '');
+  const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
+  const baseUrl = SITE_URL.replace(/\/$/, ''); // Remove trailing slash
+  const currentDate = new Date();
 
-  const seen = new Set<string>();
-  const list = ALLOWLIST.filter((r) => {
-    if (seen.has(r.path)) return false;
-    seen.add(r.path);
-    return true;
-  });
+  // Define routes with their respective priorities and change frequencies
+  const routes: Array<{
+    path: string;
+    priority: number;
+    changeFreq: SitemapEntry['changeFrequency'];
+    lastMod?: Date;
+  }> = [
+    {
+      path: '/',
+      priority: 1.0,
+      changeFreq: 'weekly',
+      lastMod: currentDate, // Homepage changes frequently
+    },
+    {
+      path: '/diensten',
+      priority: 0.9,
+      changeFreq: 'monthly',
+      lastMod: new Date('2025-09-01'), // Services page - updated monthly
+    },
+    {
+      path: '/werkwijze',
+      priority: 0.8,
+      changeFreq: 'monthly',
+      lastMod: new Date('2025-08-15'), // Work process page
+    },
+    {
+      path: '/speeltuin',
+      priority: 0.7,
+      changeFreq: 'weekly',
+      lastMod: new Date('2025-09-15'), // Tech playground - updated with new demos
+    },
+    {
+      path: '/contact',
+      priority: 0.9,
+      changeFreq: 'monthly',
+      lastMod: new Date('2025-08-01'), // Contact page - high priority for conversions
+    },
+    {
+      path: '/privacy',
+      priority: 0.3,
+      changeFreq: 'yearly',
+      lastMod: new Date('2025-05-25'), // GDPR compliance date
+    },
+    {
+      path: '/voorwaarden',
+      priority: 0.3,
+      changeFreq: 'yearly',
+      lastMod: new Date('2025-05-25'), // Terms and conditions
+    },
+  ];
 
-  return list.map((route) => ({
+  // Generate additional dynamic entries for SEO
+  const additionalRoutes: Array<{
+    path: string;
+    priority: number;
+    changeFreq: SitemapEntry['changeFrequency'];
+    lastMod?: Date;
+  }> = [
+    // Add specific service pages if they exist
+    {
+      path: '/diensten/website-laten-maken',
+      priority: 0.8,
+      changeFreq: 'monthly',
+      lastMod: new Date('2025-09-01'),
+    },
+    {
+      path: '/diensten/3d-website-ontwikkeling',
+      priority: 0.8,
+      changeFreq: 'monthly',
+      lastMod: new Date('2025-09-01'),
+    },
+    {
+      path: '/diensten/seo-optimalisatie',
+      priority: 0.8,
+      changeFreq: 'monthly',
+      lastMod: new Date('2025-09-01'),
+    },
+    {
+      path: '/diensten/webshop-laten-maken',
+      priority: 0.8,
+      changeFreq: 'monthly',
+      lastMod: new Date('2025-09-01'),
+    },
+    // Blog or portfolio entries could be added here dynamically
+    // Example: blog posts, case studies, etc.
+  ];
+
+  // Combine all routes
+  const allRoutes = [...routes, ...additionalRoutes];
+
+  return allRoutes.map((route) => ({
     url: `${baseUrl}${route.path}`,
-    lastModified: new Date(BUILD_TIME_ISO),
+    lastModified: route.lastMod || currentDate,
     changeFrequency: route.changeFreq,
     priority: route.priority,
   }));
