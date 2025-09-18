@@ -12,11 +12,11 @@ function isLowEndDevice(): boolean {
   if (cores > 0 && cores <= 2) return true;
   
   // Check memory (if available)
-  const memory = (navigator as any).deviceMemory;
+  const memory = (navigator as { deviceMemory?: number }).deviceMemory;
   if (memory && memory <= 2) return true;
   
   // Check connection type for mobile detection
-  const connection = (navigator as any).connection;
+  const connection = (navigator as { connection?: { effectiveType?: string } }).connection;
   if (connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')) {
     return true;
   }
@@ -25,15 +25,15 @@ function isLowEndDevice(): boolean {
 }
 
 // Throttle function for high-frequency events
-function throttle<T extends (...args: any[]) => void>(func: T, limit: number): T {
+function throttle<T extends (...args: never[]) => void>(func: T, limit: number): (...args: Parameters<T>) => void {
   let inThrottle: boolean;
-  return ((...args: any[]) => {
+  return (...args: Parameters<T>) => {
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
       setTimeout(() => inThrottle = false, limit);
     }
-  }) as T;
+  };
 }
 
 export default function CursorTrail() {

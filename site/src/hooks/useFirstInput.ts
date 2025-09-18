@@ -16,9 +16,9 @@ export function useFirstInput() {
     const handleFirstInput = () => {
       setHasFirstInput(true);
       // Remove listeners once first input is detected
-      window.removeEventListener('pointerdown', handleFirstInput, { passive: true } as any);
-      window.removeEventListener('keydown', handleFirstInput, { passive: true } as any);
-      window.removeEventListener('touchstart', handleFirstInput, { passive: true } as any);
+      window.removeEventListener('pointerdown', handleFirstInput, { passive: true } as AddEventListenerOptions);
+      window.removeEventListener('keydown', handleFirstInput, { passive: true } as AddEventListenerOptions);
+      window.removeEventListener('touchstart', handleFirstInput, { passive: true } as AddEventListenerOptions);
     };
 
     // Listen for first meaningful user interaction
