@@ -20,15 +20,6 @@ const THREE_ASSETS = [
   // Three.js chunks will be dynamically identified and cached
 ];
 
-// Routes to cache with stale-while-revalidate strategy
-const CACHED_ROUTES = [
-  '/',
-  '/diensten',
-  '/werkwijze',
-  '/contact',
-  '/speeltuin',
-];
-
 // Install event - cache essential assets
 self.addEventListener('install', (event) => {
   console.log('Service Worker: Installing...');
@@ -97,27 +88,29 @@ async function handleRequest(request) {
   const pathname = url.pathname;
 
   try {
-    // Strategy 1: Cache First for static assets
+    // Strategy 1: Network First for Navigation/Document Requests (NO CACHING)
+    // HTML documents are NEVER cached to prevent stale content that would harm SEO,
+    // Core Web Vitals, and search engine indexing. Fresh content is essential for:
+    // - SEO: Search engines need to see latest content and meta tags
+    // - CWV: Stale HTML may contain outdated optimization code
+    // - User Experience: Users should always see the most current content
+    if (isNavigationRequest(request) || isDocumentRequest(request)) {
+      return await networkFirstNoCache(request);
+    }
+
+    // Strategy 2: Cache First for static assets (images, fonts, icons)
     if (isStaticAsset(pathname)) {
       return await cacheFirst(request, STATIC_CACHE);
     }
 
-    // Strategy 2: Stale While Revalidate for Three.js chunks
+    // Strategy 3: Stale While Revalidate for Three.js chunks
     if (isThreeAsset(pathname)) {
       return await staleWhileRevalidate(request, THREE_CACHE);
     }
 
-    // Strategy 3: Network First for API calls
+    // Strategy 4: Network First for API calls (cache for offline resilience)
     if (pathname.startsWith('/api/')) {
       return await networkFirst(request, DYNAMIC_CACHE);
-    }
-
-    // Strategy 4: Network First for HTML documents (pages)
-    // This ensures HTML pages are never cached and always come from network
-    if (request.destination === 'document' || 
-        CACHED_ROUTES.includes(pathname) || 
-        isHTMLPage(pathname)) {
-      return await networkFirstNoCache(request);
     }
 
     // Strategy 5: Stale While Revalidate for Next.js assets (JS, CSS)
@@ -131,8 +124,8 @@ async function handleRequest(request) {
   } catch (error) {
     console.log('Service Worker: Fetch failed, serving offline page:', error);
     
-    // Return offline page for navigation requests
-    if (request.destination === 'document') {
+    // Return offline page for navigation/document requests only
+    if (isNavigationRequest(request) || isDocumentRequest(request)) {
       const offlineResponse = await caches.match('/offline.html');
       return offlineResponse || new Response('Offline', { status: 503 });
     }
@@ -180,13 +173,16 @@ async function staleWhileRevalidate(request, cacheName) {
 }
 
 // Network First strategy that doesn't cache the response (for HTML documents)
+// This ensures navigation requests always get fresh content from the network
 async function networkFirstNoCache(request) {
   try {
+    // Always try network first for navigation/document requests
     const networkResponse = await fetch(request);
+    // IMPORTANT: We deliberately do NOT call cache.put() here to avoid caching HTML
     return networkResponse;
   } catch (error) {
-    // Only fall back to offline.html for document requests
-    if (request.destination === 'document') {
+    // Only fall back to offline.html for navigation/document requests when network fails
+    if (isNavigationRequest(request) || isDocumentRequest(request)) {
       const offlineResponse = await caches.match('/offline.html');
       return offlineResponse || new Response('Offline', { status: 503 });
     }
@@ -195,7 +191,17 @@ async function networkFirstNoCache(request) {
 }
 
 // Utility functions
+function isNavigationRequest(request) {
+  return request.mode === 'navigate';
+}
+
+function isDocumentRequest(request) {
+  return request.destination === 'document';
+}
+
 function isStaticAsset(pathname) {
+  // Only cache true static assets: images, icons, and manifest
+  // Explicitly excludes HTML files to prevent stale content caching
   return (
     pathname.startsWith('/assets/') ||
     pathname.endsWith('.svg') ||
@@ -214,16 +220,6 @@ function isThreeAsset(pathname) {
     pathname.includes('@react-three') ||
     pathname.includes('chunks/three') ||
     pathname.includes('chunks/vendor') // Three.js often in vendor chunks
-  );
-}
-
-// Check if the request is for an HTML page
-function isHTMLPage(pathname) {
-  // Pages that end without extension are typically HTML pages in Next.js
-  return (
-    pathname === '/' ||
-    (!pathname.includes('.') && !pathname.startsWith('/_next/')) ||
-    pathname.endsWith('.html')
   );
 }
 
