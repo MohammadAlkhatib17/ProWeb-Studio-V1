@@ -8,7 +8,10 @@ export const metadata: Metadata = {
   description: 'Overzicht van alle pagina\'s en secties op de ProWeb Studio website voor eenvoudige navigatie.',
   alternates: {
     canonical: '/overzicht',
-    languages: { 'nl-NL': '/overzicht' },
+    languages: { 
+      'nl-NL': '/overzicht',
+      'x-default': '/overzicht'
+    },
   },
   robots: {
     index: true,

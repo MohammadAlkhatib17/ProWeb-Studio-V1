@@ -18,7 +18,10 @@ export const metadata: Metadata = {
     'Helder proces: intake & strategie, design, bouwen, launch & groei. Transparante communicatie en meetbare stappen.',
   alternates: {
     canonical: '/werkwijze',
-    languages: { 'nl-NL': '/werkwijze' },
+    languages: { 
+      'nl-NL': '/werkwijze',
+      'x-default': '/werkwijze'
+    },
   },
   openGraph: {
     title: 'Werkwijze – van intake tot launch, transparant en voorspelbaar',

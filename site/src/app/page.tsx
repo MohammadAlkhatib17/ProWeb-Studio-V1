@@ -10,7 +10,10 @@ export const metadata: Metadata = {
     'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D-websites die scoren in Google en converteren. Maatwerk met Next.js, React Three Fiber en SEO-first aanpak.',
   alternates: {
     canonical: '/',
-    languages: { 'nl-NL': '/' },
+    languages: { 
+      'nl-NL': '/',
+      'x-default': '/'
+    },
   },
   openGraph: {
     images: [

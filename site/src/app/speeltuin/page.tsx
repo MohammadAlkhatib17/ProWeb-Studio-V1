@@ -13,7 +13,10 @@ export const metadata = {
   },
   alternates: { 
     canonical: '/speeltuin',
-    languages: { 'nl-NL': '/speeltuin' },
+    languages: { 
+      'nl-NL': '/speeltuin',
+      'x-default': '/speeltuin'
+    },
   },
   openGraph: {
     title: 'Tech Playground – ProWeb Studio',

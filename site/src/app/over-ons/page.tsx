@@ -17,7 +17,10 @@ export const metadata: Metadata = {
   description: 'Ontdek de visie en missie van ProWeb Studio. Wij combineren geavanceerde technologie met creatief design om de digitale grenzen te verleggen voor Nederlandse bedrijven.',
   alternates: {
     canonical: '/over-ons',
-    languages: { 'nl-NL': '/over-ons' },
+    languages: { 
+      'nl-NL': '/over-ons',
+      'x-default': '/over-ons'
+    },
   },
   openGraph: {
     title: 'Over Ons – ProWeb Studio',

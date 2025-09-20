@@ -79,6 +79,140 @@ export default function SEOSchema({
   // Use explicit props with defaults
   const currentPageType = pageType;
   const currentIncludeFAQ = includeFAQ || pageType === 'services';
+
+  // Helper function to get page path based on pageType
+  function getPagePath(pageType: string): string {
+    switch (pageType) {
+      case 'homepage':
+        return '/';
+      case 'services':
+        return '/diensten';
+      case 'werkwijze':
+        return '/werkwijze';
+      case 'over-ons':
+        return '/over-ons';
+      case 'contact':
+        return '/contact';
+      case 'privacy':
+        return '/privacy';
+      case 'voorwaarden':
+        return '/voorwaarden';
+      default:
+        return '/';
+    }
+  }
+
+  // Helper function to get page title based on pageType
+  function getPageTitle(pageType: string, pageTitle?: string): string {
+    if (pageTitle) return pageTitle;
+    
+    switch (pageType) {
+      case 'homepage':
+        return `${siteConfig.name} - ${siteConfig.tagline}`;
+      case 'services':
+        return 'Diensten - Webdesign, 3D websites & SEO';
+      case 'werkwijze':
+        return 'Werkwijze - Van intake tot launch';
+      case 'over-ons':
+        return 'Over ons - ProWeb Studio team';
+      case 'contact':
+        return 'Contact - Neem contact op met ProWeb Studio';
+      case 'privacy':
+        return 'Privacy - Privacybeleid ProWeb Studio';
+      case 'voorwaarden':
+        return 'Voorwaarden - Algemene voorwaarden ProWeb Studio';
+      default:
+        return `${siteConfig.name} - ${siteConfig.tagline}`;
+    }
+  }
+
+  // Helper function to get primary image for page type
+  function getPrimaryImage(pageType: string): { url: string; width?: number; height?: number; caption: string } | null {
+    switch (pageType) {
+      case 'homepage':
+        return {
+          url: abs('/assets/hero/nebula_helix.webp'),
+          width: 1920,
+          height: 1080,
+          caption: `${siteConfig.name} - Digitale innovatie met kosmische impact`
+        };
+      case 'services':
+        return {
+          url: abs('/assets/nebula_services_background.webp'),
+          width: 1920,
+          height: 1080,
+          caption: `${siteConfig.name} Diensten - Webdesign en 3D websites`
+        };
+      case 'werkwijze':
+        // Only include if hero image exists for werkwijze
+        return {
+          url: abs('/assets/team_core_star.webp'),
+          width: 1920,
+          height: 1080,
+          caption: `${siteConfig.name} Werkwijze - Van intake tot launch`
+        };
+      default:
+        return null;
+    }
+  }
+
+  // Get current page path and URL
+  const currentPath = getPagePath(currentPageType);
+  const currentUrl = abs(currentPath);
+  const currentTitle = getPageTitle(currentPageType, pageTitle);
+
+  // Generate ImageObject for primary image if it exists
+  const primaryImage = getPrimaryImage(currentPageType);
+  const primaryImageSchema = primaryImage ? {
+    '@context': 'https://schema.org',
+    '@type': 'ImageObject',
+    '@id': `${currentUrl}#primaryimage`,
+    url: primaryImage.url,
+    contentUrl: primaryImage.url,
+    ...(primaryImage.width && primaryImage.height && {
+      width: primaryImage.width,
+      height: primaryImage.height,
+    }),
+    caption: primaryImage.caption,
+    description: primaryImage.caption,
+    name: primaryImage.caption,
+  } : null;
+
+  // Logo ImageObject schema
+  // Helper function to safely get social media profiles
+  function getSocialProfiles(): string[] {
+    const profiles = [
+      siteConfig.social.linkedin,
+      siteConfig.social.github, 
+      siteConfig.social.twitter,
+      // Add environment-based social profiles if they exist
+      process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN,
+      process.env.NEXT_PUBLIC_SOCIAL_GITHUB,
+      process.env.NEXT_PUBLIC_SOCIAL_TWITTER,
+      process.env.NEXT_PUBLIC_SOCIAL_BEHANCE,
+      process.env.NEXT_PUBLIC_SOCIAL_DRIBBBLE,
+      process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE,
+      process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK,
+      process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM,
+    ];
+    
+    // Filter out falsy values and ensure unique URLs
+    return [...new Set(profiles.filter((profile): profile is string => Boolean(profile)))];
+  }
+
+  const socialProfiles = getSocialProfiles();
+
+  // Logo ImageObject schema
+  const logoImageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ImageObject',
+    '@id': `${SITE_URL}#logo`,
+    url: abs('/assets/logo/logo-proweb-lockup.svg'),
+    contentUrl: abs('/assets/logo/logo-proweb-lockup.svg'),
+    caption: `${siteConfig.name} logo`,
+    description: `${siteConfig.name} - Digitale innovatie met kosmische impact`,
+    name: `${siteConfig.name} logo`,
+  };
   // Website schema
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -124,8 +258,14 @@ export default function SEOSchema({
     description: siteConfig.description,
     inLanguage: 'nl-NL',
     url: abs('/'),
-    logo: abs('/assets/logo/logo-proweb-lockup.svg'),
-    image: abs('/assets/logo/logo-proweb-lockup.svg'),
+    logo: {
+      '@id': `${SITE_URL}#logo`,
+    },
+    image: [
+      {
+        '@id': `${SITE_URL}#logo`,
+      },
+    ],
     email: process.env.CONTACT_INBOX || siteConfig.email,
     telephone: siteConfig.phone,
     openingHours: ['Mo-Fr 09:00-18:00'],
@@ -402,11 +542,7 @@ export default function SEOSchema({
         availableLanguage: ['Dutch', 'English'],
       },
     ],
-    sameAs: [
-      siteConfig.social.linkedin,
-      siteConfig.social.github,
-      siteConfig.social.twitter,
-    ].filter(Boolean),
+    sameAs: socialProfiles,
     potentialAction: {
       '@type': 'ScheduleAction',
       name: 'Afspraak plannen',
@@ -433,14 +569,14 @@ export default function SEOSchema({
       }
     : null;
 
-  // WebPage schema
+  // WebPage schema with proper per-page configuration
   const webPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    '@id': `${SITE_URL}#webpage`,
-    name: pageTitle || `${siteConfig.name} - ${siteConfig.tagline}`,
+    '@id': `${currentUrl}#webpage`,
+    name: currentTitle,
     description: pageDescription || siteConfig.description,
-    url: abs('/'),
+    url: currentUrl,
     inLanguage: 'nl-NL',
     isPartOf: {
       '@id': `${SITE_URL}#website`,
@@ -451,13 +587,19 @@ export default function SEOSchema({
     publisher: {
       '@id': `${SITE_URL}#organization`,
     },
+    ...(breadcrumbSchema && {
+      breadcrumb: {
+        '@id': `${SITE_URL}#breadcrumb`,
+      },
+    }),
+    ...(primaryImageSchema && {
+      primaryImageOfPage: {
+        '@id': `${currentUrl}#primaryimage`,
+      },
+    }),
     mainContentOfPage: {
       '@type': 'WebPageElement',
       cssSelector: 'main',
-    },
-    primaryImageOfPage: {
-      '@type': 'ImageObject',
-      url: abs('/assets/logo/logo-proweb-lockup.svg'),
     },
     ...(currentPageType === 'homepage' && {
       mainEntity: {
@@ -467,7 +609,7 @@ export default function SEOSchema({
     ...(currentPageType === 'services' && {
       mainEntity: {
         '@type': 'Service',
-        name: pageTitle || 'Website Development Services',
+        name: currentTitle,
         provider: {
           '@id': `${SITE_URL}#organization`,
         },
@@ -482,7 +624,7 @@ export default function SEOSchema({
     potentialAction: [
       {
         '@type': 'ReadAction',
-        target: [abs('/')],
+        target: [currentUrl],
       },
     ],
     speakable: {
@@ -498,6 +640,14 @@ export default function SEOSchema({
     '@id': `${SITE_URL}#organization`,
     name: siteConfig.name,
     url: abs('/'),
+    logo: {
+      '@id': `${SITE_URL}#logo`,
+    },
+    image: [
+      {
+        '@id': `${SITE_URL}#logo`,
+      },
+    ],
     telephone: siteConfig.phone,
     areaServed: {
       '@type': 'Place',
@@ -645,11 +795,7 @@ export default function SEOSchema({
         addressCountry: 'NL',
       },
     }),
-    sameAs: [
-      siteConfig.social.linkedin,
-      siteConfig.social.github,
-      siteConfig.social.twitter,
-    ].filter(Boolean),
+    sameAs: socialProfiles,
   };
 
   // Standalone Service nodes for better SEO
@@ -933,9 +1079,11 @@ export default function SEOSchema({
       organizationSchema,
       localBusinessSchema,
       webPageSchema,
+      logoImageSchema,
       websiteService,
       webshopService,
       seoService,
+      ...(primaryImageSchema ? [primaryImageSchema] : []),
       ...(breadcrumbSchema ? [breadcrumbSchema] : []),
       ...(faqSchema ? [faqSchema] : []),
       ...(howToSchema ? [howToSchema] : []),

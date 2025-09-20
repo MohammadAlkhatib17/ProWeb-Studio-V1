@@ -13,7 +13,10 @@ export const metadata: Metadata = {
     'Vertel ons over uw project. Reactie binnen één werkdag. Afspraak via video of op locatie in Nederland.',
   alternates: {
     canonical: '/contact',
-    languages: { 'nl-NL': '/contact' },
+    languages: { 
+      'nl-NL': '/contact',
+      'x-default': '/contact'
+    },
   },
   openGraph: {
     title: 'Contact – Start het gesprek met ProWeb Studio',
