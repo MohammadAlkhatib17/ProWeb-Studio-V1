@@ -706,6 +706,83 @@ export default function SEOSchema({
     },
   };
 
+  // HowTo schema for werkwijze page
+  const howToSchema = currentPageType === 'werkwijze' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': `${SITE_URL}/werkwijze#howto`,
+    name: 'Werkwijze — van intake tot livegang',
+    description: 'Een bewezen stappenplan voor het ontwikkelen van een professionele website, van eerste intake tot succesvolle livegang',
+    inLanguage: 'nl-NL',
+    url: abs('/werkwijze'),
+    step: [
+      {
+        '@type': 'HowToStep',
+        '@id': `${SITE_URL}/werkwijze#stap-1`,
+        name: 'Intake',
+        text: 'Tijdens deze cruciale eerste fase duiken we diep in uw visie en doelstellingen, zodat we een website kunnen bouwen die perfect aansluit bij uw bedrijfsstrategie en doelgroep.',
+        url: `${SITE_URL}/werkwijze#stap-1`,
+        position: 1,
+      },
+      {
+        '@type': 'HowToStep',
+        '@id': `${SITE_URL}/werkwijze#stap-2`,
+        name: 'Strategie',
+        text: 'We ontwikkelen een data-gedreven plan voor maximale impact, waardoor uw investering in een nieuwe website direct bijdraagt aan uw bedrijfsdoelen en ROI.',
+        url: `${SITE_URL}/werkwijze#stap-2`,
+        position: 2,
+      },
+      {
+        '@type': 'HowToStep',
+        '@id': `${SITE_URL}/werkwijze#stap-3`,
+        name: 'Design',
+        text: 'Ons team creëert een visueel ontwerp dat uw merk versterkt en gebruikers overtuigt, resulterend in een professionele uitstraling die vertrouwen en conversie bevordert.',
+        url: `${SITE_URL}/werkwijze#stap-3`,
+        position: 3,
+      },
+      {
+        '@type': 'HowToStep',
+        '@id': `${SITE_URL}/werkwijze#stap-4`,
+        name: 'Development',
+        text: 'We schrijven clean code en bouwen voor de toekomst, zodat uw website niet alleen vandaag perfect functioneert maar ook schaalbaar is voor toekomstige groei.',
+        url: `${SITE_URL}/werkwijze#stap-4`,
+        position: 4,
+      },
+      {
+        '@type': 'HowToStep',
+        '@id': `${SITE_URL}/werkwijze#stap-5`,
+        name: 'QA',
+        text: 'Door rigoureus testen garanderen we perfecte prestaties op alle apparaten en browsers, waardoor uw bezoekers altijd een optimale gebruikerservaring hebben.',
+        url: `${SITE_URL}/werkwijze#stap-5`,
+        position: 5,
+      },
+      {
+        '@type': 'HowToStep',
+        '@id': `${SITE_URL}/werkwijze#stap-6`,
+        name: 'Launch',
+        text: 'Onze soepele deployment en go-live begeleiding zorgen ervoor dat uw website probleemloos online gaat zonder downtime of technische problemen.',
+        url: `${SITE_URL}/werkwijze#stap-6`,
+        position: 6,
+      },
+      {
+        '@type': 'HowToStep',
+        '@id': `${SITE_URL}/werkwijze#stap-7`,
+        name: 'Groei',
+        text: 'Continue optimalisatie en ondersteuning helpen uw website groeien met uw bedrijf, met regelmatige updates en prestatieverbeteringen.',
+        url: `${SITE_URL}/werkwijze#stap-7`,
+        position: 7,
+      },
+    ],
+    publisher: {
+      '@id': `${SITE_URL}#organization`,
+    },
+    about: {
+      '@type': 'Thing',
+      name: 'Website ontwikkeling proces',
+      description: 'Professionele werkwijze voor website ontwikkeling van intake tot livegang',
+    },
+  } : null;
+
   // FAQ schema for diensten page
   const faqSchema = currentIncludeFAQ ? {
     '@context': 'https://schema.org',
@@ -818,6 +895,7 @@ export default function SEOSchema({
       seoService,
       ...(breadcrumbSchema ? [breadcrumbSchema] : []),
       ...(faqSchema ? [faqSchema] : []),
+      ...(howToSchema ? [howToSchema] : []),
     ],
   };
 

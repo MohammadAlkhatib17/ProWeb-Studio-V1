@@ -8,6 +8,7 @@ import { Suspense } from 'react';
 import Image from 'next/image';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import BreadcrumbSchema from '@/components/BreadcrumbSchema';
+import SEOSchema from '@/components/SEOSchema';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
@@ -56,6 +57,11 @@ export default function Werkwijze() {
           { name: "Home", url: "/" },
           { name: "Werkwijze", url: "/werkwijze" }
         ]}
+      />
+      <SEOSchema
+        pageType="werkwijze"
+        pageTitle={metadata.title as string}
+        pageDescription={metadata.description as string}
       />
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
@@ -170,38 +176,38 @@ export default function Werkwijze() {
 
         <h2>De Fases van uw Project: Van Idee tot Groei</h2>
         <ul>
-          <li>
+          <li id="stap-1">
             <strong>01. Intake:</strong> Tijdens deze cruciale eerste fase
             duiken we diep in uw visie en doelstellingen, zodat we een website
             kunnen bouwen die perfect aansluit bij uw bedrijfsstrategie en
             doelgroep.
           </li>
-          <li>
+          <li id="stap-2">
             <strong>02. Strategie:</strong> We ontwikkelen een data-gedreven
             plan voor maximale impact, waardoor uw investering in een nieuwe
             website direct bijdraagt aan uw bedrijfsdoelen en ROI.
           </li>
-          <li>
+          <li id="stap-3">
             <strong>03. Design:</strong> Ons team creëert een visueel ontwerp
             dat uw merk versterkt en gebruikers overtuigt, resulterend in een
             professionele uitstraling die vertrouwen en conversie bevordert.
           </li>
-          <li>
+          <li id="stap-4">
             <strong>04. Development:</strong> We schrijven clean code en bouwen
             voor de toekomst, zodat uw website niet alleen vandaag perfect
             functioneert maar ook schaalbaar is voor toekomstige groei.
           </li>
-          <li>
+          <li id="stap-5">
             <strong>05. QA:</strong> Door rigoureus testen garanderen we
             perfecte prestaties op alle apparaten en browsers, waardoor uw
             bezoekers altijd een optimale gebruikerservaring hebben.
           </li>
-          <li>
+          <li id="stap-6">
             <strong>06. Launch:</strong> Onze soepele deployment en go-live
             begeleiding zorgen ervoor dat uw website probleemloos online gaat
             zonder downtime of technische problemen.
           </li>
-          <li>
+          <li id="stap-7">
             <strong>07. Groei:</strong> Continue optimalisatie en ondersteuning
             helpen uw website groeien met uw bedrijf, met regelmatige updates en
             prestatieverbeteringen.
