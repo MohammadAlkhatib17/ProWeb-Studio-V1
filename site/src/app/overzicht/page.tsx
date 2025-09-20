@@ -32,14 +32,14 @@ export default function SiteOverzichtPage() {
             Site-overzicht
           </h1>
           <p className="text-xl text-gray-300 leading-relaxed">
-            Alle pagina's en secties van onze website op één plek voor eenvoudige navigatie.
+            Alle pagina&apos;s en secties van onze website op één plek voor eenvoudige navigatie.
           </p>
         </header>
 
         <div className="space-y-8">
           {/* Main Pages */}
           <section>
-            <h2 className="text-2xl font-semibold mb-4 text-cyan-400">Hoofdpagina's</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-cyan-400">Hoofdpagina&apos;s</h2>
             <nav>
               <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <li>
@@ -129,7 +129,7 @@ export default function SiteOverzichtPage() {
 
           {/* Legal Pages */}
           <section>
-            <h2 className="text-2xl font-semibold mb-4 text-cyan-400">Juridische pagina's</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-cyan-400">Juridische pagina&apos;s</h2>
             <nav>
               <ul className="grid gap-3 sm:grid-cols-2">
                 <li>

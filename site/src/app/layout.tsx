@@ -251,7 +251,7 @@ export default function RootLayout({
         <Footer />
         <CursorTrail />
 
-        <SEOSchema pageType="homepage" />
+        <SEOSchema pageType="generic" />
         <WebVitalsReporter />
         <PWAServiceWorker />
 

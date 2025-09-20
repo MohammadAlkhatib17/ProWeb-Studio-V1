@@ -16,7 +16,7 @@ function abs(path: string): string {
 }
 
 interface SEOSchemaProps {
-  pageType?: 'homepage' | 'service' | 'contact' | 'about';
+  pageType?: "homepage" | "services" | "werkwijze" | "contact" | "over-ons" | "generic";
   pageTitle?: string;
   pageDescription?: string;
   breadcrumbs?: Array<{
@@ -27,12 +27,15 @@ interface SEOSchemaProps {
 }
 
 export default function SEOSchema({
-  pageType = 'homepage',
+  pageType = 'generic',
   pageTitle,
   pageDescription,
   breadcrumbs = [],
   includeFAQ = false,
 }: SEOSchemaProps) {
+  // Use explicit props with defaults
+  const currentPageType = pageType;
+  const currentIncludeFAQ = includeFAQ || pageType === 'services';
   // Website schema
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -363,8 +366,11 @@ export default function SEOSchema({
     ].filter(Boolean),
     potentialAction: {
       '@type': 'ScheduleAction',
-      target: abs('/contact'),
       name: 'Afspraak plannen',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: abs('/contact'),
+      },
     },
   };
 
@@ -410,12 +416,12 @@ export default function SEOSchema({
       '@type': 'ImageObject',
       url: abs('/assets/logo/logo-proweb-lockup.svg'),
     },
-    ...(pageType === 'homepage' && {
+    ...(currentPageType === 'homepage' && {
       mainEntity: {
         '@id': `${SITE_URL}#organization`,
       },
     }),
-    ...(pageType === 'service' && {
+    ...(currentPageType === 'services' && {
       mainEntity: {
         '@type': 'Service',
         name: pageTitle || 'Website Development Services',
@@ -424,7 +430,7 @@ export default function SEOSchema({
         },
       },
     }),
-    ...(pageType === 'contact' && {
+    ...(currentPageType === 'contact' && {
       mainEntity: {
         '@type': 'ContactPage',
         name: 'Contact ProWeb Studio',
@@ -446,7 +452,7 @@ export default function SEOSchema({
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': `${SITE_URL}#localbusiness`,
+    '@id': `${SITE_URL}#organization`,
     name: siteConfig.name,
     url: abs('/'),
     telephone: siteConfig.phone,
@@ -457,6 +463,134 @@ export default function SEOSchema({
         '@type': 'PostalAddress',
         addressCountry: 'NL'
       }
+    },
+    serviceArea: [
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Drenthe',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Flevoland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Friesland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Gelderland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Groningen',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Limburg',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Noord-Brabant',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Noord-Holland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Overijssel',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Utrecht',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Zeeland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Zuid-Holland',
+      },
+    ],
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        availableLanguage: ['nl', 'en'],
+        areaServed: 'NL',
+        url: abs('/contact'),
+      },
+      {
+        '@type': 'ContactPoint',
+        telephone: siteConfig.phone,
+        email: siteConfig.email,
+        contactType: 'Customer Service',
+        areaServed: {
+          '@type': 'Place',
+          name: 'Netherlands',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'NL'
+          }
+        },
+        availableLanguage: ['Dutch', 'English'],
+        hoursAvailable: {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          opens: '09:00',
+          closes: '17:00',
+        },
+      },
+      {
+        '@type': 'ContactPoint',
+        telephone: siteConfig.phone,
+        contactType: 'Sales',
+        areaServed: {
+          '@type': 'Place',
+          name: 'Netherlands',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'NL'
+          }
+        },
+        availableLanguage: ['Dutch', 'English'],
+      },
+      {
+        '@type': 'ContactPoint',
+        email: siteConfig.email,
+        contactType: 'Technical Support',
+        areaServed: {
+          '@type': 'Place',
+          name: 'Netherlands',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'NL'
+          }
+        },
+        availableLanguage: ['Dutch', 'English'],
+      },
+    ],
+    potentialAction: {
+      '@type': 'ScheduleAction',
+      name: 'Afspraak plannen',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: abs('/contact'),
+      },
     },
     ...(hasAddress && {
       address: {
@@ -573,7 +707,7 @@ export default function SEOSchema({
   };
 
   // FAQ schema for diensten page
-  const faqSchema = includeFAQ ? {
+  const faqSchema = currentIncludeFAQ ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     '@id': `${SITE_URL}/diensten#faq`,

@@ -7,9 +7,7 @@ export const revalidate = 60 * 60 * 24;
 import { Suspense } from 'react';
 import Image from 'next/image';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import FAQSchema from '@/components/FAQSchema';
-import BreadcrumbSchema from '@/components/BreadcrumbSchema';
-import ServiceSchema from '@/components/ServiceSchema';
+import SEOSchema from '@/components/SEOSchema';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
@@ -78,29 +76,6 @@ const services = [
   },
 ];
 
-const dienstenFaqs = [
-  { 
-    question: 'Wat kost een moderne 3D-website ongeveer?', 
-    answer: 'We bieden pakketten vanaf €2.500, afhankelijk van 3D-complexiteit, content en integraties. Complexere projecten met uitgebreide 3D-ervaringen en maatwerk functionaliteiten starten vanaf €5.000.' 
-  },
-  { 
-    question: 'Werken jullie met KvK en BTW in Nederland?', 
-    answer: 'Ja, wij zijn in Nederland gevestigd, met KvK en BTW-registratie. Facturen zijn 100% zakelijk bruikbaar en voldoen aan alle Nederlandse administratieve eisen.' 
-  },
-  { 
-    question: 'Hoe snel kunnen jullie opleveren?', 
-    answer: 'Een MVP kan binnen 2–4 weken, projecten groter 6–10 weken afhankelijk van scope en assets. We werken in sprints en houden u wekelijks op de hoogte van de voortgang.' 
-  },
-  { 
-    question: 'Bieden jullie onderhoud en SLA?', 
-    answer: 'Ja, we bieden onderhoudsplannen met updates, beveiligingspatches en performance monitoring op moderne hosting platforms zoals Vercel en Netlify.' 
-  },
-  { 
-    question: 'Is SEO inbegrepen?', 
-    answer: 'Ja, technische SEO, sitemaps, OG images, en laadsnelheid optimalisatie zijn standaard inbegrepen. We zorgen voor optimale Core Web Vitals en zoekmachine vriendelijke code.' 
-  },
-];
-
 export default function Diensten() {
   // Generate JSON-LD schema for services
   const servicesSchema = {
@@ -147,38 +122,12 @@ export default function Diensten() {
         className="object-cover opacity-50 pointer-events-none -z-10"
         decoding="async"
       />
-      <BreadcrumbSchema
-        items={[
-          { name: "Home", url: "/" },
-          { name: "Diensten", url: "/diensten" }
-        ]}
-      />
-      <ServiceSchema
-        services={[
-          {
-            name: "Webdesign & Development",
-            description: "Razendsnelle, veilige en schaalbare websites gebouwd met Next.js & React",
-            serviceType: "Webdesign"
-          },
-          {
-            name: "3D Web Visualisaties",
-            description: "Interactieve 3D-ervaringen en product configurators met WebGL & Three.js",
-            serviceType: "3D Web Visualizations"
-          },
-          {
-            name: "SEO & Performance Optimalisatie",
-            description: "Data-gedreven groei door SEO, A/B testing en conversie optimalisatie",
-            serviceType: "SEO"
-          }
-        ]}
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(servicesSchema),
         }}
       />
-      <FAQSchema faqs={dienstenFaqs} id={`${SITE_URL}/diensten#faq`} />
 
       {/* Hero section with 3D elements */}
       <section className="relative min-h-[75svh] md:min-h-[70vh] overflow-hidden flex items-center content-safe-top">
@@ -530,59 +479,12 @@ export default function Diensten() {
         </div>
       </section>
       
-      {/* Schema markup */}
-      <FAQSchema 
-        id={`${SITE_URL}/diensten#faq`}
-        faqs={[
-          {
-            question: 'Hoelang duurt het om een website op te leveren?',
-            answer: 'Een professionele website wordt doorgaans binnen 4-8 weken opgeleverd, afhankelijk van de complexiteit en specifieke wensen. Voor eenvoudige websites kunnen we dit verkorten tot 2-3 weken, terwijl uitgebreide e-commerce oplossingen soms 8-12 weken in beslag nemen.'
-          },
-          {
-            question: 'Werken jullie met WordPress, een headless CMS of maatwerk?',
-            answer: 'Wij specialiseren ons in moderne headless CMS-oplossingen zoals Sanity en Contentful, gecombineerd met Next.js voor optimale performance. Voor specifieke behoeften ontwikkelen we ook volledig maatwerk oplossingen. WordPress gebruiken we alleen in uitzonderlijke gevallen.'
-          },
-          {
-            question: 'Kunnen jullie een webshop bouwen met betaalmethoden in Nederland (iDEAL, creditcard)?',
-            answer: 'Ja, wij bouwen complete e-commerce oplossingen met alle populaire Nederlandse betaalmethoden zoals iDEAL, creditcard, Bancontact, en PayPal. We integreren met betrouwbare payment service providers zoals Mollie of Stripe voor veilige transacties.'
-          },
-          {
-            question: 'Hoe pakken jullie SEO aan voor landelijke vindbaarheid in Nederland?',
-            answer: 'Onze SEO-aanpak begint met diepgaand zoekwoordenonderzoek specifiek voor de Nederlandse markt. We optimaliseren technische aspecten, creëren waardevolle content, en zorgen voor lokale SEO met focus op Nederlandse zoektermen en gebruikersgedrag.'
-          },
-          {
-            question: 'Bieden jullie onderhoud en doorontwikkeling aan?',
-            answer: 'Ja, wij bieden flexibele onderhoudscontracten en doorontwikkelingstrajecten. Van beveiligingsupdates en contentbeheer tot het toevoegen van nieuwe functionaliteiten - we zorgen ervoor dat uw website altijd up-to-date en optimaal presteert.'
-          },
-          {
-            question: 'Kunnen afspraken online plaatsvinden of op locatie in Nederland?',
-            answer: 'Beide opties zijn mogelijk. We werken graag online via videocalls voor efficiënte samenwerking, maar bezoeken ook graag klanten op locatie binnen Nederland voor persoonlijke besprekingen en workshops.'
-          }
-        ]}
-      />
-      <BreadcrumbSchema 
-        items={[
+      <SEOSchema 
+        pageType="services" 
+        includeFAQ={true}
+        breadcrumbs={[
           { name: 'Home', url: '/' },
           { name: 'Diensten', url: '/diensten' }
-        ]}
-      />
-      <ServiceSchema 
-        services={[
-          {
-            name: 'Website laten maken',
-            description: 'Professionele websites op maat gebouwd met moderne technologieën voor Nederlandse bedrijven',
-            serviceType: 'Website Development'
-          },
-          {
-            name: 'Webshop ontwikkeling', 
-            description: 'E-commerce oplossingen en webshops met Nederlandse betaalmethoden en integraties',
-            serviceType: 'E-commerce Development'
-          },
-          {
-            name: 'SEO optimalisatie',
-            description: 'Zoekmachine optimalisatie en technische SEO voor betere Google rankings',
-            serviceType: 'SEO Services'
-          }
         ]}
       />
     </main>
