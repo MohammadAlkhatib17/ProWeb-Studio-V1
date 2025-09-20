@@ -92,6 +92,24 @@ The bundle size gate monitors JavaScript bundle sizes to prevent performance reg
 | Warning Threshold | 5% | *(informational)* | Shows warnings for changes >5% but <10% |
 | Critical Routes | `/`, `/diensten` | - | Routes that are monitored for bundle size |
 
+#### How the Bundle Size Gate Works
+
+1. **Baseline Comparison**: Compares current PR bundle sizes against the base branch
+2. **Automatic Detection**: CI automatically checks bundle size on every PR
+3. **Override Recognition**: Workflow recognizes `bundle-size-override` label to bypass the gate
+4. **Documentation Requirement**: Override requires justification in PR comments
+
+#### Bundle Size Override Process
+
+When a PR fails the bundle size gate, developers can override it by:
+
+1. **Adding the Label**: Apply `bundle-size-override` label to the PR (via GitHub UI or CLI)
+2. **Documenting Rationale**: Add a comment explaining why the increase is necessary
+3. **Following Guidelines**: Ensure the reason aligns with acceptable override criteria
+4. **Team Review**: Consider having the override reviewed by a senior developer
+
+The CI workflow will automatically recognize the label and allow the PR to proceed.
+
 #### Monitored Bundle Categories
 
 - **vendors**: Core vendor libraries (React, Next.js, Framer Motion)
@@ -179,6 +197,73 @@ This PR adds the new 3D model viewer component which requires additional Three.j
 **Business justification:**
 Critical feature for Q4 portfolio showcase launch.
 ```
+
+## Acceptable Bundle Size Override Rationale
+
+The `bundle-size-override` label should only be used when the bundle size increase is justified and unavoidable. Here are the acceptable reasons:
+
+### ✅ Valid Override Reasons
+
+1. **New Feature Requirements**
+   - Adding new functionality that requires additional dependencies
+   - User-requested features that justify the performance trade-off
+   - Critical business features with approved impact assessment
+
+2. **Security or Performance Updates**
+   - Library updates to fix security vulnerabilities
+   - Dependencies updated for performance improvements
+   - Framework upgrades with temporary size increases
+
+3. **Technical Debt with Planned Resolution**
+   - Temporary increases with documented optimization plan
+   - Refactoring that initially increases size but improves maintainability
+   - Migration to better architecture with short-term size impact
+
+4. **External Dependency Changes**
+   - Third-party library size increases beyond our control
+   - Required polyfills for browser compatibility
+   - Vendor bundle changes in underlying frameworks
+
+### ❌ Invalid Override Reasons
+
+1. **Poor Development Practices**
+   - Accidentally including dev dependencies in production
+   - Duplicate dependencies or unused code
+   - Unoptimized assets or images
+
+2. **Convenience Over Performance**
+   - Adding heavy libraries for minor features
+   - Choosing convenience over bundle optimization
+   - Importing entire libraries for single functions
+
+3. **Lack of Investigation**
+   - Not exploring lighter alternatives
+   - Not implementing code splitting
+   - Not considering performance impact
+
+### 📋 Required Documentation
+
+When using the `bundle-size-override` label, your PR comment must include:
+
+1. **Root Cause Analysis**
+   - What specifically caused the bundle size increase
+   - Which files/dependencies contributed most to the growth
+   - Exact size increase breakdown by route/chunk
+
+2. **Mitigation Efforts**
+   - Optimization techniques attempted
+   - Alternative approaches considered
+   - Future optimization opportunities identified
+
+3. **Business Justification**
+   - Why this change is necessary now
+   - Impact on user experience and business goals
+   - Timeline for any planned optimizations
+
+4. **Performance Impact Assessment**
+   - Estimated load time impact on target devices
+   - Core Web Vitals implications
+   - Mobile network considerations
 
 ### 3. Code Quality Override
 

@@ -5,6 +5,8 @@
  */
 
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
 async function testHeaders(url, path) {
   return new Promise((resolve, reject) => {
@@ -51,6 +53,8 @@ async function runTests() {
     { path: '/diensten', expected: 'NOT SET', description: 'Services page (should NOT have X-Robots-Tag)' }
   ];
 
+  const results = [];
+
   for (const route of testRoutes) {
     try {
       console.log(`\nTesting: ${route.path}`);
@@ -61,14 +65,32 @@ async function runTests() {
       console.log(`✅ Status: ${result.statusCode}`);
       console.log(`🤖 X-Robots-Tag: ${result.robotsTag}`);
       
-      if (result.robotsTag === route.expected) {
+      const passed = result.robotsTag === route.expected;
+      if (passed) {
         console.log(`✅ PASS: Header matches expected value`);
       } else {
         console.log(`❌ FAIL: Expected '${route.expected}', got '${result.robotsTag}'`);
       }
 
+      // Store result for JSON output
+      results.push({
+        route: route,
+        status: result.statusCode,
+        robotsTag: result.robotsTag,
+        passed: passed,
+        headers: result.headers
+      });
+
     } catch (error) {
       console.log(`❌ ERROR: ${error.message}`);
+      
+      // Store error result
+      results.push({
+        route: route,
+        status: 'ERROR',
+        error: error.message,
+        passed: false
+      });
       
       if (error.message.includes('ECONNREFUSED')) {
         console.log('💡 Make sure the dev server is running on port 3002');
@@ -77,6 +99,24 @@ async function runTests() {
       }
     }
   }
+
+  // Save results to JSON file in reports directory
+  const scriptDir = path.dirname(__filename);
+  const reportsDir = path.join(scriptDir, 'reports');
+  
+  // Create reports directory if it doesn't exist
+  if (!fs.existsSync(reportsDir)) {
+    fs.mkdirSync(reportsDir, { recursive: true });
+  }
+  
+  const outputFile = path.join(reportsDir, 'x_robots_tag_results.json');
+  const outputData = {
+    timestamp: Date.now(),
+    results: results
+  };
+  
+  fs.writeFileSync(outputFile, JSON.stringify(outputData, null, 2));
+  console.log(`\n📊 Results saved to ${outputFile}`);
 
   console.log('\n' + '=' .repeat(50));
   console.log('✅ Test completed!');

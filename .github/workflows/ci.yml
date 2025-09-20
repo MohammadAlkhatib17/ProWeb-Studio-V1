@@ -58,6 +58,22 @@ jobs:
           echo "🔧 Checking environment variable consistency..."
           node scripts/check-env-vars-consistency.js
 
+  # Bundle Size Regression Protection
+  # 
+  # This job checks for bundle size regressions by comparing the current PR
+  # against the base branch. If bundle size increases beyond the threshold,
+  # the check fails unless overridden.
+  #
+  # Override Mechanism:
+  # - Add 'bundle-size-override' label to the PR
+  # - Document justification in PR comments
+  # - See reports/ci/quality-gates.md for acceptable rationale
+  #
+  # Acceptable Override Reasons:
+  # - New features requiring additional dependencies
+  # - Critical library updates for security/performance
+  # - Temporary increases with optimization plan
+  # - Business-critical functionality with approved trade-offs
   bundle-size-check:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
@@ -124,6 +140,18 @@ jobs:
         if: steps.bundle-check.outputs.bundle-check-passed == 'false' && steps.check-override.outputs.has-override != 'true'
         run: |
           echo "❌ Bundle size regression detected!"
-          echo "Add 'bundle-size-override' label to override this check."
-          echo "See reports/ci/quality-gates.md for more information."
+          echo ""
+          echo "📊 Bundle size has increased beyond the acceptable threshold."
+          echo "This may impact application performance and user experience."
+          echo ""
+          echo "🔧 To override this check:"
+          echo "1. Add the 'bundle-size-override' label to this PR"
+          echo "2. Document the justification in a PR comment"
+          echo "3. See reports/ci/quality-gates.md for acceptable rationale"
+          echo ""
+          echo "💡 Consider optimizing bundle size before overriding:"
+          echo "- Remove unused dependencies"
+          echo "- Use dynamic imports for large components"
+          echo "- Optimize images and assets"
+          echo "- Check for duplicate dependencies"
           exit 1

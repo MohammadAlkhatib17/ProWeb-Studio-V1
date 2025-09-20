@@ -7,6 +7,8 @@ Tests various routes to verify headers configuration.
 import requests
 import json
 import time
+import os
+from pathlib import Path
 from urllib.parse import urljoin
 
 # Configuration
@@ -130,14 +132,23 @@ def main():
         time.sleep(0.1)
     
     # Save results to JSON for further analysis
-    with open("/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/headers_test_results.json", "w") as f:
+    # Find repo root (where this script is located)
+    script_dir = Path(__file__).parent
+    reports_dir = script_dir / "reports"
+    
+    # Create reports directory if it doesn't exist
+    reports_dir.mkdir(exist_ok=True)
+    
+    output_file = reports_dir / "headers_test_results.json"
+    
+    with open(output_file, "w") as f:
         json.dump({
             "timestamp": time.time(),
             "base_url": BASE_URL,
             "results": results
         }, f, indent=2)
     
-    print("📊 Results saved to headers_test_results.json")
+    print(f"📊 Results saved to {output_file}")
     print("🎯 Ready to generate headers-cache.md report")
 
 if __name__ == "__main__":
