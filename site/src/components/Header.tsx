@@ -41,16 +41,20 @@ export default function Header() {
     <header
       className={`fixed top-0 w-full z-40 transition-all duration-300 bg-transparent ${
         isScrolled
-          ? 'glass py-4 backdrop-blur-xl border-b border-cosmic-700/30'
-          : 'py-6'
+          ? 'glass h-16 backdrop-blur-xl border-b border-cosmic-700/30'
+          : 'h-20'
       }`}
-      style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}
+      style={{ paddingTop: 'max(0.5rem, env(safe-area-inset-top))' }}
     >
-      <div className="max-w-6xl mx-auto px-6 flex items-center">
-        <div className="absolute left-3 md:left-6">
+      <div className="relative h-full w-full flex items-center justify-between px-safe">
+        {/* Logo positioned at far left */}
+        <div
+          className="absolute left-0 h-full flex items-center md:pl-6"
+          style={{ paddingInlineStart: 'env(safe-area-inset-left)' }}
+        >
           <Link
             href="/"
-            className="group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded-lg p-3 -m-3 min-h-[44px] inline-flex items-center"
+            className="group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded-lg p-2 -ml-2 md:ml-0 h-full inline-flex items-center"
             aria-label="ProWeb Studio Homepage"
           >
             <Logo
@@ -68,8 +72,9 @@ export default function Header() {
           </Link>
         </div>
 
+        {/* Desktop Navigation - centered */}
         <nav
-          className="hidden md:flex items-center gap-8 mx-auto"
+          className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2"
           aria-label="Primary navigation"
         >
           {siteConfig.navigation.map((item) => (
@@ -85,23 +90,29 @@ export default function Header() {
           ))}
         </nav>
 
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden absolute right-6 flex flex-col gap-1 p-3 hover:bg-cosmic-800/50 rounded-lg transition-colors duration-300 min-h-[44px] min-w-[44px] items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900"
-          aria-label="Toggle menu"
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-menu"
+        {/* Mobile Menu Button - positioned at far right */}
+        <div
+          className="absolute right-0 h-full flex items-center md:pr-6 md:hidden"
+          style={{ paddingInlineEnd: 'env(safe-area-inset-right)' }}
         >
-          <div
-            className={`w-6 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}
-          />
-          <div
-            className={`w-6 h-0.5 bg-white transition-opacity duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}
-          />
-          <div
-            className={`w-6 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}
-          />
-        </button>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex flex-col gap-2 p-4 -mr-4 md:mr-0 hover:bg-cosmic-800/50 rounded-lg transition-colors duration-300 min-h-[56px] min-w-[56px] items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900"
+            aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+          >
+            <div
+              className={`w-8 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2.5' : ''}`}
+            />
+            <div
+              className={`w-8 h-0.5 bg-white transition-opacity duration-300 ${isMenuOpen ? 'opacity-0' : ''}`}
+            />
+            <div
+              className={`w-8 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2.5' : ''}`}
+            />
+          </button>
+        </div>
       </div>
 
       <div id="mobile-menu" className="md:hidden">

@@ -10,6 +10,14 @@
     /* App background variables for consistent theming */
     --app-bg-color: #000d1a; /* cosmic-900 equivalent */
     --app-bg-gradient: radial-gradient(circle at 50% 30%, rgba(20, 140, 255, 0.1) 0%, rgba(255, 0, 255, 0.05) 40%, transparent 70%);
+    /* Header offset for anchor scroll positioning - professional height */
+    --header-offset: 80px; /* enhanced mobile header height */
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --header-offset: 64px; /* optimized desktop header offset */
+    }
   }
 
   * {
@@ -54,12 +62,12 @@
     font-weight: 700;
     text-rendering: optimizeLegibility;
     /* Ensure anchor targets don't hide under sticky header */
-    scroll-margin-top: 96px;
+    scroll-margin-top: var(--header-offset);
   }
 
   /* Additional scroll margin for any element that might be used as an anchor target */
   [id] {
-    scroll-margin-top: 96px;
+    scroll-margin-top: var(--header-offset);
   }
 
   p {
@@ -125,9 +133,9 @@
     opacity: 0;
   }
 
-  /* Touch target utilities for accessibility */
+  /* Touch target utilities for accessibility - professional mobile sizing */
   .touch-target {
-    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+    @apply min-h-[56px] min-w-[56px] flex items-center justify-center;
   }
 
   .touch-target-inline {
@@ -438,10 +446,16 @@
   }
 }
 
-/* Mobile logo optimizations */
+/* Mobile logo optimizations - edge-to-edge professional positioning */
 @media (max-width: 767px) {
-  /* Ensure logo maintains visibility and proper spacing on mobile */
-  header .absolute.left-3 {
+  /* Enhanced header styling for professional edge-to-edge layout */
+  header {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  
+  /* Ensure logo maintains visibility at far left edge */
+  header .absolute.left-0 {
     z-index: 50;
   }
   
@@ -450,17 +464,18 @@
     filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.4));
   }
   
-  /* Ensure logo text is always readable on mobile */
+  /* Ensure logo text is always readable on mobile - enhanced sizing for prominence */
   header img[alt*="ProWeb Studio"] {
-    min-width: 120px; /* Ensure logo text is readable */
-    max-width: 160px; /* Prevent logo from being too large */
+    min-width: 160px; /* Increased for substantial readability */
+    max-width: 220px; /* Allow much larger logo on mobile for proper proportion */
   }
 }
 
-/* Extra small mobile devices */
+/* Extra small mobile devices - maintain edge positioning */
 @media (max-width: 480px) {
-  header .absolute.left-3 {
-    left: 0.5rem; /* Move logo even more to the left on very small screens */
+  header {
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
   }
 }
 
@@ -484,14 +499,14 @@
     padding-top: max(1rem, env(safe-area-inset-top));
   }
   
-  /* Content with safe top */
+  /* Content with safe top - optimized for professional header height */
   .content-safe-top {
-    padding-top: max(5rem, calc(4rem + env(safe-area-inset-top)));
+    padding-top: max(6rem, calc(5rem + env(safe-area-inset-top)));
   }
   
   @media (min-width: 768px) {
     .content-safe-top {
-      padding-top: max(6rem, calc(5rem + env(safe-area-inset-top)));
+      padding-top: max(5rem, calc(4rem + env(safe-area-inset-top)));
     }
   }
   
