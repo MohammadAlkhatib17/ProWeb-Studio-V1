@@ -53,6 +53,13 @@
     line-height: 1.2;
     font-weight: 700;
     text-rendering: optimizeLegibility;
+    /* Ensure anchor targets don't hide under sticky header */
+    scroll-margin-top: 96px;
+  }
+
+  /* Additional scroll margin for any element that might be used as an anchor target */
+  [id] {
+    scroll-margin-top: 96px;
   }
 
   p {

@@ -23,6 +23,7 @@ interface SEOSchemaProps {
     name: string;
     url: string;
   }>;
+  includeFAQ?: boolean;
 }
 
 export default function SEOSchema({
@@ -30,6 +31,7 @@ export default function SEOSchema({
   pageTitle,
   pageDescription,
   breadcrumbs = [],
+  includeFAQ = false,
 }: SEOSchemaProps) {
   // Website schema
   const websiteSchema = {
@@ -126,7 +128,68 @@ export default function SEOSchema({
         addressCountry: 'NL'
       }
     },
-    serviceArea: { '@type': 'Place', address: { '@type': 'PostalAddress', addressCountry: 'NL' } },
+    serviceArea: [
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Drenthe',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Flevoland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Friesland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Gelderland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Groningen',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Limburg',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Noord-Brabant',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Noord-Holland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Overijssel',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Utrecht',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Zeeland',
+      },
+      {
+        '@type': 'DefinedRegion',
+        addressCountry: 'NL',
+        addressRegion: 'Zuid-Holland',
+      },
+    ],
     ...(hasAddress && {
       address: {
         '@type': 'PostalAddress',
@@ -238,6 +301,13 @@ export default function SEOSchema({
     contactPoint: [
       {
         '@type': 'ContactPoint',
+        contactType: 'sales',
+        availableLanguage: ['nl', 'en'],
+        areaServed: 'NL',
+        url: abs('/contact'),
+      },
+      {
+        '@type': 'ContactPoint',
         telephone: siteConfig.phone,
         email: siteConfig.email,
         contactType: 'Customer Service',
@@ -291,6 +361,11 @@ export default function SEOSchema({
       siteConfig.social.github,
       siteConfig.social.twitter,
     ].filter(Boolean),
+    potentialAction: {
+      '@type': 'ScheduleAction',
+      target: abs('/contact'),
+      name: 'Afspraak plannen',
+    },
   };
 
   // Breadcrumb schema (if breadcrumbs are provided)
@@ -497,6 +572,105 @@ export default function SEOSchema({
     },
   };
 
+  // FAQ schema for diensten page
+  const faqSchema = includeFAQ ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${SITE_URL}/diensten#faq`,
+    name: 'Veelgestelde vragen over webdesign en development',
+    description: 'Antwoorden op veelgestelde vragen over website laten maken, webshop ontwikkeling en SEO services in Nederland',
+    inLanguage: 'nl-NL',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        '@id': `${SITE_URL}/diensten#faq-1`,
+        name: 'Hoelang duurt het om een website op te leveren?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Een professionele website wordt doorgaans binnen 4-8 weken opgeleverd, afhankelijk van de complexiteit en specifieke wensen. Voor eenvoudige websites kunnen we dit verkorten tot 2-3 weken, terwijl uitgebreide e-commerce oplossingen soms 8-12 weken in beslag nemen.',
+          author: {
+            '@type': 'Organization',
+            '@id': `${SITE_URL}#organization`,
+          },
+        },
+      },
+      {
+        '@type': 'Question',
+        '@id': `${SITE_URL}/diensten#faq-2`,
+        name: 'Werken jullie met WordPress, een headless CMS of maatwerk?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Wij specialiseren ons in moderne headless CMS-oplossingen zoals Sanity en Contentful, gecombineerd met Next.js voor optimale performance. Voor specifieke behoeften ontwikkelen we ook volledig maatwerk oplossingen. WordPress gebruiken we alleen in uitzonderlijke gevallen.',
+          author: {
+            '@type': 'Organization',
+            '@id': `${SITE_URL}#organization`,
+          },
+        },
+      },
+      {
+        '@type': 'Question',
+        '@id': `${SITE_URL}/diensten#faq-3`,
+        name: 'Kunnen jullie een webshop bouwen met betaalmethoden in Nederland (iDEAL, creditcard)?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Ja, wij bouwen complete e-commerce oplossingen met alle populaire Nederlandse betaalmethoden zoals iDEAL, creditcard, Bancontact, en PayPal. We integreren met betrouwbare payment service providers zoals Mollie of Stripe voor veilige transacties.',
+          author: {
+            '@type': 'Organization',
+            '@id': `${SITE_URL}#organization`,
+          },
+        },
+      },
+      {
+        '@type': 'Question',
+        '@id': `${SITE_URL}/diensten#faq-4`,
+        name: 'Hoe pakken jullie SEO aan voor landelijke vindbaarheid in Nederland?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Onze SEO-aanpak begint met diepgaand zoekwoordenonderzoek specifiek voor de Nederlandse markt. We optimaliseren technische aspecten, creëren waardevolle content, en zorgen voor lokale SEO met focus op Nederlandse zoektermen en gebruikersgedrag.',
+          author: {
+            '@type': 'Organization',
+            '@id': `${SITE_URL}#organization`,
+          },
+        },
+      },
+      {
+        '@type': 'Question',
+        '@id': `${SITE_URL}/diensten#faq-5`,
+        name: 'Bieden jullie onderhoud en doorontwikkeling aan?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Ja, wij bieden flexibele onderhoudscontracten en doorontwikkelingstrajecten. Van beveiligingsupdates en contentbeheer tot het toevoegen van nieuwe functionaliteiten - we zorgen ervoor dat uw website altijd up-to-date en optimaal presteert.',
+          author: {
+            '@type': 'Organization',
+            '@id': `${SITE_URL}#organization`,
+          },
+        },
+      },
+      {
+        '@type': 'Question',
+        '@id': `${SITE_URL}/diensten#faq-6`,
+        name: 'Kunnen afspraken online plaatsvinden of op locatie in Nederland?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Beide opties zijn mogelijk. We werken graag online via videocalls voor efficiënte samenwerking, maar bezoeken ook graag klanten op locatie binnen Nederland voor persoonlijke besprekingen en workshops.',
+          author: {
+            '@type': 'Organization',
+            '@id': `${SITE_URL}#organization`,
+          },
+        },
+      },
+    ],
+    about: {
+      '@type': 'Thing',
+      name: 'Website ontwikkeling en webdesign services Nederland',
+      description: 'Professionele webdevelopment, webshop ontwikkeling en SEO services voor Nederlandse bedrijven',
+    },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+    },
+  } : null;
+
   // Combine all schemas into a graph
   const schemaGraph = {
     '@context': 'https://schema.org',
@@ -509,6 +683,7 @@ export default function SEOSchema({
       webshopService,
       seoService,
       ...(breadcrumbSchema ? [breadcrumbSchema] : []),
+      ...(faqSchema ? [faqSchema] : []),
     ],
   };
 

@@ -423,6 +423,168 @@ export default function Diensten() {
           </a>
         </p>
       </section>
+
+      {/* FAQ Section */}
+      <section className="px-6 md:px-8 lg:px-12 py-12 md:py-16">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-cyan-400 to-magenta-400 bg-clip-text text-transparent">
+            Veelgestelde vragen
+          </h2>
+          <div className="space-y-4">
+            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
+              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
+                <div className="flex items-center justify-between">
+                  <span>Hoelang duurt het om een website op te leveren?</span>
+                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </summary>
+              <div className="px-6 pb-6">
+                <p className="text-gray-300 leading-relaxed">
+                  Een professionele website wordt doorgaans binnen 4-8 weken opgeleverd, afhankelijk van de complexiteit en specifieke wensen. Voor eenvoudige websites kunnen we dit verkorten tot 2-3 weken, terwijl uitgebreide e-commerce oplossingen soms 8-12 weken in beslag nemen.
+                </p>
+              </div>
+            </details>
+
+            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
+              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
+                <div className="flex items-center justify-between">
+                  <span>Werken jullie met WordPress, een headless CMS of maatwerk?</span>
+                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </summary>
+              <div className="px-6 pb-6">
+                <p className="text-gray-300 leading-relaxed">
+                  Wij specialiseren ons in moderne headless CMS-oplossingen zoals Sanity en Contentful, gecombineerd met Next.js voor optimale performance. Voor specifieke behoeften ontwikkelen we ook volledig maatwerk oplossingen. WordPress gebruiken we alleen in uitzonderlijke gevallen.
+                </p>
+              </div>
+            </details>
+
+            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
+              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
+                <div className="flex items-center justify-between">
+                  <span>Kunnen jullie een webshop bouwen met betaalmethoden in Nederland (iDEAL, creditcard)?</span>
+                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </summary>
+              <div className="px-6 pb-6">
+                <p className="text-gray-300 leading-relaxed">
+                  Ja, wij bouwen complete e-commerce oplossingen met alle populaire Nederlandse betaalmethoden zoals iDEAL, creditcard, Bancontact, en PayPal. We integreren met betrouwbare payment service providers zoals Mollie of Stripe voor veilige transacties.
+                </p>
+              </div>
+            </details>
+
+            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
+              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
+                <div className="flex items-center justify-between">
+                  <span>Hoe pakken jullie SEO aan voor landelijke vindbaarheid in Nederland?</span>
+                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </summary>
+              <div className="px-6 pb-6">
+                <p className="text-gray-300 leading-relaxed">
+                  Onze SEO-aanpak begint met diepgaand zoekwoordenonderzoek specifiek voor de Nederlandse markt. We optimaliseren technische aspecten, creëren waardevolle content, en zorgen voor lokale SEO met focus op Nederlandse zoektermen en gebruikersgedrag.
+                </p>
+              </div>
+            </details>
+
+            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
+              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
+                <div className="flex items-center justify-between">
+                  <span>Bieden jullie onderhoud en doorontwikkeling aan?</span>
+                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </summary>
+              <div className="px-6 pb-6">
+                <p className="text-gray-300 leading-relaxed">
+                  Ja, wij bieden flexibele onderhoudscontracten en doorontwikkelingstrajecten. Van beveiligingsupdates en contentbeheer tot het toevoegen van nieuwe functionaliteiten - we zorgen ervoor dat uw website altijd up-to-date en optimaal presteert.
+                </p>
+              </div>
+            </details>
+
+            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
+              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
+                <div className="flex items-center justify-between">
+                  <span>Kunnen afspraken online plaatsvinden of op locatie in Nederland?</span>
+                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </summary>
+              <div className="px-6 pb-6">
+                <p className="text-gray-300 leading-relaxed">
+                  Beide opties zijn mogelijk. We werken graag online via videocalls voor efficiënte samenwerking, maar bezoeken ook graag klanten op locatie binnen Nederland voor persoonlijke besprekingen en workshops.
+                </p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+      
+      {/* Schema markup */}
+      <FAQSchema 
+        id={`${SITE_URL}/diensten#faq`}
+        faqs={[
+          {
+            question: 'Hoelang duurt het om een website op te leveren?',
+            answer: 'Een professionele website wordt doorgaans binnen 4-8 weken opgeleverd, afhankelijk van de complexiteit en specifieke wensen. Voor eenvoudige websites kunnen we dit verkorten tot 2-3 weken, terwijl uitgebreide e-commerce oplossingen soms 8-12 weken in beslag nemen.'
+          },
+          {
+            question: 'Werken jullie met WordPress, een headless CMS of maatwerk?',
+            answer: 'Wij specialiseren ons in moderne headless CMS-oplossingen zoals Sanity en Contentful, gecombineerd met Next.js voor optimale performance. Voor specifieke behoeften ontwikkelen we ook volledig maatwerk oplossingen. WordPress gebruiken we alleen in uitzonderlijke gevallen.'
+          },
+          {
+            question: 'Kunnen jullie een webshop bouwen met betaalmethoden in Nederland (iDEAL, creditcard)?',
+            answer: 'Ja, wij bouwen complete e-commerce oplossingen met alle populaire Nederlandse betaalmethoden zoals iDEAL, creditcard, Bancontact, en PayPal. We integreren met betrouwbare payment service providers zoals Mollie of Stripe voor veilige transacties.'
+          },
+          {
+            question: 'Hoe pakken jullie SEO aan voor landelijke vindbaarheid in Nederland?',
+            answer: 'Onze SEO-aanpak begint met diepgaand zoekwoordenonderzoek specifiek voor de Nederlandse markt. We optimaliseren technische aspecten, creëren waardevolle content, en zorgen voor lokale SEO met focus op Nederlandse zoektermen en gebruikersgedrag.'
+          },
+          {
+            question: 'Bieden jullie onderhoud en doorontwikkeling aan?',
+            answer: 'Ja, wij bieden flexibele onderhoudscontracten en doorontwikkelingstrajecten. Van beveiligingsupdates en contentbeheer tot het toevoegen van nieuwe functionaliteiten - we zorgen ervoor dat uw website altijd up-to-date en optimaal presteert.'
+          },
+          {
+            question: 'Kunnen afspraken online plaatsvinden of op locatie in Nederland?',
+            answer: 'Beide opties zijn mogelijk. We werken graag online via videocalls voor efficiënte samenwerking, maar bezoeken ook graag klanten op locatie binnen Nederland voor persoonlijke besprekingen en workshops.'
+          }
+        ]}
+      />
+      <BreadcrumbSchema 
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Diensten', url: '/diensten' }
+        ]}
+      />
+      <ServiceSchema 
+        services={[
+          {
+            name: 'Website laten maken',
+            description: 'Professionele websites op maat gebouwd met moderne technologieën voor Nederlandse bedrijven',
+            serviceType: 'Website Development'
+          },
+          {
+            name: 'Webshop ontwikkeling', 
+            description: 'E-commerce oplossingen en webshops met Nederlandse betaalmethoden en integraties',
+            serviceType: 'E-commerce Development'
+          },
+          {
+            name: 'SEO optimalisatie',
+            description: 'Zoekmachine optimalisatie en technische SEO voor betere Google rankings',
+            serviceType: 'SEO Services'
+          }
+        ]}
+      />
     </main>
   );
 }

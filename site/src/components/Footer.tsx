@@ -168,6 +168,14 @@ export default function Footer() {
             Sitemap
           </a>
           <span aria-hidden>•</span>
+          <Link
+            href="/overzicht"
+            aria-label="Site-overzicht"
+            className="hover:text-white transition-colors min-h-[44px] inline-flex items-center py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+          >
+            Site-overzicht
+          </Link>
+          <span aria-hidden>•</span>
           <a
             href={`mailto:${siteConfig.contact?.inbox ?? 'contact@prowebstudio.nl'}`}
             aria-label="Contact per e-mail"
