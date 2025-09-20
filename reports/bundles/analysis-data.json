@@ -1,25 +1,28 @@
 {
   "analysisMetadata": {
-    "generatedDate": "2025-09-18",
-    "nextJsVersion": "14.2.32",
+    "generatedDate": "2025-09-20",
+    "nextJsVersion": "14.2.5",
     "bundleAnalyzerVersion": "15.5.2",
-    "targetRoutes": ["/", "/diensten"],
-    "totalBundleSize": "3.22 MB",
-    "totalBundleSizeBytes": 3377152
+    "targetRoutes": [
+      "/",
+      "/diensten"
+    ],
+    "totalBundleSize": "3.31 MB",
+    "totalBundleSizeBytes": 3467845
   },
   "topChunks": [
     {
       "rank": 1,
-      "filename": "vendors-b4d2ca312d3396c4.js",
-      "sizeBytes": 1035188,
-      "sizeFormatted": "1010.93 KB",
+      "filename": "vendors-b2aa1ff2c64095c4.js",
+      "sizeBytes": 1038338,
+      "sizeFormatted": "1014 KB",
       "category": "vendors",
       "description": "Core vendor libraries (React, Next.js, Framer Motion, etc.)"
     },
     {
       "rank": 2,
       "filename": "three.28fe42e6d1f97f5c.js",
-      "sizeBytes": 755928,
+      "sizeBytes": 755926,
       "sizeFormatted": "738.21 KB",
       "category": "three-core",
       "description": "Three.js core library"
@@ -27,7 +30,7 @@
     {
       "rank": 3,
       "filename": "913-3d00645556b1377a.js",
-      "sizeBytes": 723705,
+      "sizeBytes": 723704,
       "sizeFormatted": "706.74 KB",
       "category": "three-components",
       "description": "3D components for diensten, over-ons, werkwijze routes"
@@ -35,7 +38,7 @@
     {
       "rank": 4,
       "filename": "664-0b7500cac858a52b.js",
-      "sizeBytes": 723611,
+      "sizeBytes": 723610,
       "sizeFormatted": "706.65 KB",
       "category": "three-components",
       "description": "3D components for homepage route"
@@ -43,150 +46,192 @@
     {
       "rank": 5,
       "filename": "polyfills-42372ed130431b0a.js",
-      "sizeBytes": 112604,
+      "sizeBytes": 112594,
       "sizeFormatted": "109.96 KB",
       "category": "polyfills",
       "description": "Browser compatibility polyfills"
+    },
+    {
+      "rank": 6,
+      "filename": "layout-19bd3bffe43faca8.js",
+      "sizeBytes": 19285,
+      "sizeFormatted": "18.83 KB",
+      "category": "other",
+      "description": "Miscellaneous chunks"
+    },
+    {
+      "rank": 7,
+      "filename": "971.db1c395c454adea8.js",
+      "sizeBytes": 17718,
+      "sizeFormatted": "17.3 KB",
+      "category": "three-components",
+      "description": "Three.js components and route-specific code"
+    },
+    {
+      "rank": 8,
+      "filename": "page-71b0372f92a3bd81.js",
+      "sizeBytes": 17500,
+      "sizeFormatted": "17.09 KB",
+      "category": "other",
+      "description": "Miscellaneous chunks"
+    },
+    {
+      "rank": 9,
+      "filename": "page-437cb28f7ac93416.js",
+      "sizeBytes": 16891,
+      "sizeFormatted": "16.5 KB",
+      "category": "other",
+      "description": "Miscellaneous chunks"
+    },
+    {
+      "rank": 10,
+      "filename": "page-67ccbd06bf9f6550.js",
+      "sizeBytes": 14847,
+      "sizeFormatted": "14.5 KB",
+      "category": "other",
+      "description": "Miscellaneous chunks"
     }
   ],
-  "routeAnalysis": {
-    "/": {
-      "totalSizeBytes": 1761312,
-      "totalSizeFormatted": "1.68 MB",
-      "hasThreeJs": true,
-      "threeJsComponents": ["HeroCanvas", "HeroScene", "HexagonalPrism"],
-      "chunks": ["webpack", "vendors", "main-app", "664", "app/page"]
+  "allChunks": [
+    {
+      "filename": "vendors-b2aa1ff2c64095c4.js",
+      "sizeBytes": 1038338,
+      "category": "vendors"
     },
-    "/diensten": {
-      "totalSizeBytes": 1761312,
-      "totalSizeFormatted": "1.68 MB", 
-      "hasThreeJs": true,
-      "threeJsComponents": ["ServicesPolyhedra"],
-      "chunks": ["webpack", "vendors", "main-app", "913", "app/diensten/page"]
+    {
+      "filename": "three.28fe42e6d1f97f5c.js",
+      "sizeBytes": 755926,
+      "category": "three-core"
     },
-    "/contact": {
-      "totalSizeBytes": 1039836,
-      "totalSizeFormatted": "1015.12 KB",
-      "hasThreeJs": false,
-      "threeJsComponents": [],
-      "chunks": ["webpack", "vendors", "main-app", "app/contact/page"]
+    {
+      "filename": "913-3d00645556b1377a.js",
+      "sizeBytes": 723704,
+      "category": "three-components"
+    },
+    {
+      "filename": "664-0b7500cac858a52b.js",
+      "sizeBytes": 723610,
+      "category": "three-components"
+    },
+    {
+      "filename": "polyfills-42372ed130431b0a.js",
+      "sizeBytes": 112594,
+      "category": "polyfills"
+    },
+    {
+      "filename": "layout-19bd3bffe43faca8.js",
+      "sizeBytes": 19285,
+      "category": "other"
+    },
+    {
+      "filename": "971.db1c395c454adea8.js",
+      "sizeBytes": 17718,
+      "category": "three-components"
+    },
+    {
+      "filename": "page-71b0372f92a3bd81.js",
+      "sizeBytes": 17500,
+      "category": "other"
+    },
+    {
+      "filename": "page-437cb28f7ac93416.js",
+      "sizeBytes": 16891,
+      "category": "other"
+    },
+    {
+      "filename": "page-67ccbd06bf9f6550.js",
+      "sizeBytes": 14847,
+      "category": "other"
+    },
+    {
+      "filename": "page-5fce65b59519549a.js",
+      "sizeBytes": 5123,
+      "category": "other"
+    },
+    {
+      "filename": "page-2ac109a9a3b30954.js",
+      "sizeBytes": 4541,
+      "category": "other"
+    },
+    {
+      "filename": "201.8f83495740ba5d30.js",
+      "sizeBytes": 4519,
+      "category": "three-components"
+    },
+    {
+      "filename": "webpack-007fcf1c943d23a0.js",
+      "sizeBytes": 3879,
+      "category": "other"
+    },
+    {
+      "filename": "page-5f9b50e218d2202e.js",
+      "sizeBytes": 3231,
+      "category": "other"
+    },
+    {
+      "filename": "652.ef8ba35b884e36ea.js",
+      "sizeBytes": 2217,
+      "category": "three-components"
+    },
+    {
+      "filename": "page-56eac6a26e677ace.js",
+      "sizeBytes": 837,
+      "category": "other"
+    },
+    {
+      "filename": "page-d1df89fab86b867f.js",
+      "sizeBytes": 837,
+      "category": "other"
+    },
+    {
+      "filename": "main-app-fae5f06674b24dca.js",
+      "sizeBytes": 457,
+      "category": "app"
+    },
+    {
+      "filename": "_app-0c0d221b8f8237fa.js",
+      "sizeBytes": 280,
+      "category": "app"
+    },
+    {
+      "filename": "page-31def18d3e769891.js",
+      "sizeBytes": 252,
+      "category": "other"
+    },
+    {
+      "filename": "_error-e5b4d61ed02fe2b7.js",
+      "sizeBytes": 247,
+      "category": "other"
+    },
+    {
+      "filename": "layout-865736d17d62cf5c.js",
+      "sizeBytes": 172,
+      "category": "other"
+    },
+    {
+      "filename": "layout-17763db508e0fa58.js",
+      "sizeBytes": 172,
+      "category": "other"
+    },
+    {
+      "filename": "page-152b10912c68b7ce.js",
+      "sizeBytes": 172,
+      "category": "other"
+    },
+    {
+      "filename": "layout-1f501f7d74e703d8.js",
+      "sizeBytes": 172,
+      "category": "other"
+    },
+    {
+      "filename": "layout-f33409a7138ea3d9.js",
+      "sizeBytes": 172,
+      "category": "other"
+    },
+    {
+      "filename": "main-7c4af4d9ba1c6ff2.js",
+      "sizeBytes": 152,
+      "category": "app"
     }
-  },
-  "threeJsAnalysis": {
-    "totalThreeJsSizeBytes": 2203244,
-    "totalThreeJsSizeFormatted": "2.1 MB",
-    "percentageOfTotal": 65.3,
-    "breakdown": {
-      "coreLibrary": {
-        "sizeBytes": 755928,
-        "sizeFormatted": "738.21 KB",
-        "percentage": 34.3
-      },
-      "customComponents": {
-        "sizeBytes": 1447316,
-        "sizeFormatted": "1.41 MB",
-        "percentage": 65.7
-      }
-    },
-    "components": {
-      "eager": [
-        "src/three/HeroScene.tsx",
-        "src/three/ParallaxRig.tsx",
-        "src/three/StarsShell.tsx",
-        "src/three/FacetedSolid.tsx",
-        "src/three/AboutScene.tsx",
-        "src/three/HelixKnot.tsx"
-      ],
-      "dynamic": [
-        "src/components/HeroCanvas.tsx",
-        "src/three/HexagonalPrism.tsx",
-        "src/three/ServicesPolyhedra.tsx"
-      ]
-    }
-  },
-  "optimizationOpportunities": {
-    "highImpact": [
-      {
-        "component": "src/components/SecureContactForm.tsx",
-        "currentStatus": "eager",
-        "proposedStrategy": "dynamic-import-on-interaction",
-        "estimatedSavingsKB": 100,
-        "risk": "low"
-      },
-      {
-        "component": "src/three/AboutScene.tsx",
-        "currentStatus": "eager",
-        "proposedStrategy": "route-based-dynamic-import",
-        "estimatedSavingsKB": 250,
-        "risk": "low"
-      }
-    ],
-    "mediumImpact": [
-      {
-        "component": "src/components/*Schema.tsx",
-        "currentStatus": "eager",
-        "proposedStrategy": "route-specific-chunks",
-        "estimatedSavingsKB": 40,
-        "risk": "minimal"
-      },
-      {
-        "component": "src/three/materials/MeshTransmissionMaterial",
-        "currentStatus": "bundled",
-        "proposedStrategy": "separate-material-chunk",
-        "estimatedSavingsKB": 125,
-        "risk": "low"
-      }
-    ]
-  },
-  "projectedOptimizations": {
-    "phase1": {
-      "targetReduction": "400-600 KB",
-      "targetPercentage": "12-18%",
-      "components": [
-        "SecureContactForm",
-        "Schema components",
-        "Debug components"
-      ]
-    },
-    "phase2": {
-      "targetReduction": "300-450 KB", 
-      "targetPercentage": "9-13%",
-      "components": [
-        "Advanced 3D materials",
-        "Route-specific 3D scenes"
-      ]
-    },
-    "totalOptimization": {
-      "targetReduction": "700-1050 KB",
-      "targetPercentage": "21-31%",
-      "newMainBundleSize": "1.1-1.2 MB"
-    }
-  },
-  "implementationPlan": {
-    "phase1": {
-      "priority": "immediate",
-      "effort": "low",
-      "changes": [
-        "Dynamic import SecureContactForm with interaction trigger",
-        "Route-split schema components",
-        "Environment-conditional debug loading"
-      ]
-    },
-    "phase2": {
-      "priority": "short-term",
-      "effort": "medium", 
-      "changes": [
-        "Advanced 3D material chunking",
-        "Route-specific 3D scene optimization"
-      ]
-    },
-    "phase3": {
-      "priority": "long-term",
-      "effort": "high",
-      "changes": [
-        "Feature-based code splitting architecture",
-        "Micro-frontend 3D module system"
-      ]
-    }
-  }
+  ]
 }
