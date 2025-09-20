@@ -170,7 +170,6 @@ export default function Dynamic3DWrapper({
       
       // System info
       const hardwareConcurrency = navigator.hardwareConcurrency || 4;
-      // @ts-expect-error - deviceMemory is experimental
       const deviceMemory = navigator.deviceMemory || 4;
       
       // Battery and thermal info

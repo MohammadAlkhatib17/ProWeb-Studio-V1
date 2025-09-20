@@ -196,10 +196,8 @@ export function usePerformanceMonitor(
 
       // Get memory usage if available
       let memoryUsage: number | undefined;
-      // @ts-expect-error - performance.memory is Chrome-specific
       if (performance.memory) {
-        // @ts-expect-error - usedJSHeapSize property not in standard types
-        memoryUsage = performance.memory.usedJSHeapSize / 1024 / 1024; // MB
+        memoryUsage = (performance.memory.usedJSHeapSize || 0) / 1024 / 1024; // MB
       }
 
       const metrics: PerformanceMetrics = {

@@ -83,11 +83,9 @@ export function useDeviceCapabilities() {
 
       // Hardware capabilities
       const hardwareConcurrency = navigator.hardwareConcurrency || 4;
-      // @ts-expect-error - deviceMemory is experimental but widely supported
       const deviceMemory = navigator.deviceMemory || 4;
 
       // Connection detection
-      // @ts-expect-error - connection is experimental
       const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
       const connectionType = connection?.effectiveType || '4g';
 

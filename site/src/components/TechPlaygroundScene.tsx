@@ -50,7 +50,6 @@ const getDeviceInfo = () => {
   
   // Enhanced performance tier detection
   const hardwareConcurrency = navigator.hardwareConcurrency || 4;
-  // @ts-expect-error - deviceMemory is experimental
   const deviceMemory = navigator.deviceMemory || 4;
   
   let performanceTier: 'low' | 'medium' | 'high' = 'medium';

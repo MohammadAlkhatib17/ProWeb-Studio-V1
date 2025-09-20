@@ -9,7 +9,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CursorTrail from '@/components/CursorTrail';
 import SEOSchema from '@/components/SEOSchema';
-import { WebVitalsReporter } from '@/components/WebVitalsReporter';
+import { RealUserVitals } from '@/components/RealUserVitals';
 import { initProductionEnvValidation } from '@/lib/env.server';
 import BackgroundLayer from '@/components/layout/BackgroundLayer';
 import HeroBackground from '@/components/HeroBackground';
@@ -252,7 +252,7 @@ export default function RootLayout({
         <CursorTrail />
 
         <SEOSchema pageType="generic" />
-        <WebVitalsReporter />
+        <RealUserVitals />
         <PWAServiceWorker />
 
         <Script

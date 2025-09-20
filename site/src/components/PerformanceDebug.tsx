@@ -39,10 +39,8 @@ export default function PerformanceDebug({
 
         // Get memory usage if available
         let memoryUsage = 0;
-        // @ts-expect-error - performance.memory is Chrome-specific
         if (performance.memory) {
-          // @ts-expect-error - usedJSHeapSize property not in standard types
-          memoryUsage = Math.round(performance.memory.usedJSHeapSize / 1024 / 1024);
+          memoryUsage = Math.round((performance.memory.usedJSHeapSize || 0) / 1024 / 1024);
         }
 
         // Detect device info
@@ -50,7 +48,6 @@ export default function PerformanceDebug({
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) ||
                          window.innerWidth <= 768;
         const hardwareConcurrency = navigator.hardwareConcurrency || 4;
-        // @ts-expect-error - deviceMemory is experimental
         const deviceMemory = navigator.deviceMemory || 4;
         
         let performanceTier: 'low' | 'medium' | 'high' = 'medium';
