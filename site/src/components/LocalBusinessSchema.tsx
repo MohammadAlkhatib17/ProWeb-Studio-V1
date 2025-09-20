@@ -160,7 +160,7 @@ export default function LocalBusinessSchema({
             description:
               'Professionele websites op maat voor Nederlandse bedrijven',
             serviceType: 'Webdevelopment',
-            url: abs('/diensten/website-laten-maken'),
+            url: abs('/diensten#website'),
             areaServed: {
               '@type': 'Place',
               name: 'Nederland',
@@ -174,7 +174,7 @@ export default function LocalBusinessSchema({
             name: '3D Website ontwikkeling',
             description: 'Innovatieve 3D websites met Three.js en React',
             serviceType: 'Webdevelopment',
-            url: abs('/diensten/3d-website-ontwikkeling'),
+            url: abs('/diensten#webshop'),
             areaServed: {
               '@type': 'Place',
               name: 'Nederland',
@@ -188,7 +188,7 @@ export default function LocalBusinessSchema({
             name: 'Webshop ontwikkeling',
             description: 'E-commerce oplossingen en webshops op maat',
             serviceType: 'E-commerce Development',
-            url: abs('/diensten/webshop-ontwikkeling'),
+            url: abs('/diensten#webshop'),
             areaServed: {
               '@type': 'Place',
               name: 'Nederland',
@@ -202,7 +202,7 @@ export default function LocalBusinessSchema({
             name: 'SEO optimalisatie',
             description: 'Zoekmachine optimalisatie voor Nederlandse markt',
             serviceType: 'Digital Marketing',
-            url: abs('/diensten/seo-optimalisatie'),
+            url: abs('/diensten#seo'),
             areaServed: {
               '@type': 'Place',
               name: 'Nederland',

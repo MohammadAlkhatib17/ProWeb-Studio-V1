@@ -139,83 +139,98 @@ export default function SEOSchema({
     }),
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Website Ontwikkeling Diensten',
+      '@id': `${SITE_URL}#offerCatalog`,
+      name: 'ProWeb Studio Diensten',
+      description: 'Professionele webdevelopment, SEO en digitale marketing diensten',
       itemListElement: [
         {
           '@type': 'Offer',
+          '@id': `${SITE_URL}/diensten#website-offer`,
+          url: abs('/diensten#website'),
+          category: 'service',
+          priceCurrency: 'EUR',
+          eligibleRegion: 'NL',
+          availability: 'https://schema.org/InStock',
           itemOffered: {
             '@type': 'Service',
+            '@id': `${SITE_URL}/diensten#website-service`,
+            serviceType: 'Website laten maken',
             name: 'Website laten maken',
-            description:
-              'Professionele websites op maat voor Nederlandse bedrijven',
+            url: abs('/diensten#website'),
+            description: 'Professionele websites op maat gebouwd met moderne technologieën voor Nederlandse bedrijven',
+            provider: {
+              '@id': `${SITE_URL}#organization`,
+            },
+            areaServed: {
+              '@type': 'Place',
+              name: 'Netherlands',
+              address: {
+                '@type': 'PostalAddress',
+                addressCountry: 'NL'
+              }
+            },
+            availableLanguage: ['nl', 'en'],
             category: 'Webdevelopment',
-            provider: {
-              '@id': `${SITE_URL}#organization`,
-            },
-          },
-          priceSpecification: {
-            '@type': 'PriceSpecification',
-            priceCurrency: 'EUR',
-            price: '2500',
-            minPrice: '2500',
-            maxPrice: '15000',
           },
         },
         {
           '@type': 'Offer',
+          '@id': `${SITE_URL}/diensten#webshop-offer`,
+          url: abs('/diensten#webshop'),
+          category: 'service',
+          priceCurrency: 'EUR',
+          eligibleRegion: 'NL',
+          availability: 'https://schema.org/InStock',
           itemOffered: {
             '@type': 'Service',
-            name: '3D Website ontwikkeling',
-            description: 'Innovatieve 3D websites met Three.js en WebGL',
-            category: 'Advanced Webdevelopment',
+            '@id': `${SITE_URL}/diensten#webshop-service`,
+            serviceType: 'Webshop ontwikkeling',
+            name: 'Webshop ontwikkeling',
+            url: abs('/diensten#webshop'),
+            description: 'E-commerce oplossingen en webshops met Nederlandse betaalmethoden en integraties',
             provider: {
               '@id': `${SITE_URL}#organization`,
             },
-          },
-          priceSpecification: {
-            '@type': 'PriceSpecification',
-            priceCurrency: 'EUR',
-            price: '7500',
-            minPrice: '5000',
-            maxPrice: '25000',
-          },
-        },
-        {
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: 'SEO optimalisatie',
-            description: 'Zoekmachine optimalisatie voor Nederlandse markt',
-            category: 'Digital Marketing',
-            provider: {
-              '@id': `${SITE_URL}#organization`,
+            areaServed: {
+              '@type': 'Place',
+              name: 'Netherlands',
+              address: {
+                '@type': 'PostalAddress',
+                addressCountry: 'NL'
+              }
             },
-          },
-          priceSpecification: {
-            '@type': 'PriceSpecification',
-            priceCurrency: 'EUR',
-            price: '1500',
-            minPrice: '1000',
-            maxPrice: '5000',
-          },
-        },
-        {
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: 'Webshop laten maken',
-            description: 'E-commerce websites met Nederlandse betaalmethoden',
+            availableLanguage: ['nl', 'en'],
             category: 'E-commerce Development',
+          },
+        },
+        {
+          '@type': 'Offer',
+          '@id': `${SITE_URL}/diensten#seo-offer`,
+          url: abs('/diensten#seo'),
+          category: 'service',
+          priceCurrency: 'EUR',
+          eligibleRegion: 'NL',
+          availability: 'https://schema.org/InStock',
+          itemOffered: {
+            '@type': 'Service',
+            '@id': `${SITE_URL}/diensten#seo-service`,
+            serviceType: 'SEO optimalisatie',
+            name: 'SEO optimalisatie',
+            url: abs('/diensten#seo'),
+            description: 'Zoekmachine optimalisatie en technische SEO voor betere Google rankings',
             provider: {
               '@id': `${SITE_URL}#organization`,
             },
-          },
-          priceSpecification: {
-            '@type': 'PriceSpecification',
-            priceCurrency: 'EUR',
-            price: '5000',
-            minPrice: '3500',
-            maxPrice: '20000',
+            areaServed: {
+              '@type': 'Place',
+              name: 'Netherlands',
+              address: {
+                '@type': 'PostalAddress',
+                addressCountry: 'NL'
+              }
+            },
+            availableLanguage: ['nl', 'en'],
+            category: 'Digital Marketing',
           },
         },
       ],
@@ -385,6 +400,103 @@ export default function SEOSchema({
     ].filter(Boolean),
   };
 
+  // Standalone Service nodes for better SEO
+  const websiteService = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${SITE_URL}/diensten#website-service`,
+    serviceType: 'Website laten maken',
+    name: 'Website laten maken',
+    url: abs('/diensten#website'),
+    description: 'Professionele websites op maat gebouwd met moderne technologieën voor Nederlandse bedrijven',
+    provider: {
+      '@id': `${SITE_URL}#organization`,
+    },
+    areaServed: {
+      '@type': 'Place',
+      name: 'Netherlands',
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'NL'
+      }
+    },
+    availableLanguage: ['nl', 'en'],
+    category: 'Webdevelopment',
+    offers: {
+      '@type': 'Offer',
+      '@id': `${SITE_URL}/diensten#website-offer`,
+      url: abs('/diensten#website'),
+      category: 'service',
+      priceCurrency: 'EUR',
+      eligibleRegion: 'NL',
+      availability: 'https://schema.org/InStock',
+    },
+  };
+
+  const webshopService = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${SITE_URL}/diensten#webshop-service`,
+    serviceType: 'Webshop ontwikkeling',
+    name: 'Webshop ontwikkeling',
+    url: abs('/diensten#webshop'),
+    description: 'E-commerce oplossingen en webshops met Nederlandse betaalmethoden en integraties',
+    provider: {
+      '@id': `${SITE_URL}#organization`,
+    },
+    areaServed: {
+      '@type': 'Place',
+      name: 'Netherlands',
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'NL'
+      }
+    },
+    availableLanguage: ['nl', 'en'],
+    category: 'E-commerce Development',
+    offers: {
+      '@type': 'Offer',
+      '@id': `${SITE_URL}/diensten#webshop-offer`,
+      url: abs('/diensten#webshop'),
+      category: 'service',
+      priceCurrency: 'EUR',
+      eligibleRegion: 'NL',
+      availability: 'https://schema.org/InStock',
+    },
+  };
+
+  const seoService = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${SITE_URL}/diensten#seo-service`,
+    serviceType: 'SEO optimalisatie',
+    name: 'SEO optimalisatie',
+    url: abs('/diensten#seo'),
+    description: 'Zoekmachine optimalisatie en technische SEO voor betere Google rankings',
+    provider: {
+      '@id': `${SITE_URL}#organization`,
+    },
+    areaServed: {
+      '@type': 'Place',
+      name: 'Netherlands',
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'NL'
+      }
+    },
+    availableLanguage: ['nl', 'en'],
+    category: 'Digital Marketing',
+    offers: {
+      '@type': 'Offer',
+      '@id': `${SITE_URL}/diensten#seo-offer`,
+      url: abs('/diensten#seo'),
+      category: 'service',
+      priceCurrency: 'EUR',
+      eligibleRegion: 'NL',
+      availability: 'https://schema.org/InStock',
+    },
+  };
+
   // Combine all schemas into a graph
   const schemaGraph = {
     '@context': 'https://schema.org',
@@ -393,6 +505,9 @@ export default function SEOSchema({
       organizationSchema,
       localBusinessSchema,
       webPageSchema,
+      websiteService,
+      webshopService,
+      seoService,
       ...(breadcrumbSchema ? [breadcrumbSchema] : []),
     ],
   };

@@ -211,9 +211,15 @@ export default function Diensten() {
       <section className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            {services.map((service, i) => (
+            {services.map((service, i) => {
+              // Map service indices to semantic IDs
+              const serviceIds = ['website', 'webshop', 'seo'];
+              const serviceId = serviceIds[i] || `service-${i + 1}`;
+              
+              return (
               <div
                 key={i}
+                id={serviceId}
                 className="glass p-6 sm:p-7 md:p-8 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden animate-fade-in"
                 style={{ animationDelay: `${i * 0.2}s` }}
               >
@@ -243,7 +249,8 @@ export default function Diensten() {
                   </ul>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
