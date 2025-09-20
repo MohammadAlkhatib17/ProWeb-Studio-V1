@@ -1,24 +1,44 @@
 'use client';
 
 import { useEffect } from 'react';
-import { onCLS, onINP, onLCP, onTTFB } from 'web-vitals/attribution';
-import type { CLSMetricWithAttribution, INPMetricWithAttribution, LCPMetricWithAttribution, TTFBMetricWithAttribution } from 'web-vitals/attribution';
 
 type MetricType = 'LCP' | 'INP' | 'CLS' | 'TTFB';
 type RatingType = 'good' | 'needs-improvement' | 'poor';
+
+// Define minimal metric interface for our needs
+interface WebVitalsMetric {
+  name: string;
+  value: number;
+  delta: number;
+  id: string;
+  navigationType?: string;
+  navigationId?: string;
+}
 
 interface VitalsPayload {
   metric: MetricType;
   value: number;
   rating: RatingType;
   path: string;
-  viewport: string;
-  connection?: string;
-  deviceMemory?: number;
-  jsHeap?: number;
+  vp: string;
+  conn?: string;
+  dm?: number;
+  mem?: number;
+  delta: number;
+  deviceType: string;
+  language: string;
+  navType?: string;
+  navId?: string;
   valueBucket: string;
-  [key: string]: unknown;
+  [key: string]: unknown; // Allow additional properties for plausible
 }
+
+// Module-level deduplication set
+const sent = new Set<string>();
+
+// Module-level pending queue for final flush
+const pendingQueue: VitalsPayload[] = [];
+let flushListenersRegistered = false;
 
 // Google Core Web Vitals thresholds
 function getMetricRating(metric: MetricType, value: number): RatingType {
@@ -79,29 +99,72 @@ function getValueBucket(metric: MetricType, value: number): string {
   }
 }
 
+// Check if this user should be sampled for vitals reporting with session persistence
+function shouldSample(): boolean {
+  const sampleRate = parseFloat(process.env.NEXT_PUBLIC_VITALS_SAMPLE || '0.2');
+  
+  // Check session storage for existing sampling decision
+  const sessionKey = '__vitals_sampled__';
+  try {
+    const stored = sessionStorage.getItem(sessionKey);
+    if (stored !== null) {
+      return stored === 'true';
+    }
+    
+    // Make new sampling decision
+    const sampled = Math.random() < sampleRate;
+    sessionStorage.setItem(sessionKey, String(sampled));
+    return sampled;
+  } catch {
+    // Fallback if sessionStorage is not available
+    return Math.random() < sampleRate;
+  }
+}
+
 // Build comprehensive payload with device and performance context
-function buildVitalsPayload(metric: MetricType, value: number): VitalsPayload {
-  // Filter out undefined values to keep payload clean
+function buildVitalsPayload(
+  metric: WebVitalsMetric,
+  value: number,
+  delta: number,
+  navigationType?: string,
+  navigationId?: string
+): VitalsPayload {
+  // Get device type based on pointer capability
+  const deviceType = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia("(pointer:coarse)").matches) 
+    ? "mobile" 
+    : "desktop";
+
   const payload: VitalsPayload = {
-    metric,
+    metric: metric.name as MetricType,
     value: Math.round(value),
-    rating: getMetricRating(metric, value),
+    rating: getMetricRating(metric.name as MetricType, value),
     path: window.location.pathname,
-    viewport: `${window.innerWidth}x${window.innerHeight}`,
-    valueBucket: getValueBucket(metric, value),
+    vp: `${window.innerWidth}x${window.innerHeight}`,
+    delta: Math.round(delta),
+    deviceType,
+    language: navigator.language,
+    valueBucket: getValueBucket(metric.name as MetricType, value),
   };
 
-  // Add optional properties only if available
+  // Add navigation info if available
+  if (navigationType) {
+    payload.navType = navigationType;
+  }
+  if (navigationId) {
+    payload.navId = navigationId;
+  }
+
+  // Add optional properties only if available (short keys for lean payload)
   if (navigator.connection?.effectiveType) {
-    payload.connection = navigator.connection.effectiveType;
+    payload.conn = navigator.connection.effectiveType;
   }
 
   if ('deviceMemory' in navigator && typeof navigator.deviceMemory === 'number') {
-    payload.deviceMemory = navigator.deviceMemory;
+    payload.dm = navigator.deviceMemory;
   }
 
   if (performance?.memory?.jsHeapSizeLimit) {
-    payload.jsHeap = performance.memory.jsHeapSizeLimit;
+    payload.mem = performance.memory.jsHeapSizeLimit;
   }
 
   return payload;
@@ -141,23 +204,88 @@ function sendToPlausible(payload: VitalsPayload): void {
   }
 }
 
-// Check if this user should be sampled for vitals reporting
-function shouldSample(): boolean {
-  const sampleRate = parseFloat(process.env.NEXT_PUBLIC_VITALS_SAMPLE || '0.2');
-  return Math.random() < sampleRate;
+// Final flush function for pagehide/visibilitychange
+function flushPendingMetrics(): void {
+  if (pendingQueue.length === 0) return;
+  
+  try {
+    // Send up to 3 pending metrics via sendBeacon
+    const toSend = pendingQueue.splice(0, 3);
+    for (const payload of toSend) {
+      const data = JSON.stringify({ 
+        name: 'web-vitals',
+        props: payload 
+      });
+      
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/plausible-proxy', data);
+      }
+    }
+  } catch {
+    // Silently fail
+  }
 }
 
-// Generic handler for all web vitals metrics
-function handleVitalsMetric(
-  metric: CLSMetricWithAttribution | INPMetricWithAttribution | LCPMetricWithAttribution | TTFBMetricWithAttribution
-): void {
-  // Only report if user is in sample group
-  if (!shouldSample()) {
-    return;
-  }
+// Register final flush listeners
+function registerFlushListeners(): void {
+  if (flushListenersRegistered || typeof window === 'undefined') return;
+  
+  flushListenersRegistered = true;
+  
+  window.addEventListener('pagehide', flushPendingMetrics);
+  window.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      flushPendingMetrics();
+    }
+  });
+}
 
-  const payload = buildVitalsPayload(metric.name as MetricType, metric.value);
-  sendToPlausible(payload);
+// Generic handler for all web vitals metrics with deduplication and DNT respect
+function handleVitalsMetric(metric: WebVitalsMetric): void {
+  try {
+    // Respect DNT setting
+    if (navigator.doNotTrack === "1") {
+      return;
+    }
+
+    // Check for consent flag if it exists
+    if (typeof window !== 'undefined' && 
+        '__CONSENT_ANALYTICS__' in window && 
+        (window as Record<string, unknown>).__CONSENT_ANALYTICS__ !== true) {
+      return;
+    }
+
+    // Only report if user is in sample group
+    if (!shouldSample()) {
+      return;
+    }
+
+    // Deduplicate based on metric ID
+    if (sent.has(metric.id)) {
+      return;
+    }
+
+    const payload = buildVitalsPayload(
+      metric,
+      metric.value,
+      metric.delta || 0,
+      metric.navigationType,
+      metric.navigationId
+    );
+
+    // Try to send immediately
+    sendToPlausible(payload);
+    
+    // Mark as sent after successful send
+    sent.add(metric.id);
+
+    // Add to pending queue as backup (max 3 items)
+    if (pendingQueue.length < 3) {
+      pendingQueue.push(payload);
+    }
+  } catch {
+    // Silently fail - analytics should never break the user experience
+  }
 }
 
 declare global {
@@ -198,11 +326,25 @@ export function RealUserVitals(): null {
       return;
     }
 
-    // Register listeners for Core Web Vitals with attribution
-    onLCP(handleVitalsMetric);
-    onINP(handleVitalsMetric);
-    onCLS(handleVitalsMetric);
-    onTTFB(handleVitalsMetric);
+    // Register flush listeners
+    registerFlushListeners();
+
+    // Lazy import web-vitals to reduce bundle size
+    const initWebVitals = async () => {
+      try {
+        const { onCLS, onINP, onLCP, onTTFB } = await import('web-vitals/attribution');
+        
+        // Register listeners for Core Web Vitals with attribution
+        onLCP(handleVitalsMetric);
+        onINP(handleVitalsMetric);
+        onCLS(handleVitalsMetric);
+        onTTFB(handleVitalsMetric);
+      } catch {
+        // Silently fail if web-vitals can't be loaded
+      }
+    };
+
+    initWebVitals();
   }, []);
 
   // This component renders nothing - it's purely for side effects
