@@ -1,19 +1,23 @@
 #!/usr/bin/env ts-node
 /**
- * SEO/Performance Preflight Check Script
+ * SEO/Performance Preflight Check Script (Hardened)
  * 
  * This script performs automated checks on the built Next.js application to ensure:
- * - Structured data uniqueness and completeness
+ * - Structured data uniqueness and completeness with robust JSON-LD parsing
  * - Sitemap hygiene  
- * - Internal link integrity
+ * - Internal link integrity with DOM-level validation
  * - Robots meta compliance
+ * - Server lifecycle management with clean shutdown
  * 
  * Usage: npm run seo:preflight (after npm run build)
  */
 
-import { spawn } from 'child_process';
+import { spawn, exec } from 'child_process';
 import { request } from 'undici';
 import * as cheerio from 'cheerio';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 // Configuration
 const SERVER_PORT = 4010;
@@ -41,7 +45,68 @@ interface CheckResult {
 
 interface ServerProcess {
   process: ReturnType<typeof spawn>;
-  cleanup: () => void;
+  cleanup: () => Promise<void>;
+}
+
+interface JsonLdNode {
+  '@type'?: string | string[];
+  '@id'?: string;
+  [key: string]: any;
+}
+
+class JsonLdHelper {
+  private nodes: JsonLdNode[];
+
+  constructor(nodes: JsonLdNode[]) {
+    this.nodes = nodes;
+  }
+
+  /**
+   * Find nodes by @type, handling both string and array values
+   */
+  byType(type: string): JsonLdNode[] {
+    return this.nodes.filter(node => {
+      const nodeType = node['@type'];
+      if (Array.isArray(nodeType)) {
+        return nodeType.includes(type);
+      }
+      return nodeType === type;
+    });
+  }
+
+  /**
+   * Find nodes by @id
+   */
+  byId(id: string): JsonLdNode[] {
+    return this.nodes.filter(node => node['@id'] === id);
+  }
+
+  /**
+   * Get all nodes
+   */
+  getAll(): JsonLdNode[] {
+    return this.nodes;
+  }
+
+  /**
+   * Get type counts for debugging
+   */
+  getTypeCounts(): Record<string, number> {
+    const counts: Record<string, number> = {};
+    this.nodes.forEach(node => {
+      const type = node['@type'];
+      if (type) {
+        if (Array.isArray(type)) {
+          type.forEach(t => {
+            counts[t] = (counts[t] || 0) + 1;
+          });
+        } else {
+          counts[type] = (counts[type] || 0) + 1;
+        }
+      }
+    });
+    return counts;
+  }
 }
 
 class SEOPreflightChecker {
@@ -49,7 +114,7 @@ class SEOPreflightChecker {
   private serverProcess: ServerProcess | null = null;
 
   /**
-   * Start Next.js server on specified port
+   * Start Next.js server on specified port with enhanced cleanup
    */
   private async startServer(): Promise<ServerProcess> {
     return new Promise((resolve, reject) => {
@@ -68,15 +133,26 @@ class SEOPreflightChecker {
         }
       }, STARTUP_TIMEOUT);
 
-      const cleanup = () => {
+      const cleanup = async (): Promise<void> => {
         clearTimeout(timeout);
         if (nextProcess && !nextProcess.killed) {
+          console.log('🛑 Sending SIGTERM to server...');
           nextProcess.kill('SIGTERM');
-          setTimeout(() => {
-            if (!nextProcess.killed) {
-              nextProcess.kill('SIGKILL');
-            }
-          }, 5000);
+          
+          // Wait 5 seconds for graceful shutdown
+          await new Promise(resolve => setTimeout(resolve, 5000));
+          
+          if (!nextProcess.killed) {
+            console.log('🛑 Force killing server...');
+            nextProcess.kill('SIGKILL');
+          }
+          
+          // Fallback: use pkill to ensure cleanup
+          try {
+            await execAsync(`pkill -f "next start"`);
+          } catch (error) {
+            // Ignore pkill errors - process might already be dead
+          }
         }
       };
 
@@ -145,7 +221,7 @@ class SEOPreflightChecker {
         headersTimeout: REQUEST_TIMEOUT,
         bodyTimeout: REQUEST_TIMEOUT,
         headers: {
-          'User-Agent': 'SEO-Preflight-Checker/1.0'
+          'User-Agent': 'SEO-Preflight-Checker/2.0'
         }
       });
       
@@ -157,12 +233,12 @@ class SEOPreflightChecker {
   }
 
   /**
-   * Parse and validate JSON-LD structured data
+   * Parse and validate JSON-LD structured data with robust graph flattening
    */
-  private parseJsonLd(html: string): any[] {
+  private parseJsonLd(html: string): JsonLdHelper {
     const $ = cheerio.load(html);
     const jsonLdScripts = $('script[type="application/ld+json"]');
-    const parsedData: any[] = [];
+    const allNodes: JsonLdNode[] = [];
 
     jsonLdScripts.each((_, script) => {
       try {
@@ -170,11 +246,17 @@ class SEOPreflightChecker {
         if (content) {
           const parsed = JSON.parse(content);
           
-          // Handle both single objects and arrays
-          if (Array.isArray(parsed)) {
-            parsedData.push(...parsed);
-          } else {
-            parsedData.push(parsed);
+          // Handle @graph arrays
+          if (parsed['@graph'] && Array.isArray(parsed['@graph'])) {
+            allNodes.push(...parsed['@graph']);
+          }
+          // Handle single objects
+          else if (typeof parsed === 'object' && parsed !== null) {
+            if (Array.isArray(parsed)) {
+              allNodes.push(...parsed);
+            } else {
+              allNodes.push(parsed);
+            }
           }
         }
       } catch (error) {
@@ -182,32 +264,29 @@ class SEOPreflightChecker {
       }
     });
 
-    return parsedData;
+    return new JsonLdHelper(allNodes);
   }
 
   /**
-   * Check structured data requirements for a specific route
+   * Check structured data requirements for a specific route with enhanced validation
    */
   private checkStructuredData(route: string, html: string): void {
-    const jsonLdData = this.parseJsonLd(html);
+    const jsonLdHelper = this.parseJsonLd(html);
+    const typeCounts = jsonLdHelper.getTypeCounts();
     
-    // Count occurrences of each schema type
-    const typeCounts = jsonLdData.reduce((acc, item) => {
-      const type = item['@type'];
-      if (type) {
-        acc[type] = (acc[type] || 0) + 1;
-      }
-      return acc;
-    }, {} as Record<string, number>);
+    // Enhanced debugging info
+    if (Object.keys(typeCounts).length > 0) {
+      console.log(`📊 Schema types found on ${route}:`, typeCounts);
+    }
 
-    // Check for exactly one BreadcrumbList per page
-    const breadcrumbCount = typeCounts['BreadcrumbList'] || 0;
-    if (breadcrumbCount !== 1) {
+    // 1. Singleton checks - BreadcrumbList (all pages)
+    const breadcrumbNodes = jsonLdHelper.byType('BreadcrumbList');
+    if (breadcrumbNodes.length !== 1) {
       this.results.push({
         route,
         check: 'BreadcrumbList uniqueness',
         status: 'fail',
-        message: `Expected exactly 1 BreadcrumbList, found ${breadcrumbCount}`
+        message: `Expected exactly 1 BreadcrumbList, found ${breadcrumbNodes.length}. IDs: [${breadcrumbNodes.map(n => n['@id'] || 'no-id').join(', ')}]`
       });
     } else {
       this.results.push({
@@ -217,114 +296,366 @@ class SEOPreflightChecker {
       });
     }
 
-    // Check for exactly one WebPage per page
-    const webPageCount = typeCounts['WebPage'] || 0;
-    if (webPageCount !== 1) {
+    // 2. Singleton checks - WebPage (all pages)
+    const webPageNodes = jsonLdHelper.byType('WebPage');
+    if (webPageNodes.length !== 1) {
       this.results.push({
         route,
         check: 'WebPage uniqueness',
         status: 'fail',
-        message: `Expected exactly 1 WebPage, found ${webPageCount}`
+        message: `Expected exactly 1 WebPage, found ${webPageNodes.length}. IDs: [${webPageNodes.map(n => n['@id'] || 'no-id').join(', ')}]`
       });
     } else {
-      // Check WebPage has proper @id and primaryImageOfPage if applicable
-      const webPageData = jsonLdData.find(item => item['@type'] === 'WebPage');
-      if (webPageData) {
-        const hasValidId = webPageData['@id']?.includes('#webpage');
+      this.results.push({
+        route,
+        check: 'WebPage uniqueness',
+        status: 'pass'
+      });
+
+      // Validate WebPage @id format
+      const webPageData = webPageNodes[0];
+      const hasValidId = webPageData['@id']?.includes('#webpage');
+      this.results.push({
+        route,
+        check: 'WebPage @id format',
+        status: hasValidId ? 'pass' : 'fail',
+        message: hasValidId ? undefined : `WebPage @id should end with #webpage, found: ${webPageData['@id']}`
+      });
+
+      // Check primaryImageOfPage if present
+      if (webPageData.primaryImageOfPage) {
+        const imageRef = webPageData.primaryImageOfPage;
+        let imageNode = null;
+        
+        if (typeof imageRef === 'string') {
+          imageNode = jsonLdHelper.byId(imageRef)[0];
+        } else if (imageRef['@id']) {
+          imageNode = jsonLdHelper.byId(imageRef['@id'])[0];
+        } else if (imageRef['@type'] === 'ImageObject') {
+          imageNode = imageRef;
+        }
+
+        if (imageNode) {
+          const hasValidImageId = imageNode['@id']?.includes('#primaryimage');
+          this.results.push({
+            route,
+            check: 'WebPage primaryImageOfPage format',
+            status: hasValidImageId ? 'pass' : 'fail',
+            message: hasValidImageId ? undefined : `Primary image @id should end with #primaryimage, found: ${imageNode['@id']}`
+          });
+        }
+      }
+    }
+
+    // 3. Route-specific checks for /diensten
+    if (route === '/diensten') {
+      // FAQPage (required on diensten)
+      const faqNodes = jsonLdHelper.byType('FAQPage');
+      if (faqNodes.length !== 1) {
         this.results.push({
           route,
-          check: 'WebPage @id format',
-          status: hasValidId ? 'pass' : 'fail',
-          message: hasValidId ? undefined : 'WebPage @id should end with #webpage'
+          check: 'FAQPage uniqueness',
+          status: 'fail',
+          message: `Expected exactly 1 FAQPage on /diensten, found ${faqNodes.length}. IDs: [${faqNodes.map(n => n['@id'] || 'no-id').join(', ')}]`
+        });
+      } else {
+        this.results.push({
+          route,
+          check: 'FAQPage uniqueness',
+          status: 'pass'
+        });
+      }
+
+      // Service nodes with proper offers (should be exactly 3)
+      const serviceNodes = jsonLdHelper.byType('Service');
+      if (serviceNodes.length !== 3) {
+        this.results.push({
+          route,
+          check: 'Service count',
+          status: 'fail',
+          message: `Expected exactly 3 Service nodes, found ${serviceNodes.length}. IDs: [${serviceNodes.map(n => n['@id'] || 'no-id').join(', ')}]`
+        });
+      } else {
+        this.results.push({
+          route,
+          check: 'Service count',
+          status: 'pass'
+        });
+
+        // Validate each service's offers
+        const validServices = serviceNodes.filter(service => {
+          const offers = service.offers;
+          if (!offers) return false;
+          
+          const offer = Array.isArray(offers) ? offers[0] : offers;
+          return (
+            offer['@type'] === 'Offer' &&
+            offer.category === 'service' &&
+            offer.availability === 'https://schema.org/InStock' &&
+            offer.eligibleRegion === 'NL' &&
+            (offer.url?.includes('#website') || offer.url?.includes('#webshop') || offer.url?.includes('#seo'))
+          );
+        });
+
+        this.results.push({
+          route,
+          check: 'Service offers validation',
+          status: validServices.length === 3 ? 'pass' : 'fail',
+          message: validServices.length === 3 ? undefined : `Expected 3 valid Service offers, found ${validServices.length}`
+        });
+      }
+
+      // OfferCatalog validation
+      const catalogNodes = jsonLdHelper.byType('OfferCatalog');
+      if (catalogNodes.length === 0) {
+        this.results.push({
+          route,
+          check: 'OfferCatalog presence',
+          status: 'fail',
+          message: 'OfferCatalog required on /diensten'
+        });
+      } else {
+        this.results.push({
+          route,
+          check: 'OfferCatalog presence',
+          status: 'pass'
+        });
+
+        // Validate catalog has 3 items
+        const catalog = catalogNodes[0];
+        const itemCount = catalog.itemListElement?.length || 0;
+        this.results.push({
+          route,
+          check: 'OfferCatalog item count',
+          status: itemCount === 3 ? 'pass' : 'fail',
+          message: itemCount === 3 ? undefined : `Expected 3 items in OfferCatalog, found ${itemCount}`
         });
       }
     }
 
-    // Route-specific checks
-    if (route === '/diensten') {
-      // Check for FAQPage
-      const faqCount = typeCounts['FAQPage'] || 0;
-      this.results.push({
-        route,
-        check: 'FAQPage presence',
-        status: faqCount >= 1 ? 'pass' : 'fail',
-        message: faqCount >= 1 ? undefined : 'FAQPage required on /diensten'
-      });
-
-      // Check for Service with Offer (should be 3)
-      const serviceCount = jsonLdData.filter(item => 
-        item['@type'] === 'Service' && item.offers
-      ).length;
-      this.results.push({
-        route,
-        check: 'Service with Offer count',
-        status: serviceCount === 3 ? 'pass' : 'fail',
-        message: serviceCount === 3 ? undefined : `Expected 3 Service with Offer, found ${serviceCount}`
-      });
-
-      // Check for OfferCatalog
-      const offerCatalogCount = typeCounts['OfferCatalog'] || 0;
-      this.results.push({
-        route,
-        check: 'OfferCatalog presence',
-        status: offerCatalogCount >= 1 ? 'pass' : 'fail',
-        message: offerCatalogCount >= 1 ? undefined : 'OfferCatalog required on /diensten'
-      });
-    }
-
+    // 4. Route-specific checks for /werkwijze
     if (route === '/werkwijze') {
-      // Check for exactly one HowTo
-      const howToCount = typeCounts['HowTo'] || 0;
-      this.results.push({
-        route,
-        check: 'HowTo presence',
-        status: howToCount === 1 ? 'pass' : 'fail',
-        message: howToCount === 1 ? undefined : `Expected exactly 1 HowTo, found ${howToCount}`
-      });
+      const howToNodes = jsonLdHelper.byType('HowTo');
+      if (howToNodes.length !== 1) {
+        this.results.push({
+          route,
+          check: 'HowTo uniqueness',
+          status: 'fail',
+          message: `Expected exactly 1 HowTo on /werkwijze, found ${howToNodes.length}. IDs: [${howToNodes.map(n => n['@id'] || 'no-id').join(', ')}]`
+        });
+      } else {
+        this.results.push({
+          route,
+          check: 'HowTo uniqueness',
+          status: 'pass'
+        });
+      }
     }
 
-    // Check Organization and LocalBusiness consistency
-    const orgData = jsonLdData.find(item => item['@type'] === 'Organization');
-    const businessData = jsonLdData.find(item => item['@type'] === 'LocalBusiness');
+    // 5. Organization and LocalBusiness consistency
+    const orgNodes = jsonLdHelper.byType('Organization');
+    const businessNodes = jsonLdHelper.byType('LocalBusiness');
     
-    if (orgData && businessData) {
+    if (orgNodes.length > 0 && businessNodes.length > 0) {
+      const orgData = orgNodes[0];
+      const businessData = businessNodes[0];
+      
+      // Check if they share the same @id
       const sameId = orgData['@id'] === businessData['@id'];
-      const orgHasServiceArea = !!orgData.areaServed || !!orgData.serviceArea;
-      const businessHasServiceArea = !!businessData.areaServed || !!businessData.serviceArea;
-      const orgHasContact = !!orgData.contactPoint;
-      const businessHasContact = !!businessData.contactPoint;
-
       this.results.push({
         route,
         check: 'Organization/LocalBusiness @id consistency',
         status: sameId ? 'pass' : 'fail',
-        message: sameId ? undefined : 'Organization and LocalBusiness should share the same @id'
+        message: sameId ? undefined : `Organization @id: ${orgData['@id']}, LocalBusiness @id: ${businessData['@id']}`
       });
 
-      this.results.push({
-        route,
-        check: 'Organization/LocalBusiness serviceArea',
-        status: (orgHasServiceArea && businessHasServiceArea) ? 'pass' : 'fail',
-        message: (orgHasServiceArea && businessHasServiceArea) ? undefined : 'Both Organization and LocalBusiness should include serviceArea'
-      });
+      // Check serviceArea requirements (12 DefinedRegion with addressCountry: "NL")
+      this.validateServiceArea(route, orgData, 'Organization');
+      this.validateServiceArea(route, businessData, 'LocalBusiness');
 
+      // Check contactPoint requirements
+      this.validateContactPoint(route, orgData, 'Organization');
+      this.validateContactPoint(route, businessData, 'LocalBusiness');
+
+      // Check potentialAction (ScheduleAction)
+      this.validatePotentialAction(route, orgData, 'Organization');
+      this.validatePotentialAction(route, businessData, 'LocalBusiness');
+    }
+  }
+
+  /**
+   * Validate serviceArea requirements
+   */
+  private validateServiceArea(route: string, data: JsonLdNode, entityType: string): void {
+    const serviceArea = data.serviceArea || data.areaServed;
+    
+    if (!serviceArea) {
       this.results.push({
         route,
-        check: 'Organization/LocalBusiness contactPoint',
-        status: (orgHasContact && businessHasContact) ? 'pass' : 'fail',
-        message: (orgHasContact && businessHasContact) ? undefined : 'Both Organization and LocalBusiness should include contactPoint'
+        check: `${entityType} serviceArea presence`,
+        status: 'fail',
+        message: 'Missing serviceArea or areaServed'
+      });
+      return;
+    }
+
+    // Check for 12 DefinedRegion with addressCountry: "NL"
+    if (Array.isArray(serviceArea)) {
+      const validRegions = serviceArea.filter(region => 
+        region['@type'] === 'DefinedRegion' && region.addressCountry === 'NL'
+      );
+      
+      this.results.push({
+        route,
+        check: `${entityType} serviceArea validation`,
+        status: validRegions.length === 12 ? 'pass' : 'fail',
+        message: validRegions.length === 12 ? undefined : `Expected 12 DefinedRegion with addressCountry: "NL", found ${validRegions.length}`
+      });
+    } else {
+      this.results.push({
+        route,
+        check: `${entityType} serviceArea validation`,
+        status: 'fail',
+        message: 'serviceArea should be an array of DefinedRegion'
       });
     }
   }
 
   /**
-   * Check sitemap.xml for hygiene issues
+   * Validate contactPoint requirements
+   */
+  private validateContactPoint(route: string, data: JsonLdNode, entityType: string): void {
+    const contactPoint = data.contactPoint;
+    
+    if (!contactPoint) {
+      this.results.push({
+        route,
+        check: `${entityType} contactPoint presence`,
+        status: 'fail',
+        message: 'Missing contactPoint'
+      });
+      return;
+    }
+
+    const contacts = Array.isArray(contactPoint) ? contactPoint : [contactPoint];
+    const salesContact = contacts.find(contact => contact.contactType === 'sales');
+    
+    if (!salesContact) {
+      this.results.push({
+        route,
+        check: `${entityType} sales contactPoint`,
+        status: 'fail',
+        message: 'Missing contactPoint with contactType: "sales"'
+      });
+      return;
+    }
+
+    // Check availableLanguage
+    const hasValidLanguages = salesContact.availableLanguage && 
+      Array.isArray(salesContact.availableLanguage) &&
+      salesContact.availableLanguage.includes('nl') &&
+      salesContact.availableLanguage.includes('en');
+
+    this.results.push({
+      route,
+      check: `${entityType} contactPoint languages`,
+      status: hasValidLanguages ? 'pass' : 'fail',
+      message: hasValidLanguages ? undefined : 'Sales contactPoint should have availableLanguage: ["nl", "en"]'
+    });
+
+    // Check areaServed
+    const hasAreaServed = salesContact.areaServed === 'NL';
+    this.results.push({
+      route,
+      check: `${entityType} contactPoint areaServed`,
+      status: hasAreaServed ? 'pass' : 'fail',
+      message: hasAreaServed ? undefined : 'Sales contactPoint should have areaServed: "NL"'
+    });
+
+    // Check URL to /contact
+    const hasContactUrl = salesContact.url && salesContact.url.includes('/contact');
+    this.results.push({
+      route,
+      check: `${entityType} contactPoint URL`,
+      status: hasContactUrl ? 'pass' : 'fail',
+      message: hasContactUrl ? undefined : 'Sales contactPoint should have URL pointing to /contact'
+    });
+  }
+
+  /**
+   * Validate potentialAction requirements
+   */
+  private validatePotentialAction(route: string, data: JsonLdNode, entityType: string): void {
+    const potentialAction = data.potentialAction;
+    
+    if (!potentialAction) {
+      this.results.push({
+        route,
+        check: `${entityType} potentialAction presence`,
+        status: 'fail',
+        message: 'Missing potentialAction'
+      });
+      return;
+    }
+
+    const actions = Array.isArray(potentialAction) ? potentialAction : [potentialAction];
+    const scheduleAction = actions.find(action => action['@type'] === 'ScheduleAction');
+    
+    if (!scheduleAction) {
+      this.results.push({
+        route,
+        check: `${entityType} ScheduleAction`,
+        status: 'fail',
+        message: 'Missing ScheduleAction in potentialAction'
+      });
+      return;
+    }
+
+    // Check EntryPoint target
+    const target = scheduleAction.target;
+    if (!target || target['@type'] !== 'EntryPoint') {
+      this.results.push({
+        route,
+        check: `${entityType} ScheduleAction target`,
+        status: 'fail',
+        message: 'ScheduleAction target should be an EntryPoint'
+      });
+      return;
+    }
+
+    const hasValidUrlTemplate = target.urlTemplate && target.urlTemplate.includes('/contact');
+    this.results.push({
+      route,
+      check: `${entityType} ScheduleAction urlTemplate`,
+      status: hasValidUrlTemplate ? 'pass' : 'fail',
+      message: hasValidUrlTemplate ? undefined : 'EntryPoint urlTemplate should end with /contact'
+    });
+  }
+
+  /**
+   * Check sitemap.xml for hygiene issues with enhanced validation
    */
   private async checkSitemap(): Promise<void> {
     try {
-      const { html: sitemapContent } = await this.fetchPage('/sitemap.xml');
+      const { html: sitemapContent, status } = await this.fetchPage('/sitemap.xml');
       
-      // Check for fragment URLs
+      if (status !== 200) {
+        this.results.push({
+          route: '/sitemap.xml',
+          check: 'Sitemap accessibility',
+          status: 'fail',
+          message: `HTTP ${status}`
+        });
+        return;
+      }
+
+      this.results.push({
+        route: '/sitemap.xml',
+        check: 'Sitemap accessibility',
+        status: 'pass'
+      });
+
+      // Check for fragment URLs (no # allowed)
       const hasFragments = sitemapContent.includes('#');
       this.results.push({
         route: '/sitemap.xml',
@@ -333,7 +664,7 @@ class SEOPreflightChecker {
         message: hasFragments ? 'Sitemap contains URLs with # fragments' : undefined
       });
 
-      // Check for HTTPS URLs
+      // Check for HTTPS URLs only
       const httpUrls = sitemapContent.match(/http:\/\/[^\s<]+/g) || [];
       this.results.push({
         route: '/sitemap.xml',
@@ -342,7 +673,7 @@ class SEOPreflightChecker {
         message: httpUrls.length === 0 ? undefined : `Found ${httpUrls.length} HTTP URLs`
       });
 
-      // Check for absolute URLs
+      // Check for absolute URLs only
       const relativeUrls = sitemapContent.match(/<loc>[^h][^<]+<\/loc>/g) || [];
       this.results.push({
         route: '/sitemap.xml',
@@ -397,70 +728,93 @@ class SEOPreflightChecker {
   }
 
   /**
-   * Check internal anchor links on specific pages
+   * Check internal anchor links with DOM-level validation (no HEAD requests on fragments)
    */
-  private async checkInternalLinks(): Promise<void> {
-    const anchorPages = ['/', '/diensten'];
-    
-    for (const route of anchorPages) {
-      try {
-        const { html } = await this.fetchPage(route);
-        const $ = cheerio.load(html);
-        
-        // Find internal anchor links to specific IDs
-        const anchorLinks = $('a[href*="#"]').toArray()
-          .map(el => $(el).attr('href'))
-          .filter(href => href && (href.includes('#website') || href.includes('#webshop') || href.includes('#seo')))
-          .filter((href, index, array) => array.indexOf(href) === index); // unique only
+  private async checkInternalAnchors(): Promise<void> {
+    // Check /diensten for required anchor IDs
+    try {
+      const { html: dienstenHtml } = await this.fetchPage('/diensten');
+      const $ = cheerio.load(dienstenHtml);
+      
+      const requiredIds = ['website', 'webshop', 'seo'];
+      const foundIds = requiredIds.filter(id => $(`#${id}`).length > 0);
+      
+      this.results.push({
+        route: '/diensten',
+        check: 'Required anchor IDs presence',
+        status: foundIds.length === 3 ? 'pass' : 'fail',
+        message: foundIds.length === 3 ? undefined : `Missing IDs: [${requiredIds.filter(id => !foundIds.includes(id)).join(', ')}]`
+      });
 
-        for (const link of anchorLinks) {
-          if (link?.startsWith('/diensten#')) {
-            try {
-              const response = await request(`${BASE_URL}${link}`, {
-                method: 'HEAD',
-                headersTimeout: REQUEST_TIMEOUT,
-                bodyTimeout: REQUEST_TIMEOUT
-              });
-              
-              this.results.push({
-                route,
-                check: `Internal link ${link}`,
-                status: response.statusCode === 200 ? 'pass' : 'fail',
-                message: response.statusCode === 200 ? undefined : `HTTP ${response.statusCode}`
-              });
-            } catch (error) {
-              this.results.push({
-                route,
-                check: `Internal link ${link}`,
-                status: 'fail',
-                message: error instanceof Error ? error.message : 'Unknown error'
-              });
-            }
-          }
-        }
-      } catch (error) {
+    } catch (error) {
+      this.results.push({
+        route: '/diensten',
+        check: 'Required anchor IDs presence',
+        status: 'fail',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+
+    // Check homepage for internal links to diensten anchors
+    try {
+      const { html: homepageHtml } = await this.fetchPage('/');
+      const $ = cheerio.load(homepageHtml);
+      
+      const anchorLinks = $('a[href*="/diensten#"]').toArray()
+        .map(el => $(el).attr('href'))
+        .filter(href => href && (href.includes('#website') || href.includes('#webshop') || href.includes('#seo')))
+        .filter((href, index, array) => array.indexOf(href) === index); // unique only
+
+      if (anchorLinks.length > 0) {
         this.results.push({
-          route,
-          check: 'Internal links analysis',
-          status: 'fail',
-          message: error instanceof Error ? error.message : 'Unknown error'
+          route: '/',
+          check: 'Internal diensten anchor links',
+          status: 'pass',
+          message: `Found ${anchorLinks.length} anchor links: [${anchorLinks.join(', ')}]`
+        });
+      } else {
+        this.results.push({
+          route: '/',
+          check: 'Internal diensten anchor links',
+          status: 'pass',
+          message: 'No diensten anchor links found (optional)'
         });
       }
+
+    } catch (error) {
+      this.results.push({
+        route: '/',
+        check: 'Internal diensten anchor links',
+        status: 'fail',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   }
 
   /**
-   * Check robots meta tags
+   * Check robots meta tags with environment-aware validation
    */
   private checkRobotsMeta(route: string, html: string): void {
     const $ = cheerio.load(html);
     const robotsMeta = $('meta[name="robots"]').attr('content');
     
-    // In production, ensure no accidental noindex on canonical pages
-    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
+    // Check if we're in preview/staging environment
+    const isPreviewOrStaging = process.env.VERCEL_ENV === 'preview' || 
+                               process.env.NODE_ENV === 'development' ||
+                               process.env.NEXT_PUBLIC_ENVIRONMENT === 'staging';
+    
     const canonicalPages = ['/', '/diensten', '/werkwijze', '/over-ons', '/contact'];
     
-    if (isProduction && canonicalPages.includes(route)) {
+    if (isPreviewOrStaging) {
+      // In preview/staging, just report what we found
+      this.results.push({
+        route,
+        check: 'Robots meta (preview/staging)',
+        status: 'pass',
+        message: robotsMeta ? `Content: ${robotsMeta}` : 'No robots meta found'
+      });
+    } else if (canonicalPages.includes(route)) {
+      // In production, ensure no accidental noindex on canonical pages
       const hasNoIndex = robotsMeta && robotsMeta.toLowerCase().includes('noindex');
       this.results.push({
         route,
@@ -469,7 +823,7 @@ class SEOPreflightChecker {
         message: hasNoIndex ? `Found noindex on canonical page: ${robotsMeta}` : undefined
       });
     } else {
-      // In preview/development, just check presence
+      // For non-canonical pages, just check presence
       this.results.push({
         route,
         check: 'Robots meta presence',
@@ -519,7 +873,7 @@ class SEOPreflightChecker {
   }
 
   /**
-   * Print results in a compact table format
+   * Print results in a compact table format with enhanced debugging
    */
   private printResults(): void {
     console.log('\n📊 SEO Preflight Check Results\n');
@@ -554,15 +908,22 @@ class SEOPreflightChecker {
     console.log(`Failed: ${failedChecks.length}`);
 
     if (failedChecks.length > 0) {
-      console.log('\n❌ Failed Checks:');
+      console.log('\n❌ Failed Checks Summary:');
       failedChecks.forEach(check => {
-        console.log(`  • ${check.route}: ${check.check} - ${check.message || 'Failed'}`);
+        const reason = check.message || 'Failed';
+        console.log(`  • ${check.route}: ${check.check}`);
+        console.log(`    └─ ${reason}`);
       });
+      
+      console.log('\n🔧 Debugging Tips:');
+      console.log('  • Schema type counts are logged for each route during execution');
+      console.log('  • Failed singleton checks show @id values to identify duplication sources');
+      console.log('  • Check server logs above for additional JSON-LD parsing warnings');
     }
   }
 
   /**
-   * Run all preflight checks
+   * Run all preflight checks with enhanced server lifecycle management
    */
   async run(): Promise<void> {
     try {
@@ -583,8 +944,8 @@ class SEOPreflightChecker {
       await this.checkSitemap();
       await this.checkRobotsTxt();
 
-      // Check internal links
-      await this.checkInternalLinks();
+      // Check internal anchors (DOM-level validation)
+      await this.checkInternalAnchors();
 
       // Print results
       this.printResults();
@@ -603,10 +964,23 @@ class SEOPreflightChecker {
       console.error('\n💥 SEO preflight check failed:', error instanceof Error ? error.message : 'Unknown error');
       process.exit(1);
     } finally {
-      // Cleanup server
+      // Enhanced cleanup server with timeout fallback
       if (this.serverProcess) {
         console.log('\n🛑 Stopping server...');
-        this.serverProcess.cleanup();
+        try {
+          await this.serverProcess.cleanup();
+          console.log('✅ Server stopped gracefully');
+        } catch (cleanupError) {
+          console.error('⚠️ Server cleanup error:', cleanupError instanceof Error ? cleanupError.message : 'Unknown error');
+          
+          // Fallback: force kill any remaining processes
+          try {
+            await execAsync(`pkill -f "next start"`);
+            console.log('✅ Server processes force-killed');
+          } catch (pkillError) {
+            console.error('⚠️ pkill fallback failed:', pkillError instanceof Error ? pkillError.message : 'Unknown error');
+          }
+        }
       }
     }
   }
