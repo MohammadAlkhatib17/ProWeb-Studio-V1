@@ -72,7 +72,7 @@ export default function Werkwijze() {
             {/* Subtle ambient glow behind the composition */}
             <div aria-hidden className="absolute inset-0 pointer-events-none -z-10 portal-gradient opacity-60 blur-3xl" />
             <Image
-              src="/assets/team_core_star.avif"
+              src="/assets/team_core_star.png"
               alt="Centrale ster die ons proces symboliseert"
               fill
               priority
