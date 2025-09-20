@@ -482,10 +482,6 @@ export default function Diensten() {
       <SEOSchema 
         pageType="services" 
         includeFAQ={true}
-        breadcrumbs={[
-          { name: 'Home', url: '/' },
-          { name: 'Diensten', url: '/diensten' }
-        ]}
       />
     </main>
   );

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import LegalContentLayout from '@/components/LegalContentLayout';
 import { siteConfig } from '@/config/site.config';
-import BreadcrumbSchema from '@/components/BreadcrumbSchema';
+import SEOSchema from '@/components/SEOSchema';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
@@ -35,11 +35,10 @@ export default function VoorwaardenPage() {
 
   return (
     <>
-      <BreadcrumbSchema
-        items={[
-          { name: "Home", url: "/" },
-          { name: "Voorwaarden", url: "/voorwaarden" }
-        ]}
+      <SEOSchema
+        pageType="voorwaarden"
+        pageTitle={metadata.title as string}
+        pageDescription={metadata.description as string}
       />
       <LegalContentLayout>
       <h1>Algemene Voorwaarden</h1>

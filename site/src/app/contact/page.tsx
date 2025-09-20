@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { headers } from 'next/headers';
 import SecureContactForm from '@/components/SecureContactForm';
+import SEOSchema from '@/components/SEOSchema';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
@@ -31,6 +32,11 @@ export default async function ContactPage() {
 
   return (
     <main className="content-safe-top pt-20 md:pt-24 relative overflow-hidden">
+      <SEOSchema
+        pageType="contact"
+        pageTitle={metadata.title as string}
+        pageDescription={metadata.description as string}
+      />
       {/* Full-bleed background to avoid top seam */}
       <Image
         src="/assets/glowing_beacon_contact.avif"

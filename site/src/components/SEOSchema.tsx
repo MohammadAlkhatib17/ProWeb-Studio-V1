@@ -15,8 +15,51 @@ function abs(path: string): string {
   }
 }
 
+// Helper function to generate breadcrumbs based on pageType
+function generateBreadcrumbs(pageType: string): Array<{ name: string; url: string }> {
+  const breadcrumbs = [
+    { name: 'Home', url: abs('/') }
+  ];
+
+  switch (pageType) {
+    case 'homepage':
+      // Homepage only has itself
+      return breadcrumbs;
+    
+    case 'services':
+      breadcrumbs.push({ name: 'Diensten', url: abs('/diensten') });
+      break;
+    
+    case 'werkwijze':
+      breadcrumbs.push({ name: 'Werkwijze', url: abs('/werkwijze') });
+      break;
+    
+    case 'over-ons':
+      breadcrumbs.push({ name: 'Over ons', url: abs('/over-ons') });
+      break;
+    
+    case 'contact':
+      breadcrumbs.push({ name: 'Contact', url: abs('/contact') });
+      break;
+    
+    case 'privacy':
+      breadcrumbs.push({ name: 'Privacy', url: abs('/privacy') });
+      break;
+    
+    case 'voorwaarden':
+      breadcrumbs.push({ name: 'Voorwaarden', url: abs('/voorwaarden') });
+      break;
+    
+    default:
+      // For generic pages, just return Home
+      return breadcrumbs;
+  }
+
+  return breadcrumbs;
+}
+
 interface SEOSchemaProps {
-  pageType?: "homepage" | "services" | "werkwijze" | "contact" | "over-ons" | "generic";
+  pageType?: "homepage" | "services" | "werkwijze" | "contact" | "over-ons" | "privacy" | "voorwaarden" | "generic";
   pageTitle?: string;
   pageDescription?: string;
   breadcrumbs?: Array<{
@@ -374,21 +417,21 @@ export default function SEOSchema({
     },
   };
 
-  // Breadcrumb schema (if breadcrumbs are provided)
-  const breadcrumbSchema =
-    breadcrumbs.length > 0
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          '@id': `${SITE_URL}#breadcrumb`,
-          itemListElement: breadcrumbs.map((crumb, index) => ({
-            '@type': 'ListItem',
-            position: index + 1,
-            name: crumb.name,
-            item: crumb.url,
-          })),
-        }
-      : null;
+  // Breadcrumb schema (generate from pageType or use provided breadcrumbs)
+  const pageBreadcrumbs = breadcrumbs.length > 0 ? breadcrumbs : generateBreadcrumbs(pageType);
+  const breadcrumbSchema = pageBreadcrumbs.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        '@id': `${SITE_URL}#breadcrumb`,
+        itemListElement: pageBreadcrumbs.map((crumb, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: crumb.name,
+          item: crumb.url,
+        })),
+      }
+    : null;
 
   // WebPage schema
   const webPageSchema = {

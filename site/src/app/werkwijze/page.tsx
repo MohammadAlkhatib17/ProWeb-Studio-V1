@@ -7,7 +7,6 @@ export const revalidate = 60 * 60 * 24;
 import { Suspense } from 'react';
 import Image from 'next/image';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import BreadcrumbSchema from '@/components/BreadcrumbSchema';
 import SEOSchema from '@/components/SEOSchema';
 
 // Get canonical URL from environment with fallback
@@ -52,12 +51,6 @@ const steps = [
 export default function Werkwijze() {
   return (
     <main className="content-safe-top pt-20 md:pt-24">
-      <BreadcrumbSchema
-        items={[
-          { name: "Home", url: "/" },
-          { name: "Werkwijze", url: "/werkwijze" }
-        ]}
-      />
       <SEOSchema
         pageType="werkwijze"
         pageTitle={metadata.title as string}

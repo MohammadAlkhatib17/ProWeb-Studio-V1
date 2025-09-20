@@ -7,7 +7,7 @@ export const revalidate = 60 * 60 * 24;
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import BreadcrumbSchema from '@/components/BreadcrumbSchema';
+import SEOSchema from '@/components/SEOSchema';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
@@ -36,11 +36,10 @@ const FlowingRibbons = dynamicImport(() => import('@/three/FlowingRibbons'), {
 export default function OverOnsPage() {
   return (
     <main className="content-safe-top pt-20 md:pt-24">
-      <BreadcrumbSchema
-        items={[
-          { name: "Home", url: "/" },
-          { name: "Over Ons", url: "/over-ons" }
-        ]}
+      <SEOSchema
+        pageType="over-ons"
+        pageTitle={metadata.title as string}
+        pageDescription={metadata.description as string}
       />
       <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 text-center overflow-hidden">
         <div className="relative z-10 max-w-4xl mx-auto">

@@ -34,6 +34,7 @@ export const metadata: Metadata = {
 };
 
 import dynamicImport from 'next/dynamic';
+import SEOSchema from '@/components/SEOSchema';
 
 const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
   ssr: false,
@@ -80,6 +81,11 @@ function CaseCard({ title, metric, desc }: CaseCardProps) {
 export default function HomePage() {
   return (
     <main className="relative content-safe-top pt-20 md:pt-24 overflow-hidden">
+      <SEOSchema
+        pageType="homepage"
+        pageTitle={metadata.title as string}
+        pageDescription={metadata.description as string}
+      />
       {/* HERO SECTION */}
       <section
         aria-label="Hero"
