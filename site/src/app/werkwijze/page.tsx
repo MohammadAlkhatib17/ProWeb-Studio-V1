@@ -79,6 +79,7 @@ export default function Werkwijze() {
               quality={90}
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-contain object-center mix-screen image-soft-glow mask-soft-edges no-pointer z-10 translate-y-[2%] md:translate-y-[1.5%]"
+              decoding="async"
             />
             <div className="absolute inset-0 z-0 pointer-events-none">
               <Suspense fallback={<div className="absolute inset-0" />}> 

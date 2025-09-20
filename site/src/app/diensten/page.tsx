@@ -141,12 +141,11 @@ export default function Diensten() {
       {/* Full-bleed page background to unify top edge */}
       <Image
         src="/assets/nebula_services_background.avif"
-        alt="Nebula achtergrond"
+        alt=""
         fill
-        priority
-        fetchPriority="high"
         sizes="100vw"
         className="object-cover opacity-50 pointer-events-none -z-10"
+        decoding="async"
       />
       <BreadcrumbSchema
         items={[

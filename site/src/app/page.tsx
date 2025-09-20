@@ -44,7 +44,6 @@ const HeroScene = dynamicImport(() => import('@/three/HeroScene'), {
   ssr: false,
   loading: () => null,
 });
-import Image from 'next/image';
 import Link from 'next/link';
 
 // Dynamic import for 3D hexagonal prism scene with performance optimization
@@ -81,16 +80,6 @@ function CaseCard({ title, metric, desc }: CaseCardProps) {
 export default function HomePage() {
   return (
     <main className="relative content-safe-top pt-20 md:pt-24 overflow-hidden">
-      {/* Full-bleed page background to unify the top edge */}
-      <Image
-        src="/assets/hero/nebula_helix.avif"
-        alt="Kosmische nevel achtergrond voor webontwikkeling en 3D ervaringen"
-        fill
-        priority
-        fetchPriority="high"
-        sizes="100vw"
-        className="object-cover opacity-60 pointer-events-none -z-10"
-      />
       {/* HERO SECTION */}
       <section
         aria-label="Hero"

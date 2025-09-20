@@ -141,10 +141,13 @@ export const metadata: Metadata = {
         },
       },
   verification: {
-    google: 'GOOGLE_VERIFICATION_CODE_PLACEHOLDER',
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    }),
     other: {
-      'msvalidate.01': 'BING_VERIFICATION_CODE_PLACEHOLDER',
-      'yandex-verification': 'YANDEX_VERIFICATION_CODE_PLACEHOLDER',
+      ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION && {
+        'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION,
+      }),
     },
   },
   alternates: {

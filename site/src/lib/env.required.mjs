@@ -17,6 +17,36 @@ export const CRITICAL_ENV_VARS = [
 ];
 
 /**
+ * Environment variables grouped by functional category for better error messaging
+ */
+export const ENV_VAR_GROUPS = {
+  analytics: {
+    name: 'Analytics',
+    description: 'Web analytics and tracking configuration',
+    variables: ['NEXT_PUBLIC_PLAUSIBLE_DOMAIN'],
+    guidance: 'Set up Plausible analytics domain. Example: your-domain.com'
+  },
+  contact: {
+    name: 'Contact',
+    description: 'Contact form and email configuration',
+    variables: ['CONTACT_INBOX'],
+    guidance: 'Configure contact form destination email. Example: contact@yourdomain.com'
+  },
+  recaptcha: {
+    name: 'reCAPTCHA',
+    description: 'Google reCAPTCHA spam protection',
+    variables: ['NEXT_PUBLIC_RECAPTCHA_SITE_KEY', 'RECAPTCHA_SECRET_KEY'],
+    guidance: 'Get keys from Google reCAPTCHA console: https://www.google.com/recaptcha/admin'
+  },
+  address: {
+    name: 'Site Configuration',
+    description: 'Primary site URL and domain settings',
+    variables: ['SITE_URL'],
+    guidance: 'Set your production domain. Example: https://yourdomain.com'
+  }
+};
+
+/**
  * URL variables - at least one is required (used by env.server.ts)
  */
 export const URL_VARS = ['NEXT_PUBLIC_SITE_URL', 'SITE_URL'];

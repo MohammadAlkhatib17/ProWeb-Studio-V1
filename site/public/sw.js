@@ -8,7 +8,6 @@ const THREE_CACHE = 'prowebstudio-three-v1';
 
 // Assets to cache on install
 const STATIC_ASSETS = [
-  '/',
   '/manifest.json',
   '/assets/logo/logo-proweb-icon.svg',
   '/assets/logo/logo-proweb-lockup.svg',
@@ -113,12 +112,20 @@ async function handleRequest(request) {
       return await networkFirst(request, DYNAMIC_CACHE);
     }
 
-    // Strategy 4: Stale While Revalidate for pages
-    if (CACHED_ROUTES.includes(pathname) || pathname.startsWith('/_next/')) {
+    // Strategy 4: Network First for HTML documents (pages)
+    // This ensures HTML pages are never cached and always come from network
+    if (request.destination === 'document' || 
+        CACHED_ROUTES.includes(pathname) || 
+        isHTMLPage(pathname)) {
+      return await networkFirstNoCache(request);
+    }
+
+    // Strategy 5: Stale While Revalidate for Next.js assets (JS, CSS)
+    if (pathname.startsWith('/_next/')) {
       return await staleWhileRevalidate(request, DYNAMIC_CACHE);
     }
 
-    // Strategy 5: Network Only for everything else
+    // Strategy 6: Network Only for everything else
     return await fetch(request);
 
   } catch (error) {
@@ -172,6 +179,21 @@ async function staleWhileRevalidate(request, cacheName) {
   return cachedResponse || networkResponsePromise;
 }
 
+// Network First strategy that doesn't cache the response (for HTML documents)
+async function networkFirstNoCache(request) {
+  try {
+    const networkResponse = await fetch(request);
+    return networkResponse;
+  } catch (error) {
+    // Only fall back to offline.html for document requests
+    if (request.destination === 'document') {
+      const offlineResponse = await caches.match('/offline.html');
+      return offlineResponse || new Response('Offline', { status: 503 });
+    }
+    return Promise.reject(error);
+  }
+}
+
 // Utility functions
 function isStaticAsset(pathname) {
   return (
@@ -192,6 +214,16 @@ function isThreeAsset(pathname) {
     pathname.includes('@react-three') ||
     pathname.includes('chunks/three') ||
     pathname.includes('chunks/vendor') // Three.js often in vendor chunks
+  );
+}
+
+// Check if the request is for an HTML page
+function isHTMLPage(pathname) {
+  // Pages that end without extension are typically HTML pages in Next.js
+  return (
+    pathname === '/' ||
+    (!pathname.includes('.') && !pathname.startsWith('/_next/')) ||
+    pathname.endsWith('.html')
   );
 }
 

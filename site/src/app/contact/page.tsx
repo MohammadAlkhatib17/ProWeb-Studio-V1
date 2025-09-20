@@ -34,12 +34,11 @@ export default async function ContactPage() {
       {/* Full-bleed background to avoid top seam */}
       <Image
         src="/assets/glowing_beacon_contact.avif"
-        alt="Contact achtergrond"
+        alt=""
         fill
-        priority
-        fetchPriority="high"
         sizes="100vw"
         className="object-cover object-center opacity-30 pointer-events-none -z-10"
+        decoding="async"
       />
       <SecureContactForm />
       <section

@@ -1,7 +1,7 @@
 // @ts-check
 
 import nextBundleAnalyzer from '@next/bundle-analyzer';
-import { CRITICAL_ENV_VARS, PLACEHOLDER_VALUES } from './src/lib/env.required.mjs';
+import { CRITICAL_ENV_VARS, PLACEHOLDER_VALUES, ENV_VAR_GROUPS } from './src/lib/env.required.mjs';
 
 const withBundleAnalyzer = nextBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -34,23 +34,53 @@ function validateProductionEnv() {
     );
   }
 
-  const errors = [];
+  // Group errors by category
+  /** @type {Record<string, {name: string, description: string, variables: string[], guidance: string, errors: string[]}>} */
+  const errorsByGroup = {};
+  let hasErrors = false;
   
+  // Check each environment variable and group by category
   for (const envVar of CRITICAL_ENV_VARS) {
     const value = process.env[envVar];
+    let error = null;
     
     if (!value) {
-      errors.push(`${envVar} is not set`);
+      error = `${envVar} is not set`;
     } else if (isPlaceholderValue(value)) {
-      errors.push(`${envVar} contains placeholder value: "${value}"`);
+      error = `${envVar} contains placeholder value: "${value}"`;
+    }
+
+    if (error) {
+      hasErrors = true;
+      // Find which group this variable belongs to
+      for (const [groupKey, groupConfig] of Object.entries(ENV_VAR_GROUPS)) {
+        if (groupConfig.variables.includes(envVar)) {
+          if (!errorsByGroup[groupKey]) {
+            errorsByGroup[groupKey] = {
+              ...groupConfig,
+              errors: []
+            };
+          }
+          errorsByGroup[groupKey].errors.push(error);
+          break;
+        }
+      }
     }
   }
 
-  if (errors.length > 0) {
-    console.error('\n🚨 Build failed! Critical environment variables are missing or invalid:');
-    errors.forEach(error => console.error(`   ❌ ${error}`));
-    console.error('\n💡 Set the required environment variables in your deployment platform');
-    console.error('📚 See docs/DEPLOY_CHECKLIST.md for setup instructions\n');
+  if (hasErrors) {
+    console.error('\n🚨 Build failed! Critical environment variables are missing or invalid:\n');
+    
+    // Display errors grouped by category
+    for (const [groupKey, groupData] of Object.entries(errorsByGroup)) {
+      console.error(`📁 ${groupData.name} (${groupData.description})`);
+      groupData.errors.forEach(/** @param {string} error */ error => console.error(`   ❌ ${error}`));
+      console.error(`   💡 ${groupData.guidance}`);
+      console.error(''); // Empty line for spacing
+    }
+    
+    console.error('📚 For complete setup instructions, see docs/DEPLOY_CHECKLIST.md');
+    console.error('🔧 Set these variables in your deployment platform (Vercel, Netlify, etc.)\n');
     throw new Error('Environment validation failed - missing or invalid critical environment variables');
   }
 }

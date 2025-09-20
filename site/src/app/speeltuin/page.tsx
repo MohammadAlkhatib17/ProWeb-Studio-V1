@@ -33,12 +33,11 @@ export default function Page() {
     <main className="relative overflow-hidden content-safe-top pt-20 md:pt-24">
       <Image
         src="/assets/hero_portal_background.avif"
-        alt="Kosmische achtergrond"
+        alt=""
         fill
         sizes="100vw"
-        priority
-        fetchPriority="high"
         className="object-cover opacity-55 pointer-events-none -z-10"
+        decoding="async"
       />
       <SpeeltuinClient />
     </main>

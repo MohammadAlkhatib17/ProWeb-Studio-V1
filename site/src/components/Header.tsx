@@ -2,9 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { siteConfig } from '@/config/site.config';
 import Logo from '@/components/Logo';
-import MobileMenu from '@/components/navigation/MobileMenu';
+
+const MobileMenu = dynamic(() => import('@/components/navigation/MobileMenu'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);

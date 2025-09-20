@@ -352,12 +352,46 @@ export default function SEOSchema({
     },
   };
 
+  // LocalBusiness schema
+  const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    '@id': `${SITE_URL}#localbusiness`,
+    name: siteConfig.name,
+    url: abs('/'),
+    telephone: siteConfig.phone,
+    areaServed: {
+      '@type': 'Place',
+      name: 'Netherlands',
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'NL'
+      }
+    },
+    ...(hasAddress && {
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: addrStreet,
+        addressLocality: addrCity,
+        postalCode: addrZip,
+        addressRegion: 'NH',
+        addressCountry: 'NL',
+      },
+    }),
+    sameAs: [
+      siteConfig.social.linkedin,
+      siteConfig.social.github,
+      siteConfig.social.twitter,
+    ].filter(Boolean),
+  };
+
   // Combine all schemas into a graph
   const schemaGraph = {
     '@context': 'https://schema.org',
     '@graph': [
       websiteSchema,
       organizationSchema,
+      localBusinessSchema,
       webPageSchema,
       ...(breadcrumbSchema ? [breadcrumbSchema] : []),
     ],

@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getRouteLastModified, SERVICE_ROUTES } from '@/lib/sitemap-utils';
+import { getRouteLastModified } from '@/lib/sitemap-utils';
 
 interface SitemapEntry {
   url: string;
@@ -72,26 +72,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Generate additional dynamic entries for SEO
-  const additionalRoutes: Array<{
-    path: string;
-    priority: number;
-    changeFreq: SitemapEntry['changeFrequency'];
-    fallbackDate?: Date;
-  }> = [
-    // Add service sub-routes that share the same source file as /diensten
-    ...SERVICE_ROUTES.map(route => ({
-      path: route,
-      priority: 0.8,
-      changeFreq: 'monthly' as const,
-      fallbackDate: new Date('2025-09-01'),
-    })),
-    // Blog or portfolio entries could be added here dynamically
-    // Example: blog posts, case studies, etc.
-  ];
-
-  // Combine all routes
-  const allRoutes = [...routes, ...additionalRoutes];
+  // Combine all routes (just the main routes for now)
+  const allRoutes = [...routes];
 
   return allRoutes.map((route) => ({
     url: `${baseUrl}${route.path}`,
