@@ -32,6 +32,9 @@
     "analyze:generate": "node scripts/analyze-bundle-data.js",
     "bundle:compare": "node scripts/bundle-compare.js",
     "seo:preflight": "tsx scripts/seo-preflight.ts",
+    "lhci:collect": "lhci collect --config=lighthouserc.json",
+    "lhci:assert": "lhci assert --config=lighthouserc.json",
+    "ci:perf": "npm run lhci:collect && npm run lhci:assert",
     "ci:quality-check": "npm run typecheck && npm run lint && npm run format:check && npm run test",
     "ci:build": "npm run build:analyze && npm run analyze:generate && npm run seo:preflight",
     "validate:regions": "node scripts/validate-regions.js"
@@ -66,6 +69,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.13.0",
     "@next/bundle-analyzer": "^15.5.2",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",

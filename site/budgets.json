@@ -1,0 +1,86 @@
+[
+  {
+    "path": "/",
+    "resourceSizes": [
+      { "resourceType": "total", "budget": 1500 },
+      { "resourceType": "script", "budget": 900 },
+      { "resourceType": "image", "budget": 500 }
+    ],
+    "timings": [
+      { "metric": "interactive", "budget": 5000 },
+      { "metric": "first-contentful-paint", "budget": 2000 }
+    ]
+  },
+  {
+    "path": "/diensten",
+    "resourceSizes": [
+      { "resourceType": "total", "budget": 1500 },
+      { "resourceType": "script", "budget": 900 },
+      { "resourceType": "image", "budget": 500 }
+    ],
+    "timings": [
+      { "metric": "interactive", "budget": 5000 },
+      { "metric": "first-contentful-paint", "budget": 2000 }
+    ]
+  },
+  {
+    "path": "/werkwijze",
+    "resourceSizes": [
+      { "resourceType": "total", "budget": 1500 },
+      { "resourceType": "script", "budget": 900 },
+      { "resourceType": "image", "budget": 500 }
+    ],
+    "timings": [
+      { "metric": "interactive", "budget": 5000 },
+      { "metric": "first-contentful-paint", "budget": 2000 }
+    ]
+  },
+  {
+    "path": "/over-ons",
+    "resourceSizes": [
+      { "resourceType": "total", "budget": 1500 },
+      { "resourceType": "script", "budget": 900 },
+      { "resourceType": "image", "budget": 500 }
+    ],
+    "timings": [
+      { "metric": "interactive", "budget": 5000 },
+      { "metric": "first-contentful-paint", "budget": 2000 }
+    ]
+  },
+  {
+    "path": "/contact",
+    "resourceSizes": [
+      { "resourceType": "total", "budget": 1500 },
+      { "resourceType": "script", "budget": 900 },
+      { "resourceType": "image", "budget": 500 }
+    ],
+    "timings": [
+      { "metric": "interactive", "budget": 5000 },
+      { "metric": "first-contentful-paint", "budget": 2000 }
+    ]
+  },
+  {
+    "path": "/privacy",
+    "resourceSizes": [
+      { "resourceType": "total", "budget": 1500 },
+      { "resourceType": "script", "budget": 800 },
+      { "resourceType": "image", "budget": 300 }
+    ],
+    "timings": [
+      { "metric": "interactive", "budget": 4000 },
+      { "metric": "first-contentful-paint", "budget": 1500 }
+    ]
+  },
+  {
+    "path": "/voorwaarden",
+    "resourceSizes": [
+      { "resourceType": "total", "budget": 1500 },
+      { "resourceType": "script", "budget": 800 },
+      { "resourceType": "image", "budget": 300 }
+    ],
+    "timings": [
+      { "metric": "interactive", "budget": 4000 },
+      { "metric": "first-contentful-paint", "budget": 1500 }
+    ]
+  }
+]
