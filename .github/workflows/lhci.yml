@@ -21,7 +21,10 @@ jobs:
           cache-dependency-path: 'site/package-lock.json'
 
       - name: Install dependencies
-        run: npm install --prefix site
+        run: npm ci --prefix site
+
+      - name: Clean up port 4020
+        run: kill -9 $(lsof -t -i:4020) 2>/dev/null || true
 
       - name: Build application
         run: npm --prefix site run build
@@ -32,10 +35,14 @@ jobs:
       - name: Run Lighthouse CI
         run: npm --prefix site run ci:perf
 
-      - name: Upload Lighthouse reports
+      - name: Generate Lighthouse Summary
+        if: always()
+        run: node .github/scripts/summary-lhci.js
+
+      - name: Upload Lighthouse artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: lighthouse-reports
-          path: site/.lighthouseci/
+          name: lhci-report
+          path: "site/.lighthouseci/*"
           retention-days: 30
