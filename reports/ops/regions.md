@@ -6,15 +6,31 @@ This document provides a comprehensive mapping of all API routes and their regio
 
 | Route | Runtime | Preferred Region | Status | Purpose |
 |-------|---------|------------------|--------|---------|
-| `/api/vitals` | `nodejs` | `fra1` | ✅ Configured | Web Vitals analytics collection |
-| `/api/csp-report` | `nodejs` | `fra1` | ✅ Configured | Content Security Policy violation reporting |
-| `/api/contact` | `nodejs` | `fra1` | ✅ Configured | Contact form submission and email processing |
-| `/api/subscribe` | `nodejs` | `fra1` | ✅ Configured | Newsletter subscription via Brevo API |
+| `/og` | `edge` | `['fra1', 'cdg1', 'arn1']` | ✅ EU-priority | Open Graph image generation with cache optimization |
+| `/api/vitals` | `nodejs` | `['fra1', 'cdg1', 'arn1', 'ams1']` | ✅ EU-priority | Web Vitals analytics collection |
+| `/api/csp-report` | `nodejs` | `['fra1', 'cdg1', 'arn1', 'ams1']` | ✅ EU-priority | Content Security Policy violation reporting |
+| `/api/contact` | `nodejs` | `['fra1', 'cdg1', 'arn1', 'ams1']` | ✅ EU-priority | Contact form submission and email processing |
+| `/api/subscribe` | `nodejs` | `['fra1', 'cdg1', 'arn1', 'ams1']` | ✅ EU-priority | Newsletter subscription via Brevo API |
 
 ## Regional Configuration Details
 
-### Frankfurt Region (fra1)
-All API routes are configured to deploy to the **Frankfurt (fra1)** region, which provides:
+### EU-First Priority Configuration
+All routes are now configured with **EU-first priority regions** using ordered arrays prioritizing NL traffic:
+
+#### Primary Region Priority Order:
+1. **Frankfurt (fra1)** - Germany 🇩🇪 - Primary EU hub
+2. **Paris (cdg1)** - France 🇫🇷 - Western EU coverage  
+3. **Stockholm (arn1)** - Sweden 🇸🇪 - Nordic coverage
+4. **Amsterdam (ams1)** - Netherlands 🇳🇱 - Local NL coverage *(API routes only)*
+
+### Edge Runtime Configuration
+- **OG Image Route** (`/og`): Uses `['fra1', 'cdg1', 'arn1']` with conservative cache policy
+  - Cache-Control: `public, max-age=86400, s-maxage=86400, stale-while-revalidate=172800`
+  - Prevents unnecessary OG image recomputation while allowing reasonable updates
+
+### API Routes Configuration  
+- **All API Routes**: Use `['fra1', 'cdg1', 'arn1', 'ams1']` for maximum EU coverage
+- **Node.js Runtime**: Full server-side functionality maintained
 
 - **Geographic Location**: Frankfurt, Germany 🇩🇪
 - **Compliance**: Full EU GDPR compliance

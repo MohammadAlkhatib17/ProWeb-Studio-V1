@@ -1,6 +1,6 @@
 {
   "analysisMetadata": {
-    "generatedDate": "2025-09-20",
+    "generatedDate": "2025-09-21",
     "nextJsVersion": "14.2.5",
     "bundleAnalyzerVersion": "15.5.2",
     "targetRoutes": [
@@ -8,36 +8,36 @@
       "/diensten"
     ],
     "totalBundleSize": "3.31 MB",
-    "totalBundleSizeBytes": 3467845
+    "totalBundleSizeBytes": 3475703
   },
   "topChunks": [
     {
       "rank": 1,
-      "filename": "vendors-b2aa1ff2c64095c4.js",
-      "sizeBytes": 1038338,
-      "sizeFormatted": "1014 KB",
+      "filename": "vendors-9117e187e007decf.js",
+      "sizeBytes": 1034922,
+      "sizeFormatted": "1010.67 KB",
       "category": "vendors",
       "description": "Core vendor libraries (React, Next.js, Framer Motion, etc.)"
     },
     {
       "rank": 2,
-      "filename": "three.28fe42e6d1f97f5c.js",
-      "sizeBytes": 755926,
-      "sizeFormatted": "738.21 KB",
+      "filename": "three.b786edeabfa9cee0.js",
+      "sizeBytes": 757831,
+      "sizeFormatted": "740.07 KB",
       "category": "three-core",
       "description": "Three.js core library"
     },
     {
       "rank": 3,
-      "filename": "913-3d00645556b1377a.js",
-      "sizeBytes": 723704,
-      "sizeFormatted": "706.74 KB",
+      "filename": "807-7de7c7d775d62f8e.js",
+      "sizeBytes": 726604,
+      "sizeFormatted": "709.57 KB",
       "category": "three-components",
-      "description": "3D components for diensten, over-ons, werkwijze routes"
+      "description": "Three.js components and route-specific code"
     },
     {
       "rank": 4,
-      "filename": "664-0b7500cac858a52b.js",
+      "filename": "664-f801609d76f1f761.js",
       "sizeBytes": 723610,
       "sizeFormatted": "706.65 KB",
       "category": "three-components",
@@ -53,9 +53,9 @@
     },
     {
       "rank": 6,
-      "filename": "layout-19bd3bffe43faca8.js",
-      "sizeBytes": 19285,
-      "sizeFormatted": "18.83 KB",
+      "filename": "layout-79b95bbd8de5c89e.js",
+      "sizeBytes": 19570,
+      "sizeFormatted": "19.11 KB",
       "category": "other",
       "description": "Miscellaneous chunks"
     },
@@ -69,7 +69,7 @@
     },
     {
       "rank": 8,
-      "filename": "page-71b0372f92a3bd81.js",
+      "filename": "page-313b766156c26e7b.js",
       "sizeBytes": 17500,
       "sizeFormatted": "17.09 KB",
       "category": "other",
@@ -77,7 +77,7 @@
     },
     {
       "rank": 9,
-      "filename": "page-437cb28f7ac93416.js",
+      "filename": "page-f265c5cf565de9df.js",
       "sizeBytes": 16891,
       "sizeFormatted": "16.5 KB",
       "category": "other",
@@ -85,7 +85,7 @@
     },
     {
       "rank": 10,
-      "filename": "page-67ccbd06bf9f6550.js",
+      "filename": "page-02c8316a54644165.js",
       "sizeBytes": 14847,
       "sizeFormatted": "14.5 KB",
       "category": "other",
@@ -94,22 +94,22 @@
   ],
   "allChunks": [
     {
-      "filename": "vendors-b2aa1ff2c64095c4.js",
-      "sizeBytes": 1038338,
+      "filename": "vendors-9117e187e007decf.js",
+      "sizeBytes": 1034922,
       "category": "vendors"
     },
     {
-      "filename": "three.28fe42e6d1f97f5c.js",
-      "sizeBytes": 755926,
+      "filename": "three.b786edeabfa9cee0.js",
+      "sizeBytes": 757831,
       "category": "three-core"
     },
     {
-      "filename": "913-3d00645556b1377a.js",
-      "sizeBytes": 723704,
+      "filename": "807-7de7c7d775d62f8e.js",
+      "sizeBytes": 726604,
       "category": "three-components"
     },
     {
-      "filename": "664-0b7500cac858a52b.js",
+      "filename": "664-f801609d76f1f761.js",
       "sizeBytes": 723610,
       "category": "three-components"
     },
@@ -119,8 +119,8 @@
       "category": "polyfills"
     },
     {
-      "filename": "layout-19bd3bffe43faca8.js",
-      "sizeBytes": 19285,
+      "filename": "layout-79b95bbd8de5c89e.js",
+      "sizeBytes": 19570,
       "category": "other"
     },
     {
@@ -129,28 +129,23 @@
       "category": "three-components"
     },
     {
-      "filename": "page-71b0372f92a3bd81.js",
+      "filename": "page-313b766156c26e7b.js",
       "sizeBytes": 17500,
       "category": "other"
     },
     {
-      "filename": "page-437cb28f7ac93416.js",
+      "filename": "page-f265c5cf565de9df.js",
       "sizeBytes": 16891,
       "category": "other"
     },
     {
-      "filename": "page-67ccbd06bf9f6550.js",
+      "filename": "page-02c8316a54644165.js",
       "sizeBytes": 14847,
       "category": "other"
     },
     {
-      "filename": "page-5fce65b59519549a.js",
-      "sizeBytes": 5123,
-      "category": "other"
-    },
-    {
-      "filename": "page-2ac109a9a3b30954.js",
-      "sizeBytes": 4541,
+      "filename": "error-28ed190e4fa9eec4.js",
+      "sizeBytes": 8085,
       "category": "other"
     },
     {
@@ -159,14 +154,19 @@
       "category": "three-components"
     },
     {
-      "filename": "webpack-007fcf1c943d23a0.js",
-      "sizeBytes": 3879,
+      "filename": "webpack-129069a9727fddf1.js",
+      "sizeBytes": 3925,
       "category": "other"
     },
     {
-      "filename": "page-5f9b50e218d2202e.js",
-      "sizeBytes": 3231,
+      "filename": "page-9b7653c0c8e9a952.js",
+      "sizeBytes": 3520,
       "category": "other"
+    },
+    {
+      "filename": "495.d9f744b611000227.js",
+      "sizeBytes": 2879,
+      "category": "three-components"
     },
     {
       "filename": "652.ef8ba35b884e36ea.js",
@@ -174,12 +174,27 @@
       "category": "three-components"
     },
     {
-      "filename": "page-56eac6a26e677ace.js",
+      "filename": "943.62fe3a3d74bd9e3b.js",
+      "sizeBytes": 1828,
+      "category": "three-components"
+    },
+    {
+      "filename": "page-def4f189acad5e29.js",
+      "sizeBytes": 1291,
+      "category": "other"
+    },
+    {
+      "filename": "page-d351538857e23b7f.js",
+      "sizeBytes": 1282,
+      "category": "other"
+    },
+    {
+      "filename": "page-3d2a4705e970c44c.js",
       "sizeBytes": 837,
       "category": "other"
     },
     {
-      "filename": "page-d1df89fab86b867f.js",
+      "filename": "page-ab25902f3cb264e3.js",
       "sizeBytes": 837,
       "category": "other"
     },
@@ -194,38 +209,43 @@
       "category": "app"
     },
     {
-      "filename": "page-31def18d3e769891.js",
-      "sizeBytes": 252,
-      "category": "other"
-    },
-    {
       "filename": "_error-e5b4d61ed02fe2b7.js",
       "sizeBytes": 247,
       "category": "other"
     },
     {
-      "filename": "layout-865736d17d62cf5c.js",
-      "sizeBytes": 172,
+      "filename": "not-found-2624a7ec716e9c80.js",
+      "sizeBytes": 204,
       "category": "other"
     },
     {
-      "filename": "layout-17763db508e0fa58.js",
-      "sizeBytes": 172,
+      "filename": "page-e11cb1c579d5e3fa.js",
+      "sizeBytes": 176,
       "category": "other"
     },
     {
-      "filename": "page-152b10912c68b7ce.js",
-      "sizeBytes": 172,
+      "filename": "layout-8903a0b2e2f2a865.js",
+      "sizeBytes": 176,
       "category": "other"
     },
     {
-      "filename": "layout-1f501f7d74e703d8.js",
-      "sizeBytes": 172,
+      "filename": "layout-66475441ed2e5a38.js",
+      "sizeBytes": 176,
       "category": "other"
     },
     {
-      "filename": "layout-f33409a7138ea3d9.js",
-      "sizeBytes": 172,
+      "filename": "page-dd0d88c83d253b75.js",
+      "sizeBytes": 176,
+      "category": "other"
+    },
+    {
+      "filename": "layout-55509152acad7ed1.js",
+      "sizeBytes": 176,
+      "category": "other"
+    },
+    {
+      "filename": "layout-f38be88e8c2ef8b0.js",
+      "sizeBytes": 176,
       "category": "other"
     },
     {

@@ -1,0 +1,165 @@
+{
+  "timestamp": 1758417962251,
+  "testDate": "2025-09-21T01:26:02.251Z",
+  "testPort": 3001,
+  "environment": "development",
+  "criticalTestsPassed": 2,
+  "totalCriticalTests": 2,
+  "allTestsPassed": true,
+  "results": [
+    {
+      "route": {
+        "path": "/robots.txt",
+        "description": "Robots.txt endpoint"
+      },
+      "status": 200,
+      "content": "User-Agent: *\nAllow: /\n\nHost: https://prowebstudio.nl\nSitemap: https://prowebstudio.nl/sitemap.xml",
+      "isDevConfig": true,
+      "passed": true
+    },
+    {
+      "route": {
+        "path": "/speeltuin",
+        "expected": "noindex, follow",
+        "description": "Speeltuin page (should have X-Robots-Tag: noindex, follow)",
+        "critical": true
+      },
+      "status": 200,
+      "robotsTag": "noindex, follow",
+      "passed": true,
+      "critical": true,
+      "headers": {
+        "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+        "x-frame-options": "SAMEORIGIN",
+        "x-content-type-options": "nosniff",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "permissions-policy": "accelerometer=(), autoplay=(), browsing-topics=(), camera=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), xr-spatial-tracking=()",
+        "x-dns-prefetch-control": "on",
+        "x-permitted-cross-domain-policies": "none",
+        "cross-origin-embedder-policy": "unsafe-none",
+        "cross-origin-opener-policy": "same-origin",
+        "cross-origin-resource-policy": "same-origin",
+        "x-security-version": "2.0",
+        "x-download-options": "noopen",
+        "cache-control": "no-store, must-revalidate",
+        "x-nonce": "3718d5ce-e0b1-4b76-a2de-8a07da61da2a",
+        "x-robots-tag": "noindex, follow",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "link": "</_next/static/media/8e9860b6e62d6359-s.p.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/media/e4af272ccee01ff0-s.p.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 21 Sep 2025 01:26:01 GMT",
+        "connection": "keep-alive",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      }
+    },
+    {
+      "route": {
+        "path": "/",
+        "expected": "NOT SET",
+        "description": "Home page (should NOT have X-Robots-Tag)",
+        "critical": true
+      },
+      "status": 200,
+      "robotsTag": "NOT SET",
+      "passed": true,
+      "critical": true,
+      "headers": {
+        "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+        "x-frame-options": "SAMEORIGIN",
+        "x-content-type-options": "nosniff",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "permissions-policy": "accelerometer=(), autoplay=(), browsing-topics=(), camera=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), xr-spatial-tracking=()",
+        "x-dns-prefetch-control": "on",
+        "x-permitted-cross-domain-policies": "none",
+        "cross-origin-embedder-policy": "unsafe-none",
+        "cross-origin-opener-policy": "same-origin",
+        "cross-origin-resource-policy": "same-origin",
+        "x-security-version": "2.0",
+        "x-download-options": "noopen",
+        "cache-control": "no-store, must-revalidate",
+        "x-nonce": "30d4dcec-b3d4-4fbb-bb7a-96fe31adffcb",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "link": "</_next/static/media/8e9860b6e62d6359-s.p.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/media/e4af272ccee01ff0-s.p.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 21 Sep 2025 01:26:01 GMT",
+        "connection": "keep-alive",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      }
+    },
+    {
+      "route": {
+        "path": "/diensten",
+        "expected": "NOT SET",
+        "description": "Services page (should NOT have X-Robots-Tag)",
+        "critical": false
+      },
+      "status": 200,
+      "robotsTag": "NOT SET",
+      "passed": true,
+      "critical": false,
+      "headers": {
+        "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+        "x-frame-options": "SAMEORIGIN",
+        "x-content-type-options": "nosniff",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "permissions-policy": "accelerometer=(), autoplay=(), browsing-topics=(), camera=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), xr-spatial-tracking=()",
+        "x-dns-prefetch-control": "on",
+        "x-permitted-cross-domain-policies": "none",
+        "cross-origin-embedder-policy": "unsafe-none",
+        "cross-origin-opener-policy": "same-origin",
+        "cross-origin-resource-policy": "same-origin",
+        "x-security-version": "2.0",
+        "x-download-options": "noopen",
+        "cache-control": "no-store, must-revalidate",
+        "x-nonce": "f4e0cc98-0f12-41a7-bf15-ad66c14669c3",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "link": "</_next/static/media/8e9860b6e62d6359-s.p.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/media/e4af272ccee01ff0-s.p.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 21 Sep 2025 01:26:01 GMT",
+        "connection": "keep-alive",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      }
+    },
+    {
+      "route": {
+        "path": "/contact",
+        "expected": "NOT SET",
+        "description": "Contact page (should NOT have X-Robots-Tag)",
+        "critical": false
+      },
+      "status": 200,
+      "robotsTag": "NOT SET",
+      "passed": true,
+      "critical": false,
+      "headers": {
+        "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+        "x-frame-options": "SAMEORIGIN",
+        "x-content-type-options": "nosniff",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "permissions-policy": "accelerometer=(), autoplay=(), browsing-topics=(), camera=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), xr-spatial-tracking=()",
+        "x-dns-prefetch-control": "on",
+        "x-permitted-cross-domain-policies": "none",
+        "cross-origin-embedder-policy": "unsafe-none",
+        "cross-origin-opener-policy": "same-origin",
+        "cross-origin-resource-policy": "same-origin",
+        "x-security-version": "2.0",
+        "x-download-options": "noopen",
+        "cache-control": "no-store, must-revalidate",
+        "content-security-policy": "default-src 'self'; script-src 'self' 'nonce-94a15278-c481-47b3-ab38-0617887d71a7' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com; script-src-elem 'self' 'nonce-94a15278-c481-47b3-ab38-0617887d71a7' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; media-src 'self' https:; frame-src 'self' https://www.google.com https://cal.com https://app.cal.com; connect-src 'self' https://api.cal.com https://www.google-analytics.com https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests",
+        "expect-ct": "max-age=86400, enforce",
+        "x-nonce": "94a15278-c481-47b3-ab38-0617887d71a7",
+        "x-xss-protection": "1; mode=block",
+        "vary": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding",
+        "link": "</_next/static/media/8e9860b6e62d6359-s.p.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\", </_next/static/media/e4af272ccee01ff0-s.p.woff2>; rel=preload; as=\"font\"; crossorigin=\"\"; type=\"font/woff2\"",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 21 Sep 2025 01:26:02 GMT",
+        "connection": "keep-alive",
+        "keep-alive": "timeout=5",
+        "transfer-encoding": "chunked"
+      }
+    }
+  ]
+}

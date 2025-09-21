@@ -246,6 +246,47 @@ Actual space savings from removing unused assets:
 
 ---
 
+---
+
+## Additional Cleanup (September 21, 2025)
+
+### Further Unused Assets Removed
+After the initial cleanup, a follow-up scan identified additional unused asset format duplicates:
+
+✅ **Additional Files Successfully Deleted (September 21, 2025):**
+1. `site/public/assets/glowing_beacon_contact.png` (644K) - superseded by .avif
+2. `site/public/assets/glowing_beacon_contact.webp` (60K) - superseded by .avif  
+3. `site/public/assets/hero_portal_background.webp` (108K) - superseded by .avif
+4. `site/public/assets/nebula_services_background.png` (716K) - superseded by .avif
+5. `site/public/assets/team_core_star.avif` (140K) - code uses .png and .webp versions
+
+**Additional Space Saved:** 1,668K (1.6MB)
+**Total Space Saved:** 3,024K (2.9MB)
+
+### Final Asset Inventory (12 files)
+All remaining assets are confirmed to be actively used in the codebase:
+
+- `assets/glowing_beacon_contact.avif` (1 ref) - Contact page background
+- `assets/hero/nebula_helix.avif` (2 refs) - Hero background (primary format) 
+- `assets/hero/nebula_helix.jpg` (1 ref) - Hero background fallback
+- `assets/hero/nebula_helix.webp` (3 refs) - Hero background (secondary format)
+- `assets/hero_portal_background.avif` (1 ref) - Speeltuin page background
+- `assets/hero_portal_background.png` (1 ref) - Speeltuin page fallback
+- `assets/logo/logo-proweb-icon.svg` (5 refs) - Icon logo in components & service worker
+- `assets/logo/logo-proweb-lockup.svg` (6 refs) - Full logo in schemas & components
+- `assets/nebula_services_background.avif` (2 refs) - Services page background
+- `assets/nebula_services_background.webp` (1 ref) - Services page SEO schema
+- `assets/team_core_star.png` (1 ref) - Team page star element
+- `assets/team_core_star.webp` (1 ref) - Team page SEO schema
+
+### Build Verification
+✅ **Build Test Passed**: `npm run build` completed successfully with no asset-related errors or warnings.
+
+**Verification Date:** September 21, 2025
+
+---
+
 **Report Generated:** September 18, 2025  
+**Updated:** September 21, 2025
 **Scan Coverage:** All TypeScript, JavaScript, CSS files in `site/src/` and `site/public/`  
 **Method:** Static analysis via grep patterns and file system inspection

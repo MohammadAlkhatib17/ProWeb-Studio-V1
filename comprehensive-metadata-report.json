@@ -1,0 +1,336 @@
+{
+  "timestamp": "2025-09-21T01:36:14.422Z",
+  "summary": {
+    "totalFiles": 14,
+    "totalIssues": 2,
+    "routeGroups": {
+      "/contact": [
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/contact/layout.tsx",
+          "routePath": "/contact",
+          "fileType": "layout",
+          "hasMetadata": false,
+          "canonical": null,
+          "languages": {},
+          "issues": []
+        },
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/contact/page.tsx",
+          "routePath": "/contact",
+          "fileType": "page",
+          "hasMetadata": true,
+          "canonical": "/contact",
+          "languages": {
+            "nl-NL": "/contact",
+            "x-default": "/contact"
+          },
+          "issues": []
+        }
+      ],
+      "/diensten": [
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/diensten/layout.tsx",
+          "routePath": "/diensten",
+          "fileType": "layout",
+          "hasMetadata": false,
+          "canonical": null,
+          "languages": {},
+          "issues": []
+        },
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/diensten/page.tsx",
+          "routePath": "/diensten",
+          "fileType": "page",
+          "hasMetadata": true,
+          "canonical": "/diensten",
+          "languages": {
+            "nl-NL": "/diensten",
+            "x-default": "/diensten"
+          },
+          "issues": []
+        }
+      ],
+      "/": [
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/layout.tsx",
+          "routePath": "/",
+          "fileType": "layout",
+          "hasMetadata": true,
+          "canonical": null,
+          "languages": {},
+          "issues": []
+        },
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/page.tsx",
+          "routePath": "/",
+          "fileType": "page",
+          "hasMetadata": true,
+          "canonical": "/",
+          "languages": {
+            "nl-NL": "/",
+            "x-default": "/"
+          },
+          "issues": []
+        }
+      ],
+      "/speeltuin": [
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/speeltuin/layout.tsx",
+          "routePath": "/speeltuin",
+          "fileType": "layout",
+          "hasMetadata": false,
+          "canonical": null,
+          "languages": {},
+          "issues": []
+        },
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/speeltuin/page.tsx",
+          "routePath": "/speeltuin",
+          "fileType": "page",
+          "hasMetadata": true,
+          "canonical": "/speeltuin",
+          "languages": {
+            "nl-NL": "/speeltuin",
+            "x-default": "/speeltuin"
+          },
+          "issues": []
+        }
+      ],
+      "/werkwijze": [
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/werkwijze/layout.tsx",
+          "routePath": "/werkwijze",
+          "fileType": "layout",
+          "hasMetadata": false,
+          "canonical": null,
+          "languages": {},
+          "issues": []
+        },
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/werkwijze/page.tsx",
+          "routePath": "/werkwijze",
+          "fileType": "page",
+          "hasMetadata": true,
+          "canonical": "/werkwijze",
+          "languages": {
+            "nl-NL": "/werkwijze",
+            "x-default": "/werkwijze"
+          },
+          "issues": []
+        }
+      ],
+      "/over-ons": [
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/over-ons/page.tsx",
+          "routePath": "/over-ons",
+          "fileType": "page",
+          "hasMetadata": true,
+          "canonical": "/over-ons",
+          "languages": {
+            "nl-NL": "/over-ons",
+            "x-default": "/over-ons"
+          },
+          "issues": []
+        }
+      ],
+      "/overzicht": [
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/overzicht/page.tsx",
+          "routePath": "/overzicht",
+          "fileType": "page",
+          "hasMetadata": true,
+          "canonical": "/overzicht",
+          "languages": {
+            "nl-NL": "/overzicht",
+            "x-default": "/overzicht"
+          },
+          "issues": []
+        }
+      ],
+      "/privacy": [
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/privacy/page.tsx",
+          "routePath": "/privacy",
+          "fileType": "page",
+          "hasMetadata": true,
+          "canonical": "/privacy",
+          "languages": {
+            "nl-NL": "/privacy",
+            "x-default": "/privacy"
+          },
+          "issues": []
+        }
+      ],
+      "/voorwaarden": [
+        {
+          "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/voorwaarden/page.tsx",
+          "routePath": "/voorwaarden",
+          "fileType": "page",
+          "hasMetadata": true,
+          "canonical": "/voorwaarden",
+          "languages": {
+            "nl-NL": "/voorwaarden",
+            "x-default": "/voorwaarden"
+          },
+          "issues": []
+        }
+      ]
+    },
+    "hardCodedIssues": 0
+  },
+  "analysis": [
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/contact/layout.tsx",
+      "routePath": "/contact",
+      "fileType": "layout",
+      "hasMetadata": false,
+      "canonical": null,
+      "languages": {},
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/diensten/layout.tsx",
+      "routePath": "/diensten",
+      "fileType": "layout",
+      "hasMetadata": false,
+      "canonical": null,
+      "languages": {},
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/layout.tsx",
+      "routePath": "/",
+      "fileType": "layout",
+      "hasMetadata": true,
+      "canonical": null,
+      "languages": {},
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/speeltuin/layout.tsx",
+      "routePath": "/speeltuin",
+      "fileType": "layout",
+      "hasMetadata": false,
+      "canonical": null,
+      "languages": {},
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/werkwijze/layout.tsx",
+      "routePath": "/werkwijze",
+      "fileType": "layout",
+      "hasMetadata": false,
+      "canonical": null,
+      "languages": {},
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/contact/page.tsx",
+      "routePath": "/contact",
+      "fileType": "page",
+      "hasMetadata": true,
+      "canonical": "/contact",
+      "languages": {
+        "nl-NL": "/contact",
+        "x-default": "/contact"
+      },
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/diensten/page.tsx",
+      "routePath": "/diensten",
+      "fileType": "page",
+      "hasMetadata": true,
+      "canonical": "/diensten",
+      "languages": {
+        "nl-NL": "/diensten",
+        "x-default": "/diensten"
+      },
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/over-ons/page.tsx",
+      "routePath": "/over-ons",
+      "fileType": "page",
+      "hasMetadata": true,
+      "canonical": "/over-ons",
+      "languages": {
+        "nl-NL": "/over-ons",
+        "x-default": "/over-ons"
+      },
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/overzicht/page.tsx",
+      "routePath": "/overzicht",
+      "fileType": "page",
+      "hasMetadata": true,
+      "canonical": "/overzicht",
+      "languages": {
+        "nl-NL": "/overzicht",
+        "x-default": "/overzicht"
+      },
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/page.tsx",
+      "routePath": "/",
+      "fileType": "page",
+      "hasMetadata": true,
+      "canonical": "/",
+      "languages": {
+        "nl-NL": "/",
+        "x-default": "/"
+      },
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/privacy/page.tsx",
+      "routePath": "/privacy",
+      "fileType": "page",
+      "hasMetadata": true,
+      "canonical": "/privacy",
+      "languages": {
+        "nl-NL": "/privacy",
+        "x-default": "/privacy"
+      },
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/speeltuin/page.tsx",
+      "routePath": "/speeltuin",
+      "fileType": "page",
+      "hasMetadata": true,
+      "canonical": "/speeltuin",
+      "languages": {
+        "nl-NL": "/speeltuin",
+        "x-default": "/speeltuin"
+      },
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/voorwaarden/page.tsx",
+      "routePath": "/voorwaarden",
+      "fileType": "page",
+      "hasMetadata": true,
+      "canonical": "/voorwaarden",
+      "languages": {
+        "nl-NL": "/voorwaarden",
+        "x-default": "/voorwaarden"
+      },
+      "issues": []
+    },
+    {
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/werkwijze/page.tsx",
+      "routePath": "/werkwijze",
+      "fileType": "page",
+      "hasMetadata": true,
+      "canonical": "/werkwijze",
+      "languages": {
+        "nl-NL": "/werkwijze",
+        "x-default": "/werkwijze"
+      },
+      "issues": []
+    }
+  ]
+}

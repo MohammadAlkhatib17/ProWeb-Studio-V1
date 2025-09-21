@@ -1,0 +1,122 @@
+{
+  "timestamp": "2025-09-21T01:36:23.533Z",
+  "analysis": [
+    {
+      "routePath": "/contact",
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/contact/page.tsx",
+      "hasMetadata": true,
+      "canonical": "/contact",
+      "languages": {
+        "nl-NL": "/contact",
+        "x-default": "/contact"
+      },
+      "title": "Contact – Start het gesprek met ProWeb Studio"
+    },
+    {
+      "routePath": "/diensten",
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/diensten/page.tsx",
+      "hasMetadata": true,
+      "canonical": "/diensten",
+      "languages": {
+        "nl-NL": "/diensten",
+        "x-default": "/diensten"
+      },
+      "title": "Diensten – Webdesign, 3D websites, SEO & performance optimalisatie"
+    },
+    {
+      "routePath": "/over-ons",
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/over-ons/page.tsx",
+      "hasMetadata": true,
+      "canonical": "/over-ons",
+      "languages": {
+        "nl-NL": "/over-ons",
+        "x-default": "/over-ons"
+      },
+      "title": "Over Ons – Architecten van de Digitale Toekomst | ProWeb Studio"
+    },
+    {
+      "routePath": "/overzicht",
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/overzicht/page.tsx",
+      "hasMetadata": true,
+      "canonical": "/overzicht",
+      "languages": {
+        "nl-NL": "/overzicht",
+        "x-default": "/overzicht"
+      },
+      "title": "Site-overzicht – Alle pagina\\"
+    },
+    {
+      "routePath": "/",
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/page.tsx",
+      "hasMetadata": true,
+      "canonical": "/",
+      "languages": {
+        "nl-NL": "/",
+        "x-default": "/"
+      },
+      "title": "Website laten maken in Nederland | 3D webdesign & hoge performance – ProWeb Studio"
+    },
+    {
+      "routePath": "/privacy",
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/privacy/page.tsx",
+      "hasMetadata": true,
+      "canonical": "/privacy",
+      "languages": {
+        "nl-NL": "/privacy",
+        "x-default": "/privacy"
+      },
+      "title": "Privacybeleid – ProWeb Studio"
+    },
+    {
+      "routePath": "/speeltuin",
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/speeltuin/page.tsx",
+      "hasMetadata": true,
+      "canonical": "/speeltuin",
+      "languages": {
+        "nl-NL": "/speeltuin",
+        "x-default": "/speeltuin"
+      },
+      "title": "Tech Playground – ProWeb Studio"
+    },
+    {
+      "routePath": "/voorwaarden",
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/voorwaarden/page.tsx",
+      "hasMetadata": true,
+      "canonical": "/voorwaarden",
+      "languages": {
+        "nl-NL": "/voorwaarden",
+        "x-default": "/voorwaarden"
+      },
+      "title": "Algemene voorwaarden – ProWeb Studio"
+    },
+    {
+      "routePath": "/werkwijze",
+      "filePath": "/home/mohammadalkhatib/Desktop/personal/ProWeb-Studio-V1/site/src/app/werkwijze/page.tsx",
+      "hasMetadata": true,
+      "canonical": "/werkwijze",
+      "languages": {
+        "nl-NL": "/werkwijze",
+        "x-default": "/werkwijze"
+      },
+      "title": "Werkwijze – van intake tot launch, transparant en voorspelbaar"
+    }
+  ],
+  "issues": {
+    "missingCanonical": [],
+    "inconsistentCanonical": [],
+    "missingLanguages": [],
+    "inconsistentLanguages": [],
+    "missingXDefault": []
+  },
+  "summary": {
+    "totalPages": 9,
+    "totalIssues": 0,
+    "byType": {
+      "missingCanonical": 0,
+      "inconsistentCanonical": 0,
+      "missingLanguages": 0,
+      "inconsistentLanguages": 0,
+      "missingXDefault": 0
+    }
+  }
+}

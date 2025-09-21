@@ -32,8 +32,11 @@ jobs:
       - name: Run SEO preflight checks
         run: npm --prefix site run seo:preflight
 
-      - name: Run Lighthouse CI
+      - name: Run Lighthouse CI (Desktop)
         run: npm --prefix site run ci:perf
+
+      - name: Run Lighthouse CI (Mobile - Critical Routes)
+        run: npm --prefix site run ci:perf:mobile
 
       - name: Generate Lighthouse Summary
         if: always()
@@ -43,6 +46,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: lhci-report
-          path: "site/.lighthouseci/*"
+          name: lighthouse-reports
+          path: |
+            site/.lighthouseci/*
+            site/lhci_reports/*
           retention-days: 30

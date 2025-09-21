@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  BUNDLE_SIZE_THRESHOLD: 10 # Percentage threshold for bundle size regression
+  BUNDLE_SIZE_THRESHOLD: 5 # Percentage threshold for bundle size regression (tightened)
 
 jobs:
   quality-checks:
@@ -46,6 +46,9 @@ jobs:
       - name: Generate bundle analysis data
         run: npm --prefix site run analyze:generate
 
+      - name: Run SEO preflight checks post-build
+        run: npm --prefix site run seo:preflight
+
       - name: Security quality gates
         run: |
           echo "🔒 Running security quality gates..."
@@ -57,6 +60,16 @@ jobs:
           # Check environment variable consistency
           echo "🔧 Checking environment variable consistency..."
           node scripts/check-env-vars-consistency.js
+
+      - name: Upload CI reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ci-reports
+          path: |
+            site/reports/bundles/analysis-data.json
+            site/reports/bundles/summary.md
+          retention-days: 30
 
   # Bundle Size Regression Protection
   # 
@@ -155,3 +168,14 @@ jobs:
           echo "- Optimize images and assets"
           echo "- Check for duplicate dependencies"
           exit 1
+
+      - name: Upload bundle analysis reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bundle-analysis-reports
+          path: |
+            current-bundle.json
+            reports/bundles/analysis-data.json
+            reports/bundles/summary.md
+          retention-days: 30
