@@ -134,20 +134,32 @@ export async function middleware(req: NextRequest) {
   
   // 2. Suspicious Content Detection
   if (detectSuspiciousContent(req)) {
-    console.warn(`Suspicious request blocked: ${ip} ${path}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`Suspicious request blocked: ${ip} ${path}`);
+    } else {
+      console.warn('Suspicious request blocked');
+    }
     return new NextResponse('Bad Request', { status: 400 });
   }
   
   // 3. Request Validation
   const validation = validateRequest(req);
   if (!validation.valid) {
-    console.warn(`Invalid request blocked: ${ip} ${path} - ${validation.reason}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`Invalid request blocked: ${ip} ${path} - ${validation.reason}`);
+    } else {
+      console.warn('Invalid request blocked');
+    }
     return new NextResponse('Unauthorized', { status: 401 });
   }
   
   // 4. Rate Limiting
   if (await isRateLimitedEdge(ip, path)) {
-    console.warn(`Rate limit exceeded: ${ip} ${path}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`Rate limit exceeded: ${ip} ${path}`);
+    } else {
+      console.warn('Rate limit exceeded');
+    }
     return new NextResponse('Too Many Requests', { 
       status: 429,
       headers: {
@@ -213,7 +225,9 @@ export async function middleware(req: NextRequest) {
   }
   
   // Apply X-Robots-Tag for preview deployments
-  if (process.env.VERCEL_ENV === 'preview') {
+  const host = req.headers.get('host') || '';
+  const isProdHost = /(^|\.)prowebstudio\.nl$/i.test(host);
+  if (process.env.VERCEL_ENV === 'preview' && !isProdHost) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
   }
   

@@ -23,7 +23,9 @@ export default function PWAServiceWorker() {
         await initializeServiceWorker();
       } catch (error) {
         // Silent fail - PWA features are progressive enhancements
-        console.log('SW: Registration failed silently:', error);
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('SW: Registration failed silently:', error);
+        }
       }
     };
 

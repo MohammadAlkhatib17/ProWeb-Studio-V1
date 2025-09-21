@@ -29,22 +29,39 @@ class ServiceWorkerManager {
   /**
    * Check if service workers are supported and conditions are met for registration
    */
-  private canRegisterServiceWorker(): boolean {
-    // Only register in production environment
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('SW: Registration skipped - not in production');
-      return false;
-    }
-
-    // Check browser support
+  private async canRegisterServiceWorker(): Promise<boolean> {
+    // Check browser support first
     if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
-      console.log('SW: Registration skipped - no browser support');
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('SW: Registration skipped - no browser support');
+      }
       return false;
     }
 
-    // Ensure same-origin policy
-    if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-      console.log('SW: Registration skipped - not HTTPS or localhost');
+    // Handle development environment or localhost/127.0.0.1
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+    const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    
+    if (isDevelopment || isLocalhost) {
+      try {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        if (registrations.length > 0) {
+          await Promise.all(registrations.map(registration => registration.unregister()));
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('SW: Unregistered stale dev registrations');
+          }
+        }
+      } catch (error) {
+        console.warn('SW: Failed to unregister existing registrations:', error);
+      }
+      return false;
+    }
+
+    // Ensure same-origin policy for production
+    if (location.protocol !== 'https:') {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('SW: Registration skipped - not HTTPS');
+      }
       return false;
     }
 
@@ -59,7 +76,7 @@ class ServiceWorkerManager {
       return this.registration;
     }
 
-    if (!this.canRegisterServiceWorker()) {
+    if (!(await this.canRegisterServiceWorker())) {
       return null;
     }
 
@@ -70,32 +87,40 @@ class ServiceWorkerManager {
         ...options,
       };
 
-      console.log('SW: Attempting registration...');
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('SW: Attempting registration...');
+      }
       
       this.registration = await navigator.serviceWorker.register(this.SW_PATH, defaultOptions);
       this.isRegistered = true;
 
       // Handle service worker updates
       this.registration.addEventListener('updatefound', () => {
-        console.log('SW: Update found, installing new version');
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('SW: Update found, installing new version');
+        }
         const newWorker = this.registration?.installing;
         
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              console.log('SW: New version available, will activate on next visit');
+              if (process.env.NODE_ENV !== 'production') {
+                console.log('SW: New version available, will activate on next visit');
+              }
             }
           });
         }
       });
 
       // Log registration success
-      if (this.registration.installing) {
-        console.log('SW: Installing...');
-      } else if (this.registration.waiting) {
-        console.log('SW: Waiting to activate...');
-      } else if (this.registration.active) {
-        console.log('SW: Active and running');
+      if (process.env.NODE_ENV !== 'production') {
+        if (this.registration.installing) {
+          console.log('SW: Installing...');
+        } else if (this.registration.waiting) {
+          console.log('SW: Waiting to activate...');
+        } else if (this.registration.active) {
+          console.log('SW: Active and running');
+        }
       }
 
       return this.registration;
@@ -120,7 +145,9 @@ class ServiceWorkerManager {
       if (success) {
         this.isRegistered = false;
         this.registration = null;
-        console.log('SW: Successfully unregistered');
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('SW: Successfully unregistered');
+        }
       }
       return success;
     } catch (error) {

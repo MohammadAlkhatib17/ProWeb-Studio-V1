@@ -53,11 +53,15 @@ export function withPerformanceMonitoring<T extends Record<string, unknown>>(
               const renderTime = endTime - startTime;
               
               // Log performance metrics
-              console.log(`3D Component ${componentName} render time: ${renderTime}ms`);
+              if (process.env.NODE_ENV !== 'production') {
+                console.log(`3D Component ${componentName} render time: ${renderTime}ms`);
+              }
               
               // Send to analytics if needed
               if (renderTime > 100) {
-                console.warn(`Slow 3D component render: ${componentName} took ${renderTime}ms`);
+                if (process.env.NODE_ENV !== 'production') {
+                  console.warn(`Slow 3D component render: ${componentName} took ${renderTime}ms`);
+                }
               }
             }
           }}

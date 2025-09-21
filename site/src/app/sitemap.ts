@@ -16,8 +16,8 @@ interface SitemapEntry {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
-  const baseUrl = SITE_URL.replace(/\/$/, ''); // Remove trailing slash
+  const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+  const baseUrl = SITE_URL; // Already normalized
   const currentDate = new Date();
 
   // Define routes with their respective priorities and change frequencies

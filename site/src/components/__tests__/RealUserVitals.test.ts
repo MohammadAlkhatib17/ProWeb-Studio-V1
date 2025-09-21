@@ -2,12 +2,16 @@
 // This is a manual verification script to check if the implementation is working
 
 const testRealUserVitals = () => {
-  console.log('🔍 Testing RealUserVitals implementation...');
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('🔍 Testing RealUserVitals implementation...');
+  }
   
   // Test 1: Check if web-vitals package is installed
   try {
     // This would be imported in the actual component
-    console.log('✅ web-vitals package should be available');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('✅ web-vitals package should be available');
+    }
   } catch {
     console.error('❌ web-vitals package not found');
   }
@@ -19,10 +23,12 @@ const testRealUserVitals = () => {
     const connection = navigator.connection?.effectiveType || '4g';
     const jsHeap = performance?.memory?.jsHeapSizeLimit || 0;
     
-    console.log('✅ Global interfaces properly extended');
-    console.log(`  Device Memory: ${deviceMemory}GB`);
-    console.log(`  Connection: ${connection}`);
-    console.log(`  JS Heap Limit: ${Math.round(jsHeap / 1024 / 1024)}MB`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('✅ Global interfaces properly extended');
+      console.log(`  Device Memory: ${deviceMemory}GB`);
+      console.log(`  Connection: ${connection}`);
+      console.log(`  JS Heap Limit: ${Math.round(jsHeap / 1024 / 1024)}MB`);
+    }
   };
 
   // Test 3: Check rating computation
@@ -44,7 +50,9 @@ const testRealUserVitals = () => {
     }
     
     const passed = rating === expected;
-    console.log(`${passed ? '✅' : '❌'} ${metric} ${value} → ${rating} (expected: ${expected})`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`${passed ? '✅' : '❌'} ${metric} ${value} → ${rating} (expected: ${expected})`);
+    }
     return passed;
   };
 
@@ -66,7 +74,9 @@ const testRealUserVitals = () => {
     }
     
     const passed = bucket === expectedBucket;
-    console.log(`${passed ? '✅' : '❌'} ${metric} ${value} → ${bucket} (expected: ${expectedBucket})`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`${passed ? '✅' : '❌'} ${metric} ${value} → ${bucket} (expected: ${expectedBucket})`);
+    }
     return passed;
   };
 
@@ -83,7 +93,9 @@ const testRealUserVitals = () => {
     
     Math.random = originalRandom; // Restore
     
-    console.log(`✅ Sampling logic: 0.1 < 0.2 = ${shouldSample1}, 0.5 < 0.2 = ${shouldSample2}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`✅ Sampling logic: 0.1 < 0.2 = ${shouldSample1}, 0.5 < 0.2 = ${shouldSample2}`);
+    }
   };
 
   // Test 6: Check environment variable configuration

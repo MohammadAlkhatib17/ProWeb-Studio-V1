@@ -71,7 +71,9 @@ export function validateProductionEnv(): EnvValidationResult {
   }
 
   if (isValid && warnings.length === 0) {
-    console.log('✅ [ENV VALIDATION] All environment variables configured correctly');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('✅ [ENV VALIDATION] All environment variables configured correctly');
+    }
   }
 
   return { missing, warnings, isValid };

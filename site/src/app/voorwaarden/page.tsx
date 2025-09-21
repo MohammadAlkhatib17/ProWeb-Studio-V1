@@ -4,7 +4,7 @@ import { siteConfig } from '@/config/site.config';
 import SEOSchema from '@/components/SEOSchema';
 
 // Get canonical URL from environment with fallback
-const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;

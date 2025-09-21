@@ -1,10 +1,11 @@
 import Script from 'next/script';
 
 // Helper function to build absolute URLs safely
-const SITE_URL =
+const SITE_URL = (
   process.env.SITE_URL ??
   process.env.NEXT_PUBLIC_SITE_URL ??
-  'https://prowebstudio.nl';
+  'https://prowebstudio.nl'
+).replace(/\/+$/, '');
 
 interface Service {
   name: string;

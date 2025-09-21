@@ -31,10 +31,14 @@ async function waitForServer(port, timeout = TEST_TIMEOUT) {
   while (Date.now() - start < timeout) {
     try {
       await testHeaders('localhost', port, '/');
-      console.log(`✅ Server is ready on port ${port}`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`✅ Server is ready on port ${port}`);
+      }
       return true;
     } catch (error) {
-      console.log(`⏳ Waiting for server... (${Math.round((Date.now() - start) / 1000)}s)`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`⏳ Waiting for server... (${Math.round((Date.now() - start) / 1000)}s)`);
+      }
       await sleep(2000);
     }
   }
@@ -43,8 +47,10 @@ async function waitForServer(port, timeout = TEST_TIMEOUT) {
 }
 
 async function startDevServer() {
-  console.log('🚀 Starting development server...');
-  console.log(`📁 Working directory: ${SITE_DIR}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('🚀 Starting development server...');
+    console.log(`📁 Working directory: ${SITE_DIR}`);
+  }
   
   return new Promise((resolve, reject) => {
     // Change to site directory and start dev server
@@ -58,7 +64,9 @@ async function startDevServer() {
     
     devServer.stdout.on('data', (data) => {
       const output = data.toString();
-      console.log(`[SERVER] ${output.trim()}`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`[SERVER] ${output.trim()}`);
+      }
       
       // Check for various Next.js ready messages
       if ((output.includes('Ready') || 
@@ -96,7 +104,9 @@ async function startDevServer() {
 
 function stopDevServer() {
   if (devServer) {
-    console.log('🛑 Stopping development server...');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('🛑 Stopping development server...');
+    }
     devServer.kill('SIGTERM');
     
     // Force kill if it doesn't stop gracefully
@@ -214,16 +224,21 @@ async function runComprehensiveTests() {
   const results = [];
 
   // Test robots.txt endpoint
-  console.log('\n🤖 Testing robots.txt endpoint...');
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('\n🤖 Testing robots.txt endpoint...');
+  }
   try {
     const robotsResult = await testRobotsEndpoint('localhost', TEST_PORT);
-    console.log(`✅ robots.txt Status: ${robotsResult.statusCode}`);
-    console.log(`📄 robots.txt Content:\n${robotsResult.content}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`✅ robots.txt Status: ${robotsResult.statusCode}`);
+      console.log(`📄 robots.txt Content:\n${robotsResult.content}`);
+      
+      // Check if it's properly configured for dev environment
+      const isDevConfig = robotsResult.content.includes('Allow: /');
+      console.log(`🔍 Development config detected: ${isDevConfig ? 'Yes' : 'No'}`);
+    }
     
-    // Check if it's properly configured for dev environment
     const isDevConfig = robotsResult.content.includes('Allow: /');
-    console.log(`🔍 Development config detected: ${isDevConfig ? 'Yes' : 'No'}`);
-    
     results.push({
       route: { path: '/robots.txt', description: 'Robots.txt endpoint' },
       status: robotsResult.statusCode,
@@ -232,7 +247,7 @@ async function runComprehensiveTests() {
       passed: robotsResult.statusCode === 200
     });
   } catch (error) {
-    console.log(`❌ robots.txt ERROR: ${error.message}`);
+    console.error(`❌ robots.txt ERROR: ${error.message}`);
     results.push({
       route: { path: '/robots.txt', description: 'Robots.txt endpoint' },
       status: 'ERROR',
@@ -242,26 +257,34 @@ async function runComprehensiveTests() {
   }
 
   // Test X-Robots-Tag headers
-  console.log('\n🏷️  Testing X-Robots-Tag headers...');
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('\n🏷️  Testing X-Robots-Tag headers...');
+  }
   let criticalTestsPassed = 0;
   let totalCriticalTests = testRoutes.filter(r => r.critical).length;
 
   for (const route of testRoutes) {
     try {
-      console.log(`\n🔍 Testing: ${route.path}`);
-      console.log(`📝 Description: ${route.description}`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`\n🔍 Testing: ${route.path}`);
+        console.log(`📝 Description: ${route.description}`);
+      }
       
       const result = await testHeaders('localhost', TEST_PORT, route.path);
       
-      console.log(`📊 Status: ${result.statusCode}`);
-      console.log(`🤖 X-Robots-Tag: ${result.robotsTag}`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`📊 Status: ${result.statusCode}`);
+        console.log(`🤖 X-Robots-Tag: ${result.robotsTag}`);
+      }
       
       const passed = result.robotsTag === route.expected;
       if (passed) {
-        console.log(`✅ PASS: Header matches expected value`);
+        if (process.env.NODE_ENV !== 'production') {
+          console.log(`✅ PASS: Header matches expected value`);
+        }
         if (route.critical) criticalTestsPassed++;
       } else {
-        console.log(`❌ FAIL: Expected '${route.expected}', got '${result.robotsTag}'`);
+        console.error(`❌ FAIL: Expected '${route.expected}', got '${result.robotsTag}'`);
       }
 
       // Store result for JSON output
@@ -275,7 +298,7 @@ async function runComprehensiveTests() {
       });
 
     } catch (error) {
-      console.log(`❌ ERROR: ${error.message}`);
+      console.error(`❌ ERROR: ${error.message}`);
       
       // Store error result
       results.push({
@@ -308,7 +331,9 @@ async function runComprehensiveTests() {
   };
   
   fs.writeFileSync(outputFile, JSON.stringify(outputData, null, 2));
-  console.log(`\n📊 Detailed results saved to ${outputFile}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`\n📊 Detailed results saved to ${outputFile}`);
+  }
 
   // Final summary
   console.log('\n' + '=' .repeat(60));
@@ -362,13 +387,17 @@ async function main() {
 
 // Handle process termination
 process.on('SIGINT', () => {
-  console.log('\n🛑 Test interrupted');
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('\n🛑 Test interrupted');
+  }
   stopDevServer();
   process.exit(1);
 });
 
 process.on('SIGTERM', () => {
-  console.log('\n🛑 Test terminated');
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('\n🛑 Test terminated');
+  }
   stopDevServer();
   process.exit(1);
 });

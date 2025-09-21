@@ -22,7 +22,9 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
-          console.log('Service Worker registered:', registration);
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('Service Worker registered:', registration);
+          }
           
           // Handle updates
           registration.addEventListener('updatefound', () => {
@@ -79,10 +81,12 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
     deferredPrompt.prompt();
     const choiceResult = await deferredPrompt.userChoice;
     
-    if (choiceResult.outcome === 'accepted') {
-      console.log('PWA installation accepted');
-    } else {
-      console.log('PWA installation declined');
+    if (process.env.NODE_ENV !== 'production') {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('PWA installation accepted');
+      } else {
+        console.log('PWA installation declined');
+      }
     }
     
     setDeferredPrompt(null);

@@ -31,7 +31,9 @@ function FloatingShape({ position, Component, color, scale = 1 }: FloatingShapeP
           position[1] + Math.sin(state.clock.elapsedTime) * 0.2;
       }
     } catch (error) {
-      console.warn('FloatingShape animation error:', error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('FloatingShape animation error:', error);
+      }
     }
   });
 

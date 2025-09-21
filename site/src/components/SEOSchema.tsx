@@ -2,10 +2,11 @@ import Script from 'next/script';
 import { siteConfig } from '@/config/site.config';
 
 // Helper function to build absolute URLs safely
-const SITE_URL =
+const SITE_URL = (
   process.env.SITE_URL ??
   process.env.NEXT_PUBLIC_SITE_URL ??
-  'https://prowebstudio.nl'; // fallback only for build-time
+  'https://prowebstudio.nl' // fallback only for build-time
+).replace(/\/+$/, '');
 
 function abs(path: string): string {
   try {

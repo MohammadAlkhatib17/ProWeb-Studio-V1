@@ -97,7 +97,9 @@ function analyzeMetadataFile(filePath) {
   };
 }
 
-console.log('🔍 Comprehensive metadata verification...\n');
+if (process.env.NODE_ENV !== 'production') {
+  console.log('🔍 Comprehensive metadata verification...\n');
+}
 
 const files = findMetadataFiles(SITE_ROOT);
 const allAnalysis = [
@@ -123,16 +125,22 @@ Object.keys(routeGroups).forEach(route => {
   const layoutFile = group.find(f => f.fileType === 'layout');
   const pageFile = group.find(f => f.fileType === 'page');
   
-  console.log(`📄 Route: ${route}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`📄 Route: ${route}`);
+  }
   
   if (layoutFile && pageFile && layoutFile.hasMetadata && pageFile.hasMetadata) {
     console.log('   ⚠️  CONFLICT: Both layout.tsx and page.tsx have metadata exports');
     console.log('   💡 Recommendation: Keep metadata in page.tsx, remove from layout.tsx');
     totalIssues++;
   } else if (layoutFile && layoutFile.hasMetadata) {
-    console.log('   ✅ Metadata in layout.tsx only');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('   ✅ Metadata in layout.tsx only');
+    }
   } else if (pageFile && pageFile.hasMetadata) {
-    console.log('   ✅ Metadata in page.tsx only');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('   ✅ Metadata in page.tsx only');
+    }
   } else {
     console.log('   ❌ No metadata found');
     totalIssues++;
@@ -148,7 +156,9 @@ Object.keys(routeGroups).forEach(route => {
     }
   }
   
-  console.log();
+  if (process.env.NODE_ENV !== 'production') {
+    console.log();
+  }
 });
 
 console.log('📋 HARD-CODED URL ANALYSIS\n');
@@ -156,31 +166,41 @@ console.log('📋 HARD-CODED URL ANALYSIS\n');
 const hardCodedIssues = allAnalysis.filter(a => a.issues.length > 0);
 
 if (hardCodedIssues.length === 0) {
-  console.log('✅ No hard-coded URLs found');
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('✅ No hard-coded URLs found');
+  }
 } else {
   hardCodedIssues.forEach(file => {
     console.log(`📄 ${file.filePath}`);
     file.issues.forEach(issue => {
       if (issue.type === 'hard-coded-url') {
         console.log(`   ❌ Hard-coded URL: ${issue.value}`);
-        console.log(`   📝 Context: ...${issue.context}...`);
+        if (process.env.NODE_ENV !== 'production') {
+          console.log(`   📝 Context: ...${issue.context}...`);
+        }
         totalIssues++;
       }
     });
-    console.log();
+    if (process.env.NODE_ENV !== 'production') {
+      console.log();
+    }
   });
 }
 
 console.log('📋 HREFLANG CONFIGURATION ANALYSIS\n');
 
 allAnalysis.filter(a => a.hasMetadata).forEach(file => {
-  console.log(`📄 ${file.routePath} (${file.fileType})`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`📄 ${file.routePath} (${file.fileType})`);
+  }
   
   if (Object.keys(file.languages).length === 0) {
     console.log('   ❌ No hreflang configuration');
     totalIssues++;
   } else {
-    console.log(`   🌐 Languages: ${JSON.stringify(file.languages)}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`   🌐 Languages: ${JSON.stringify(file.languages)}`);
+    }
     
     // Check for required languages
     if (!file.languages['nl-NL']) {
@@ -197,7 +217,9 @@ allAnalysis.filter(a => a.hasMetadata).forEach(file => {
     }
   }
   
-  console.log();
+  if (process.env.NODE_ENV !== 'production') {
+    console.log();
+  }
 });
 
 console.log('\n📊 FINAL SUMMARY\n');

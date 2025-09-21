@@ -198,7 +198,6 @@ const nextConfig = {
           // Cross-domain policies
           { key: 'X-Permitted-Cross-Domain-Policies', value: 'none' },
           // Cross-Origin policies
-          { key: 'Cross-Origin-Embedder-Policy', value: 'unsafe-none' },
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
           // Custom security headers

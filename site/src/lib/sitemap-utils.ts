@@ -40,7 +40,9 @@ export function getRouteMtime(route: string): Date | null {
 
     const filePath = ROUTE_TO_FILE_MAP[route];
     if (!filePath) {
-      console.warn(`No file mapping found for route: ${route}`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(`No file mapping found for route: ${route}`);
+      }
       return null;
     }
 
@@ -50,7 +52,9 @@ export function getRouteMtime(route: string): Date | null {
     
     return stats.mtime;
   } catch (error) {
-    console.warn(`Unable to read mtime for route ${route}:`, error);
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`Unable to read mtime for route ${route}:`, error);
+    }
     return null;
   }
 }
@@ -90,7 +94,9 @@ export function getLatestMtime(filePaths: string[]): Date | null {
         latestMtime = stats.mtime;
       }
     } catch (error) {
-      console.warn(`Unable to read mtime for file ${filePath}:`, error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(`Unable to read mtime for file ${filePath}:`, error);
+      }
     }
   }
 

@@ -20,7 +20,7 @@ import PWAServiceWorker from '@/components/PWAServiceWorker';
 initProductionEnvValidation();
 
 // Get canonical URL from environment with fallback
-const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 const inter = Inter({ subsets: ['latin', 'latin-ext'], display: 'swap' });
 
@@ -141,14 +141,7 @@ export const metadata: Metadata = {
         },
       },
   verification: {
-    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && {
-      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-    }),
-    other: {
-      ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION && {
-        'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION,
-      }),
-    },
+    google: 'PASTE_YOUR_GOOGLE_SITE_VERIFICATION_TOKEN'
   },
   category: 'technology',
   classification: 'Business',
@@ -221,8 +214,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://cal.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://cal.com" />
         {/* Preload critical LCP images */}
-        <link rel="preload" as="image" href="/assets/hero/nebula_helix.avif" type="image/avif" />
-        <link rel="preload" as="image" href="/assets/hero/nebula_helix.webp" type="image/webp" />
+        <link
+          rel="preload"
+          as="image"
+          href="/assets/hero/nebula_helix.avif"
+          imageSrcSet="/assets/hero/nebula_helix.avif 1920w, /assets/hero/nebula_helix.webp 1920w"
+          imageSizes="100vw"
+        />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />

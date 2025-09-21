@@ -16,7 +16,6 @@ const STATIC_ASSETS = [
 
 // Three.js and heavy assets to cache strategically
 const THREE_ASSETS = [
-  '/_next/static/chunks/three.js',
   // Three.js chunks will be dynamically identified and cached
 ];
 
@@ -101,6 +100,13 @@ async function handleRequest(request) {
     // Strategy 2: Cache First for static assets (images, fonts, icons)
     if (isStaticAsset(pathname)) {
       return await cacheFirst(request, STATIC_CACHE);
+    }
+
+    // Strategy 2.5: Dynamic caching for Three.js script chunks
+    if (request.destination === 'script' && 
+        pathname.includes('/_next/static/chunks') && 
+        pathname.includes('three')) {
+      return await staleWhileRevalidate(request, THREE_CACHE);
     }
 
     // Strategy 3: Stale While Revalidate for Three.js chunks

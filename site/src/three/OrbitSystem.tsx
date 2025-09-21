@@ -23,7 +23,9 @@ function Planet({ radius, speed, distance, color }: PlanetProps) {
         groupRef.current.rotation.y = state.clock.elapsedTime * speed;
       }
     } catch (error) {
-      console.warn('Planet animation error:', error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('Planet animation error:', error);
+      }
     }
   });
 

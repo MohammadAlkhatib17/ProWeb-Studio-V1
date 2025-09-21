@@ -9,7 +9,7 @@ import SEOSchema from '@/components/SEOSchema';
 import DynamicOrbitSystem from '@/components/dynamic/DynamicOrbitSystem';
 
 // Get canonical URL from environment with fallback
-const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const metadata: Metadata = {
   title: 'Werkwijze – van intake tot launch, transparant en voorspelbaar',

@@ -8,7 +8,9 @@ const path = require('path');
 const schemaPath = path.join(__dirname, 'site/src/components/SEOSchema.tsx');
 const schemaContent = fs.readFileSync(schemaPath, 'utf8');
 
-console.log('✅ SEOSchema.tsx exists and can be read');
+if (process.env.NODE_ENV !== 'production') {
+  console.log('✅ SEOSchema.tsx exists and can be read');
+}
 
 // Check for key implementations
 const checks = [
@@ -21,18 +23,26 @@ const checks = [
   { name: 'Schema graph includes all elements', pattern: /logoImageSchema.*primaryImageSchema/ },
 ];
 
-console.log('\n🔍 Checking schema implementations:');
+if (process.env.NODE_ENV !== 'production') {
+  console.log('\n🔍 Checking schema implementations:');
+}
 checks.forEach(check => {
   const found = check.pattern.test(schemaContent);
-  console.log(`${found ? '✅' : '❌'} ${check.name}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`${found ? '✅' : '❌'} ${check.name}`);
+  }
 });
 
 // Check for specific page types
 const pageTypes = ['homepage', 'services', 'werkwijze'];
-console.log('\n📄 Checking page type implementations:');
+if (process.env.NODE_ENV !== 'production') {
+  console.log('\n📄 Checking page type implementations:');
+}
 pageTypes.forEach(pageType => {
   const found = schemaContent.includes(`'${pageType}':`);
-  console.log(`${found ? '✅' : '❌'} ${pageType} page type`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`${found ? '✅' : '❌'} ${pageType} page type`);
+  }
 });
 
 console.log('\n✨ Schema validation complete!');

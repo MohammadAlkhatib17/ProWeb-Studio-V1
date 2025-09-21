@@ -26,7 +26,11 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.warn('3D Scene Error:', error, errorInfo);
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('3D Scene Error:', error, errorInfo);
+    } else {
+      console.warn('3D Scene Error:', error.message);
+    }
   }
 
   render() {

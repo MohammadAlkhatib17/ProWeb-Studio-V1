@@ -82,7 +82,9 @@ console.log('🔍 Auditing page metadata...\n');
 const pageFiles = findPageFiles(SITE_ROOT);
 const analysis = pageFiles.map(extractMetadata);
 
-console.log(`Found ${pageFiles.length} pages:\n`);
+if (process.env.NODE_ENV !== 'production') {
+  console.log(`Found ${pageFiles.length} pages:\n`);
+}
 
 // Issues tracking
 const issues = {
@@ -94,52 +96,76 @@ const issues = {
 };
 
 analysis.forEach(page => {
-  console.log(`📄 ${page.routePath}`);
-  console.log(`   File: ${path.relative(process.cwd(), page.filePath)}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`📄 ${page.routePath}`);
+    console.log(`   File: ${path.relative(process.cwd(), page.filePath)}`);
+  }
   
   if (!page.hasMetadata) {
-    console.log('   ❌ No metadata export found');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('   ❌ No metadata export found');
+    }
     return;
   }
   
   // Check canonical
   if (!page.canonical) {
-    console.log('   ❌ Missing canonical URL');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('   ❌ Missing canonical URL');
+    }
     issues.missingCanonical.push(page);
   } else if (page.canonical !== page.routePath) {
-    console.log(`   ⚠️  Canonical mismatch: expected "${page.routePath}", got "${page.canonical}"`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`   ⚠️  Canonical mismatch: expected "${page.routePath}", got "${page.canonical}"`);
+    }
     issues.inconsistentCanonical.push({...page, expected: page.routePath});
   } else {
-    console.log(`   ✅ Canonical: ${page.canonical}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`   ✅ Canonical: ${page.canonical}`);
+    }
   }
   
   // Check languages
   if (!page.languages || Object.keys(page.languages).length === 0) {
-    console.log('   ❌ Missing languages configuration');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('   ❌ Missing languages configuration');
+    }
     issues.missingLanguages.push(page);
   } else {
-    console.log(`   🌐 Languages: ${JSON.stringify(page.languages)}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`   🌐 Languages: ${JSON.stringify(page.languages)}`);
+    }
     
     // Check for nl-NL
     if (!page.languages['nl-NL']) {
-      console.log('   ⚠️  Missing nl-NL language');
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('   ⚠️  Missing nl-NL language');
+      }
       issues.inconsistentLanguages.push({...page, issue: 'missing nl-NL'});
     } else if (page.languages['nl-NL'] !== page.routePath) {
-      console.log(`   ⚠️  nl-NL mismatch: expected "${page.routePath}", got "${page.languages['nl-NL']}"`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`   ⚠️  nl-NL mismatch: expected "${page.routePath}", got "${page.languages['nl-NL']}"`);
+      }
       issues.inconsistentLanguages.push({...page, issue: 'nl-NL mismatch', expected: page.routePath});
     }
     
     // Check x-default
     if (!page.languages['x-default']) {
-      console.log('   ⚠️  Missing x-default');
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('   ⚠️  Missing x-default');
+      }
       issues.missingXDefault.push(page);
     } else if (page.languages['x-default'] !== page.routePath) {
-      console.log(`   ⚠️  x-default should point to Dutch path "${page.routePath}", got "${page.languages['x-default']}"`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`   ⚠️  x-default should point to Dutch path "${page.routePath}", got "${page.languages['x-default']}"`);
+      }
       issues.missingXDefault.push({...page, issue: 'x-default mismatch', expected: page.routePath});
     }
   }
   
-  console.log();
+  if (process.env.NODE_ENV !== 'production') {
+    console.log();
+  }
 });
 
 // Summary
@@ -155,7 +181,9 @@ if (totalIssues === 0) {
   if (issues.missingCanonical.length > 0) {
     console.log(`📍 Missing canonical URLs (${issues.missingCanonical.length}):`);
     issues.missingCanonical.forEach(p => console.log(`   - ${p.routePath}`));
-    console.log();
+    if (process.env.NODE_ENV !== 'production') {
+      console.log();
+    }
   }
   
   if (issues.inconsistentCanonical.length > 0) {
@@ -163,13 +191,17 @@ if (totalIssues === 0) {
     issues.inconsistentCanonical.forEach(p => 
       console.log(`   - ${p.routePath}: "${p.canonical}" → should be "${p.expected}"`)
     );
-    console.log();
+    if (process.env.NODE_ENV !== 'production') {
+      console.log();
+    }
   }
   
   if (issues.missingLanguages.length > 0) {
     console.log(`🌐 Missing languages configuration (${issues.missingLanguages.length}):`);
     issues.missingLanguages.forEach(p => console.log(`   - ${p.routePath}`));
-    console.log();
+    if (process.env.NODE_ENV !== 'production') {
+      console.log();
+    }
   }
   
   if (issues.inconsistentLanguages.length > 0) {
@@ -177,7 +209,9 @@ if (totalIssues === 0) {
     issues.inconsistentLanguages.forEach(p => 
       console.log(`   - ${p.routePath}: ${p.issue}`)
     );
-    console.log();
+    if (process.env.NODE_ENV !== 'production') {
+      console.log();
+    }
   }
   
   if (issues.missingXDefault.length > 0) {
@@ -185,7 +219,9 @@ if (totalIssues === 0) {
     issues.missingXDefault.forEach(p => 
       console.log(`   - ${p.routePath}: ${p.issue || 'missing x-default'}`)
     );
-    console.log();
+    if (process.env.NODE_ENV !== 'production') {
+      console.log();
+    }
   }
 }
 
@@ -208,4 +244,6 @@ fs.writeFileSync(reportPath, JSON.stringify({
   }
 }, null, 2));
 
-console.log(`📄 Detailed report saved to: ${reportPath}`);
+if (process.env.NODE_ENV !== 'production') {
+  console.log(`📄 Detailed report saved to: ${reportPath}`);
+}

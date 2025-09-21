@@ -48,7 +48,9 @@ function generateLighthouseSummary() {
             serverResponseTime: audits['server-response-time']?.numericValue || 0
           };
         } catch (err) {
-          console.warn(`Warning: Could not read detailed report for ${url}:`, err.message);
+          if (process.env.NODE_ENV !== 'production') {
+            console.warn(`Warning: Could not read detailed report for ${url}:`, err.message);
+          }
         }
       }
 
@@ -88,7 +90,9 @@ function generateLighthouseSummary() {
       fs.appendFileSync(summaryFile, summary);
       console.log('✅ Lighthouse summary added to job summary');
     } else {
-      console.log('Summary would be:\n', summary);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('Summary would be:\n', summary);
+      }
     }
 
     // Also output summary to console for debugging

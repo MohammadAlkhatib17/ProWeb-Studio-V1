@@ -44,7 +44,9 @@ export const isGA4Enabled = (): boolean => {
  */
 export const initGA4 = (): void => {
   if (!isGA4Enabled()) {
-    console.log('GA4: Measurement ID not provided or analytics consent not granted, analytics disabled');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('GA4: Measurement ID not provided or analytics consent not granted, analytics disabled');
+    }
     return;
   }
 
@@ -66,7 +68,9 @@ export const initGA4 = (): void => {
     page_location: window.location.href,
   });
 
-  console.log('GA4: Initialized with measurement ID:', GA_MEASUREMENT_ID);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('GA4: Initialized with measurement ID:', GA_MEASUREMENT_ID);
+  }
 };
 
 /**
@@ -198,7 +202,9 @@ export const safeGA4 = (fn: () => void): void => {
       fn();
     }
   } catch (error) {
-    console.warn('GA4: Error executing analytics function:', error);
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('GA4: Error executing analytics function:', error);
+    }
   }
 };
 
