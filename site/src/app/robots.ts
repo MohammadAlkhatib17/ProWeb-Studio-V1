@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       ? [{ userAgent: '*', disallow: ['/'] }]
       : [{ userAgent: '*', allow: ['/'] }],
     sitemap: [`${base}/sitemap.xml`],
-    host: base,
+    host: 'prowebstudio.nl',
   };
 }

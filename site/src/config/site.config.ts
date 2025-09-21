@@ -3,7 +3,7 @@ export const siteConfig = {
   tagline: 'Digitale innovatie met kosmische impact',
   description:
     'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D‑websites die scoren in Google en converteren.',
-  url: (process.env.SITE_URL || 'https://prowebstudio.nl').replace(/\/+$/, ''),
+  url: (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, ''),
   email: process.env.CONTACT_INBOX || 'contact@prowebstudio.nl',
   phone: '+31686412430',
   social: {

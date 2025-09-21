@@ -77,7 +77,7 @@ function validateRequest(req: NextRequest): { valid: boolean; reason?: string } 
     // Validate origin for API requests
     if (req.nextUrl.pathname.startsWith('/api/')) {
       const allowedOrigins = [
-        process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+        (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/+$/, ''),
         'https://prowebstudio.nl',
         'https://www.prowebstudio.nl'
       ];
