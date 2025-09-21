@@ -67,6 +67,7 @@ interface SEOSchemaProps {
     url: string;
   }>;
   includeFAQ?: boolean;
+  nonce?: string;
 }
 
 export default function SEOSchema({
@@ -75,6 +76,7 @@ export default function SEOSchema({
   pageDescription,
   breadcrumbs = [],
   includeFAQ = false,
+  nonce,
 }: SEOSchemaProps) {
   // Use explicit props with defaults
   const currentPageType = pageType;
@@ -1119,6 +1121,7 @@ export default function SEOSchema({
         key="website-schema"
         id="website-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(websiteSchema, null, 2),
         }}
@@ -1131,6 +1134,7 @@ export default function SEOSchema({
         key="organization-schema"
         id="organization-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(organizationSchema, null, 2),
         }}
@@ -1143,6 +1147,7 @@ export default function SEOSchema({
         key="localbusiness-schema"
         id="localbusiness-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(localBusinessSchema, null, 2),
         }}
@@ -1155,6 +1160,7 @@ export default function SEOSchema({
         key="webpage-schema"
         id="webpage-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(webPageSchema, null, 2),
         }}
@@ -1167,6 +1173,7 @@ export default function SEOSchema({
         key="logo-schema"
         id="logo-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(logoImageSchema, null, 2),
         }}
@@ -1179,6 +1186,7 @@ export default function SEOSchema({
         key="website-service-schema"
         id="website-service-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(websiteService, null, 2),
         }}
@@ -1191,6 +1199,7 @@ export default function SEOSchema({
         key="webshop-service-schema"
         id="webshop-service-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(webshopService, null, 2),
         }}
@@ -1203,6 +1212,7 @@ export default function SEOSchema({
         key="seo-service-schema"
         id="seo-service-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(seoService, null, 2),
         }}
@@ -1216,6 +1226,7 @@ export default function SEOSchema({
           key="primary-image-schema"
           id="primary-image-schema"
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(primaryImageSchema, null, 2),
           }}
@@ -1230,6 +1241,7 @@ export default function SEOSchema({
           key="breadcrumb-schema"
           id="breadcrumb-schema"
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(breadcrumbSchema, null, 2),
           }}
@@ -1244,6 +1256,7 @@ export default function SEOSchema({
           key="faq-schema"
           id="faq-schema"
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(faqSchema, null, 2),
           }}
@@ -1258,6 +1271,7 @@ export default function SEOSchema({
           key="howto-schema"
           id="howto-schema"
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(howToSchema, null, 2),
           }}

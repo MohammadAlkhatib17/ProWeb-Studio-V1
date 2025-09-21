@@ -182,26 +182,15 @@ const nextConfig = {
             key: 'Permissions-Policy', 
             value: [
               'accelerometer=()',
-              'autoplay=()',
-              'browsing-topics=()',
               'camera=()',
-              'cross-origin-isolated=()',
-              'display-capture=()',
-              'encrypted-media=()',
-              'fullscreen=(self)',
+              'microphone=()',
               'geolocation=()',
               'gyroscope=()',
-              'keyboard-map=()',
               'magnetometer=()',
-              'microphone=()',
-              'midi=()',
               'payment=()',
-              'picture-in-picture=()',
-              'publickey-credentials-get=()',
-              'screen-wake-lock=()',
-              'sync-xhr=()',
               'usb=()',
-              'xr-spatial-tracking=()'
+              'fullscreen=(self)',
+              'browsing-topics=()'
             ].join(', ')
           },
           // DNS prefetch control

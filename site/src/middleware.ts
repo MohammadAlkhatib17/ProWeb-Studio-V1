@@ -164,8 +164,12 @@ export async function middleware(req: NextRequest) {
     ? globalThis.crypto.randomUUID()
     : Math.random().toString(36).slice(2);
   
-  // 6. Apply Security Headers
-  const response = NextResponse.next();
+  // 6. Set nonce on request headers for components to access
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('X-Nonce', nonce);
+  
+  // 7. Apply Security Headers
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
   const securityHeaders = createSecurityHeaders(nonce);
   
   Object.entries(securityHeaders).forEach(([key, value]) => {
@@ -194,7 +198,6 @@ export async function middleware(req: NextRequest) {
     
     response.headers.set('Content-Security-Policy', cspValue);
     response.headers.set('Expect-CT', 'max-age=86400, enforce');
-    response.headers.set('X-XSS-Protection', '1; mode=block');
     response.headers.set('X-Content-Type-Options', 'nosniff');
   }
   
@@ -207,6 +210,11 @@ export async function middleware(req: NextRequest) {
   if (path === '/not-found' || path === '/error' || path.includes('/_error') || 
       (req.nextUrl.searchParams.has('error') && req.nextUrl.searchParams.get('error'))) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow, nocache, nosnippet, noarchive, noimageindex');
+  }
+  
+  // Apply X-Robots-Tag for preview deployments
+  if (process.env.VERCEL_ENV === 'preview') {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
   }
   
   // Note: API headers (X-API-Version, Cache-Control, Pragma, Expires) are now

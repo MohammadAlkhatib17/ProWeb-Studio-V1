@@ -60,9 +60,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       path: '/overzicht',
-      priority: 0.7,
-      changeFreq: 'weekly', // Core page: weekly
-      fallbackDate: new Date('2025-09-01'),
+      priority: 0.4,
+      changeFreq: 'yearly',
+      fallbackDate: new Date(),
     },
     {
       path: '/privacy',

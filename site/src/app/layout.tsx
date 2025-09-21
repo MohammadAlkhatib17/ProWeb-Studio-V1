@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Script from 'next/script';
+import { headers } from 'next/headers';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { siteConfig } from '@/config/site.config';
@@ -9,7 +10,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CursorTrail from '@/components/CursorTrail';
 import SEOSchema from '@/components/SEOSchema';
-import { RealUserVitals } from '@/components/RealUserVitals';
 import { initProductionEnvValidation } from '@/lib/env.server';
 import BackgroundLayer from '@/components/layout/BackgroundLayer';
 import HeroBackground from '@/components/HeroBackground';
@@ -210,6 +210,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const nonce = headers().get('X-Nonce') || undefined;
+  // IMPORTANT: Any <Script> components added in the future must receive nonce={nonce} for CSP compliance
+  
   return (
     <html lang="nl-NL">
       <head>
@@ -247,8 +250,7 @@ export default function RootLayout({
         <Footer />
         <CursorTrail />
 
-        <SEOSchema pageType="generic" />
-        <RealUserVitals />
+        <SEOSchema nonce={nonce} pageType="generic" />
         <PWAServiceWorker />
 
         <Script
@@ -256,6 +258,7 @@ export default function RootLayout({
           data-domain={siteConfig.analytics.plausibleDomain}
           src="https://plausible.io/js/script.js"
           strategy="afterInteractive"
+          nonce={nonce}
         />
         <Analytics />
         <SpeedInsights />
