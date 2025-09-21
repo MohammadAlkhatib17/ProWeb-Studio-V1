@@ -30,45 +30,51 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }> = [
     {
       path: '/',
-      priority: 1.0,
-      changeFreq: 'weekly',
-      fallbackDate: currentDate, // Homepage changes frequently
+      priority: 1.0, // Home: highest priority
+      changeFreq: 'weekly', // Core page: weekly
+      fallbackDate: currentDate,
     },
     {
       path: '/diensten',
       priority: 0.9,
-      changeFreq: 'monthly',
-      fallbackDate: new Date('2025-09-01'), // Services page fallback
+      changeFreq: 'weekly', // Core page: weekly
+      fallbackDate: new Date('2025-09-01'),
     },
     {
       path: '/werkwijze',
       priority: 0.8,
-      changeFreq: 'monthly',
-      fallbackDate: new Date('2025-08-15'), // Work process page fallback
+      changeFreq: 'weekly', // Core page: weekly
+      fallbackDate: new Date('2025-08-15'),
     },
     {
       path: '/contact',
       priority: 0.9,
-      changeFreq: 'monthly',
-      fallbackDate: new Date('2025-08-01'), // Contact page fallback
+      changeFreq: 'weekly', // Core page: weekly
+      fallbackDate: new Date('2025-08-01'),
     },
     {
       path: '/over-ons',
       priority: 0.8,
-      changeFreq: 'monthly',
-      fallbackDate: new Date('2025-09-01'), // About us page fallback
+      changeFreq: 'weekly', // Core page: weekly
+      fallbackDate: new Date('2025-09-01'),
+    },
+    {
+      path: '/overzicht',
+      priority: 0.7,
+      changeFreq: 'weekly', // Core page: weekly
+      fallbackDate: new Date('2025-09-01'),
     },
     {
       path: '/privacy',
       priority: 0.3,
-      changeFreq: 'yearly',
-      fallbackDate: new Date('2025-05-25'), // GDPR compliance date fallback
+      changeFreq: 'monthly', // Legal page: monthly
+      fallbackDate: new Date('2025-05-25'),
     },
     {
       path: '/voorwaarden',
       priority: 0.3,
-      changeFreq: 'yearly',
-      fallbackDate: new Date('2025-05-25'), // Terms and conditions fallback
+      changeFreq: 'monthly', // Legal page: monthly
+      fallbackDate: new Date('2025-05-25'),
     },
   ];
 

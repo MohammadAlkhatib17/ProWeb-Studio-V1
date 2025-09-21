@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-static';
+export const revalidate = 60 * 60 * 24;
+
 // Get canonical URL from environment with fallback
 const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
 

@@ -16,19 +16,35 @@ declare global {
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 /**
- * Check if GA4 is enabled (measurement ID is provided)
+ * Check if consent has been granted for analytics
+ */
+export const hasAnalyticsConsent = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  
+  // Check for consent flag - only proceed if explicitly granted
+  return '__CONSENT_ANALYTICS__' in window && 
+         (window as Record<string, unknown>).__CONSENT_ANALYTICS__ === true;
+};
+
+/**
+ * Check if GA4 is enabled (measurement ID is provided AND consent granted)
  */
 export const isGA4Enabled = (): boolean => {
-  return Boolean(GA_MEASUREMENT_ID && typeof window !== 'undefined');
+  return Boolean(
+    GA_MEASUREMENT_ID && 
+    typeof window !== 'undefined' && 
+    hasAnalyticsConsent()
+  );
 };
 
 /**
  * Initialize Google Analytics 4
  * Call this in your app's root component or _app.tsx
+ * Only loads if measurement ID is provided AND consent is granted
  */
 export const initGA4 = (): void => {
   if (!isGA4Enabled()) {
-    console.log('GA4: Measurement ID not provided, analytics disabled');
+    console.log('GA4: Measurement ID not provided or analytics consent not granted, analytics disabled');
     return;
   }
 
@@ -217,6 +233,7 @@ export const useGA4 = () => {
  */
 const ga4Utils = {
   isGA4Enabled,
+  hasAnalyticsConsent,
   initGA4,
   trackPageView,
   trackEvent,

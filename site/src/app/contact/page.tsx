@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { headers } from 'next/headers';
 import SecureContactForm from '@/components/SecureContactForm';
 import SEOSchema from '@/components/SEOSchema';
+
+// Get canonical URL from environment with fallback
+const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
@@ -22,17 +24,13 @@ export const metadata: Metadata = {
     title: 'Contact – Start het gesprek met ProWeb Studio',
     description:
       'Vertel ons over uw project. Reactie binnen één werkdag. Afspraak via video of op locatie in Nederland.',
-    url: 'https://prowebstudio.nl/contact',
+    url: `${SITE_URL}/contact`,
     type: 'website',
     locale: 'nl_NL',
   },
 };
 
-export default async function ContactPage() {
-  // Get the nonce from the X-Nonce header set by middleware
-  const headersList = headers();
-  const nonce = headersList.get('X-Nonce') || '';
-
+export default function ContactPage() {
   return (
     <main className="content-safe-top pt-20 md:pt-24 relative overflow-hidden">
       <SEOSchema
@@ -92,7 +90,6 @@ export default async function ContactPage() {
 
       <script
         type="application/ld+json"
-        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',

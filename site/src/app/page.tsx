@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 
+// Get canonical URL from environment with fallback
+const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
+
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
@@ -23,7 +26,7 @@ export const metadata: Metadata = {
       'Website laten maken in Nederland | 3D webdesign & hoge performance – ProWeb Studio',
     description:
       'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D-websites die scoren in Google en converteren. Maatwerk met Next.js, React Three Fiber en SEO-first aanpak.',
-    url: 'https://prowebstudio.nl/',
+    url: `${SITE_URL}/`,
     type: 'website',
     locale: 'nl_NL',
   },

@@ -34,7 +34,10 @@
     "seo:preflight": "tsx scripts/seo-preflight.ts",
     "lhci:collect": "lhci collect --config=lighthouserc.json",
     "lhci:assert": "lhci assert --config=lighthouserc.json",
+    "lhci:collect:mobile": "lhci collect --config=lighthouserc.mobile.json",
+    "lhci:assert:mobile": "lhci assert --config=lighthouserc.mobile.json",
     "ci:perf": "npm run lhci:collect && npm run lhci:assert",
+    "ci:perf:mobile": "npm run lhci:collect:mobile && npm run lhci:assert:mobile",
     "ci:quality-check": "npm run typecheck && npm run lint && npm run format:check && npm run test",
     "ci:build": "npm run build:analyze && npm run analyze:generate && npm run seo:preflight",
     "validate:regions": "node scripts/validate-regions.js"

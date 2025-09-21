@@ -198,9 +198,15 @@ export async function middleware(req: NextRequest) {
     response.headers.set('X-Content-Type-Options', 'nosniff');
   }
   
-  // 8. Apply X-Robots-Tag for speeltuin route
+  // 8. Apply X-Robots-Tag for speeltuin route and error pages
   if (path === '/speeltuin' || path.startsWith('/speeltuin/')) {
     response.headers.set('X-Robots-Tag', 'noindex, follow');
+  }
+  
+  // Apply X-Robots-Tag for error pages (404, 500, etc.)
+  if (path === '/not-found' || path === '/error' || path.includes('/_error') || 
+      (req.nextUrl.searchParams.has('error') && req.nextUrl.searchParams.get('error'))) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow, nocache, nosnippet, noarchive, noimageindex');
   }
   
   // Note: API headers (X-API-Version, Cache-Control, Pragma, Expires) are now

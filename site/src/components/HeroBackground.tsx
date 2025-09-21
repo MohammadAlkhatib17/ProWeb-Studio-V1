@@ -8,8 +8,9 @@ export default function HeroBackground() {
         src="/assets/hero/nebula_helix.jpg"
         alt=""
         className="w-full h-full object-cover"
-        loading="lazy"
+        loading="eager"
         decoding="async"
+        fetchPriority="high"
       />
     </picture>
   );

@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
-import dynamicImport from 'next/dynamic';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
-import { Suspense } from 'react';
 import Link from 'next/link';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
+import DynamicFlowingRibbons from '@/components/dynamic/DynamicFlowingRibbons';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
@@ -30,11 +29,6 @@ export const metadata: Metadata = {
     locale: 'nl_NL',
   },
 };
-
-const FlowingRibbons = dynamicImport(() => import('@/three/FlowingRibbons'), {
-  ssr: false,
-  loading: () => <div className="h-[300px] sm:h-[350px] md:h-[400px] w-full bg-cosmic-900/50 animate-pulse rounded-lg" />,
-});
 
 export default function OverOnsPage() {
   return (
@@ -67,11 +61,9 @@ export default function OverOnsPage() {
             </p>
           </div>
           <div className="h-[300px] sm:h-[350px] md:h-[400px] rounded-2xl overflow-hidden border border-cosmic-700/60 bg-cosmic-800/20 relative">
-            <Suspense fallback={<div className="h-full w-full bg-cosmic-900/50 animate-pulse" />}>
-              <ErrorBoundary>
-                <FlowingRibbons />
-              </ErrorBoundary>
-            </Suspense>
+            <ErrorBoundary>
+              <DynamicFlowingRibbons />
+            </ErrorBoundary>
           </div>
         </div>
       </section>

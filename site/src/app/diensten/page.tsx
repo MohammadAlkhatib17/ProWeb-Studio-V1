@@ -116,11 +116,15 @@ export default function Diensten() {
 
   return (
     <main className="pt-20 md:pt-24 relative overflow-hidden">
+      {/* Preload the LCP background image for this page */}
+      <link rel="preload" as="image" href="/assets/nebula_services_background.avif" type="image/avif" />
+      
       {/* Full-bleed page background to unify top edge */}
       <Image
         src="/assets/nebula_services_background.avif"
         alt=""
         fill
+        priority
         sizes="100vw"
         className="object-cover opacity-50 pointer-events-none -z-10"
         decoding="async"

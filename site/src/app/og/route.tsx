@@ -3,7 +3,8 @@ import { ImageResponse } from 'next/og';
 import { siteConfig } from '@/config/site.config';
 
 export const runtime = 'edge';
-export const preferredRegion = 'fra1';
+// EU-first region priority: Frankfurt, Paris, Stockholm prioritizing NL traffic
+export const preferredRegion = ['fra1', 'cdg1', 'arn1'];
 
 export async function GET() {
   const desc = siteConfig.description;
@@ -44,6 +45,11 @@ export async function GET() {
     {
       width: 1200,
       height: 630,
+      headers: {
+        // Conservative cache policy: 1 day for OG images to avoid unnecessary recomputation
+        // while still allowing for reasonable updates
+        'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=172800',
+      },
     }
   );
 }

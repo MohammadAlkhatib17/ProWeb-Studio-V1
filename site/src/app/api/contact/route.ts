@@ -6,7 +6,8 @@ import DOMPurify from 'isomorphic-dompurify';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-export const preferredRegion = 'fra1';
+// EU-first region priority: Frankfurt, Paris, Stockholm, Amsterdam prioritizing NL traffic
+export const preferredRegion = ['fra1', 'cdg1', 'arn1', 'ams1'];
 
 // Enhanced validation schema with security considerations
 const contactSchema = z.object({

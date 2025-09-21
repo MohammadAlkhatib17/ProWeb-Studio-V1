@@ -150,13 +150,6 @@ export const metadata: Metadata = {
       }),
     },
   },
-  alternates: {
-    canonical: SITE_URL,
-    languages: {
-      'nl-NL': SITE_URL,
-      'x-default': SITE_URL,
-    },
-  },
   category: 'technology',
   classification: 'Business',
   referrer: 'strict-origin-when-cross-origin',
@@ -224,6 +217,9 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://plausible.io" />
         <link rel="preconnect" href="https://cal.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://cal.com" />
+        {/* Preload critical LCP images */}
+        <link rel="preload" as="image" href="/assets/hero/nebula_helix.avif" type="image/avif" />
+        <link rel="preload" as="image" href="/assets/hero/nebula_helix.webp" type="image/webp" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />
@@ -259,6 +255,7 @@ export default function RootLayout({
           defer
           data-domain={siteConfig.analytics.plausibleDomain}
           src="https://plausible.io/js/script.js"
+          strategy="afterInteractive"
         />
         <Analytics />
         <SpeedInsights />

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
-export const preferredRegion = 'fra1';
+// EU-first region priority: Frankfurt, Paris, Stockholm, Amsterdam prioritizing NL traffic
+export const preferredRegion = ['fra1', 'cdg1', 'arn1', 'ams1'];
 
 interface WebVitalMetric {
   name: string;

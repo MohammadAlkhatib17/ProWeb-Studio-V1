@@ -1,13 +1,12 @@
 import type { Metadata } from 'next';
-import dynamicImport from 'next/dynamic';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
-import { Suspense } from 'react';
 import Image from 'next/image';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
+import DynamicOrbitSystem from '@/components/dynamic/DynamicOrbitSystem';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl';
@@ -32,11 +31,6 @@ export const metadata: Metadata = {
     locale: 'nl_NL',
   },
 };
-
-const OrbitSystem = dynamicImport(() => import('@/three/OrbitSystem'), {
-  ssr: false,
-  loading: () => <div className="h-96 bg-cosmic-900" />,
-});
 
 const steps = [
   {
@@ -84,11 +78,9 @@ export default function Werkwijze() {
               decoding="async"
             />
             <div className="absolute inset-0 z-0 pointer-events-none">
-              <Suspense fallback={<div className="absolute inset-0" />}> 
-                <ErrorBoundary>
-                  <OrbitSystem />
-                </ErrorBoundary>
-              </Suspense>
+              <ErrorBoundary>
+                <DynamicOrbitSystem />
+              </ErrorBoundary>
             </div>
           </div>
 

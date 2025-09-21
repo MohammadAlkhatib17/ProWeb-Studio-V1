@@ -4,7 +4,8 @@ import { z } from 'zod';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-export const preferredRegion = 'fra1';
+// EU-first region priority: Frankfurt, Paris, Stockholm, Amsterdam prioritizing NL traffic
+export const preferredRegion = ['fra1', 'cdg1', 'arn1', 'ams1'];
 
 const subscribeSchema = z.object({
   email: z.string().email('Ongeldig e-mailadres.'),

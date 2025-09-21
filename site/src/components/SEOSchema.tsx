@@ -243,11 +243,13 @@ export default function SEOSchema({
     ],
   };
 
-  // Organization schema with optional address
+  // Organization schema with optional address and identifiers
   const addrStreet = process.env.NEXT_PUBLIC_ADDR_STREET;
   const addrCity = process.env.NEXT_PUBLIC_ADDR_CITY;
   const addrZip = process.env.NEXT_PUBLIC_ADDR_ZIP;
   const hasAddress = Boolean(addrStreet && addrCity && addrZip);
+  const kvkNumber = process.env.NEXT_PUBLIC_KVK;
+  const btwNumber = process.env.NEXT_PUBLIC_BTW;
 
   const organizationSchema = {
     '@context': 'https://schema.org',
@@ -279,15 +281,16 @@ export default function SEOSchema({
     naics: '541511', // Custom Computer Programming Services
     isicV4: '6201', // Computer programming activities
     knowsAbout: [
-      'Website ontwikkeling',
       'Webdesign',
-      'SEO optimalisatie',
+      'Website laten maken',
       '3D websites',
+      'Webshop laten maken',
+      'SEO optimalisatie',
+      'Webdevelopment',
       'React ontwikkeling',
       'Next.js',
       'TypeScript',
       'E-commerce ontwikkeling',
-      'Webshop laten maken',
       'Digital marketing',
       'UI/UX Design',
       'Mobile-first design',
@@ -306,6 +309,20 @@ export default function SEOSchema({
       'Google Analytics',
       'Conversion optimalisatie',
     ],
+    ...(kvkNumber && {
+      identifier: [
+        {
+          '@type': 'PropertyValue',
+          name: 'KVK',
+          value: kvkNumber,
+        },
+        ...(btwNumber ? [{
+          '@type': 'PropertyValue',
+          name: 'BTW',
+          value: btwNumber,
+        }] : []),
+      ],
+    }),
     areaServed: {
       '@type': 'Place',
       name: 'Netherlands',
@@ -505,7 +522,7 @@ export default function SEOSchema({
             addressCountry: 'NL'
           }
         },
-        availableLanguage: ['Dutch', 'English'],
+        availableLanguage: ['nl', 'en'],
         hoursAvailable: {
           '@type': 'OpeningHoursSpecification',
           dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -525,7 +542,7 @@ export default function SEOSchema({
             addressCountry: 'NL'
           }
         },
-        availableLanguage: ['Dutch', 'English'],
+        availableLanguage: ['nl', 'en'],
       },
       {
         '@type': 'ContactPoint',
@@ -539,7 +556,7 @@ export default function SEOSchema({
             addressCountry: 'NL'
           }
         },
-        availableLanguage: ['Dutch', 'English'],
+        availableLanguage: ['nl', 'en'],
       },
     ],
     sameAs: socialProfiles,
@@ -740,7 +757,7 @@ export default function SEOSchema({
             addressCountry: 'NL'
           }
         },
-        availableLanguage: ['Dutch', 'English'],
+        availableLanguage: ['nl', 'en'],
         hoursAvailable: {
           '@type': 'OpeningHoursSpecification',
           dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -760,7 +777,7 @@ export default function SEOSchema({
             addressCountry: 'NL'
           }
         },
-        availableLanguage: ['Dutch', 'English'],
+        availableLanguage: ['nl', 'en'],
       },
       {
         '@type': 'ContactPoint',
@@ -774,7 +791,7 @@ export default function SEOSchema({
             addressCountry: 'NL'
           }
         },
-        availableLanguage: ['Dutch', 'English'],
+        availableLanguage: ['nl', 'en'],
       },
     ],
     potentialAction: {
@@ -807,6 +824,7 @@ export default function SEOSchema({
     name: 'Website laten maken',
     url: abs('/diensten#website'),
     description: 'Professionele websites op maat gebouwd met moderne technologieën voor Nederlandse bedrijven',
+    inLanguage: 'nl-NL',
     provider: {
       '@id': `${SITE_URL}#organization`,
     },
@@ -818,6 +836,12 @@ export default function SEOSchema({
         addressCountry: 'NL'
       }
     },
+    serviceArea: [
+      {
+        '@type': 'AdministrativeArea',
+        name: 'Netherlands',
+      },
+    ],
     availableLanguage: ['nl', 'en'],
     category: 'Webdevelopment',
     offers: {
@@ -836,9 +860,10 @@ export default function SEOSchema({
     '@type': 'Service',
     '@id': `${SITE_URL}/diensten#webshop-service`,
     serviceType: 'Webshop ontwikkeling',
-    name: 'Webshop ontwikkeling',
+    name: 'Webshop laten maken',
     url: abs('/diensten#webshop'),
     description: 'E-commerce oplossingen en webshops met Nederlandse betaalmethoden en integraties',
+    inLanguage: 'nl-NL',
     provider: {
       '@id': `${SITE_URL}#organization`,
     },
@@ -850,6 +875,12 @@ export default function SEOSchema({
         addressCountry: 'NL'
       }
     },
+    serviceArea: [
+      {
+        '@type': 'AdministrativeArea',
+        name: 'Netherlands',
+      },
+    ],
     availableLanguage: ['nl', 'en'],
     category: 'E-commerce Development',
     offers: {
@@ -871,6 +902,7 @@ export default function SEOSchema({
     name: 'SEO optimalisatie',
     url: abs('/diensten#seo'),
     description: 'Zoekmachine optimalisatie en technische SEO voor betere Google rankings',
+    inLanguage: 'nl-NL',
     provider: {
       '@id': `${SITE_URL}#organization`,
     },
@@ -882,6 +914,12 @@ export default function SEOSchema({
         addressCountry: 'NL'
       }
     },
+    serviceArea: [
+      {
+        '@type': 'AdministrativeArea',
+        name: 'Netherlands',
+      },
+    ],
     availableLanguage: ['nl', 'en'],
     category: 'Digital Marketing',
     offers: {
@@ -1071,32 +1109,164 @@ export default function SEOSchema({
     },
   } : null;
 
-  // Combine all schemas into a graph
-  const schemaGraph = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      websiteSchema,
-      organizationSchema,
-      localBusinessSchema,
-      webPageSchema,
-      logoImageSchema,
-      websiteService,
-      webshopService,
-      seoService,
-      ...(primaryImageSchema ? [primaryImageSchema] : []),
-      ...(breadcrumbSchema ? [breadcrumbSchema] : []),
-      ...(faqSchema ? [faqSchema] : []),
-      ...(howToSchema ? [howToSchema] : []),
-    ],
+  // Combine all schemas into separate scripts instead of a single graph
+  const renderSchemaScripts = () => {
+    const scripts = [];
+
+    // Website Schema Script
+    scripts.push(
+      <Script
+        key="website-schema"
+        id="website-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteSchema, null, 2),
+        }}
+      />
+    );
+
+    // Organization Schema Script
+    scripts.push(
+      <Script
+        key="organization-schema"
+        id="organization-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationSchema, null, 2),
+        }}
+      />
+    );
+
+    // LocalBusiness Schema Script
+    scripts.push(
+      <Script
+        key="localbusiness-schema"
+        id="localbusiness-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(localBusinessSchema, null, 2),
+        }}
+      />
+    );
+
+    // WebPage Schema Script
+    scripts.push(
+      <Script
+        key="webpage-schema"
+        id="webpage-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webPageSchema, null, 2),
+        }}
+      />
+    );
+
+    // Logo Image Schema Script
+    scripts.push(
+      <Script
+        key="logo-schema"
+        id="logo-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(logoImageSchema, null, 2),
+        }}
+      />
+    );
+
+    // Website Service Schema Script
+    scripts.push(
+      <Script
+        key="website-service-schema"
+        id="website-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteService, null, 2),
+        }}
+      />
+    );
+
+    // Webshop Service Schema Script
+    scripts.push(
+      <Script
+        key="webshop-service-schema"
+        id="webshop-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(webshopService, null, 2),
+        }}
+      />
+    );
+
+    // SEO Service Schema Script
+    scripts.push(
+      <Script
+        key="seo-service-schema"
+        id="seo-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(seoService, null, 2),
+        }}
+      />
+    );
+
+    // Primary Image Schema Script (if exists)
+    if (primaryImageSchema) {
+      scripts.push(
+        <Script
+          key="primary-image-schema"
+          id="primary-image-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(primaryImageSchema, null, 2),
+          }}
+        />
+      );
+    }
+
+    // Breadcrumb Schema Script (if exists)
+    if (breadcrumbSchema) {
+      scripts.push(
+        <Script
+          key="breadcrumb-schema"
+          id="breadcrumb-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbSchema, null, 2),
+          }}
+        />
+      );
+    }
+
+    // FAQ Schema Script (if exists)
+    if (faqSchema) {
+      scripts.push(
+        <Script
+          key="faq-schema"
+          id="faq-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqSchema, null, 2),
+          }}
+        />
+      );
+    }
+
+    // HowTo Schema Script (if exists)
+    if (howToSchema) {
+      scripts.push(
+        <Script
+          key="howto-schema"
+          id="howto-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(howToSchema, null, 2),
+          }}
+        />
+      );
+    }
+
+    return scripts;
   };
 
-  return (
-    <Script
-      id="comprehensive-seo-schema"
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(schemaGraph, null, 2),
-      }}
-    />
-  );
+  return <>{renderSchemaScripts()}</>;
 }
