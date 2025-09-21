@@ -140,9 +140,6 @@ export const metadata: Metadata = {
           'max-snippet': -1,
         },
       },
-  verification: {
-    google: 'PASTE_YOUR_GOOGLE_SITE_VERIFICATION_TOKEN'
-  },
   category: 'technology',
   classification: 'Business',
   referrer: 'strict-origin-when-cross-origin',
