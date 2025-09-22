@@ -7,13 +7,14 @@ import Link from 'next/link';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
 import DynamicFlowingRibbons from '@/components/dynamic/DynamicFlowingRibbons';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const metadata: Metadata = {
-  title: 'Over Ons – Architecten van de Digitale Toekomst | ProWeb Studio',
-  description: 'Ontdek de visie en missie van ProWeb Studio. Wij combineren geavanceerde technologie met creatief design om de digitale grenzen te verleggen voor Nederlandse bedrijven.',
+  title: 'Over ProWeb Studio | Nederlandse webdesign specialisten | Betrouwbare partner',
+  description: 'Ontmoet het ProWeb Studio team. Nederlandse webdesign experts met transparante werkwijze en no-nonsense aanpak. Pragmatische oplossingen voor ondernemers die resultaat willen.',
   alternates: {
     canonical: '/over-ons',
     languages: { 
@@ -22,8 +23,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Over Ons – ProWeb Studio',
-    description: 'Leer ons team en onze filosofie kennen. Wij bouwen de websites van morgen, vandaag.',
+    title: 'Over ProWeb Studio | Nederlandse webdesign specialisten | Betrouwbare partner',
+    description: 'Ontmoet het ProWeb Studio team. Nederlandse webdesign experts met transparante werkwijze en no-nonsense aanpak. Pragmatische oplossingen voor ondernemers die resultaat willen.',
     url: `${SITE_URL}/over-ons`,
     type: 'website',
     locale: 'nl_NL',
@@ -33,6 +34,7 @@ export const metadata: Metadata = {
 export default function OverOnsPage() {
   return (
     <main className="content-safe-top pt-20 md:pt-24">
+      <Breadcrumbs />
       <SEOSchema
         pageType="over-ons"
         pageTitle={metadata.title as string}

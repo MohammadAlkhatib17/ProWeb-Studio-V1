@@ -3,18 +3,20 @@ import type { Metadata } from 'next';
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
-import Image from 'next/image';
+import { ResponsiveImage } from '@/components/ui/responsive-image';
+import Link from 'next/link';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
 import DynamicOrbitSystem from '@/components/dynamic/DynamicOrbitSystem';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const metadata: Metadata = {
-  title: 'Werkwijze – van intake tot launch, transparant en voorspelbaar',
+  title: 'Website laten maken proces | Transparante werkwijze | ProWeb Studio Nederland',
   description:
-    'Helder proces: intake & strategie, design, bouwen, launch & groei. Transparante communicatie en meetbare stappen.',
+    'Zo laten wij uw website maken: van intake tot launch in 5 stappen. Transparante communicatie, vaste prijzen, Nederlandse kwaliteit. Bekijk onze beproefde werkwijze.',
   alternates: {
     canonical: '/werkwijze',
     languages: { 
@@ -23,9 +25,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Werkwijze – van intake tot launch, transparant en voorspelbaar',
+    title: 'Website laten maken proces | Transparante werkwijze | ProWeb Studio Nederland',
     description:
-      'Helder proces: intake & strategie, design, bouwen, launch & groei. Transparante communicatie en meetbare stappen.',
+      'Zo laten wij uw website maken: van intake tot launch in 5 stappen. Transparante communicatie, vaste prijzen, Nederlandse kwaliteit. Bekijk onze beproefde werkwijze.',
     url: `${SITE_URL}/werkwijze`,
     type: 'website',
     locale: 'nl_NL',
@@ -48,6 +50,7 @@ const steps = [
 export default function Werkwijze() {
   return (
     <main className="content-safe-top pt-20 md:pt-24">
+      <Breadcrumbs />
       <SEOSchema
         pageType="werkwijze"
         pageTitle={metadata.title as string}
@@ -67,15 +70,15 @@ export default function Werkwijze() {
           <div className="relative h-96 mb-12">
             {/* Subtle ambient glow behind the composition */}
             <div aria-hidden className="absolute inset-0 pointer-events-none -z-10 portal-gradient opacity-60 blur-3xl" />
-            <Image
+            <ResponsiveImage
               src="/assets/team_core_star.png"
               alt="Centrale ster die ons proces symboliseert"
               fill
               priority
               quality={90}
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              responsiveSizes="(max-width: 1024px) 100vw, 50vw"
+              aspectRatio="1/1"
               className="object-contain object-center mix-screen image-soft-glow mask-soft-edges no-pointer z-10 translate-y-[2%] md:translate-y-[1.5%]"
-              decoding="async"
             />
             <div className="absolute inset-0 z-0 pointer-events-none">
               <ErrorBoundary>
@@ -214,9 +217,20 @@ export default function Werkwijze() {
           wordt die altijd tot een succesvol eindresultaat leidt.
         </p>
         <p>
-          <a href="/contact" className="inline-block mt-4">
+          Ontdek meer over{' '}
+          <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">
+            onze webdevelopment diensten
+          </Link>{' '}
+          of bekijk{' '}
+          <Link href="/speeltuin" className="text-cyan-400 hover:text-cyan-300">
+            voorbeelden van onze innovatieve 3D-technologie
+          </Link>{' '}
+          om te zien hoe wij uw visie tot leven brengen.
+        </p>
+        <p>
+          <Link href="/contact" className="inline-block mt-4">
             Start uw project met ons bewezen proces
-          </a>
+          </Link>
         </p>
       </section>
     </main>

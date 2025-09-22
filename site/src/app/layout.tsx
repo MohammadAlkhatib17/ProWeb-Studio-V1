@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import Script from 'next/script';
 import { headers } from 'next/headers';
@@ -15,14 +14,14 @@ import BackgroundLayer from '@/components/layout/BackgroundLayer';
 import HeroBackground from '@/components/HeroBackground';
 import TopVignetteOverlay from '@/components/layout/TopVignetteOverlay';
 import PWAServiceWorker from '@/components/PWAServiceWorker';
+import { primaryFont, generateFontPreloads } from '@/lib/fonts';
+import { generateResourcePreconnects } from '@/lib/preconnect';
 
 // Initialize environment validation for production deployments
 initProductionEnvValidation();
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-
-const inter = Inter({ subsets: ['latin', 'latin-ext'], display: 'swap' });
 
 export const viewport = {
   width: 'device-width',
@@ -41,20 +40,28 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: [
     'website laten maken nederland',
-    'webdevelopment nederland',
     'website bouwen',
-    '3D websites',
     'webdesign nederland',
-    'professionele websites',
-    'react ontwikkeling',
-    'next.js developer',
-    'seo optimalisatie',
     'webshop laten maken',
+    'professionele website laten maken',
     'responsive webdesign',
-    'moderne websites',
-    'website op maat',
+    'bedrijfswebsite laten maken',
+    'website ontwikkeling',
+    'seo geoptimaliseerde website',
+    'mkb-vriendelijk',
+    'ondernemers',
+    'nederlands webdesign bureau',
+    'betrouwbare webdesign partner',
+    'transparante communicatie',
+    'no-nonsense aanpak',
+    'iDEAL integratie',
+    'nederlandse kwaliteit',
+    'website laten maken amsterdam',
+    'webdesign rotterdam',
+    'website ontwikkeling den haag',
+    'professionele website utrecht',
+    'toekomstbestendig',
     'digital agency nederland',
-    'website laten ontwerpen',
   ],
   authors: [
     { name: 'ProWeb Studio', url: siteConfig.url },
@@ -207,9 +214,45 @@ export default function RootLayout({
     <html lang="nl-NL">
       <head>
         <link rel="preconnect" href="https://plausible.io" crossOrigin="" />
+        {/* Critical third-party resource preconnections */}
+        {generateResourcePreconnects().map((resource, index) => {
+          if (resource.type === 'preconnect') {
+            return (
+              <link
+                key={`preconnect-${index}`}
+                rel="preconnect"
+                href={resource.href}
+                {...(resource.crossOrigin !== undefined && { crossOrigin: resource.crossOrigin })}
+              />
+            );
+          } else if (resource.type === 'dns-prefetch') {
+            return (
+              <link
+                key={`dns-prefetch-${index}`}
+                rel="dns-prefetch"
+                href={resource.href}
+              />
+            );
+          }
+          return null;
+        })}
+        
         <link rel="dns-prefetch" href="https://plausible.io" />
         <link rel="preconnect" href="https://cal.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://cal.com" />
+        
+        {/* Preload critical fonts for better LCP */}
+        {generateFontPreloads().map((fontPreload, index) => (
+          <link
+            key={index}
+            rel={fontPreload.rel}
+            href={fontPreload.href}
+            as={fontPreload.as}
+            type={fontPreload.type}
+            crossOrigin={fontPreload.crossOrigin}
+          />
+        ))}
+        
         {/* Preload critical LCP images */}
         <link
           rel="preload"
@@ -222,7 +265,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />
       </head>
-      <body className={`${inter.className} bg-transparent`}>
+      <body className={`${primaryFont.className} bg-transparent`}>
         <BackgroundLayer />
         {/**
          * Global cosmic background placed at the root, behind all content.

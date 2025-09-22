@@ -224,6 +224,26 @@ export default function LocalBusinessSchema({
       contactType: 'Customer Service',
       areaServed: 'NL',
       availableLanguage: ['Dutch', 'English'],
+      hoursAvailable: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          opens: '09:00',
+          closes: '17:00',
+          validFrom: new Date().toISOString().split('T')[0],
+          validThrough: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        },
+      ],
+      contactOption: [
+        'TollFree',
+        'HearingImpairedSupported',
+      ],
+      productSupported: [
+        'Website Development',
+        'E-commerce Solutions',
+        'SEO Services',
+        '3D Web Experiences',
+      ],
     },
     aggregateRating: aggregateRating || {
       '@type': 'AggregateRating',
@@ -265,7 +285,60 @@ export default function LocalBusinessSchema({
       },
     ],
     currenciesAccepted: 'EUR',
-    paymentAccepted: ['Cash', 'Credit Card', 'Bank Transfer', 'Invoice'],
+    paymentAccepted: ['Cash', 'Credit Card', 'Bank Transfer', 'Invoice', 'iDEAL', 'Bancontact', 'PayPal', 'SEPA'],
+    acceptedPaymentMethod: [
+      {
+        '@type': 'PaymentMethod',
+        '@id': 'https://schema.org/Cash',
+        name: 'Contant',
+      },
+      {
+        '@type': 'PaymentMethod',
+        '@id': 'https://schema.org/CreditCard',
+        name: 'Creditcard',
+      },
+      {
+        '@type': 'PaymentMethod',
+        '@id': 'https://schema.org/BankTransferInAdvance',
+        name: 'Bankoverschrijving',
+      },
+      {
+        '@type': 'PaymentMethod',
+        name: 'iDEAL',
+        description: 'Nederlandse online betaalmethode',
+      },
+      {
+        '@type': 'PaymentMethod',
+        name: 'Bancontact',
+        description: 'Belgische betaalmethode',
+      },
+      {
+        '@type': 'PaymentMethod',
+        name: 'SEPA',
+        description: 'Europese bankoverschrijving',
+      },
+    ],
+    naics: '541511', // Custom Computer Programming Services
+    isicV4: '6201', // Computer programming activities
+    duns: process.env.NEXT_PUBLIC_DUNS || undefined,
+    legalName: 'ProWeb Studio',
+    taxID: process.env.NEXT_PUBLIC_BTW || undefined,
+    vatID: process.env.NEXT_PUBLIC_BTW || undefined,
+    ...(process.env.NEXT_PUBLIC_KVK && {
+      globalLocationNumber: process.env.NEXT_PUBLIC_KVK,
+    }),
+    knowsLanguage: [
+      {
+        '@type': 'Language',
+        name: 'Dutch',
+        alternateName: 'Nederlands',
+      },
+      {
+        '@type': 'Language',
+        name: 'English',
+        alternateName: 'Engels',
+      },
+    ],
     knowsAbout: [
       'website laten maken',
       'webshop ontwikkeling',
@@ -282,6 +355,17 @@ export default function LocalBusinessSchema({
       'website onderhoud',
       'webapplicatie ontwikkeling',
       'maatwerk websites',
+      'Nederlandse webstandaarden',
+      'GDPR compliance',
+      'AVG wetgeving',
+      'Nederlandse hosting',
+      'BTW administratie websites',
+      'KVK integraties',
+      'Nederlandse payment providers',
+      'Mollie integratie',
+      'Stripe Nederland',
+      'Dutch UX design',
+      'Nederlandse contentstrategie',
     ],
     slogan: siteConfig.tagline,
     '@graph': [
@@ -303,35 +387,230 @@ export default function LocalBusinessSchema({
         hasOfferCatalog: {
           '@type': 'OfferCatalog',
           name: 'Website Ontwikkeling Pakketten',
+          description: 'Transparante pakketprijzen voor professionele websites in Nederland',
           itemListElement: [
             {
               '@type': 'Offer',
-              name: 'Basis Website',
-              description: 'Eenvoudige website voor kleine bedrijven',
+              name: 'Basis Website Pakket',
+              description: 'Eenvoudige website voor startende bedrijven en ZZP&apos;ers',
+              category: 'Webdevelopment',
+              eligibleRegion: {
+                '@type': 'Country',
+                name: 'Nederland',
+                sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+              },
+              businessFunction: 'http://purl.org/goodrelations/v1#Sell',
               priceSpecification: {
                 '@type': 'PriceSpecification',
                 priceCurrency: 'EUR',
                 price: '2500',
+                valueAddedTaxIncluded: false,
+                eligibleRegion: {
+                  '@type': 'Country',
+                  name: 'Nederland',
+                },
+                validFrom: new Date().toISOString().split('T')[0],
+                validThrough: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              },
+              includesObject: [
+                {
+                  '@type': 'TypeAndQuantityNode',
+                  amountOfThisGood: 5,
+                  typeOfGood: {
+                    '@type': 'Service',
+                    name: 'Webpagina&apos;s',
+                  },
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Responsive design',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'SEO basis optimalisatie',
+                },
+                {
+                  '@type': 'Service',
+                  name: '1 jaar domein en hosting',
+                },
+              ],
+              warranty: {
+                '@type': 'WarrantyPromise',
+                durationOfWarranty: 'P12M',
+                warrantyScope: 'Technische support en bugfixes',
               },
             },
             {
               '@type': 'Offer',
-              name: 'Professionele Website',
-              description: 'Uitgebreide website met CMS en SEO',
+              name: 'Professionele Website Pakket',
+              description: 'Uitgebreide website met CMS en geavanceerde functionaliteiten',
+              category: 'Webdevelopment',
+              eligibleRegion: {
+                '@type': 'Country',
+                name: 'Nederland',
+                sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+              },
+              businessFunction: 'http://purl.org/goodrelations/v1#Sell',
               priceSpecification: {
                 '@type': 'PriceSpecification',
                 priceCurrency: 'EUR',
                 price: '5000',
+                valueAddedTaxIncluded: false,
+                eligibleRegion: {
+                  '@type': 'Country',
+                  name: 'Nederland',
+                },
+                validFrom: new Date().toISOString().split('T')[0],
+                validThrough: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              },
+              includesObject: [
+                {
+                  '@type': 'TypeAndQuantityNode',
+                  amountOfThisGood: 15,
+                  typeOfGood: {
+                    '@type': 'Service',
+                    name: 'Webpagina&apos;s',
+                  },
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Headless CMS integratie',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Geavanceerde SEO optimalisatie',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Google Analytics 4 setup',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Contactformulieren en integraties',
+                },
+                {
+                  '@type': 'Service',
+                  name: '1 jaar premium hosting en domein',
+                },
+              ],
+              warranty: {
+                '@type': 'WarrantyPromise',
+                durationOfWarranty: 'P12M',
+                warrantyScope: 'Volledige technische support en onderhoud',
               },
             },
             {
               '@type': 'Offer',
-              name: 'Premium 3D Website',
-              description: 'Innovatieve 3D website met interactieve elementen',
+              name: 'Premium 3D Website Pakket',
+              description: 'Innovatieve 3D website met interactieve elementen en premium functionaliteiten',
+              category: 'Webdevelopment',
+              eligibleRegion: {
+                '@type': 'Country',
+                name: 'Nederland',
+                sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+              },
+              businessFunction: 'http://purl.org/goodrelations/v1#Sell',
               priceSpecification: {
                 '@type': 'PriceSpecification',
                 priceCurrency: 'EUR',
                 price: '10000',
+                valueAddedTaxIncluded: false,
+                eligibleRegion: {
+                  '@type': 'Country',
+                  name: 'Nederland',
+                },
+                validFrom: new Date().toISOString().split('T')[0],
+                validThrough: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              },
+              includesObject: [
+                {
+                  '@type': 'Service',
+                  name: '3D interactieve elementen met Three.js',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Maatwerk animaties en transities',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Performance optimalisatie voor 3D content',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Advanced SEO en technische optimalisatie',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Dedicated project manager',
+                },
+                {
+                  '@type': 'Service',
+                  name: '2 jaar premium hosting en support',
+                },
+              ],
+              warranty: {
+                '@type': 'WarrantyPromise',
+                durationOfWarranty: 'P24M',
+                warrantyScope: 'Volledige technische support, onderhoud en doorontwikkeling',
+              },
+            },
+            {
+              '@type': 'Offer',
+              name: 'E-commerce / Webshop Pakket',
+              description: 'Complete webshop oplossing met Nederlandse betaalmethoden en integraties',
+              category: 'E-commerce Development',
+              eligibleRegion: {
+                '@type': 'Country',
+                name: 'Nederland',
+                sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+              },
+              businessFunction: 'http://purl.org/goodrelations/v1#Sell',
+              priceSpecification: {
+                '@type': 'PriceSpecification',
+                priceCurrency: 'EUR',
+                price: '7500',
+                valueAddedTaxIncluded: false,
+                eligibleRegion: {
+                  '@type': 'Country',
+                  name: 'Nederland',
+                },
+                validFrom: new Date().toISOString().split('T')[0],
+                validThrough: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              },
+              includesObject: [
+                {
+                  '@type': 'Service',
+                  name: 'iDEAL en Bancontact betaalintegratie',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Mollie of Stripe payment processing',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Nederlandse BTW berekeningen',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Voorraadbeheersysteem',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'Koppeling met boekhoudsoftware',
+                },
+                {
+                  '@type': 'Service',
+                  name: 'GDPR/AVG compliance',
+                },
+                {
+                  '@type': 'Service',
+                  name: '1 jaar e-commerce hosting en support',
+                },
+              ],
+              warranty: {
+                '@type': 'WarrantyPromise',
+                durationOfWarranty: 'P12M',
+                warrantyScope: 'Technische support, betalingsondersteuning en compliance updates',
               },
             },
           ],

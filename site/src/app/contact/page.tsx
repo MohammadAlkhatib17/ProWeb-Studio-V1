@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
+import { BackgroundImage } from '@/components/ui/responsive-image';
 import SecureContactForm from '@/components/SecureContactForm';
 import SEOSchema from '@/components/SEOSchema';
 
@@ -10,9 +10,9 @@ export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
 export const metadata: Metadata = {
-  title: 'Contact – Start het gesprek met ProWeb Studio',
+  title: 'Contact ProWeb Studio | Website laten maken afspraak | Nederland',
   description:
-    'Vertel ons over uw project. Reactie binnen één werkdag. Afspraak via video of op locatie in Nederland.',
+    'Start uw website project vandaag. Gratis adviesgesprek over website laten maken, webshop bouwen of webdesign. Reactie binnen 1 werkdag. Video of op locatie in Nederland.',
   alternates: {
     canonical: '/contact',
     languages: { 
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Contact – Start het gesprek met ProWeb Studio',
+    title: 'Contact ProWeb Studio | Website laten maken afspraak | Nederland',
     description:
-      'Vertel ons over uw project. Reactie binnen één werkdag. Afspraak via video of op locatie in Nederland.',
+      'Start uw website project vandaag. Gratis adviesgesprek over website laten maken, webshop bouwen of webdesign. Reactie binnen 1 werkdag. Video of op locatie in Nederland.',
     url: `${SITE_URL}/contact`,
     type: 'website',
     locale: 'nl_NL',
@@ -39,13 +39,12 @@ export default function ContactPage() {
         pageDescription={metadata.description as string}
       />
       {/* Full-bleed background to avoid top seam */}
-      <Image
+      <BackgroundImage
         src="/assets/glowing_beacon_contact.avif"
         alt=""
-        fill
-        sizes="100vw"
-        className="object-cover object-center opacity-30 pointer-events-none -z-10"
-        decoding="async"
+        priority={true}
+        quality={85}
+        className="opacity-30 pointer-events-none -z-10"
       />
       <SecureContactForm />
       <section

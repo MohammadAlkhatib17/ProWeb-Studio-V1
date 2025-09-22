@@ -36,7 +36,7 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
       break;
     
     case 'over-ons':
-      breadcrumbs.push({ name: 'Over ons', url: abs('/over-ons') });
+      breadcrumbs.push({ name: 'Over Ons', url: abs('/over-ons') });
       break;
     
     case 'contact':
@@ -44,16 +44,52 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
       break;
     
     case 'privacy':
-      breadcrumbs.push({ name: 'Privacy', url: abs('/privacy') });
+      breadcrumbs.push({ name: 'Privacybeleid', url: abs('/privacy') });
       break;
     
     case 'voorwaarden':
-      breadcrumbs.push({ name: 'Voorwaarden', url: abs('/voorwaarden') });
+      breadcrumbs.push({ name: 'Algemene Voorwaarden', url: abs('/voorwaarden') });
+      break;
+
+    case 'speeltuin':
+      breadcrumbs.push({ name: 'Speeltuin', url: abs('/speeltuin') });
+      break;
+
+    case 'overzicht-site':
+      breadcrumbs.push({ name: 'Site Overzicht', url: abs('/overzicht-site') });
+      break;
+
+    case 'sitemap':
+      breadcrumbs.push({ name: 'Sitemap', url: abs('/sitemap') });
       break;
     
     default:
-      // For generic pages, just return Home
-      return breadcrumbs;
+      // For generic pages, try to extract from current path if available
+      if (typeof window !== 'undefined') {
+        const pathname = window.location.pathname;
+        const segments = pathname.split('/').filter(Boolean);
+        
+        // Dutch route translations for dynamic breadcrumbs
+        const routeTranslations: Record<string, string> = {
+          'blog': 'Blog',
+          'portfolio': 'Portfolio',
+          'cases': 'Cases',
+          'kennisbank': 'Kennisbank',
+          'nieuws': 'Nieuws',
+          'tools': 'Tools',
+          'downloads': 'Downloads',
+        };
+
+        segments.forEach((segment) => {
+          const segmentName = routeTranslations[segment] || 
+            segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+          breadcrumbs.push({ 
+            name: segmentName, 
+            url: abs('/' + segments.slice(0, segments.indexOf(segment) + 1).join('/'))
+          });
+        });
+      }
+      break;
   }
 
   return breadcrumbs;
@@ -234,6 +270,58 @@ export default function SEOSchema({
     publisher: {
       '@id': `${SITE_URL}#organization`,
     },
+    ...(currentPageType === 'homepage' && {
+      siteNavigationElement: [
+        {
+          '@type': 'SiteNavigationElement',
+          '@id': `${SITE_URL}#nav-home`,
+          name: 'Home',
+          description: 'Homepage van ProWeb Studio - Professionele website ontwikkeling',
+          url: abs('/'),
+          position: 1,
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          '@id': `${SITE_URL}#nav-diensten`,
+          name: 'Diensten',
+          description: 'Onze webdevelopment diensten: websites, webshops, SEO en 3D ervaringen',
+          url: abs('/diensten'),
+          position: 2,
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          '@id': `${SITE_URL}#nav-werkwijze`,
+          name: 'Werkwijze',
+          description: 'Ons bewezen stappenplan van intake tot succesvolle website livegang',
+          url: abs('/werkwijze'),
+          position: 3,
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          '@id': `${SITE_URL}#nav-over-ons`,
+          name: 'Over Ons',
+          description: 'Leer meer over het ProWeb Studio team en onze missie',
+          url: abs('/over-ons'),
+          position: 4,
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          '@id': `${SITE_URL}#nav-contact`,
+          name: 'Contact',
+          description: 'Neem contact op voor een vrijblijvende kennismaking en offerte',
+          url: abs('/contact'),
+          position: 5,
+        },
+        {
+          '@type': 'SiteNavigationElement',
+          '@id': `${SITE_URL}#nav-speeltuin`,
+          name: 'Speeltuin',
+          description: 'Technische showcases en 3D demonstraties van onze mogelijkheden',
+          url: abs('/speeltuin'),
+          position: 6,
+        },
+      ],
+    }),
     potentialAction: [
       {
         '@type': 'SearchAction',
@@ -580,12 +668,19 @@ export default function SEOSchema({
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         '@id': `${SITE_URL}#breadcrumb`,
+        inLanguage: 'nl-NL',
         itemListElement: pageBreadcrumbs.map((crumb, index) => ({
           '@type': 'ListItem',
           position: index + 1,
           name: crumb.name,
-          item: crumb.url,
+          item: {
+            '@type': 'WebPage',
+            '@id': crumb.url,
+            name: crumb.name,
+            url: crumb.url,
+          },
         })),
+        numberOfItems: pageBreadcrumbs.length,
       }
     : null;
 
@@ -826,7 +921,7 @@ export default function SEOSchema({
     serviceType: 'Website laten maken',
     name: 'Website laten maken',
     url: abs('/diensten#website'),
-    description: 'Professionele websites op maat gebouwd met moderne technologieën voor Nederlandse bedrijven',
+    description: 'Professionele websites op maat gebouwd met moderne technologieën voor Nederlandse bedrijven. Van eenvoudige bedrijfswebsites tot complexe webapplicaties met focus op performance en Nederlandse webstandaarden.',
     inLanguage: 'nl-NL',
     provider: {
       '@id': `${SITE_URL}#organization`,
@@ -847,15 +942,101 @@ export default function SEOSchema({
     ],
     availableLanguage: ['nl', 'en'],
     category: 'Webdevelopment',
-    offers: {
-      '@type': 'Offer',
-      '@id': `${SITE_URL}/diensten#website-offer`,
-      url: abs('/diensten#website'),
-      category: 'service',
-      priceCurrency: 'EUR',
-      eligibleRegion: 'NL',
-      availability: 'https://schema.org/InStock',
+    keywords: [
+      'website laten maken',
+      'webdesign Nederland',
+      'responsive website',
+      'Next.js ontwikkeling',
+      'React website',
+      'headless CMS',
+      'SEO geoptimaliseerd',
+      'Nederlandse webstandaarden',
+      'GDPR compliant',
+      'performance optimalisatie',
+    ],
+    serviceOutput: {
+      '@type': 'WebSite',
+      name: 'Professionele bedrijfswebsite',
+      description: 'Volledig responsive website geoptimaliseerd voor Nederlandse markt',
     },
+    offers: [
+      {
+        '@type': 'Offer',
+        '@id': `${SITE_URL}/diensten#website-basis-offer`,
+        name: 'Basis Website Pakket',
+        url: abs('/diensten#website'),
+        category: 'service',
+        priceCurrency: 'EUR',
+        price: '2500',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          price: '2500',
+          priceCurrency: 'EUR',
+          valueAddedTaxIncluded: false,
+          eligibleRegion: 'NL',
+          name: 'Startersprijs excl. BTW',
+        },
+        eligibleRegion: 'NL',
+        availability: 'https://schema.org/InStock',
+        deliveryLeadTime: {
+          '@type': 'QuantitativeValue',
+          value: 30,
+          unitCode: 'DAY',
+        },
+        warranty: {
+          '@type': 'WarrantyPromise',
+          durationOfWarranty: 'P12M',
+          warrantyScope: 'Technische support en bugfixes',
+        },
+        includesObject: [
+          {
+            '@type': 'Service',
+            name: 'Responsive webdesign',
+          },
+          {
+            '@type': 'Service',
+            name: 'SEO basis optimalisatie',
+          },
+          {
+            '@type': 'Service',
+            name: 'Google Analytics setup',
+          },
+          {
+            '@type': 'Service',
+            name: '1 jaar hosting en domein',
+          },
+        ],
+      },
+      {
+        '@type': 'Offer',
+        '@id': `${SITE_URL}/diensten#website-pro-offer`,
+        name: 'Professionele Website Pakket',
+        url: abs('/diensten#website'),
+        category: 'service',
+        priceCurrency: 'EUR',
+        price: '5000',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          price: '5000',
+          priceCurrency: 'EUR',
+          valueAddedTaxIncluded: false,
+          eligibleRegion: 'NL',
+          name: 'Professioneel pakket excl. BTW',
+        },
+        eligibleRegion: 'NL',
+        availability: 'https://schema.org/InStock',
+        deliveryLeadTime: {
+          '@type': 'QuantitativeValue',
+          value: 45,
+          unitCode: 'DAY',
+        },
+        warranty: {
+          '@type': 'WarrantyPromise',
+          durationOfWarranty: 'P12M',
+          warrantyScope: 'Volledige technische support en onderhoud',
+        },
+      },
+    ],
   };
 
   const webshopService = {
@@ -865,7 +1046,7 @@ export default function SEOSchema({
     serviceType: 'Webshop ontwikkeling',
     name: 'Webshop laten maken',
     url: abs('/diensten#webshop'),
-    description: 'E-commerce oplossingen en webshops met Nederlandse betaalmethoden en integraties',
+    description: 'Complete e-commerce oplossingen en webshops met Nederlandse betaalmethoden, BTW-administratie en integraties met populaire Nederlandse payment providers zoals iDEAL, Mollie en Stripe.',
     inLanguage: 'nl-NL',
     provider: {
       '@id': `${SITE_URL}#organization`,
@@ -886,15 +1067,140 @@ export default function SEOSchema({
     ],
     availableLanguage: ['nl', 'en'],
     category: 'E-commerce Development',
-    offers: {
-      '@type': 'Offer',
-      '@id': `${SITE_URL}/diensten#webshop-offer`,
-      url: abs('/diensten#webshop'),
-      category: 'service',
-      priceCurrency: 'EUR',
-      eligibleRegion: 'NL',
-      availability: 'https://schema.org/InStock',
+    keywords: [
+      'webshop laten maken',
+      'e-commerce Nederland',
+      'online winkel',
+      'iDEAL betaling',
+      'Mollie integratie',
+      'Nederlandse webshop',
+      'BTW administratie',
+      'GDPR webshop',
+      'responsive webshop',
+      'mobile commerce',
+    ],
+    serviceOutput: {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}#webshop-output`,
+      name: 'Nederlandse e-commerce webshop',
+      description: 'Volledige webshop met Nederlandse betaalmethoden en compliance',
     },
+    offers: [
+      {
+        '@type': 'Offer',
+        '@id': `${SITE_URL}/diensten#webshop-starter-offer`,
+        name: 'Webshop Starter Pakket',
+        url: abs('/diensten#webshop'),
+        category: 'service',
+        priceCurrency: 'EUR',
+        price: '5000',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          price: '5000',
+          priceCurrency: 'EUR',
+          valueAddedTaxIncluded: false,
+          eligibleRegion: 'NL',
+          name: 'Webshop startersprijs excl. BTW',
+        },
+        eligibleRegion: 'NL',
+        availability: 'https://schema.org/InStock',
+        deliveryLeadTime: {
+          '@type': 'QuantitativeValue',
+          value: 60,
+          unitCode: 'DAY',
+        },
+        warranty: {
+          '@type': 'WarrantyPromise',
+          durationOfWarranty: 'P12M',
+          warrantyScope: 'Technische support, betaalondersteuning en beveiligingsupdates',
+        },
+        includesObject: [
+          {
+            '@type': 'Service',
+            name: 'iDEAL en creditcard betalingen',
+          },
+          {
+            '@type': 'Service',
+            name: 'Nederlandse BTW berekeningen',
+          },
+          {
+            '@type': 'Service',
+            name: 'Mollie of Stripe integratie',
+          },
+          {
+            '@type': 'Service',
+            name: 'GDPR/AVG compliance',
+          },
+          {
+            '@type': 'Service',
+            name: 'Voorraadbeheersysteem',
+          },
+          {
+            '@type': 'Service',
+            name: 'Nederlandse verzendopties',
+          },
+          {
+            '@type': 'Service',
+            name: '1 jaar e-commerce hosting',
+          },
+        ],
+      },
+      {
+        '@type': 'Offer',
+        '@id': `${SITE_URL}/diensten#webshop-pro-offer`,
+        name: 'Webshop Professional Pakket',
+        url: abs('/diensten#webshop'),
+        category: 'service',
+        priceCurrency: 'EUR',
+        price: '10000',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          price: '10000',
+          priceCurrency: 'EUR',
+          valueAddedTaxIncluded: false,
+          eligibleRegion: 'NL',
+          name: 'Professioneel webshop pakket excl. BTW',
+        },
+        eligibleRegion: 'NL',
+        availability: 'https://schema.org/InStock',
+        deliveryLeadTime: {
+          '@type': 'QuantitativeValue',
+          value: 90,
+          unitCode: 'DAY',
+        },
+        warranty: {
+          '@type': 'WarrantyPromise',
+          durationOfWarranty: 'P24M',
+          warrantyScope: 'Volledige technische support, betaalondersteuning, en doorontwikkeling',
+        },
+        includesObject: [
+          {
+            '@type': 'Service',
+            name: 'Alle Nederlandse betaalmethoden',
+          },
+          {
+            '@type': 'Service',
+            name: 'Koppeling met boekhoudsoftware',
+          },
+          {
+            '@type': 'Service',
+            name: 'Marketplace integraties (Bol.com, Amazon)',
+          },
+          {
+            '@type': 'Service',
+            name: 'Geavanceerde analytics en rapportage',
+          },
+          {
+            '@type': 'Service',
+            name: 'Multi-language ondersteuning',
+          },
+          {
+            '@type': 'Service',
+            name: 'Dedicated account manager',
+          },
+        ],
+      },
+    ],
   };
 
   const seoService = {
@@ -902,9 +1208,9 @@ export default function SEOSchema({
     '@type': 'Service',
     '@id': `${SITE_URL}/diensten#seo-service`,
     serviceType: 'SEO optimalisatie',
-    name: 'SEO optimalisatie',
+    name: 'SEO optimalisatie Nederland',
     url: abs('/diensten#seo'),
-    description: 'Zoekmachine optimalisatie en technische SEO voor betere Google rankings',
+    description: 'Professionele zoekmachine optimalisatie en technische SEO voor betere Google rankings in Nederland. Specialisatie in Nederlandse zoektermen, lokale SEO en Nederlandse webrichtlijnen.',
     inLanguage: 'nl-NL',
     provider: {
       '@id': `${SITE_URL}#organization`,
@@ -925,15 +1231,135 @@ export default function SEOSchema({
     ],
     availableLanguage: ['nl', 'en'],
     category: 'Digital Marketing',
-    offers: {
-      '@type': 'Offer',
-      '@id': `${SITE_URL}/diensten#seo-offer`,
-      url: abs('/diensten#seo'),
-      category: 'service',
-      priceCurrency: 'EUR',
-      eligibleRegion: 'NL',
-      availability: 'https://schema.org/InStock',
+    keywords: [
+      'SEO Nederland',
+      'zoekmachine optimalisatie',
+      'Google ranking verbeteren',
+      'Nederlandse SEO',
+      'lokale SEO',
+      'technische SEO',
+      'zoekwoorden onderzoek Nederland',
+      'Google Analytics Nederlandse markt',
+      'Dutch SEO services',
+      'Nederlandse zoektermen',
+      'organic traffic Nederland',
+      'Core Web Vitals optimalisatie',
+    ],
+    serviceOutput: {
+      '@type': 'WebPage',
+      name: 'SEO geoptimaliseerde website',
+      description: 'Website geoptimaliseerd voor Nederlandse zoekmachines en gebruikersgedrag',
     },
+    offers: [
+      {
+        '@type': 'Offer',
+        '@id': `${SITE_URL}/diensten#seo-starter-offer`,
+        name: 'SEO Basis Pakket',
+        url: abs('/diensten#seo'),
+        category: 'service',
+        priceCurrency: 'EUR',
+        price: '1500',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          price: '1500',
+          priceCurrency: 'EUR',
+          valueAddedTaxIncluded: false,
+          eligibleRegion: 'NL',
+          name: 'SEO basis pakket excl. BTW',
+          billingDuration: 'P1M',
+        },
+        eligibleRegion: 'NL',
+        availability: 'https://schema.org/InStock',
+        deliveryLeadTime: {
+          '@type': 'QuantitativeValue',
+          value: 14,
+          unitCode: 'DAY',
+        },
+        warranty: {
+          '@type': 'WarrantyPromise',
+          durationOfWarranty: 'P6M',
+          warrantyScope: 'SEO performance monitoring en rapportage',
+        },
+        includesObject: [
+          {
+            '@type': 'Service',
+            name: 'Nederlandse zoekwoorden analyse',
+          },
+          {
+            '@type': 'Service',
+            name: 'Technische SEO audit',
+          },
+          {
+            '@type': 'Service',
+            name: 'Google Analytics 4 setup Nederland',
+          },
+          {
+            '@type': 'Service',
+            name: 'Basis on-page optimalisatie',
+          },
+          {
+            '@type': 'Service',
+            name: 'Maandelijkse performance rapportage',
+          },
+        ],
+      },
+      {
+        '@type': 'Offer',
+        '@id': `${SITE_URL}/diensten#seo-pro-offer`,
+        name: 'SEO Professional Pakket',
+        url: abs('/diensten#seo'),
+        category: 'service',
+        priceCurrency: 'EUR',
+        price: '3500',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          price: '3500',
+          priceCurrency: 'EUR',
+          valueAddedTaxIncluded: false,
+          eligibleRegion: 'NL',
+          name: 'SEO professioneel pakket excl. BTW',
+          billingDuration: 'P1M',
+        },
+        eligibleRegion: 'NL',
+        availability: 'https://schema.org/InStock',
+        deliveryLeadTime: {
+          '@type': 'QuantitativeValue',
+          value: 7,
+          unitCode: 'DAY',
+        },
+        warranty: {
+          '@type': 'WarrantyPromise',
+          durationOfWarranty: 'P12M',
+          warrantyScope: 'Volledige SEO support, content strategie en ranking monitoring',
+        },
+        includesObject: [
+          {
+            '@type': 'Service',
+            name: 'Uitgebreide Nederlandse keyword research',
+          },
+          {
+            '@type': 'Service',
+            name: 'Lokale SEO voor Nederlandse markt',
+          },
+          {
+            '@type': 'Service',
+            name: 'Nederlandse content strategie',
+          },
+          {
+            '@type': 'Service',
+            name: 'Linkbuilding Nederlandse websites',
+          },
+          {
+            '@type': 'Service',
+            name: 'E-A-T optimalisatie Nederlandse markt',
+          },
+          {
+            '@type': 'Service',
+            name: 'Dedicated SEO specialist',
+          },
+        ],
+      },
+    ],
   };
 
   // HowTo schema for werkwijze page
@@ -1013,104 +1439,361 @@ export default function SEOSchema({
     },
   } : null;
 
-  // FAQ schema for diensten page
-  const faqSchema = currentIncludeFAQ ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    '@id': `${SITE_URL}/diensten#faq`,
-    name: 'Veelgestelde vragen over webdesign en development',
-    description: 'Antwoorden op veelgestelde vragen over website laten maken, webshop ontwikkeling en SEO services in Nederland',
-    inLanguage: 'nl-NL',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        '@id': `${SITE_URL}/diensten#faq-1`,
-        name: 'Hoelang duurt het om een website op te leveren?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Een professionele website wordt doorgaans binnen 4-8 weken opgeleverd, afhankelijk van de complexiteit en specifieke wensen. Voor eenvoudige websites kunnen we dit verkorten tot 2-3 weken, terwijl uitgebreide e-commerce oplossingen soms 8-12 weken in beslag nemen.',
-          author: {
-            '@type': 'Organization',
-            '@id': `${SITE_URL}#organization`,
+  // FAQ schema for different page types
+  const faqSchema = currentIncludeFAQ ? (() => {
+    if (currentPageType === 'homepage') {
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}#faq`,
+        name: 'Veelgestelde vragen over website laten maken in Nederland',
+        description: 'Antwoorden op veelgestelde vragen over professionele website ontwikkeling, kosten, en onze werkwijze',
+        inLanguage: 'nl-NL',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}#faq-homepage-1`,
+            name: 'Wat kost het om een website te laten maken bij ProWeb Studio?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'De investering voor een professionele website varieert tussen €3.500 en €25.000+, afhankelijk van functionaliteiten, design complexiteit en integraties. We werken met transparante, vaste prijzen per project. Na een gratis strategiesessie ontvangt u een gedetailleerde offerte zonder verborgen kosten.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
           },
-        },
-      },
-      {
-        '@type': 'Question',
-        '@id': `${SITE_URL}/diensten#faq-2`,
-        name: 'Werken jullie met WordPress, een headless CMS of maatwerk?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Wij specialiseren ons in moderne headless CMS-oplossingen zoals Sanity en Contentful, gecombineerd met Next.js voor optimale performance. Voor specifieke behoeften ontwikkelen we ook volledig maatwerk oplossingen. WordPress gebruiken we alleen in uitzonderlijke gevallen.',
-          author: {
-            '@type': 'Organization',
-            '@id': `${SITE_URL}#organization`,
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}#faq-homepage-2`,
+            name: 'Hoe lang duurt het om een website te laten maken?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Een standaard business website realiseren we binnen 4-6 weken. Complexere projecten met 3D-elementen of uitgebreide functionaliteiten kunnen 8-12 weken in beslag nemen. We plannen altijd een realistische timeline en houden u wekelijks op de hoogte van de voortgang.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
           },
-        },
-      },
-      {
-        '@type': 'Question',
-        '@id': `${SITE_URL}/diensten#faq-3`,
-        name: 'Kunnen jullie een webshop bouwen met betaalmethoden in Nederland (iDEAL, creditcard)?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Ja, wij bouwen complete e-commerce oplossingen met alle populaire Nederlandse betaalmethoden zoals iDEAL, creditcard, Bancontact, en PayPal. We integreren met betrouwbare payment service providers zoals Mollie of Stripe voor veilige transacties.',
-          author: {
-            '@type': 'Organization',
-            '@id': `${SITE_URL}#organization`,
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}#faq-homepage-3`,
+            name: 'Waarom zou ik mijn website laten maken door ProWeb Studio?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Wij combineren technische excellentie met creatieve innovatie. Onze websites behalen niet alleen perfecte Google PageSpeed scores, maar onderscheiden zich ook visueel met unieke 3D-ervaringen. Bovendien bieden we volledige transparantie, persoonlijke begeleiding en continue support na oplevering.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
           },
-        },
-      },
-      {
-        '@type': 'Question',
-        '@id': `${SITE_URL}/diensten#faq-4`,
-        name: 'Hoe pakken jullie SEO aan voor landelijke vindbaarheid in Nederland?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Onze SEO-aanpak begint met diepgaand zoekwoordenonderzoek specifiek voor de Nederlandse markt. We optimaliseren technische aspecten, creëren waardevolle content, en zorgen voor lokale SEO met focus op Nederlandse zoektermen en gebruikersgedrag.',
-          author: {
-            '@type': 'Organization',
-            '@id': `${SITE_URL}#organization`,
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}#faq-homepage-4`,
+            name: 'Krijg ik ook SEO en online marketing ondersteuning?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, elke website bouwen we met een sterke SEO-basis: technische optimalisatie, snelheidsoptimalisatie, schema markup en contentstrategie. Voor doorlopende SEO en marketing kunnen we u doorverwijzen naar onze vertrouwde partners gespecialiseerd in Nederlandse marktbewerking.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
           },
-        },
-      },
-      {
-        '@type': 'Question',
-        '@id': `${SITE_URL}/diensten#faq-5`,
-        name: 'Bieden jullie onderhoud en doorontwikkeling aan?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Ja, wij bieden flexibele onderhoudscontracten en doorontwikkelingstrajecten. Van beveiligingsupdates en contentbeheer tot het toevoegen van nieuwe functionaliteiten - we zorgen ervoor dat uw website altijd up-to-date en optimaal presteert.',
-          author: {
-            '@type': 'Organization',
-            '@id': `${SITE_URL}#organization`,
+        ],
+      };
+    } else if (currentPageType === 'werkwijze') {
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/werkwijze#faq`,
+        name: 'Veelgestelde vragen over onze werkwijze en projectaanpak',
+        description: 'Antwoorden op vragen over ons ontwikkelproces, samenwerking, en Nederlandse compliance aspecten',
+        inLanguage: 'nl-NL',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/werkwijze#faq-1`,
+            name: 'Hoe verloopt de samenwerking tijdens het project?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'We werken transparant en communicatief: wekelijkse updates, toegang tot ons projectdashboard, en vaste contactpersoon. U bent altijd op de hoogte van de voortgang en kunt direct feedback geven.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
           },
-        },
-      },
-      {
-        '@type': 'Question',
-        '@id': `${SITE_URL}/diensten#faq-6`,
-        name: 'Kunnen afspraken online plaatsvinden of op locatie in Nederland?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Beide opties zijn mogelijk. We werken graag online via videocalls voor efficiënte samenwerking, maar bezoeken ook graag klanten op locatie binnen Nederland voor persoonlijke besprekingen en workshops.',
-          author: {
-            '@type': 'Organization',
-            '@id': `${SITE_URL}#organization`,
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/werkwijze#faq-2`,
+            name: 'Welke betaalvoorwaarden hanteren jullie in Nederland?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'We werken met een 30% vooruitbetaling bij opdrachtverlening, 40% bij design goedkeuring, en 30% bij oplevering. BTW wordt conform Nederlandse wetgeving berekend. Betaling mogelijk via iDEAL, bankoverschrijving of factuur.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
           },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/werkwijze#faq-3`,
+            name: 'Zorgen jullie voor GDPR/AVG compliance?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, alle websites bouwen we volledig GDPR/AVG compliant met Nederlandse privacywetgeving. Inclusief cookie consent, privacy statements, en data processing agreements.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/werkwijze#faq-4`,
+            name: 'Kunnen we een Nederlandse hosting provider gebruiken?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Absoluut! We werken samen met betrouwbare Nederlandse hosting providers voor optimale performance en data sovereignty. Ook AWS Amsterdam, Google Cloud Brussels en Microsoft Azure Nederland zijn opties.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+        ],
+      };
+    } else if (currentPageType === 'over-ons') {
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/over-ons#faq`,
+        name: 'Veelgestelde vragen over ProWeb Studio',
+        description: 'Meer weten over ons team, locatie, en bedrijfsvoering in Nederland',
+        inLanguage: 'nl-NL',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/over-ons#faq-1`,
+            name: 'Waar is ProWeb Studio gevestigd?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'ProWeb Studio opereert vanuit Nederland en bedient klanten door het hele land. We werken remote-first maar zijn ook beschikbaar voor fysieke meetings en workshops op locatie.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/over-ons#faq-2`,
+            name: 'Zijn jullie een Nederlandse onderneming?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, ProWeb Studio is een geregistreerde Nederlandse onderneming met KVK-nummer en BTW-nummer. We opereren conform alle Nederlandse wetgeving en administratieve vereisten.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/over-ons#faq-3`,
+            name: 'Welke bedrijfsaansprakelijkheidsverzekering hebben jullie?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'We hebben een uitgebreide beroepsaansprakelijkheidsverzekering specifiek voor webdevelopment diensten, conform Nederlandse standaarden voor IT-dienstverlening.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/over-ons#faq-4`,
+            name: 'Werken jullie samen met andere Nederlandse bureaus?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, we hebben een netwerk van Nederlandse partners voor marketing, fotografie, copywriting en strategisch advies. Zo kunnen we complete digitale transformaties realiseren.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+        ],
+      };
+    } else if (currentPageType === 'contact') {
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/contact#faq`,
+        name: 'Veelgestelde vragen over contact en samenwerking',
+        description: 'Informatie over bereikbaarheid, reactietijden en eerste stappen in Nederland',
+        inLanguage: 'nl-NL',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/contact#faq-1`,
+            name: 'Hoe snel reageren jullie op aanvragen?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'We reageren binnen één werkdag op alle aanvragen. Voor urgente vragen kunt u ook direct bellen tijdens kantooruren (9:00-17:00, Nederlandse tijd).',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/contact#faq-2`,
+            name: 'Kunnen we een geheimhoudingsverklaring (NDA) tekenen?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, op verzoek tekenen we graag een Nederlandse geheimhoudingsverklaring. We begrijpen het belang van vertrouwelijke bedrijfsinformatie en respecteren dit volledig.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/contact#faq-3`,
+            name: 'Werken jullie remote of kunnen we elkaar ontmoeten?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Beide opties zijn mogelijk. We werken efficiënt remote via videocalls, maar komen ook graag langs voor persoonlijke kennismaking, workshops, of belangrijke projectmomenten.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/contact#faq-4`,
+            name: 'Wat zijn jullie kantooruren in Nederland?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Onze kantooruren zijn maandag tot vrijdag van 9:00 tot 17:00 (Nederlandse tijd). Voor urgente technische problemen zijn we ook buiten kantooruren bereikbaar.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+        ],
+      };
+    } else {
+      // Existing FAQ schema for services page
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/diensten#faq`,
+        name: 'Veelgestelde vragen over webdesign en development',
+        description: 'Antwoorden op veelgestelde vragen over website laten maken, webshop ontwikkeling en SEO services in Nederland',
+        inLanguage: 'nl-NL',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten#faq-1`,
+            name: 'Hoelang duurt het om een website op te leveren?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Een professionele website wordt doorgaans binnen 4-8 weken opgeleverd, afhankelijk van de complexiteit en specifieke wensen. Voor eenvoudige websites kunnen we dit verkorten tot 2-3 weken, terwijl uitgebreide e-commerce oplossingen soms 8-12 weken in beslag nemen.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten#faq-2`,
+            name: 'Werken jullie met WordPress, een headless CMS of maatwerk?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Wij specialiseren ons in moderne headless CMS-oplossingen zoals Sanity en Contentful, gecombineerd met Next.js voor optimale performance. Voor specifieke behoeften ontwikkelen we ook volledig maatwerk oplossingen. WordPress gebruiken we alleen in uitzonderlijke gevallen.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten#faq-3`,
+            name: 'Kunnen jullie een webshop bouwen met betaalmethoden in Nederland (iDEAL, creditcard)?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, wij bouwen complete e-commerce oplossingen met alle populaire Nederlandse betaalmethoden zoals iDEAL, creditcard, Bancontact, en PayPal. We integreren met betrouwbare payment service providers zoals Mollie of Stripe voor veilige transacties.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten#faq-4`,
+            name: 'Hoe pakken jullie SEO aan voor landelijke vindbaarheid in Nederland?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Onze SEO-aanpak begint met diepgaand zoekwoordenonderzoek specifiek voor de Nederlandse markt. We optimaliseren technische aspecten, creëren waardevolle content, en zorgen voor lokale SEO met focus op Nederlandse zoektermen en gebruikersgedrag.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten#faq-5`,
+            name: 'Bieden jullie onderhoud en doorontwikkeling aan?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, wij bieden flexibele onderhoudscontracten en doorontwikkelingstrajecten. Van beveiligingsupdates en contentbeheer tot het toevoegen van nieuwe functionaliteiten - we zorgen ervoor dat uw website altijd up-to-date en optimaal presteert.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten#faq-6`,
+            name: 'Kunnen afspraken online plaatsvinden of op locatie in Nederland?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Beide opties zijn mogelijk. We werken graag online via videocalls voor efficiënte samenwerking, maar bezoeken ook graag klanten op locatie binnen Nederland voor persoonlijke besprekingen en workshops.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+        ],
+        about: {
+          '@type': 'Thing',
+          name: 'Website ontwikkeling en webdesign services Nederland',
+          description: 'Professionele webdevelopment, webshop ontwikkeling en SEO services voor Nederlandse bedrijven',
         },
-      },
-    ],
-    about: {
-      '@type': 'Thing',
-      name: 'Website ontwikkeling en webdesign services Nederland',
-      description: 'Professionele webdevelopment, webshop ontwikkeling en SEO services voor Nederlandse bedrijven',
-    },
-    publisher: {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}#organization`,
-    },
-  } : null;
+        publisher: {
+          '@type': 'Organization',
+          '@id': `${SITE_URL}#organization`,
+        },
+      };
+    }
+  })() : null;
 
   // Combine all schemas into separate scripts instead of a single graph
   const renderSchemaScripts = () => {

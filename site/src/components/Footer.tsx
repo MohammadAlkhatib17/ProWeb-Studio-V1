@@ -169,7 +169,7 @@ export default function Footer() {
           </a>
           <span aria-hidden>•</span>
           <Link
-            href="/overzicht"
+            href="/overzicht-site"
             aria-label="Site-overzicht"
             className="hover:text-white transition-colors min-h-[44px] inline-flex items-center py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
           >

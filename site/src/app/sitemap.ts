@@ -15,74 +15,78 @@ interface SitemapEntry {
 }
 
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-const BUILD_TIME = new Date(process.env.BUILD_TIME ?? new Date().toISOString());
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE_URL; // Already normalized
 
   // Define routes with their respective priorities and change frequencies
+  // Enhanced with more specific lastModified dates and better priority distribution
   const routes: Array<{
     path: string;
     priority: number;
     changeFreq: SitemapEntry['changeFrequency'];
-    fallbackDate?: Date; // Optional fallback if mtime is unavailable
+    lastModified: Date;
   }> = [
     {
       path: '/',
       priority: 1.0, // Home: highest priority
-      changeFreq: 'weekly', // Core page: weekly
-      fallbackDate: BUILD_TIME,
+      changeFreq: 'daily', // Home page changes frequently with updates
+      lastModified: new Date('2025-09-22'), // Latest update
     },
     {
       path: '/diensten',
-      priority: 0.9,
-      changeFreq: 'weekly', // Core page: weekly
-      fallbackDate: new Date('2025-09-01'),
-    },
-    {
-      path: '/werkwijze',
-      priority: 0.8,
-      changeFreq: 'weekly', // Core page: weekly
-      fallbackDate: new Date('2025-08-15'),
+      priority: 0.9, // Services: very important for business
+      changeFreq: 'weekly', // Services evolve regularly
+      lastModified: new Date('2025-09-20'),
     },
     {
       path: '/contact',
-      priority: 0.9,
-      changeFreq: 'weekly', // Core page: weekly
-      fallbackDate: new Date('2025-08-01'),
+      priority: 0.9, // Contact: critical for conversions
+      changeFreq: 'monthly', // Contact info rarely changes
+      lastModified: new Date('2025-09-15'),
+    },
+    {
+      path: '/werkwijze',
+      priority: 0.8, // Process: important for understanding value prop
+      changeFreq: 'monthly', // Process documentation updates monthly
+      lastModified: new Date('2025-09-10'),
     },
     {
       path: '/over-ons',
-      priority: 0.8,
-      changeFreq: 'weekly', // Core page: weekly
-      fallbackDate: new Date('2025-09-01'),
+      priority: 0.8, // About: important for trust and credibility
+      changeFreq: 'monthly', // Team and company info updates monthly
+      lastModified: new Date('2025-09-05'),
     },
     {
       path: '/overzicht',
-      priority: 0.4,
-      changeFreq: 'yearly',
-      fallbackDate: new Date(),
+      priority: 0.6, // Overview: moderate importance
+      changeFreq: 'monthly', // Site overview changes occasionally
+      lastModified: new Date('2025-09-01'),
+    },
+    {
+      path: '/overzicht-site',
+      priority: 0.5, // Site overview: informational
+      changeFreq: 'yearly', // Technical overview rarely changes
+      lastModified: new Date('2025-08-15'),
     },
     {
       path: '/privacy',
-      priority: 0.3,
-      changeFreq: 'monthly', // Legal page: monthly
-      fallbackDate: new Date('2025-05-25'),
+      priority: 0.4, // Privacy: legal requirement but lower conversion priority
+      changeFreq: 'yearly', // Privacy policy updates annually or when regulations change
+      lastModified: new Date('2025-08-01'),
     },
     {
       path: '/voorwaarden',
-      priority: 0.3,
-      changeFreq: 'monthly', // Legal page: monthly
-      fallbackDate: new Date('2025-05-25'),
+      priority: 0.4, // Terms: legal requirement but lower conversion priority
+      changeFreq: 'yearly', // Terms update annually or when regulations change
+      lastModified: new Date('2025-08-01'),
     },
+    // Note: /speeltuin is excluded as it's marked noindex in middleware
   ];
 
-  // Combine all routes (just the main routes for now)
-  const allRoutes = [...routes];
-
-  return allRoutes.map((route) => ({
+  return routes.map((route) => ({
     url: `${baseUrl}${route.path}`,
-    lastModified: BUILD_TIME,
+    lastModified: route.lastModified,
     changeFrequency: route.changeFreq,
     priority: route.priority,
   }));

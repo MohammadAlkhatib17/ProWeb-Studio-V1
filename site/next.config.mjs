@@ -106,6 +106,22 @@ const nextConfig = {
     minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Enable responsive images with optimized settings
+    unoptimized: false,
+    // Remote patterns for external images (if needed)
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'plausible.io',
+        port: '',
+        pathname: '/**',
+      },
+      // Add more remote patterns as needed for external images
+    ],
+    // Enable loader for better performance
+    loader: 'default',
+    // Domains for external images (legacy - prefer remotePatterns)
+    domains: [],
   },
 
   // PWA and Service Worker: serve /public/sw.js directly as /sw.js

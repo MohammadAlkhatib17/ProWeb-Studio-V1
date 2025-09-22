@@ -5,17 +5,19 @@ export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
 import { Suspense } from 'react';
-import Image from 'next/image';
+import { BackgroundImage } from '@/components/ui/responsive-image';
+import Link from 'next/link';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const metadata: Metadata = {
-  title: 'Diensten – Webdesign, 3D websites, SEO & performance optimalisatie',
+  title: 'Website laten maken & Webshop bouwen | Nederlandse webdesign diensten – ProWeb Studio',
   description:
-    'Maatwerk webdesign & development met 3D-ervaringen, technische SEO, Core Web Vitals en headless CMS. Gericht op groei en resultaat.',
+    'Professionele website laten maken of webshop bouwen voor Nederlandse bedrijven. Responsive webdesign, SEO-optimalisatie, iDEAL integratie. Betrouwbare partner voor uw digitale groei.',
   alternates: {
     canonical: '/diensten',
     languages: { 
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Diensten – Webdesign, 3D websites, SEO & performance optimalisatie',
+    title: 'Website laten maken & Webshop bouwen | Nederlandse webdesign diensten – ProWeb Studio',
     description:
       'Maatwerk webdesign & development met 3D-ervaringen, technische SEO, Core Web Vitals en headless CMS. Gericht op groei en resultaat.',
     url: `${SITE_URL}/diensten`,
@@ -44,7 +46,7 @@ const services = [
   {
     title: 'Fundamenten voor Digitale Dominantie',
     description:
-      'Uw website is het hart van uw digitale ecosysteem. Wij bouwen razendsnelle, veilige en schaalbare platformen die niet alleen vandaag indruk maken, maar ook klaar zijn voor de ambities van morgen. Dit is de technologische ruggengraat voor uw online groei.',
+      'Uw website is het hart van uw digitale ecosysteem. Wij bouwen razendsnelle, veilige en schaalbare platformen die niet alleen vandaag indruk maken, maar ook klaar zijn voor de ambities van morgen. Dit is de technologische ruggengraat voor uw online groei. Ontdek meer over onze strategische aanpak in onze werkwijze.',
     features: [
       'Next.js & React Ontwikkeling',
       'Headless CMS Integratie',
@@ -56,7 +58,7 @@ const services = [
   {
     title: 'Meeslepende Ervaringen die Onderscheiden',
     description:
-      'In een overvolle markt is differentiatie cruciaal. Wij gebruiken interactieve 3D-technologie niet als gimmick, maar als een krachtig middel om uw producten tot leven te brengen, uw merkverhaal te vertellen en een onvergetelijke, diepe connectie met uw publiek te smeden.',
+      'In een overvolle markt is differentiatie cruciaal. Wij gebruiken interactieve 3D-technologie niet als gimmick, maar als een krachtig middel om uw producten tot leven te brengen, uw merkverhaal te vertellen en een onvergetelijke, diepe connectie met uw publiek te smeden. Bekijk voorbeelden in onze speeltuin.',
     features: [
       'WebGL & Three.js Experiences',
       'Interactieve Product Configurators',
@@ -68,7 +70,7 @@ const services = [
   {
     title: 'Data-gedreven Groei en Optimalisatie',
     description:
-      'Een prachtige website is slechts het begin. Wij zetten data om in actie. Door continu te analyseren, te testen en te optimaliseren, transformeren we uw bezoekers in klanten en maximaliseren we de return on investment (ROI) van uw digitale platform.',
+      'Een prachtige website is slechts het begin. Wij zetten data om in actie. Door continu te analyseren, te testen en te optimaliseren, transformeren we uw bezoekers in klanten en maximaliseren we de return on investment (ROI) van uw digitale platform. Leer meer over ons team en onze missie.',
     features: [
       'Gebruikersdata Analyse',
       'A/B Testing & Conversie Optimalisatie',
@@ -116,18 +118,19 @@ export default function Diensten() {
 
   return (
     <main className="pt-20 md:pt-24 relative overflow-hidden">
+      {/* Breadcrumbs */}
+      <Breadcrumbs />
+      
       {/* Preload the LCP background image for this page */}
       <link rel="preload" as="image" href="/assets/nebula_services_background.avif" type="image/avif" />
       
       {/* Full-bleed page background to unify top edge */}
-      <Image
+      <BackgroundImage
         src="/assets/nebula_services_background.avif"
         alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover opacity-50 pointer-events-none -z-10"
-        decoding="async"
+        priority={true}
+        quality={85}
+        className="opacity-50 pointer-events-none -z-10"
       />
       <script
         type="application/ld+json"
@@ -266,6 +269,93 @@ export default function Diensten() {
                 <li>Netlify</li>
                 <li>AWS</li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Related Services & Internal Links Section */}
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+        <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-12 text-center gradient-text">
+            Ontdek Meer van ProWeb Studio
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12">
+            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
+              <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
+                🏗️ Onze Werkwijze
+              </h3>
+              <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                Ontdek hoe wij van idee naar realisatie werken. Van strategische planning 
+                tot technische implementatie en doorlopende optimalisatie.
+              </p>
+              <Link 
+                href="/werkwijze" 
+                className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium"
+              >
+                Bekijk onze projectaanpak
+                <span className="ml-1">→</span>
+              </Link>
+            </div>
+
+            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
+              <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
+                🎮 3D Technologie Speeltuin
+              </h3>
+              <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                Ervaar de kracht van moderne webtechnologie. Interactieve 3D-ervaringen, 
+                WebGL-experimenten en innovatieve gebruikersinterfaces.
+              </p>
+              <Link 
+                href="/speeltuin" 
+                className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium"
+              >
+                Ontdek onze 3D showcases
+                <span className="ml-1">→</span>
+              </Link>
+            </div>
+
+            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
+              <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
+                👥 Over ProWeb Studio
+              </h3>
+              <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                Leer het team kennen achter de innovatieve weboplossingen. Onze missie, 
+                visie en de expertise die we inzetten voor uw digitale succes.
+              </p>
+              <Link 
+                href="/over-ons" 
+                className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium"
+              >
+                Ontmoet het team
+                <span className="ml-1">→</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Conversion-focused CTA */}
+          <div className="text-center">
+            <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white">
+              Klaar voor een Website die Indruk Maakt?
+            </h3>
+            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+              Van concept tot conversie - wij realiseren digitale oplossingen die uw bedrijf 
+              naar het volgende niveau tillen. Plan een gratis strategiesessie en ontdek de mogelijkheden.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/contact"
+                className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-lg hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25"
+              >
+                Plan Gratis Strategiesessie
+              </Link>
+              <Link
+                href="/overzicht"
+                className="px-8 py-4 border-2 border-gray-600 rounded-lg font-semibold text-lg hover:border-white hover:bg-white/10 transition-all duration-300"
+              >
+                Bekijk Portfolio
+              </Link>
             </div>
           </div>
         </div>
