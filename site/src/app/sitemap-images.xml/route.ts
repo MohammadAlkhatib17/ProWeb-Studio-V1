@@ -21,32 +21,37 @@ export async function GET() {
   const imageSitemapEntries: ImageSitemapEntry[] = [
     {
       url: `${baseUrl}/`,
-      lastModified: '2025-09-22',
+      lastModified: new Date().toISOString().split('T')[0],
       images: [
         {
           loc: `${baseUrl}/assets/hero/nebula_helix.avif`,
-          caption: 'ProWeb Studio - Revolutionaire webontwikkeling met kosmische precisie',
-          title: 'Hero achtergrond - Nebula Helix',
+          caption: 'ProWeb Studio - Revolutionaire webontwikkeling met kosmische precisie in Nederland',
+          title: 'Hero achtergrond - Nebula Helix - Website laten maken',
+          geoLocation: 'Netherlands',
         },
         {
           loc: `${baseUrl}/assets/hero/nebula_helix.webp`,
-          caption: 'ProWeb Studio - Revolutionaire webontwikkeling met kosmische precisie',
-          title: 'Hero achtergrond - Nebula Helix (WebP)',
+          caption: 'ProWeb Studio - Revolutionaire webontwikkeling met kosmische precisie in Nederland',
+          title: 'Hero achtergrond - Nebula Helix (WebP) - Webdesign Nederland',
+          geoLocation: 'Netherlands',
         },
         {
           loc: `${baseUrl}/assets/hero_portal_background.avif`,
-          caption: 'ProWeb Studio portaal - Toegang tot digitale transformatie',
-          title: 'Hero Portal achtergrond',
+          caption: 'ProWeb Studio portaal - Toegang tot digitale transformatie voor Nederlandse bedrijven',
+          title: 'Hero Portal achtergrond - Website ontwikkeling',
+          geoLocation: 'Netherlands',
         },
         {
           loc: `${baseUrl}/assets/logo/logo-proweb-lockup.svg`,
-          caption: 'ProWeb Studio logo - Professionele webontwikkeling',
-          title: 'ProWeb Studio Logo Lockup',
+          caption: 'ProWeb Studio logo - Professionele webontwikkeling Amsterdam Rotterdam Utrecht',
+          title: 'ProWeb Studio Logo Lockup - Webdesign Bureau Nederland',
+          geoLocation: 'Netherlands',
         },
         {
           loc: `${baseUrl}/assets/logo/logo-proweb-icon.svg`,
-          caption: 'ProWeb Studio icoon - Brand identiteit',
-          title: 'ProWeb Studio Icoon',
+          caption: 'ProWeb Studio icoon - Nederlandse webdesign specialist',
+          title: 'ProWeb Studio Icoon - Website maken Nederland',
+          geoLocation: 'Netherlands',
         },
       ],
     },

@@ -23,7 +23,18 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: ['/'],
+        allow: [
+          '/',
+          '/diensten/',
+          '/contact/',
+          '/werkwijze/',
+          '/portfolio/',
+          '/over-ons/',
+          '/privacy/',
+          '/voorwaarden/',
+          '/sitemap.xml',
+          '/robots.txt',
+        ],
         disallow: [
           '/speeltuin/',     // Playground area - not for public indexing
           '/_next/',         // Next.js internal files
@@ -33,28 +44,56 @@ export default function robots(): MetadataRoute.Robots {
           '*.xml$',          // XML files except sitemap
           '/sw.js',          // Service worker
           '/offline.html',   // Offline page
+          '/overzicht/',     // Internal overview pages
+          '/overzicht-site/', // Internal site overview
+          '/.well-known/',   // Hidden directories
+          '/manifest.json',  // PWA manifest
         ],
         crawlDelay: 1, // Be respectful to servers
       },
       {
         userAgent: 'Googlebot',
-        allow: ['/'],
+        allow: [
+          '/',
+          '/diensten/',
+          '/contact/',
+          '/werkwijze/',
+          '/portfolio/',
+          '/over-ons/',
+          '/privacy/',
+          '/voorwaarden/',
+          '/sitemap.xml',
+          '/robots.txt',
+        ],
         disallow: [
           '/speeltuin/',
           '/_next/',
           '/api/',
           '/admin/',
+          '/overzicht/',
+          '/overzicht-site/',
         ],
         // No crawl delay for Googlebot as it's well-behaved
       },
       {
         userAgent: 'Bingbot',
-        allow: ['/'],
+        allow: [
+          '/',
+          '/diensten/',
+          '/contact/',
+          '/werkwijze/',
+          '/portfolio/',
+          '/over-ons/',
+          '/privacy/',
+          '/voorwaarden/',
+        ],
         disallow: [
           '/speeltuin/',
           '/_next/',
           '/api/',
           '/admin/',
+          '/overzicht/',
+          '/overzicht-site/',
         ],
         crawlDelay: 2, // Slightly more conservative for Bing
       },

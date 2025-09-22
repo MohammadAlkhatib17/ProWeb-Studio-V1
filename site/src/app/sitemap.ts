@@ -31,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       path: '/',
       priority: 1.0, // Home: highest priority
       changeFreq: 'daily', // Home page changes frequently with updates
-      lastModified: new Date('2025-09-22'), // Latest update
+      lastModified: new Date(), // Current date for fresh indexing
     },
     {
       path: '/diensten',
@@ -44,6 +44,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9, // Contact: critical for conversions
       changeFreq: 'monthly', // Contact info rarely changes
       lastModified: new Date('2025-09-15'),
+    },
+    {
+      path: '/portfolio',
+      priority: 0.9, // Portfolio: critical for showcasing work
+      changeFreq: 'weekly', // Portfolio gets updated with new projects
+      lastModified: new Date(),
     },
     {
       path: '/werkwijze',

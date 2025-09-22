@@ -53,7 +53,8 @@ const sitemapSections = [
     description: 'Onze projecten en technische demonstraties',
     icon: '🎨',
     links: [
-      { href: '/overzicht', title: 'Portfolio Overzicht', description: 'Bekijk onze gerealiseerde webprojecten' },
+      { href: '/portfolio', title: 'Portfolio', description: 'Bekijk onze gerealiseerde webprojecten en case studies' },
+      { href: '/overzicht', title: 'Project Overzicht', description: 'Overzicht van onze diensten en werkwijze' },
       { href: '/speeltuin', title: '3D Technologie Speeltuin', description: 'Interactieve demonstraties van moderne webtechnologie' },
     ]
   },

@@ -68,6 +68,15 @@ export default function SiteOverzichtPage() {
                 </li>
                 <li>
                   <a 
+                    href="/portfolio" 
+                    className="block p-4 rounded-lg bg-cosmic-900/50 border border-white/10 hover:border-cyan-400/50 hover:bg-white/5 transition-all duration-200"
+                  >
+                    <span className="font-medium text-white">Portfolio</span>
+                    <p className="text-sm text-gray-400 mt-1">Onze gerealiseerde projecten</p>
+                  </a>
+                </li>
+                <li>
+                  <a 
                     href="/werkwijze" 
                     className="block p-4 rounded-lg bg-cosmic-900/50 border border-white/10 hover:border-cyan-400/50 hover:bg-white/5 transition-all duration-200"
                   >

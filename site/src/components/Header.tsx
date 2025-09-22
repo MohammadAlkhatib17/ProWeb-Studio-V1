@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { siteConfig } from '@/config/site.config';
 import Logo from '@/components/Logo';
@@ -14,6 +15,7 @@ const MobileMenu = dynamic(() => import('@/components/navigation/MobileMenu'), {
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const menuItems = siteConfig.navigation.map(item => ({
     href: item.href,
@@ -77,17 +79,29 @@ export default function Header() {
           className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2"
           aria-label="Primary navigation"
         >
-          {siteConfig.navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="font-medium text-gray-300 hover:text-white transition-all duration-300 relative group py-3 px-3 rounded-lg hover:bg-cyan-400/5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900 min-h-[44px] inline-flex items-center"
-            >
-              <span className="relative z-10">{item.name}</span>
-              <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-cyan-400 to-magenta-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-magenta-500/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </Link>
-          ))}
+          {siteConfig.navigation.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`font-medium transition-all duration-300 relative group py-3 px-3 rounded-lg hover:bg-cyan-400/5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900 min-h-[44px] inline-flex items-center ${
+                  isActive 
+                    ? 'text-white' 
+                    : 'text-gray-300 hover:text-white'
+                }`}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                <span className="relative z-10">{item.name}</span>
+                <div className={`absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-cyan-400 to-magenta-400 transform transition-transform duration-300 origin-left ${
+                  isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                }`} />
+                <div className={`absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-magenta-500/5 rounded-lg transition-opacity duration-300 ${
+                  isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`} />
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Mobile Menu Button - positioned at far right */}

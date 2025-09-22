@@ -90,35 +90,41 @@ export default function MobileMenu({
               
               <nav className="relative h-full overflow-y-auto px-5 sm:px-7 py-5">
                 <ul className="mt-2 space-y-1.5">
-                  {items.map((it, i) => (
-                    <motion.li
-                      key={it.href}
-                      initial={{ y: 10, opacity: 0 }}
-                      animate={{ 
-                        y: 0, 
-                        opacity: 1, 
-                        transition: { 
-                          delay: 0.05 + i * 0.06, 
-                          duration: .25 
-                        } 
-                      }}
-                    >
-                      <Magnetic className="will-change-transform">
-                        <Link
-                          ref={i === 0 ? firstRef : undefined}
-                          href={it.href}
-                          onClick={onClose}
-                          className="block w-full rounded-xl px-4 py-4 text-[17px] font-medium tracking-wide
-                                     text-white/95 hover:text-white min-h-[44px] flex items-center
-                                     hover:bg-white/6 focus:bg-white/8 focus:outline-none
-                                     ring-1 ring-transparent hover:ring-white/10 focus:ring-white/15
-                                     transition-colors"
-                        >
-                          {it.label}
-                        </Link>
-                      </Magnetic>
-                    </motion.li>
-                  ))}
+                  {items.map((it, i) => {
+                    const isActive = pathname === it.href;
+                    return (
+                      <motion.li
+                        key={it.href}
+                        initial={{ y: 10, opacity: 0 }}
+                        animate={{ 
+                          y: 0, 
+                          opacity: 1, 
+                          transition: { 
+                            delay: 0.05 + i * 0.06, 
+                            duration: .25 
+                          } 
+                        }}
+                      >
+                        <Magnetic className="will-change-transform">
+                          <Link
+                            ref={i === 0 ? firstRef : undefined}
+                            href={it.href}
+                            onClick={onClose}
+                            className={`block w-full rounded-xl px-4 py-4 text-[17px] font-medium tracking-wide
+                                       min-h-[44px] flex items-center transition-colors
+                                       focus:outline-none ring-1 ring-transparent focus:ring-white/15 ${
+                              isActive 
+                                ? 'text-white bg-white/8 ring-white/15' 
+                                : 'text-white/95 hover:text-white hover:bg-white/6 focus:bg-white/8 hover:ring-white/10'
+                            }`}
+                            aria-current={isActive ? 'page' : undefined}
+                          >
+                            {it.label}
+                          </Link>
+                        </Magnetic>
+                      </motion.li>
+                    );
+                  })}
                 </ul>
               </nav>
             </motion.div>

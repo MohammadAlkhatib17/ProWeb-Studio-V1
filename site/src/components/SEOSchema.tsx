@@ -16,10 +16,10 @@ function abs(path: string): string {
   }
 }
 
-// Helper function to generate breadcrumbs based on pageType
-function generateBreadcrumbs(pageType: string): Array<{ name: string; url: string }> {
+// Helper function to generate breadcrumbs based on pageType with enhanced Dutch navigation
+function generateBreadcrumbs(pageType: string): Array<{ name: string; url: string; position?: number }> {
   const breadcrumbs = [
-    { name: 'Home', url: abs('/') }
+    { name: 'Home', url: abs('/'), position: 1 }
   ];
 
   switch (pageType) {
@@ -28,64 +28,140 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
       return breadcrumbs;
     
     case 'services':
-      breadcrumbs.push({ name: 'Diensten', url: abs('/diensten') });
+      breadcrumbs.push({ name: 'Diensten', url: abs('/diensten'), position: 2 });
       break;
     
     case 'werkwijze':
-      breadcrumbs.push({ name: 'Werkwijze', url: abs('/werkwijze') });
+      breadcrumbs.push({ name: 'Werkwijze', url: abs('/werkwijze'), position: 2 });
       break;
     
     case 'over-ons':
-      breadcrumbs.push({ name: 'Over Ons', url: abs('/over-ons') });
+      breadcrumbs.push({ name: 'Over Ons', url: abs('/over-ons'), position: 2 });
       break;
     
     case 'contact':
-      breadcrumbs.push({ name: 'Contact', url: abs('/contact') });
+      breadcrumbs.push({ name: 'Contact', url: abs('/contact'), position: 2 });
       break;
     
     case 'privacy':
-      breadcrumbs.push({ name: 'Privacybeleid', url: abs('/privacy') });
+      breadcrumbs.push({ name: 'Privacybeleid', url: abs('/privacy'), position: 2 });
       break;
     
     case 'voorwaarden':
-      breadcrumbs.push({ name: 'Algemene Voorwaarden', url: abs('/voorwaarden') });
+      breadcrumbs.push({ name: 'Algemene Voorwaarden', url: abs('/voorwaarden'), position: 2 });
       break;
 
     case 'speeltuin':
-      breadcrumbs.push({ name: 'Speeltuin', url: abs('/speeltuin') });
+      breadcrumbs.push({ name: 'Speeltuin', url: abs('/speeltuin'), position: 2 });
       break;
 
     case 'overzicht-site':
-      breadcrumbs.push({ name: 'Site Overzicht', url: abs('/overzicht-site') });
+      breadcrumbs.push({ name: 'Site Overzicht', url: abs('/overzicht-site'), position: 2 });
       break;
 
     case 'sitemap':
-      breadcrumbs.push({ name: 'Sitemap', url: abs('/sitemap') });
+      breadcrumbs.push({ name: 'Sitemap', url: abs('/sitemap'), position: 2 });
+      break;
+
+    // Enhanced service-specific breadcrumbs
+    case 'website-laten-maken':
+      breadcrumbs.push({ name: 'Diensten', url: abs('/diensten'), position: 2 });
+      breadcrumbs.push({ name: 'Website laten maken', url: abs('/diensten/website-laten-maken'), position: 3 });
+      break;
+
+    case 'webshop-laten-maken':
+      breadcrumbs.push({ name: 'Diensten', url: abs('/diensten'), position: 2 });
+      breadcrumbs.push({ name: 'Webshop laten maken', url: abs('/diensten/webshop-laten-maken'), position: 3 });
+      break;
+
+    case 'seo-optimalisatie':
+      breadcrumbs.push({ name: 'Diensten', url: abs('/diensten'), position: 2 });
+      breadcrumbs.push({ name: 'SEO optimalisatie', url: abs('/diensten/seo-optimalisatie'), position: 3 });
+      break;
+
+    case '3d-websites':
+      breadcrumbs.push({ name: 'Diensten', url: abs('/diensten'), position: 2 });
+      breadcrumbs.push({ name: '3D websites', url: abs('/diensten/3d-websites'), position: 3 });
+      break;
+
+    // Portfolio breadcrumbs
+    case 'portfolio':
+      breadcrumbs.push({ name: 'Portfolio', url: abs('/portfolio'), position: 2 });
+      break;
+
+    case 'portfolio-item':
+      breadcrumbs.push({ name: 'Portfolio', url: abs('/portfolio'), position: 2 });
+      // Portfolio item name would be added dynamically
+      break;
+
+    // Knowledge base breadcrumbs
+    case 'kennisbank':
+      breadcrumbs.push({ name: 'Kennisbank', url: abs('/kennisbank'), position: 2 });
+      break;
+
+    case 'blog':
+      breadcrumbs.push({ name: 'Blog', url: abs('/blog'), position: 2 });
+      break;
+
+    case 'blog-post':
+      breadcrumbs.push({ name: 'Blog', url: abs('/blog'), position: 2 });
+      // Blog post title would be added dynamically
+      break;
+
+    case 'nieuws':
+      breadcrumbs.push({ name: 'Nieuws', url: abs('/nieuws'), position: 2 });
+      break;
+
+    case 'cases':
+      breadcrumbs.push({ name: 'Cases', url: abs('/cases'), position: 2 });
+      break;
+
+    case 'tools':
+      breadcrumbs.push({ name: 'Tools', url: abs('/tools'), position: 2 });
       break;
     
     default:
-      // For generic pages, try to extract from current path if available
+      // Enhanced dynamic breadcrumb generation for generic pages
       if (typeof window !== 'undefined') {
         const pathname = window.location.pathname;
         const segments = pathname.split('/').filter(Boolean);
         
-        // Dutch route translations for dynamic breadcrumbs
-        const routeTranslations: Record<string, string> = {
-          'blog': 'Blog',
-          'portfolio': 'Portfolio',
-          'cases': 'Cases',
-          'kennisbank': 'Kennisbank',
-          'nieuws': 'Nieuws',
-          'tools': 'Tools',
-          'downloads': 'Downloads',
+        // Enhanced Dutch route translations with categories
+        const routeTranslations: Record<string, { name: string; category?: string }> = {
+          'blog': { name: 'Blog', category: 'content' },
+          'portfolio': { name: 'Portfolio', category: 'showcase' },
+          'cases': { name: 'Cases', category: 'showcase' },
+          'kennisbank': { name: 'Kennisbank', category: 'content' },
+          'nieuws': { name: 'Nieuws', category: 'content' },
+          'tools': { name: 'Tools', category: 'resources' },
+          'downloads': { name: 'Downloads', category: 'resources' },
+          'documentatie': { name: 'Documentatie', category: 'resources' },
+          'handleidingen': { name: 'Handleidingen', category: 'resources' },
+          'templates': { name: 'Templates', category: 'resources' },
+          'webdesign': { name: 'Webdesign', category: 'services' },
+          'webdevelopment': { name: 'Webdevelopment', category: 'services' },
+          'e-commerce': { name: 'E-commerce', category: 'services' },
+          'marketing': { name: 'Digital Marketing', category: 'services' },
+          'onderhoud': { name: 'Website Onderhoud', category: 'services' },
+          'hosting': { name: 'Website Hosting', category: 'services' },
+          'beveiliging': { name: 'Website Beveiliging', category: 'services' },
+          'performance': { name: 'Performance Optimalisatie', category: 'services' },
+          'toegankelijkheid': { name: 'Web Toegankelijkheid', category: 'services' },
+          'analytics': { name: 'Website Analytics', category: 'services' },
+          'migratie': { name: 'Website Migratie', category: 'services' },
+          'rebranding': { name: 'Website Rebranding', category: 'services' },
         };
 
-        segments.forEach((segment) => {
-          const segmentName = routeTranslations[segment] || 
+        let currentPosition = 2;
+        segments.forEach((segment, index) => {
+          const segmentInfo = routeTranslations[segment];
+          const segmentName = segmentInfo?.name || 
             segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+          
           breadcrumbs.push({ 
             name: segmentName, 
-            url: abs('/' + segments.slice(0, segments.indexOf(segment) + 1).join('/'))
+            url: abs('/' + segments.slice(0, index + 1).join('/')),
+            position: currentPosition++,
           });
         });
       }
@@ -102,6 +178,7 @@ interface SEOSchemaProps {
   breadcrumbs?: Array<{
     name: string;
     url: string;
+    position?: number;
   }>;
   includeFAQ?: boolean;
   nonce?: string;
@@ -236,8 +313,672 @@ export default function SEOSchema({
     ];
     
     // Filter out falsy values and ensure unique URLs
-    return [...new Set(profiles.filter((profile): profile is string => Boolean(profile)))];
-  }
+  return [...new Set(profiles.filter((profile): profile is string => Boolean(profile)))];
+}
+
+// Helper function to generate Dutch Chamber of Commerce (KVK) schema
+function generateKVKSchema(kvkNumber: string, kvkPlace?: string): any {
+  if (!kvkNumber) return null;
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'GovernmentOrganization',
+    '@id': `https://www.kvk.nl/orderstraat/product-kiezen/?kvknummer=${kvkNumber}#kvk`,
+    name: 'Kamer van Koophandel',
+    alternateName: 'KVK',
+    description: 'Nederlandse Kamer van Koophandel bedrijfsregistratie',
+    url: `https://www.kvk.nl/orderstraat/product-kiezen/?kvknummer=${kvkNumber}`,
+    areaServed: {
+      '@type': 'Country',
+      name: 'Netherlands',
+      identifier: 'NL',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'Customer Service',
+      telephone: '088-585-2222',
+      url: 'https://www.kvk.nl/contact',
+      availableLanguage: ['nl', 'en'],
+    },
+    identifier: {
+      '@type': 'PropertyValue',
+      name: 'KVK-nummer',
+      value: kvkNumber,
+      ...(kvkPlace && { description: `Geregistreerd in ${kvkPlace}` }),
+    },
+  };
+}
+
+// Helper function to generate Dutch compliance certifications schema
+function generateComplianceSchema(): any {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Certification',
+    '@id': `${SITE_URL}#dutch-compliance`,
+    name: 'Nederlandse compliance certificering',
+    description: 'Certificering voor Nederlandse wetgeving en standaarden',
+    certificationIdentification: [
+      {
+        '@type': 'DefinedTerm',
+        name: 'AVG/GDPR Compliance',
+        description: 'Algemene Verordening Gegevensbescherming compliance',
+        inDefinedTermSet: 'https://autoriteitpersoonsgegevens.nl/',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: 'Nederlandse Toegankelijkheidsstandaard',
+        description: 'EN 301 549 / WCAG 2.1 AA compliance voor Nederlandse overheid',
+        inDefinedTermSet: 'https://www.digitaleoverheid.nl/overzicht-van-alle-onderwerpen/digitale-inclusie/digitaal-toegankelijk/',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: 'Nederlandse Web Guidelines',
+        description: 'Best practices voor Nederlandse websites',
+        inDefinedTermSet: 'https://www.voorhoede.nl/nl/blog/dutch-web-guidelines/',
+      },
+    ],
+    issuedBy: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+    },
+    validIn: {
+      '@type': 'Country',
+      name: 'Netherlands',
+      identifier: 'NL',
+    },
+  };
+}
+
+// Helper function to generate professional accreditation schema
+function generateProfessionalAccreditationSchema(): any {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': `${SITE_URL}#professional-accreditation`,
+    name: 'Nederlandse IT Professional Services',
+    description: 'Professionele IT-dienstverlening conform Nederlandse standaarden',
+    serviceType: 'Professional Web Development Services',
+    provider: {
+      '@id': `${SITE_URL}#organization`,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'Netherlands',
+      identifier: 'NL',
+    },
+    hasCredential: [
+      {
+        '@type': 'EducationalOccupationalCredential',
+        name: 'Nederlandse IT Vakbekwaamheid',
+        description: 'Certificering voor professionele webdevelopment diensten',
+        credentialCategory: 'Professional Certification',
+        recognizedBy: {
+          '@type': 'Organization',
+          name: 'Nederlandse IT brancheverenigingen',
+        },
+      },
+    ],
+    compliance: [
+      {
+        '@type': 'DefinedTerm',
+        name: 'Kwaliteit van IT-dienstverlening',
+        description: 'Kwaliteitsstandaarden voor Nederlandse IT-dienstverlening',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: 'Nederlandse aansprakelijkheidsverzekering',
+        description: 'Beroepsaansprakelijkheidsverzekering conform Nederlandse eisen',
+      },
+    ],
+  };
+}// Helper function to generate comprehensive Dutch service areas
+function generateDutchServiceAreas() {
+  return [
+    // Provinces with major cities
+    {
+      '@type': 'State',
+      name: 'Drenthe',
+      identifier: 'DR',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Assen' },
+        { '@type': 'City', name: 'Emmen' },
+        { '@type': 'City', name: 'Hoogeveen' },
+        { '@type': 'City', name: 'Meppel' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Flevoland',
+      identifier: 'FL',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Lelystad' },
+        { '@type': 'City', name: 'Almere' },
+        { '@type': 'City', name: 'Dronten' },
+        { '@type': 'City', name: 'Urk' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Friesland',
+      identifier: 'FR',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Leeuwarden' },
+        { '@type': 'City', name: 'Sneek' },
+        { '@type': 'City', name: 'Heerenveen' },
+        { '@type': 'City', name: 'Drachten' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Gelderland',
+      identifier: 'GE',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Arnhem' },
+        { '@type': 'City', name: 'Nijmegen' },
+        { '@type': 'City', name: 'Apeldoorn' },
+        { '@type': 'City', name: 'Ede' },
+        { '@type': 'City', name: 'Zutphen' },
+        { '@type': 'City', name: 'Doetinchem' },
+        { '@type': 'City', name: 'Harderwijk' },
+        { '@type': 'City', name: 'Wageningen' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Groningen',
+      identifier: 'GR',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Groningen' },
+        { '@type': 'City', name: 'Stadskanaal' },
+        { '@type': 'City', name: 'Veendam' },
+        { '@type': 'City', name: 'Hoogezand' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Limburg',
+      identifier: 'LI',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Maastricht' },
+        { '@type': 'City', name: 'Venlo' },
+        { '@type': 'City', name: 'Heerlen' },
+        { '@type': 'City', name: 'Sittard-Geleen' },
+        { '@type': 'City', name: 'Roermond' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Noord-Brabant',
+      identifier: 'NB',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Eindhoven' },
+        { '@type': 'City', name: 'Tilburg' },
+        { '@type': 'City', name: 'Breda' },
+        { '@type': 'City', name: 's-Hertogenbosch' },
+        { '@type': 'City', name: 'Helmond' },
+        { '@type': 'City', name: 'Oss' },
+        { '@type': 'City', name: 'Bergen op Zoom' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Noord-Holland',
+      identifier: 'NH',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Amsterdam' },
+        { '@type': 'City', name: 'Haarlem' },
+        { '@type': 'City', name: 'Zaanstad' },
+        { '@type': 'City', name: 'Haarlemmermeer' },
+        { '@type': 'City', name: 'Alkmaar' },
+        { '@type': 'City', name: 'Hilversum' },
+        { '@type': 'City', name: 'Hoorn' },
+        { '@type': 'City', name: 'Purmerend' },
+        { '@type': 'City', name: 'Den Helder' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Overijssel',
+      identifier: 'OV',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Zwolle' },
+        { '@type': 'City', name: 'Enschede' },
+        { '@type': 'City', name: 'Deventer' },
+        { '@type': 'City', name: 'Hengelo' },
+        { '@type': 'City', name: 'Almelo' },
+        { '@type': 'City', name: 'Kampen' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Utrecht',
+      identifier: 'UT',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Utrecht' },
+        { '@type': 'City', name: 'Amersfoort' },
+        { '@type': 'City', name: 'Nieuwegein' },
+        { '@type': 'City', name: 'Veenendaal' },
+        { '@type': 'City', name: 'Zeist' },
+        { '@type': 'City', name: 'IJsselstein' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Zeeland',
+      identifier: 'ZE',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Middelburg' },
+        { '@type': 'City', name: 'Vlissingen' },
+        { '@type': 'City', name: 'Goes' },
+        { '@type': 'City', name: 'Terneuzen' },
+      ],
+    },
+    {
+      '@type': 'State',
+      name: 'Zuid-Holland',
+      identifier: 'ZH',
+      addressCountry: 'NL',
+      containsPlace: [
+        { '@type': 'City', name: 'Rotterdam' },
+        { '@type': 'City', name: 'Den Haag' },
+        { '@type': 'City', name: 'Leiden' },
+        { '@type': 'City', name: 'Dordrecht' },
+        { '@type': 'City', name: 'Zoetermeer' },
+        { '@type': 'City', name: 'Delft' },
+        { '@type': 'City', name: 'Gouda' },
+        { '@type': 'City', name: 'Alphen aan den Rijn' },
+        { '@type': 'City', name: 'Spijkenisse' },
+        { '@type': 'City', name: 'Capelle aan den IJssel' },
+      ],
+    },
+  ];
+}
+
+// Helper function to generate postal code regions for targeted service areas
+function generatePostalCodeRegions() {
+  return [
+    // Major metropolitan areas by postal code
+    {
+      '@type': 'PostalCodeArea',
+      name: 'Amsterdam Regio',
+      postalCode: '10**',
+      addressCountry: 'NL',
+      description: 'Amsterdam en directe omgeving',
+    },
+    {
+      '@type': 'PostalCodeArea',
+      name: 'Rotterdam Regio',
+      postalCode: '30**',
+      addressCountry: 'NL',
+      description: 'Rotterdam en Rijnmond gebied',
+    },
+    {
+      '@type': 'PostalCodeArea',
+      name: 'Den Haag Regio',
+      postalCode: '25**',
+      addressCountry: 'NL',
+      description: 'Den Haag en Westland',
+    },
+    {
+      '@type': 'PostalCodeArea',
+      name: 'Utrecht Regio',
+      postalCode: '35**',
+      addressCountry: 'NL',
+      description: 'Utrecht en directe omgeving',
+    },
+    {
+      '@type': 'PostalCodeArea',
+      name: 'Eindhoven Regio',
+      postalCode: '56**',
+      addressCountry: 'NL',
+      description: 'Eindhoven en Brainport regio',
+    },
+    {
+      '@type': 'PostalCodeArea',
+      name: 'Groningen Regio',
+      postalCode: '97**',
+      addressCountry: 'NL',
+      description: 'Groningen en Noord-Nederland',
+    },
+  ];
+}
+
+// Helper function to generate Dutch business classification schema
+function generateDutchBusinessClassification(sbiCode: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CategoryCode',
+    '@id': `${SITE_URL}#business-classification`,
+    name: 'Nederlandse Bedrijfsclassificatie',
+    description: 'Standaard Bedrijfsindeling (SBI) en internationale classificaties',
+    codeValue: sbiCode,
+    inCodeSet: {
+      '@type': 'CategoryCodeSet',
+      name: 'Standaard Bedrijfsindeling (SBI) 2008',
+      description: 'Nederlandse standaard voor het classificeren van economische activiteiten',
+      url: 'https://www.cbs.nl/nl-nl/onze-diensten/methoden/classificaties/activiteiten/standaard-bedrijfsindeling--sbi--',
+      identifier: 'SBI2008',
+      inDefinedTermSet: 'https://www.cbs.nl/sbi/',
+    },
+    additionalType: [
+      {
+        '@type': 'DefinedTerm',
+        name: 'NACE Rev. 2',
+        identifier: '62.01',
+        description: 'Computer programming activities (European classification)',
+        inDefinedTermSet: 'https://ec.europa.eu/eurostat/web/nace-rev2',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: 'ISIC Rev. 4',
+        identifier: '6201',
+        description: 'Computer programming activities (UN classification)',
+        inDefinedTermSet: 'https://unstats.un.org/unsd/publication/seriesm/seriesm_4rev4e.pdf',
+      },
+    ],
+    hasDefinedTerm: [
+      {
+        '@type': 'DefinedTerm',
+        name: 'Webdevelopment',
+        description: 'Ontwikkeling van websites en webapplicaties',
+        termCode: '62010-1',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: 'E-commerce development',
+        description: 'Ontwikkeling van online webshops en e-commerce platforms',
+        termCode: '62010-2',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: 'SEO dienstverlening',
+        description: 'Zoekmachine optimalisatie en online marketing',
+        termCode: '62010-3',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: '3D web experiences',
+        description: 'Ontwikkeling van interactieve 3D webapplicaties',
+        termCode: '62010-4',
+      },
+    ],
+    about: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+    },
+  };
+}
+
+// Helper function to generate Dutch industry certification schema
+function generateDutchIndustryCompliance() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Certification',
+    '@id': `${SITE_URL}#industry-compliance`,
+    name: 'Nederlandse IT Branche Compliance',
+    description: 'Compliance met Nederlandse IT branche standaarden en regelgeving',
+    certificationIdentification: [
+      {
+        '@type': 'DefinedTerm',
+        name: 'Nederlandse Beroepsaansprakelijkheid IT',
+        description: 'Beroepsaansprakelijkheidsverzekering voor IT-dienstverlening',
+        inDefinedTermSet: 'https://www.verbondvanzekeraars.nl/',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: 'KVK Handelsregistratie',
+        description: 'Officiële bedrijfsregistratie bij Nederlandse Kamer van Koophandel',
+        inDefinedTermSet: 'https://www.kvk.nl/',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: 'BTW-plichtig Nederland',
+        description: 'Geregistreerd voor Nederlandse BTW administratie',
+        inDefinedTermSet: 'https://www.belastingdienst.nl/',
+      },
+      {
+        '@type': 'DefinedTerm',
+        name: 'Nederlandse Arbeidsrecht Compliance',
+        description: 'Compliance met Nederlandse arbeidsrecht en CAO-afspraken',
+        inDefinedTermSet: 'https://www.government.nl/topics/labour-law',
+      },
+    ],
+    validFor: {
+      '@type': 'Duration',
+      value: 'P1Y',
+      description: 'Jaarlijks vernieuwd en gevalideerd',
+    },
+    recognizedBy: [
+      {
+        '@type': 'GovernmentOrganization',
+        name: 'Nederlandse Belastingdienst',
+        url: 'https://www.belastingdienst.nl/',
+      },
+      {
+        '@type': 'GovernmentOrganization',
+        name: 'Kamer van Koophandel Nederland',
+        url: 'https://www.kvk.nl/',
+      },
+    ],
+  };
+}
+
+// Helper function to generate Dutch business article schema
+function generateDutchBusinessArticleSchema(
+  articleTitle?: string, 
+  articleDescription?: string, 
+  publishedDate?: string,
+  category: 'guide' | 'news' | 'tutorial' | 'case-study' = 'guide'
+) {
+  const baseUrl = abs('/kennisbank');
+  const articleUrl = articleTitle 
+    ? abs(`/kennisbank/${articleTitle.toLowerCase().replace(/\s+/g, '-')}`)
+    : baseUrl;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    '@id': `${articleUrl}#article`,
+    headline: articleTitle || 'Nederlandse Webdevelopment Gids',
+    description: articleDescription || 'Praktische gids voor webdevelopment en digitale marketing in Nederland',
+    url: articleUrl,
+    inLanguage: 'nl-NL',
+    author: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: siteConfig.name,
+      url: abs('/'),
+      sameAs: getSocialProfiles(),
+    },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: siteConfig.name,
+      logo: {
+        '@type': 'ImageObject',
+        url: abs('/assets/logo/logo-proweb-lockup.svg'),
+        width: 600,
+        height: 60,
+      },
+    },
+    datePublished: publishedDate || new Date().toISOString(),
+    dateModified: new Date().toISOString(),
+    articleSection: category === 'guide' ? 'Business Gidsen' :
+                   category === 'news' ? 'Nieuws' :
+                   category === 'tutorial' ? 'Tutorials' : 'Case Studies',
+    keywords: [
+      'Nederlandse webdevelopment',
+      'website laten maken Nederland',
+      'Nederlandse webstandaarden',
+      'GDPR compliance Nederland',
+      'Nederlandse SEO',
+      'lokale SEO Nederland',
+      'Nederlandse betaalmethoden',
+      'KVK registratie',
+      'Nederlandse hosting',
+      'Dutch web guidelines',
+    ],
+    about: [
+      {
+        '@type': 'Thing',
+        name: 'Nederlandse Webdevelopment',
+        description: 'Webdevelopment diensten specifiek voor de Nederlandse markt',
+      },
+      {
+        '@type': 'Place',
+        name: 'Netherlands',
+        address: {
+          '@type': 'PostalAddress',
+          addressCountry: 'NL',
+        },
+      },
+    ],
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': articleUrl,
+    },
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}#website`,
+    },
+  };
+}
+
+// Helper function to generate Dutch HowTo guide schema
+function generateDutchHowToGuideSchema(
+  guideTitle?: string,
+  guideDescription?: string,
+  steps?: Array<{ name: string; description: string }>,
+  category: 'website' | 'seo' | 'compliance' | 'marketing' = 'website'
+) {
+  const baseUrl = abs('/handleidingen');
+  const guideUrl = guideTitle 
+    ? abs(`/handleidingen/${guideTitle.toLowerCase().replace(/\s+/g, '-')}`)
+    : baseUrl;
+
+  const defaultSteps = [
+    {
+      name: 'Plan uw Nederlandse website',
+      description: 'Bepaal doelgroep, functionaliteiten en Nederlandse compliance vereisten voor uw website.',
+    },
+    {
+      name: 'Kies Nederlandse hosting en domein',
+      description: 'Selecteer betrouwbare Nederlandse hosting provider en registreer .nl domein bij SIDN.',
+    },
+    {
+      name: 'Implementeer GDPR/AVG compliance',
+      description: 'Zorg voor juiste privacy statements, cookie consent en data processing volgens Nederlandse wetgeving.',
+    },
+    {
+      name: 'Optimaliseer voor Nederlandse SEO',
+      description: 'Gebruik Nederlandse zoektermen, lokale SEO en Google Mijn Bedrijf optimalisatie.',
+    },
+    {
+      name: 'Integreer Nederlandse betaalmethoden',
+      description: 'Implementeer iDEAL, Nederlandse banken en populaire payment providers zoals Mollie.',
+    },
+    {
+      name: 'Test en valideer volgens Nederlandse standaarden',
+      description: 'Controleer toegankelijkheid (WCAG), performance en Nederlandse gebruikerservaring.',
+    },
+  ];
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    '@id': `${guideUrl}#howto`,
+    name: guideTitle || 'Stap-voor-stap gids: Website laten maken in Nederland',
+    description: guideDescription || 'Complete handleiding voor het ontwikkelen van een professionele website conform Nederlandse standaarden',
+    url: guideUrl,
+    inLanguage: 'nl-NL',
+    image: {
+      '@type': 'ImageObject',
+      url: abs('/assets/guides/dutch-website-guide.webp'),
+      width: 1200,
+      height: 630,
+      caption: guideTitle || 'Nederlandse Website Ontwikkeling Gids',
+    },
+    author: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+    },
+    datePublished: new Date().toISOString(),
+    dateModified: new Date().toISOString(),
+    step: (steps || defaultSteps).map((step, index) => ({
+      '@type': 'HowToStep',
+      name: step.name,
+      text: step.description,
+      position: index + 1,
+      url: `${guideUrl}#stap-${index + 1}`,
+    })),
+    totalTime: 'PT4W', // 4 weeks typical timeline
+    estimatedCost: {
+      '@type': 'MonetaryAmount',
+      currency: 'EUR',
+      value: category === 'website' ? '3500' :
+             category === 'seo' ? '1500' :
+             category === 'compliance' ? '2000' : '2500',
+    },
+    supply: [
+      {
+        '@type': 'HowToSupply',
+        name: 'Nederlandse KVK registratie',
+      },
+      {
+        '@type': 'HowToSupply',
+        name: 'BTW nummer',
+      },
+      {
+        '@type': 'HowToSupply',
+        name: 'Nederlandse bankrekening',
+      },
+      {
+        '@type': 'HowToSupply',
+        name: 'Bedrijfslogo en content',
+      },
+    ],
+    tool: [
+      {
+        '@type': 'HowToTool',
+        name: 'Next.js Development Framework',
+      },
+      {
+        '@type': 'HowToTool',
+        name: 'Nederlandse hosting provider',
+      },
+      {
+        '@type': 'HowToTool',
+        name: 'GDPR compliance tools',
+      },
+      {
+        '@type': 'HowToTool',
+        name: 'Nederlandse SEO tools',
+      },
+    ],
+    about: [
+      {
+        '@type': 'Thing',
+        name: 'Nederlandse Website Ontwikkeling',
+        description: 'Complete gids voor professionele website ontwikkeling in Nederland',
+      },
+    ],
+  };
+}
 
   const socialProfiles = getSocialProfiles();
 
@@ -334,13 +1075,21 @@ export default function SEOSchema({
     ],
   };
 
-  // Organization schema with optional address and identifiers
+  // Organization schema with optional address and Dutch business identifiers
   const addrStreet = process.env.NEXT_PUBLIC_ADDR_STREET;
   const addrCity = process.env.NEXT_PUBLIC_ADDR_CITY;
   const addrZip = process.env.NEXT_PUBLIC_ADDR_ZIP;
+  const addrRegion = process.env.NEXT_PUBLIC_ADDR_REGION || 'NH'; // Default to Noord-Holland
   const hasAddress = Boolean(addrStreet && addrCity && addrZip);
+  
+  // Dutch business identifiers
   const kvkNumber = process.env.NEXT_PUBLIC_KVK;
   const btwNumber = process.env.NEXT_PUBLIC_BTW;
+  const rsinNumber = process.env.NEXT_PUBLIC_RSIN;
+  const ibanNumber = process.env.NEXT_PUBLIC_IBAN;
+  const sbiCode = process.env.NEXT_PUBLIC_SBI_CODE || '62010'; // Computer programming activities
+  const kvkPlace = process.env.NEXT_PUBLIC_KVK_PLACE || addrCity;
+  const establishmentNumber = process.env.NEXT_PUBLIC_VESTIGINGSNUMMER;
 
   const organizationSchema = {
     '@context': 'https://schema.org',
@@ -404,13 +1153,45 @@ export default function SEOSchema({
       identifier: [
         {
           '@type': 'PropertyValue',
-          name: 'KVK',
+          name: 'KVK-nummer',
           value: kvkNumber,
+          description: 'Kamer van Koophandel registratienummer',
         },
         ...(btwNumber ? [{
           '@type': 'PropertyValue',
-          name: 'BTW',
+          name: 'BTW-nummer',
           value: btwNumber,
+          description: 'Nederlandse BTW identificatienummer',
+        }] : []),
+        ...(rsinNumber ? [{
+          '@type': 'PropertyValue',
+          name: 'RSIN',
+          value: rsinNumber,
+          description: 'Rechtspersonen en Samenwerkingsverbanden Informatienummer',
+        }] : []),
+        ...(establishmentNumber ? [{
+          '@type': 'PropertyValue',
+          name: 'Vestigingsnummer',
+          value: establishmentNumber,
+          description: 'KVK vestigingsnummer',
+        }] : []),
+        ...(ibanNumber ? [{
+          '@type': 'PropertyValue',
+          name: 'IBAN',
+          value: ibanNumber,
+          description: 'Nederlandse bankrekening',
+        }] : []),
+        {
+          '@type': 'PropertyValue',
+          name: 'SBI-code',
+          value: sbiCode,
+          description: 'Standaard Bedrijfsindeling - Computer programmeeractiviteiten',
+        },
+        ...(kvkPlace ? [{
+          '@type': 'PropertyValue',
+          name: 'KVK-vestigingsplaats',
+          value: kvkPlace,
+          description: 'Plaats van inschrijving Kamer van Koophandel',
         }] : []),
       ],
     }),
@@ -422,66 +1203,24 @@ export default function SEOSchema({
         addressCountry: 'NL'
       }
     },
-    serviceArea: [
+    serviceArea: generateDutchServiceAreas(),
+    geo: {
+      '@type': 'GeoShape',
+      addressCountry: 'NL',
+      description: 'Geheel Nederland - alle provincies en gemeenten',
+    },
+    additionalProperty: [
       {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Drenthe',
+        '@type': 'PropertyValue',
+        name: 'Postal Code Coverage',
+        value: 'Complete Nederlandse postcodegebieden',
+        description: 'Servicedekking voor alle Nederlandse postcodes 1000-9999',
       },
       {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Flevoland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Friesland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Gelderland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Groningen',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Limburg',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Noord-Brabant',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Noord-Holland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Overijssel',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Utrecht',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Zeeland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Zuid-Holland',
+        '@type': 'PropertyValue',
+        name: 'Service Regions',
+        value: generatePostalCodeRegions().map(region => region.name).join(', '),
+        description: 'Specifieke servicegebieden in Nederland',
       },
     ],
     ...(hasAddress && {
@@ -490,7 +1229,7 @@ export default function SEOSchema({
         streetAddress: addrStreet,
         addressLocality: addrCity,
         postalCode: addrZip,
-        addressRegion: 'NH',
+        addressRegion: addrRegion,
         addressCountry: 'NL',
       },
     }),
@@ -661,26 +1400,49 @@ export default function SEOSchema({
     },
   };
 
-  // Breadcrumb schema (generate from pageType or use provided breadcrumbs)
+  // Enhanced Breadcrumb schema with proper hierarchical structure
   const pageBreadcrumbs = breadcrumbs.length > 0 ? breadcrumbs : generateBreadcrumbs(pageType);
   const breadcrumbSchema = pageBreadcrumbs.length > 0
     ? {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
-        '@id': `${SITE_URL}#breadcrumb`,
+        '@id': `${currentUrl}#breadcrumb`,
         inLanguage: 'nl-NL',
+        name: 'Navigatie breadcrumbs',
+        description: `Navigatiepad voor ${currentTitle}`,
         itemListElement: pageBreadcrumbs.map((crumb, index) => ({
           '@type': 'ListItem',
-          position: index + 1,
+          position: crumb.position || (index + 1),
           name: crumb.name,
           item: {
             '@type': 'WebPage',
             '@id': crumb.url,
             name: crumb.name,
             url: crumb.url,
+            ...(index === 0 && {
+              // Mark the first item (home) as the website
+              isPartOf: {
+                '@id': `${SITE_URL}#website`,
+              },
+            }),
+            ...(index === pageBreadcrumbs.length - 1 && {
+              // Mark the current page
+              mainEntity: {
+                '@id': `${currentUrl}#webpage`,
+              },
+            }),
           },
         })),
         numberOfItems: pageBreadcrumbs.length,
+        // Add hierarchical parent-child relationships
+        ...(pageBreadcrumbs.length > 1 && {
+          hasPart: pageBreadcrumbs.slice(1).map((crumb, index) => ({
+            '@type': 'ListItem',
+            position: crumb.position || (index + 2),
+            name: crumb.name,
+            url: crumb.url,
+          })),
+        }),
       }
     : null;
 
@@ -704,7 +1466,7 @@ export default function SEOSchema({
     },
     ...(breadcrumbSchema && {
       breadcrumb: {
-        '@id': `${SITE_URL}#breadcrumb`,
+        '@id': `${currentUrl}#breadcrumb`,
       },
     }),
     ...(primaryImageSchema && {
@@ -772,68 +1534,7 @@ export default function SEOSchema({
         addressCountry: 'NL'
       }
     },
-    serviceArea: [
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Drenthe',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Flevoland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Friesland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Gelderland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Groningen',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Limburg',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Noord-Brabant',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Noord-Holland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Overijssel',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Utrecht',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Zeeland',
-      },
-      {
-        '@type': 'DefinedRegion',
-        addressCountry: 'NL',
-        addressRegion: 'Zuid-Holland',
-      },
-    ],
+    serviceArea: generateDutchServiceAreas(),
     contactPoint: [
       {
         '@type': 'ContactPoint',
@@ -906,7 +1607,7 @@ export default function SEOSchema({
         streetAddress: addrStreet,
         addressLocality: addrCity,
         postalCode: addrZip,
-        addressRegion: 'NH',
+        addressRegion: addrRegion,
         addressCountry: 'NL',
       },
     }),
@@ -1361,6 +2062,45 @@ export default function SEOSchema({
       },
     ],
   };
+
+  // Dutch-specific schemas
+  const kvkSchema = kvkNumber ? generateKVKSchema(kvkNumber, kvkPlace) : null;
+  const complianceSchema = generateComplianceSchema();
+  const professionalAccreditationSchema = generateProfessionalAccreditationSchema();
+  const businessClassificationSchema = generateDutchBusinessClassification(sbiCode);
+  const industryComplianceSchema = generateDutchIndustryCompliance();
+
+  // Article and guide schemas for content pages
+  const dutchBusinessArticleSchema = generateDutchBusinessArticleSchema();
+  const dutchWebsiteGuideSchema = generateDutchHowToGuideSchema(
+    'Website laten maken in Nederland: Complete gids 2024',
+    'Stap-voor-stap handleiding voor het ontwikkelen van een professionele website die voldoet aan alle Nederlandse standaarden en wetgeving',
+    undefined,
+    'website'
+  );
+  const dutchSEOGuideSchema = generateDutchHowToGuideSchema(
+    'Nederlandse SEO optimalisatie: Lokale vindbaarheid verbeteren',
+    'Complete gids voor het optimaliseren van uw website voor Nederlandse zoekmachines en lokale zoekresultaten',
+    [
+      {
+        name: 'Nederlandse zoekwoorden research',
+        description: 'Analyseer populaire zoektermen specifiek voor de Nederlandse markt en uw doelgroep.',
+      },
+      {
+        name: 'Google Mijn Bedrijf optimalisatie',
+        description: 'Optimaliseer uw Google Mijn Bedrijf profiel voor lokale SEO in Nederland.',
+      },
+      {
+        name: 'Nederlandse content strategie',
+        description: 'Ontwikkel waardevolle content die aansluit bij Nederlandse zoekintentie.',
+      },
+      {
+        name: 'Lokale citaties en backlinks',
+        description: 'Bouw autoriteit op via Nederlandse directories en lokale partnerships.',
+      },
+    ],
+    'seo'
+  );
 
   // HowTo schema for werkwijze page
   const howToSchema = currentPageType === 'werkwijze' ? {
@@ -1962,6 +2702,106 @@ export default function SEOSchema({
         />
       );
     }
+
+    // Dutch-specific Schema Scripts
+    if (kvkSchema) {
+      scripts.push(
+        <Script
+          key="kvk-schema"
+          id="kvk-schema"
+          type="application/ld+json"
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(kvkSchema, null, 2),
+          }}
+        />
+      );
+    }
+
+    scripts.push(
+      <Script
+        key="compliance-schema"
+        id="compliance-schema"
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(complianceSchema, null, 2),
+        }}
+      />
+    );
+
+    scripts.push(
+      <Script
+        key="professional-accreditation-schema"
+        id="professional-accreditation-schema"
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(professionalAccreditationSchema, null, 2),
+        }}
+      />
+    );
+
+    scripts.push(
+      <Script
+        key="business-classification-schema"
+        id="business-classification-schema"
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(businessClassificationSchema, null, 2),
+        }}
+      />
+    );
+
+    scripts.push(
+      <Script
+        key="industry-compliance-schema"
+        id="industry-compliance-schema"
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(industryComplianceSchema, null, 2),
+        }}
+      />
+    );
+
+    // Dutch content schemas
+    scripts.push(
+      <Script
+        key="dutch-business-article-schema"
+        id="dutch-business-article-schema"
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(dutchBusinessArticleSchema, null, 2),
+        }}
+      />
+    );
+
+    scripts.push(
+      <Script
+        key="dutch-website-guide-schema"
+        id="dutch-website-guide-schema"
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(dutchWebsiteGuideSchema, null, 2),
+        }}
+      />
+    );
+
+    scripts.push(
+      <Script
+        key="dutch-seo-guide-schema"
+        id="dutch-seo-guide-schema"
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(dutchSEOGuideSchema, null, 2),
+        }}
+      />
+    );
 
     return scripts;
   };

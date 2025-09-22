@@ -213,6 +213,11 @@ export default function RootLayout({
   return (
     <html lang="nl-NL">
       <head>
+        {/* Hreflang tags for Dutch market targeting */}
+        <link rel="alternate" hrefLang="nl" href={`${SITE_URL}/`} />
+        <link rel="alternate" hrefLang="nl-NL" href={`${SITE_URL}/`} />
+        <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}/`} />
+        
         <link rel="preconnect" href="https://plausible.io" crossOrigin="" />
         {/* Critical third-party resource preconnections */}
         {generateResourcePreconnects().map((resource, index) => {

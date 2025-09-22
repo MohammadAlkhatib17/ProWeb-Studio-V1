@@ -16,6 +16,7 @@ interface BreadcrumbsProps {
 // Dutch translations for common routes
 const routeTranslations: Record<string, string> = {
   'diensten': 'Diensten',
+  'portfolio': 'Portfolio',
   'over-ons': 'Over Ons',
   'contact': 'Contact',
   'werkwijze': 'Werkwijze',
