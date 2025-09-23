@@ -8,11 +8,6 @@ afterEach(() => {
   cleanup();
 });
 
-// Augment Vitest's Assertion interface with jest-dom matchers for TypeScript
-declare module 'vitest' {
-  interface Assertion<T = any> extends jest.Matchers<void, T> {}
-}
-
 // Provide default envs for tests where not explicitly mocked
 process.env.RECAPTCHA_SECRET_KEY ||= 'test-secret-key';
 process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ||= 'test-site-key';

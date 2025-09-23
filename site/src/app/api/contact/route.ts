@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import DOMPurify from 'isomorphic-dompurify';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -60,14 +59,13 @@ const contactSchema = z.object({
 
 // Input sanitization function
 function sanitizeInput(input: string): string {
-  // First pass: HTML sanitization
-  const sanitized = DOMPurify.sanitize(input, { 
-    ALLOWED_TAGS: [],
-    ALLOWED_ATTR: []
-  });
-  
-  // Second pass: Remove potentially dangerous characters
-  return sanitized
+  // Use a safer sanitization approach for build compatibility
+  // Basic HTML entity encoding and dangerous pattern removal
+  return input
+    .replace(/[<>]/g, '') // Remove < and > characters
+    .replace(/javascript:/gi, '') // Remove javascript: protocols
+    .replace(/data:/gi, '') // Remove data: protocols
+    .replace(/vbscript:/gi, '') // Remove vbscript: protocols
     .replace(/[<>'"&]/g, '') // Remove HTML chars
     .replace(/javascript:/gi, '') // Remove javascript: protocol
     .replace(/data:/gi, '') // Remove data: protocol

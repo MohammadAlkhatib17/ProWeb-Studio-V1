@@ -71,7 +71,7 @@ export function analyzeInternalLinking(): LinkEquityAnalysis {
     recommendations.push('Overweeg het reduceren van het totaal aantal links om link equity te concentreren');
   }
   
-  const deepLinks = Object.entries(linkDepth).filter(([_, depth]) => depth > 3).length;
+  const deepLinks = Object.entries(linkDepth).filter(([, depth]) => depth > 3).length;
   if (deepLinks > totalLinks * 0.3) {
     recommendations.push('Te veel diepe links - overweeg het verplaatsen van belangrijke content naar hogere niveaus');
   }
@@ -287,7 +287,7 @@ export function generateSitemapHierarchy() {
               changefreq: 'monthly'
             };
             return acc;
-          }, {} as Record<string, any>)
+          }, {} as Record<string, { url: string; priority: number; changefreq: string }>)
         },
         locations: {
           url: '/locaties',
@@ -300,7 +300,7 @@ export function generateSitemapHierarchy() {
               changefreq: 'monthly'
             };
             return acc;
-          }, {} as Record<string, any>)
+          }, {} as Record<string, { url: string; priority: number; changefreq: string }>)
         },
         portfolio: {
           url: '/portfolio',
@@ -359,10 +359,12 @@ export function validateInternalLinks(): Array<{issue: string; severity: 'low' |
   return issues;
 }
 
-export default {
+const internalLinkingOptimizer = {
   analyzeInternalLinking,
   generatePageLinkStrategy,
   getContextualLinks,
   generateSitemapHierarchy,
   validateInternalLinks
 };
+
+export default internalLinkingOptimizer;

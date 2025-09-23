@@ -26,7 +26,7 @@ import {
 } from '@react-three/postprocessing';
 import { BlendFunction, KernelSize } from 'postprocessing';
 import * as THREE from 'three';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 // Extend THREE to include TextGeometry

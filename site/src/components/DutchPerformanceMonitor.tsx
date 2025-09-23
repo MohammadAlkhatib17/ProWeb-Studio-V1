@@ -9,6 +9,14 @@ interface PerformanceMetric {
   delta?: number;
 }
 
+interface NavigatorWithConnection extends Navigator {
+  connection?: {
+    effectiveType?: string;
+    downlink?: number;
+    rtt?: number;
+  };
+}
+
 // Performance thresholds optimized for Dutch users
 const THRESHOLDS = {
   LCP: { good: 1000, poor: 2500 }, // Largest Contentful Paint - targeting sub-1s
@@ -120,7 +128,7 @@ function observePerformance() {
 
     // Network Information API for connection quality
     if ('connection' in navigator) {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as NavigatorWithConnection).connection;
       if (connection) {
         const networkInfo = {
           effectiveType: connection.effectiveType,

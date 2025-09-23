@@ -4,7 +4,6 @@ import dynamicImport from 'next/dynamic';
 export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - services content is fairly stable
 export const fetchCache = 'force-cache';
-export const runtime = 'edge';
 
 import { Suspense } from 'react';
 import { BackgroundImage } from '@/components/ui/responsive-image';

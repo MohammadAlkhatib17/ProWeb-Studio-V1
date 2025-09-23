@@ -11,7 +11,6 @@ import FAQSection from '@/components/sections/FAQSection';
 export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - service content is fairly stable
 export const fetchCache = 'force-cache';
-export const runtime = 'edge';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -258,7 +257,7 @@ export default function WebsiteLatenMaken() {
               </span>
             </h2>
             <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-              Van eenvoudige landingspagina's tot complexe bedrijfswebsites - 
+              Van eenvoudige landingspagina&apos;s tot complexe bedrijfswebsites - 
               wij hebben de expertise voor elk type website.
             </p>
           </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { services, getRelatedServices } from '@/config/internal-linking.config';
+import { services, getRelatedServices, type ServiceLink } from '@/config/internal-linking.config';
 
 interface RelatedServicesProps {
   currentService?: string;
@@ -82,7 +82,7 @@ export default function RelatedServices({
 }
 
 // Schema.org structured data for related services
-export function RelatedServicesSchema({ relatedServices }: { relatedServices: any[] }) {
+export function RelatedServicesSchema({ relatedServices }: { relatedServices: ServiceLink[] }) {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',

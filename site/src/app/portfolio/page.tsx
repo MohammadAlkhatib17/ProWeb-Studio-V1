@@ -13,7 +13,6 @@ import SimpleBrandIdentityModel from '@/components/SimpleBrandIdentityModel';
 export const dynamic = 'force-static';
 export const revalidate = 14400; // 4 hours - portfolio updates less frequently
 export const fetchCache = 'force-cache';
-export const runtime = 'edge';
 
 export const metadata: Metadata = {
   title: 'Portfolio | Onze Beste Werk - 3D Web & App Ontwikkeling',

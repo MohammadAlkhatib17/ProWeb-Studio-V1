@@ -6,7 +6,6 @@ const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'h
 export const dynamic = 'force-static';
 export const revalidate = 3600; // 1 hour - homepage updates frequently
 export const fetchCache = 'force-cache';
-export const runtime = 'edge';
 
 export const metadata: Metadata = {
   title:

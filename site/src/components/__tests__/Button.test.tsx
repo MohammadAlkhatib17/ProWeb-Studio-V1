@@ -1,4 +1,6 @@
+import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import { Button } from '../Button';
 
 describe('Button', () => {
@@ -9,7 +11,7 @@ describe('Button', () => {
   });
 
   it('renders as a button when as="button" is specified', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<Button as="button" onClick={handleClick}>Click me</Button>);
     const button = screen.getByRole('button', { name: /click me/i });
     expect(button).toBeInTheDocument();
@@ -22,7 +24,7 @@ describe('Button', () => {
   });
 
   it('handles button clicks correctly', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<Button as="button" onClick={handleClick}>Click me</Button>);
     const button = screen.getByRole('button');
     fireEvent.click(button);
