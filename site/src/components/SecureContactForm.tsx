@@ -244,7 +244,16 @@ export default function SecureContactForm() {
         }),
       });
 
-      const data = await response.json();
+      let data;
+      const contentType = response.headers.get('content-type');
+      
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        // Handle non-JSON responses (e.g., plain text error messages)
+        const text = await response.text();
+        data = { error: text };
+      }
 
       if (!response.ok) {
         if (response.status === 429) {

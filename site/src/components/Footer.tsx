@@ -11,11 +11,13 @@ export default function Footer() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
     setErrorMessage('');
+    setSuccessMessage('');
 
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       setErrorMessage('Voer een geldig e-mailadres in.');
@@ -30,13 +32,23 @@ export default function Footer() {
         body: JSON.stringify({ email }),
       });
 
-      const data = await response.json();
+      let data;
+      const contentType = response.headers.get('content-type');
+      
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        // Handle non-JSON responses (e.g., plain text error messages)
+        const text = await response.text();
+        data = { error: text };
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Er is iets misgegaan.');
       }
 
       setStatus('success');
+      setSuccessMessage(data.message || 'Bedankt voor je inschrijving!');
       setEmail(''); // Clear input on success
     } catch (error) {
       setStatus('error');
@@ -93,7 +105,7 @@ export default function Footer() {
                   </Button>
                 </div>
                 {status === 'success' && (
-                  <p className="text-xs text-green-400">Bedankt voor je inschrijving!</p>
+                  <p className="text-xs text-green-400">{successMessage}</p>
                 )}
                 {status === 'error' && (
                   <p className="text-xs text-red-400">{errorMessage}</p>

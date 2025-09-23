@@ -64,6 +64,25 @@ export async function POST(req: NextRequest) {
       const res = NextResponse.json({ ok: true, message: 'Successfully subscribed!' });
       res.headers.set('Cache-Control', 'no-store');
       return res;
+    } else if (response.status === 400) {
+      // Check if it's a duplicate email error
+      const errorData = await response.json();
+      if (errorData.code === 'duplicate_parameter' && errorData.message?.includes('email is already associated')) {
+        // Email already exists - treat as success with appropriate message
+        console.log(`[Newsletter Subscription] Email ${email} already exists in list ID ${listId} - treating as success.`);
+        const res = NextResponse.json({ ok: true, message: 'Je bent al ingeschreven voor onze nieuwsbrief!' });
+        res.headers.set('Cache-Control', 'no-store');
+        return res;
+      } else {
+        // Other 400 errors (invalid email format, etc.)
+        console.error(`[Brevo API Error] Status: ${response.status}, Email: ${email}`, errorData);
+        const res = NextResponse.json(
+          { ok: false, error: 'Ongeldig e-mailadres opgegeven.' },
+          { status: 400 }
+        );
+        res.headers.set('Cache-Control', 'no-store');
+        return res;
+      }
     } else {
       const errorData = await response.json();
       console.error(`[Brevo API Error] Status: ${response.status}, Email: ${email}`, errorData);

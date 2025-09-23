@@ -108,8 +108,10 @@ function validateRequest(req: NextRequest): { valid: boolean; reason?: string } 
       ];
       // Allow Vercel preview deployments
       const isVercelPreview = origin?.endsWith('.vercel.app');
+      // Allow localhost on any port for development
+      const isLocalhost = origin?.startsWith('http://localhost:') || origin?.startsWith('https://localhost:');
       
-      if (origin && !isVercelPreview && !allowedOrigins.includes(origin)) {
+      if (origin && !isVercelPreview && !isLocalhost && !allowedOrigins.includes(origin)) {
         return { valid: false, reason: 'Invalid origin' };
       }
     }
@@ -157,6 +159,12 @@ export async function middleware(req: NextRequest) {
   if (detectBot(userAgent) && !path.startsWith('/api/')) {
     // Allow bots for SEO but block from sensitive areas
     if (path.includes('admin') || path.includes('dashboard')) {
+      if (path.startsWith('/api/')) {
+        return NextResponse.json(
+          { ok: false, error: 'Access Denied' },
+          { status: 403 }
+        );
+      }
       return new NextResponse('Access Denied', { status: 403 });
     }
   }
@@ -167,6 +175,13 @@ export async function middleware(req: NextRequest) {
       console.warn(`Suspicious request blocked: ${ip} ${path}`);
     } else {
       console.warn('Suspicious request blocked');
+    }
+    
+    if (path.startsWith('/api/')) {
+      return NextResponse.json(
+        { ok: false, error: 'Bad Request' },
+        { status: 400 }
+      );
     }
     return new NextResponse('Bad Request', { status: 400 });
   }
@@ -179,6 +194,13 @@ export async function middleware(req: NextRequest) {
     } else {
       console.warn('Invalid request blocked');
     }
+    
+    if (path.startsWith('/api/')) {
+      return NextResponse.json(
+        { ok: false, error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
     return new NextResponse('Unauthorized', { status: 401 });
   }
   
@@ -189,14 +211,24 @@ export async function middleware(req: NextRequest) {
     } else {
       console.warn('Rate limit exceeded');
     }
+    
+    const headers = {
+      'Retry-After': '10', // 10 seconds
+      'X-RateLimit-Limit': '100',
+      'X-RateLimit-Remaining': '0',
+      'X-RateLimit-Reset': (Date.now() + 10000).toString()
+    };
+    
+    if (path.startsWith('/api/')) {
+      return NextResponse.json(
+        { ok: false, error: 'Too Many Requests' },
+        { status: 429, headers }
+      );
+    }
+    
     return new NextResponse('Too Many Requests', { 
       status: 429,
-      headers: {
-        'Retry-After': '10', // 10 seconds
-        'X-RateLimit-Limit': '100',
-        'X-RateLimit-Remaining': '0',
-        'X-RateLimit-Reset': (Date.now() + 10000).toString()
-      }
+      headers
     });
   }
   
