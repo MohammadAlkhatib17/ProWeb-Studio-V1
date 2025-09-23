@@ -4,6 +4,7 @@ import { Suspense, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, OrbitControls, Environment } from '@react-three/drei';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/Button';
 import * as THREE from 'three';
 
 function ShoppingCart() {
@@ -241,18 +242,18 @@ export default function EcommerceShowcase() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <a
+              <Button
                 href="/contact"
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-stellar-500 to-cosmic-500 hover:from-stellar-400 hover:to-cosmic-400 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+                variant="primary"
               >
                 Start Jullie Webshop
-              </a>
-              <a
+              </Button>
+              <Button
                 href="/diensten"
-                className="inline-flex items-center px-6 py-3 border-2 border-stellar-400 text-stellar-400 hover:bg-stellar-400 hover:text-white font-semibold rounded-lg transition-all duration-300"
+                variant="secondary"
               >
                 E-commerce Info
-              </a>
+              </Button>
             </div>
           </motion.div>
         </div>

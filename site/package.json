@@ -40,7 +40,10 @@
     "ci:perf:mobile": "npm run lhci:collect:mobile && npm run lhci:assert:mobile",
     "ci:quality-check": "npm run typecheck && npm run lint && npm run format:check && npm run test",
     "ci:build": "npm run build:analyze && npm run analyze:generate && npm run seo:preflight",
-    "validate:regions": "node scripts/validate-regions.js"
+    "validate:regions": "node scripts/validate-regions.js",
+    "perf:validate": "./scripts/validate-performance.sh",
+    "perf:test:dutch": "LIGHTHOUSE_CONFIG=dutch npm run lighthouse",
+    "perf:monitor": "npm run dev:perf && npm run perf:validate"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,md}": [

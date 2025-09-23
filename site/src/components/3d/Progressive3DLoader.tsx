@@ -10,7 +10,7 @@ interface Progressive3DLoaderProps {
   /**
    * Component to load dynamically
    */
-  component: () => Promise<{ default: ComponentType<any> }>;
+  component: () => Promise<{ default: ComponentType<Record<string, unknown>> }>;
   
   /**
    * Fallback component while loading
@@ -20,7 +20,7 @@ interface Progressive3DLoaderProps {
   /**
    * Props to pass to the 3D component
    */
-  componentProps?: Record<string, any>;
+  componentProps?: Record<string, unknown>;
   
   /**
    * Whether to enable client-side only rendering
@@ -285,7 +285,7 @@ export function use3DLoader(
   );
   
   return React.useCallback(
-    (props: any = {}) => (
+    (props: Record<string, unknown> = {}) => (
       <Progressive3DLoader
         component={component}
         componentProps={props}
@@ -300,7 +300,7 @@ export function use3DLoader(
  * Pre-configured loaders for common 3D components
  */
 export const Optimized3DLoaders = {
-  HeroScene: (props: any = {}) => (
+  HeroScene: (props: Record<string, unknown> = {}) => (
     <Progressive3DLoader
       component={() => import('@/three/HeroScene')}
       componentProps={props}
@@ -310,7 +310,7 @@ export const Optimized3DLoaders = {
     />
   ),
   
-  HexagonalPrism: (props: any = {}) => (
+  HexagonalPrism: (props: Record<string, unknown> = {}) => (
     <Progressive3DLoader
       component={() => import('@/three/HexagonalPrism')}
       componentProps={props}

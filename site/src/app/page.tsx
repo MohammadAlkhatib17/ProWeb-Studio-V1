@@ -4,7 +4,9 @@ import type { Metadata } from 'next';
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const dynamic = 'force-static';
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 3600; // 1 hour - homepage updates frequently
+export const fetchCache = 'force-cache';
+export const runtime = 'edge';
 
 export const metadata: Metadata = {
   title:
@@ -12,11 +14,11 @@ export const metadata: Metadata = {
   description:
     'Website laten maken door Nederlandse webdesign experts. Professionele websites, webshops en 3D ervaringen voor MKB, startups en enterprise. Van Amsterdam tot Eindhoven - transparante prijzen, snelle oplevering, Nederlandse kwaliteit.',
   alternates: {
-    canonical: '/',
+    canonical: `${SITE_URL}/`,
     languages: { 
-      'nl-NL': '/',
-      'nl': '/',
-      'x-default': '/'
+      'nl-NL': `${SITE_URL}/`,
+      'nl': `${SITE_URL}/`,
+      'x-default': `${SITE_URL}/`
     },
   },
   robots: {
@@ -34,7 +36,7 @@ export const metadata: Metadata = {
   },
   other: {
     'google-site-verification': process.env.GOOGLE_SITE_VERIFICATION || '',
-    'revisit-after': '7 days',
+    'revisit-after': '3 days',
     'distribution': 'web',
     'rating': 'general',
     'language': 'Dutch',
@@ -42,18 +44,41 @@ export const metadata: Metadata = {
     'geo.placename': 'Netherlands',
     'geo.position': '52.3676;4.9041',
     'ICBM': '52.3676, 4.9041',
+    'robots': 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1',
+    'googlebot': 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1',
+    'bingbot': 'index,follow',
+    'slurp': 'index,follow',
+    'duckduckbot': 'index,follow',
+    'facebookexternalhit': 'index,follow',
+    'twitterbot': 'index,follow',
+    'linkedinbot': 'index,follow',
+    'whatsapp': 'index,follow',
+    'telegrambot': 'index,follow',
+    'priority': '1.0',
+    'importance': 'high',
+    'crawl-delay': '1',
   },
   openGraph: {
     images: [
-      { url: '/og', width: 1200, height: 630 },
+      { 
+        url: `${SITE_URL}/og`, 
+        width: 1200, 
+        height: 630,
+        alt: 'Website laten maken Nederland - ProWeb Studio webdesign experts',
+        type: 'image/png',
+        secureUrl: `${SITE_URL}/og`,
+      },
     ],
     title:
       'Website Laten Maken Nederland | Webdesign & Webshop Ontwikkeling Amsterdam, Rotterdam, Utrecht – ProWeb Studio',
     description:
       'Website laten maken door Nederlandse webdesign experts. Professionele websites, webshops en 3D ervaringen voor MKB, startups en enterprise. Van Amsterdam tot Eindhoven - transparante prijzen, snelle oplevering, Nederlandse kwaliteit.',
     url: `${SITE_URL}/`,
+    siteName: 'ProWeb Studio - Website laten maken Nederland',
     type: 'website',
     locale: 'nl_NL',
+    alternateLocale: ['en_US', 'de_DE'],
+    countryName: 'Netherlands',
   },
   keywords: [
     'website laten maken',
@@ -91,10 +116,20 @@ export const metadata: Metadata = {
     'snelle website',
     'veilige website'
   ],
+  twitter: {
+    card: 'summary_large_image',
+    site: '@prowebstudio_nl',
+    creator: '@prowebstudio_nl',
+    title: 'Website Laten Maken Nederland | ProWeb Studio Webdesign Experts',
+    description: 'Website laten maken door Nederlandse webdesign experts. Van Amsterdam tot Eindhoven - razendsnelle websites, webshops en 3D ervaringen.',
+    images: [`${SITE_URL}/og`],
+  },
 };
 
 import dynamicImport from 'next/dynamic';
 import SEOSchema from '@/components/SEOSchema';
+import FAQSection from '@/components/sections/FAQSection';
+import DutchMarketFAQ from '@/components/DutchMarketFAQ';
 
 const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
   ssr: false,
@@ -106,6 +141,7 @@ const HeroScene = dynamicImport(() => import('@/three/HeroScene'), {
   loading: () => null,
 });
 import Link from 'next/link';
+import { Button } from '@/components/Button';
 
 // Dynamic import for 3D hexagonal prism scene with performance optimization
 const HexagonalPrism = dynamicImport(() => import('@/three/HexagonalPrism'), {
@@ -158,6 +194,21 @@ export default function HomePage() {
         pageDescription={metadata.description as string}
         includeFAQ={true}
       />
+      
+      {/* Critical SEO content - always rendered server-side */}
+      <div className="sr-only">
+        <h1>Website Laten Maken Nederland - ProWeb Studio Webdesign Experts</h1>
+        <p>ProWeb Studio is een Nederlandse webdesign bureau gespecialiseerd in het laten maken van professionele websites, webshops en 3D ervaringen. Wij bedienen klanten in Amsterdam, Rotterdam, Utrecht, Den Haag, Eindhoven en heel Nederland met transparante prijzen en Nederlandse kwaliteit.</p>
+        <nav aria-label="Diensten overzicht">
+          <ul>
+            <li><a href="/diensten/website-laten-maken">Website laten maken</a></li>
+            <li><a href="/diensten/webshop-laten-maken">Webshop laten maken</a></li>
+            <li><a href="/diensten/seo-optimalisatie">SEO optimalisatie</a></li>
+            <li><a href="/diensten/3d-websites">3D websites</a></li>
+          </ul>
+        </nav>
+      </div>
+      
       {/* HERO SECTION */}
       <section
         aria-label="Hero"
@@ -185,18 +236,20 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
+            <Button
               href="/contact"
-              className="px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-base sm:text-lg hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900"
+              variant="primary"
+              size="large"
             >
               Website laten maken - Start project
-            </Link>
-            <Link
+            </Button>
+            <Button
               href="/werkwijze"
-              className="px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 border-2 border-gray-600 rounded-lg font-semibold text-base sm:text-lg hover:border-white hover:bg-white/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900"
+              variant="secondary"
+              size="large"
             >
               Ontdek onze werkwijze →
-            </Link>
+            </Button>
           </div>
 
           <p className="mt-12 text-gray-400 text-sm motion-safe:animate-fade-in-delayed">
@@ -350,15 +403,16 @@ export default function HomePage() {
                   </span>
                 </li>
               </ul>
-              <Link
+              <Button
                 href="/speeltuin"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-cyan-400 rounded-lg hover:bg-cyan-400/10 transition-all duration-300 hover:gap-4 group focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900"
+                variant="secondary"
+                className="gap-2 hover:gap-4 group"
               >
                 Bekijk 3D website voorbeelden
                 <span className="group-hover:translate-x-1 transition-transform duration-300">
                   →
                 </span>
-              </Link>
+              </Button>
             </div>
             <div className="h-[400px] rounded-2xl overflow-hidden border border-cosmic-700/60 bg-cosmic-800/20 relative">
               <HexagonalPrism />
@@ -380,18 +434,20 @@ export default function HomePage() {
             en <Link href="/werkwijze" className="text-cyan-400 hover:text-cyan-300">bewezen projectaanpak</Link>.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link
+            <Button
               href="/contact"
-              className="px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-base sm:text-lg hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900"
+              variant="primary"
+              size="large"
             >
               Website laten maken - Plan strategiesessie
-            </Link>
-            <Link
+            </Button>
+            <Button
               href="/diensten"
-              className="px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 border-2 border-gray-600 rounded-lg font-semibold text-base sm:text-lg hover:border-white hover:bg-white/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900"
+              variant="secondary"
+              size="large"
             >
               Bekijk webdesign diensten
-            </Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -609,120 +665,16 @@ export default function HomePage() {
                       <li>• Webdesign Tilburg</li>
                       <li>• Website maken Maastricht</li>
                       <li>• Webdevelopment Breda</li>
-                      <li>• Website 's-Hertogenbosch</li>
+                      <li>• Website &apos;s-Hertogenbosch</li>
                     </ul>
                   </div>
                 </div>
               </div>
             </section>
 
-            <section itemScope itemType="https://schema.org/FAQPage">
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
-                Veelgestelde Vragen over Website Laten Maken Nederland
-              </h3>
-              
-              <div className="space-y-6">
-                <div itemScope itemType="https://schema.org/Question" className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <details>
-                    <summary itemProp="name" className="font-semibold text-white cursor-pointer hover:text-cyan-300 transition-colors">
-                      Wat kost het om een professionele website te laten maken bij ProWeb Studio?
-                    </summary>
-                    <div itemScope itemType="https://schema.org/Answer" className="mt-4 text-gray-300">
-                      <p itemProp="text">
-                        De investering voor een professionele website varieert tussen €3.500 en €25.000+, 
-                        afhankelijk van functionaliteiten, design complexiteit en integraties. Voor een standaard 
-                        zakelijke website rekent u op €3.500-€8.500, webshops starten vanaf €6.500, en complexe 
-                        enterprise websites vanaf €15.000. We werken met transparante, vaste prijzen per project. 
-                        Na een gratis strategiesessie ontvangt u een gedetailleerde offerte zonder verborgen kosten.
-                      </p>
-                    </div>
-                  </details>
-                </div>
-                
-                <div itemScope itemType="https://schema.org/Question" className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <details>
-                    <summary itemProp="name" className="font-semibold text-white cursor-pointer hover:text-cyan-300 transition-colors">
-                      Hoe lang duurt het om een website te laten maken in Nederland?
-                    </summary>
-                    <div itemScope itemType="https://schema.org/Answer" className="mt-4 text-gray-300">
-                      <p itemProp="text">
-                        Een standaard business website realiseren we binnen 4-6 weken. Webshops en e-commerce 
-                        platforms vragen 6-8 weken. Complexere projecten met 3D-elementen, uitgebreide 
-                        functionaliteiten of enterprise-integraties kunnen 8-12 weken in beslag nemen. 
-                        We plannen altijd een realistische timeline en houden u wekelijks op de hoogte van de voortgang 
-                        via ons Nederlandse projectmanagement systeem.
-                      </p>
-                    </div>
-                  </details>
-                </div>
-                
-                <div itemScope itemType="https://schema.org/Question" className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <details>
-                    <summary itemProp="name" className="font-semibold text-white cursor-pointer hover:text-cyan-300 transition-colors">
-                      Waarom zou ik mijn website laten maken door ProWeb Studio in plaats van een goedkoper alternatief?
-                    </summary>
-                    <div itemScope itemType="https://schema.org/Answer" className="mt-4 text-gray-300">
-                      <p itemProp="text">
-                        Wij combineren technische excellentie met creatieve innovatie en Nederlandse marktkennis. 
-                        Onze websites behalen niet alleen perfecte Google PageSpeed scores en Core Web Vitals, 
-                        maar onderscheiden zich ook visueel met unieke 3D-ervaringen. Bovendien bieden we volledige 
-                        transparantie, persoonlijke begeleiding in het Nederlands, en continue support na oplevering. 
-                        Onze klanten zien gemiddeld 150% meer conversies binnen 6 maanden na website launch.
-                      </p>
-                    </div>
-                  </details>
-                </div>
-                
-                <div itemScope itemType="https://schema.org/Question" className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <details>
-                    <summary itemProp="name" className="font-semibold text-white cursor-pointer hover:text-cyan-300 transition-colors">
-                      Krijg ik ook SEO en online marketing ondersteuning bij mijn nieuwe website?
-                    </summary>
-                    <div itemScope itemType="https://schema.org/Answer" className="mt-4 text-gray-300">
-                      <p itemProp="text">
-                        Ja, elke website bouwen we met een sterke SEO-basis: technische optimalisatie voor Nederlandse 
-                        zoekopdrachten, snelheidsoptimalisatie, schema markup, lokale SEO voor Nederlandse steden, 
-                        en contentstrategie. Voor doorlopende SEO en marketing kunnen we u doorverwijzen naar onze 
-                        vertrouwde partners gespecialiseerd in Nederlandse marktbewerking en Google Ads management.
-                      </p>
-                    </div>
-                  </details>
-                </div>
-
-                <div itemScope itemType="https://schema.org/Question" className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <details>
-                    <summary itemProp="name" className="font-semibold text-white cursor-pointer hover:text-cyan-300 transition-colors">
-                      Kan ik mijn website zelf onderhouden na oplevering, of heb ik technische kennis nodig?
-                    </summary>
-                    <div itemScope itemType="https://schema.org/Answer" className="mt-4 text-gray-300">
-                      <p itemProp="text">
-                        Wij leveren uw website op met een gebruiksvriendelijk content management systeem (CMS) 
-                        waarmee u zelf teksten, afbeeldingen en pagina's kunt bijwerken zonder technische kennis. 
-                        Daarnaast bieden we Nederlandse training, uitgebreide documentatie, en optionele onderhoudscontracten 
-                        voor technische updates, beveiliging en backup-beheer.
-                      </p>
-                    </div>
-                  </details>
-                </div>
-
-                <div itemScope itemType="https://schema.org/Question" className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <details>
-                    <summary itemProp="name" className="font-semibold text-white cursor-pointer hover:text-cyan-300 transition-colors">
-                      Werken jullie ook met internationale klanten, of alleen Nederlandse bedrijven?
-                    </summary>
-                    <div itemScope itemType="https://schema.org/Answer" className="mt-4 text-gray-300">
-                      <p itemProp="text">
-                        Hoewel onze basis in Nederland ligt en we gespecialiseerd zijn in de Nederlandse markt, 
-                        werken we regelmatig met internationale klanten. Onze meertalige websites, grensoverschrijdende 
-                        e-commerce functionaliteiten, en ervaring met internationale SEO maken ons de ideale partner 
-                        voor Nederlandse bedrijven die internationaal willen groeien, of buitenlandse bedrijven die 
-                        de Nederlandse markt willen betreden.
-                      </p>
-                    </div>
-                  </details>
-                </div>
-              </div>
-            </section>
+            <FAQSection title="Veelgestelde Vragen">
+              <DutchMarketFAQ />
+            </FAQSection>
 
             <section>
               <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
@@ -761,13 +713,15 @@ export default function HomePage() {
                 Ontdek waarom ondernemers door heel Nederland kiezen voor onze 
                 <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300 ml-1">professionele webdesign services</Link>.
               </p>
-              <Link
+              <Button
                 href="/contact"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-lg hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25"
+                variant="primary"
+                size="large"
+                className="gap-2"
               >
                 Plan Gratis Website Strategiesessie
                 <span>→</span>
-              </Link>
+              </Button>
             </footer>
           </article>
         </div>

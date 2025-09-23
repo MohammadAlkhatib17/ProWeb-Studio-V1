@@ -1,4 +1,5 @@
 import { siteConfig } from '@/config/site.config';
+import { Button } from '@/components/Button';
 
 // Dutch Market FAQ Component with Regional and Business-Specific Content
 export default function DutchMarketFAQ() {
@@ -160,15 +161,15 @@ export default function DutchMarketFAQ() {
             Elke ondernemer heeft unieke vragen en uitdagingen. We beantwoorden graag 
             uw specifieke vragen over website ontwikkeling, SEO, of digitale strategie.
           </p>
-          <a 
+          <Button
             href="/contact"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-400 to-purple-400 text-black font-semibold rounded-lg hover:from-cyan-300 hover:to-purple-300 transition-all duration-300 transform hover:scale-105"
+            variant="primary"
           >
             Stel uw vraag
             <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
-          </a>
+          </Button>
         </div>
       </div>
 

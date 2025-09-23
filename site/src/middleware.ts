@@ -12,6 +12,37 @@ const SUSPICIOUS_PATTERNS = [
   /\bexec\b/i, /\bsystem\b/i, /\.\.\/\.\.\//i, /\bunion\b.*\bselect\b/i
 ];
 
+// Geographic optimization for Dutch users
+const DUTCH_IP_RANGES = [
+  // Netherlands IP ranges (simplified for example)
+  '31.', '37.', '46.', '62.', '77.', '78.', '80.', '81.', '82.', '83.',
+  '84.', '85.', '86.', '87.', '88.', '89.', '90.', '91.', '92.', '93.',
+  '94.', '95.', '109.', '130.', '145.', '146.', '149.', '176.', '178.',
+  '185.', '188.', '193.', '194.', '195.', '212.', '213.', '217.'
+];
+
+const EDGE_REGIONS = {
+  netherlands: ['ams1', 'dub1'],
+  europe: ['fra1', 'lhr1', 'cdg1'],
+  global: ['iad1', 'sfo1', 'sin1']
+};
+
+function getGeographicHint(ip: string, countryHeader?: string): string {
+  // Check if IP appears to be from Netherlands
+  if (DUTCH_IP_RANGES.some(range => ip.startsWith(range))) {
+    return 'nl';
+  }
+  
+  // Check country header from CDN
+  if (countryHeader) {
+    const country = countryHeader.toLowerCase();
+    if (country === 'nl' || country === 'netherlands') return 'nl';
+    if (['de', 'be', 'fr', 'uk', 'gb'].includes(country)) return 'eu';
+  }
+  
+  return 'global';
+}
+
 function getClientIP(req: NextRequest): string {
   // Check various headers for real IP
   const xForwardedFor = req.headers.get('x-forwarded-for');
@@ -114,6 +145,7 @@ export async function middleware(req: NextRequest) {
   const ip = getClientIP(req);
   const path = req.nextUrl.pathname;
   const userAgent = req.headers.get('user-agent') || '';
+  const country = req.headers.get('x-vercel-ip-country') || req.headers.get('cf-ipcountry');
   
   // Skip middleware for static files and Next.js internals
   if (
@@ -124,6 +156,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Geographic optimization hints
+  const geoHint = getGeographicHint(ip, country || undefined);
+  
   // 1. Bot Detection
   if (detectBot(userAgent) && !path.startsWith('/api/')) {
     // Allow bots for SEO but block from sensitive areas
@@ -179,6 +214,8 @@ export async function middleware(req: NextRequest) {
   // 6. Set nonce on request headers for components to access
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set('X-Nonce', nonce);
+  requestHeaders.set('X-Geographic-Hint', geoHint);
+  requestHeaders.set('X-Client-IP', ip);
   
   // 7. Apply Security Headers
   const response = NextResponse.next({ request: { headers: requestHeaders } });
@@ -187,8 +224,18 @@ export async function middleware(req: NextRequest) {
   Object.entries(securityHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
+
+  // Add geographic and performance headers
+  response.headers.set('X-Geographic-Hint', geoHint);
+  response.headers.set('X-Edge-Region', geoHint === 'nl' ? 'ams1' : geoHint === 'eu' ? 'fra1' : 'global');
   
-  // 7. Apply Contact-specific CSP with nonce
+  // Enhanced caching for Dutch users
+  if (geoHint === 'nl' && !path.startsWith('/api/')) {
+    response.headers.set('Cache-Control', 'public, max-age=7200, s-maxage=86400, stale-while-revalidate=3600');
+    response.headers.set('X-Cache-Strategy', 'dutch-optimized');
+  }
+  
+  // 8. Apply Contact-specific CSP with nonce
   if (path === '/contact') {
     const cspValue = [
       "default-src 'self'",

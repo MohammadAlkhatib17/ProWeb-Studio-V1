@@ -2,14 +2,21 @@ import type { Metadata } from 'next';
 import dynamicImport from 'next/dynamic';
 
 export const dynamic = 'force-static';
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 7200; // 2 hours - services content is fairly stable
+export const fetchCache = 'force-cache';
+export const runtime = 'edge';
 
 import { Suspense } from 'react';
 import { BackgroundImage } from '@/components/ui/responsive-image';
 import Link from 'next/link';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { Button } from '@/components/Button';
 import SEOSchema from '@/components/SEOSchema';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import FAQSection from '@/components/sections/FAQSection';
+import DutchMarketFAQ from '@/components/DutchMarketFAQ';
+import RelatedServices from '@/components/RelatedServices';
+import ContentSuggestions from '@/components/ContentSuggestions';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -344,18 +351,20 @@ export default function Diensten() {
               naar het volgende niveau tillen. Plan een gratis strategiesessie en ontdek de mogelijkheden.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
+              <Button
                 href="/contact"
-                className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-lg hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25"
+                variant="primary"
+                size="large"
               >
                 Plan Gratis Strategiesessie
-              </Link>
-              <Link
+              </Button>
+              <Button
                 href="/overzicht"
-                className="px-8 py-4 border-2 border-gray-600 rounded-lg font-semibold text-lg hover:border-white hover:bg-white/10 transition-all duration-300"
+                variant="secondary"
+                size="large"
               >
                 Bekijk Portfolio
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -374,35 +383,32 @@ export default function Diensten() {
             die jouw verwachtingen overtreft.
           </p>
           <div className="flex gap-6 justify-center flex-wrap">
-            <a
+            <Button
               href="/contact"
-              className="px-6 py-3 sm:px-7 sm:py-3 md:px-8 md:py-3.5 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 relative overflow-hidden group"
+              variant="primary"
             >
-              <span className="relative z-10">Plan een intake</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-magenta-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </a>
-            <a
+              Plan een intake
+            </Button>
+            <Button
               href="/speeltuin"
-              className="px-6 py-3 sm:px-7 sm:py-3 md:px-8 md:py-3.5 border border-cyan-400/60 text-cyan-100 rounded-lg hover:bg-cyan-400/10 transition-all duration-300 hover:border-cyan-400/80 hover:shadow-lg group relative overflow-hidden"
+              variant="secondary"
+              className="flex items-center gap-2"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                Ervaar onze technologie
-                <svg
-                  className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5-5 5M6 12h12"
-                  />
-                </svg>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </a>
+              Ervaar onze technologie
+              <svg
+                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5-5 5M6 12h12"
+                />
+              </svg>
+            </Button>
           </div>
         </div>
       </section>
@@ -470,111 +476,13 @@ export default function Diensten() {
         </p>
       </section>
 
-      {/* FAQ Section */}
-      <section className="px-6 md:px-8 lg:px-12 py-12 md:py-16">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-cyan-400 to-magenta-400 bg-clip-text text-transparent">
-            Veelgestelde vragen
-          </h2>
-          <div className="space-y-4">
-            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
-              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
-                <div className="flex items-center justify-between">
-                  <span>Hoelang duurt het om een website op te leveren?</span>
-                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </summary>
-              <div className="px-6 pb-6">
-                <p className="text-gray-300 leading-relaxed">
-                  Een professionele website wordt doorgaans binnen 4-8 weken opgeleverd, afhankelijk van de complexiteit en specifieke wensen. Voor eenvoudige websites kunnen we dit verkorten tot 2-3 weken, terwijl uitgebreide e-commerce oplossingen soms 8-12 weken in beslag nemen.
-                </p>
-              </div>
-            </details>
-
-            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
-              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
-                <div className="flex items-center justify-between">
-                  <span>Werken jullie met WordPress, een headless CMS of maatwerk?</span>
-                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </summary>
-              <div className="px-6 pb-6">
-                <p className="text-gray-300 leading-relaxed">
-                  Wij specialiseren ons in moderne headless CMS-oplossingen zoals Sanity en Contentful, gecombineerd met Next.js voor optimale performance. Voor specifieke behoeften ontwikkelen we ook volledig maatwerk oplossingen. WordPress gebruiken we alleen in uitzonderlijke gevallen.
-                </p>
-              </div>
-            </details>
-
-            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
-              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
-                <div className="flex items-center justify-between">
-                  <span>Kunnen jullie een webshop bouwen met betaalmethoden in Nederland (iDEAL, creditcard)?</span>
-                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </summary>
-              <div className="px-6 pb-6">
-                <p className="text-gray-300 leading-relaxed">
-                  Ja, wij bouwen complete e-commerce oplossingen met alle populaire Nederlandse betaalmethoden zoals iDEAL, creditcard, Bancontact, en PayPal. We integreren met betrouwbare payment service providers zoals Mollie of Stripe voor veilige transacties.
-                </p>
-              </div>
-            </details>
-
-            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
-              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
-                <div className="flex items-center justify-between">
-                  <span>Hoe pakken jullie SEO aan voor landelijke vindbaarheid in Nederland?</span>
-                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </summary>
-              <div className="px-6 pb-6">
-                <p className="text-gray-300 leading-relaxed">
-                  Onze SEO-aanpak begint met diepgaand zoekwoordenonderzoek specifiek voor de Nederlandse markt. We optimaliseren technische aspecten, creëren waardevolle content, en zorgen voor lokale SEO met focus op Nederlandse zoektermen en gebruikersgedrag.
-                </p>
-              </div>
-            </details>
-
-            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
-              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
-                <div className="flex items-center justify-between">
-                  <span>Bieden jullie onderhoud en doorontwikkeling aan?</span>
-                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </summary>
-              <div className="px-6 pb-6">
-                <p className="text-gray-300 leading-relaxed">
-                  Ja, wij bieden flexibele onderhoudscontracten en doorontwikkelingstrajecten. Van beveiligingsupdates en contentbeheer tot het toevoegen van nieuwe functionaliteiten - we zorgen ervoor dat uw website altijd up-to-date en optimaal presteert.
-                </p>
-              </div>
-            </details>
-
-            <details className="group border border-white/10 rounded-lg bg-cosmic-900/50 backdrop-blur-sm">
-              <summary className="cursor-pointer p-6 text-lg font-medium text-white list-none hover:bg-white/5 transition-colors">
-                <div className="flex items-center justify-between">
-                  <span>Kunnen afspraken online plaatsvinden of op locatie in Nederland?</span>
-                  <svg className="w-5 h-5 text-cyan-400 transform group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-              </summary>
-              <div className="px-6 pb-6">
-                <p className="text-gray-300 leading-relaxed">
-                  Beide opties zijn mogelijk. We werken graag online via videocalls voor efficiënte samenwerking, maar bezoeken ook graag klanten op locatie binnen Nederland voor persoonlijke besprekingen en workshops.
-                </p>
-              </div>
-            </details>
-          </div>
-        </div>
-      </section>
+      <FAQSection title="Vragen over onze Diensten">
+        <DutchMarketFAQ />
+      </FAQSection>
+      
+      <RelatedServices showAll={true} />
+      
+      <ContentSuggestions />
       
       <SEOSchema 
         pageType="services" 

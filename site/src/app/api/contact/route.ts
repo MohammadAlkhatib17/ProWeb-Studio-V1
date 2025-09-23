@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import DOMPurify from 'isomorphic-dompurify';
 
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-// EU-first region priority: Frankfurt, Paris, Stockholm, Amsterdam prioritizing NL traffic
-export const preferredRegion = ['fra1', 'cdg1', 'arn1', 'ams1'];
+// EU-first region priority: Amsterdam (for Dutch users), Frankfurt, Paris, Stockholm
+export const preferredRegion = ['ams1', 'fra1', 'cdg1', 'arn1'];
 
 // Enhanced validation schema with security considerations
 const contactSchema = z.object({

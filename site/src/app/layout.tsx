@@ -14,6 +14,7 @@ import BackgroundLayer from '@/components/layout/BackgroundLayer';
 import HeroBackground from '@/components/HeroBackground';
 import TopVignetteOverlay from '@/components/layout/TopVignetteOverlay';
 import PWAServiceWorker from '@/components/PWAServiceWorker';
+import DutchPerformanceMonitor from '@/components/DutchPerformanceMonitor';
 import { primaryFont, generateFontPreloads } from '@/lib/fonts';
 import { generateResourcePreconnects } from '@/lib/preconnect';
 
@@ -295,6 +296,7 @@ export default function RootLayout({
 
         <SEOSchema nonce={nonce} pageType="generic" />
         <PWAServiceWorker />
+        <DutchPerformanceMonitor />
 
         <Script
           defer

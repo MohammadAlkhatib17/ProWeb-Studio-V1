@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { siteConfig } from '@/config/site.config';
+import { Button } from '@/components/Button';
 
 // Regional targeting component for major Dutch cities and regions
 export default function DutchRegionalTargeting() {
@@ -16,7 +17,7 @@ export default function DutchRegionalTargeting() {
     {
       name: "Rotterdam",
       province: "Zuid-Holland",
-      description: "Professionele websites voor Rotterdam's zakelijke sector. Van haven-gerelateerde bedrijven tot moderne dienstverlening.",
+      description: "Professionele websites voor Rotterdam&apos;s zakelijke sector. Van haven-gerelateerde bedrijven tot moderne dienstverlening.",
       features: ["Zakelijke focus", "Haven & logistiek expertise", "B2B optimalisatie", "Robuuste oplossingen"],
       keywords: ["website bouwen Rotterdam", "bedrijfswebsite Rotterdam", "webdesign Rotterdam"],
       population: "650k+ inwoners", 
@@ -25,7 +26,7 @@ export default function DutchRegionalTargeting() {
     {
       name: "Den Haag",
       province: "Zuid-Holland",
-      description: "Website ontwikkeling voor Den Haag's overheid, juridische sector en internationale organisaties. Compliance en professionaliteit voorop.",
+      description: "Website ontwikkeling voor Den Haag&apos;s overheid, juridische sector en internationale organisaties. Compliance en professionaliteit voorop.",
       features: ["Overheid-compliant", "Juridische sector", "Internationale standaarden", "GDPR expertise"],
       keywords: ["website laten maken Den Haag", "overheid website", "juridische website"],
       population: "550k+ inwoners",
@@ -34,7 +35,7 @@ export default function DutchRegionalTargeting() {
     {
       name: "Utrecht",
       province: "Utrecht", 
-      description: "Centrale ligging, dynamische economie. Websites voor Utrecht's diverse bedrijfsleven, van tech tot traditionele sectoren.",
+      description: "Centrale ligging, dynamische economie. Websites voor Utrecht&apos;s diverse bedrijfsleven, van tech tot traditionele sectoren.",
       features: ["Centrale locatie", "Diverse sectoren", "Innovatieve oplossingen", "Snelle bereikbaarheid"],
       keywords: ["professionele website Utrecht", "webdesign Utrecht", "website ontwikkeling Utrecht"],
       population: "360k+ inwoners",
@@ -43,7 +44,7 @@ export default function DutchRegionalTargeting() {
     {
       name: "Eindhoven",
       province: "Noord-Brabant",
-      description: "Tech-hub van Nederland. Websites voor Eindhoven's high-tech industrie, startups en innovatieve bedrijven.",
+      description: "Tech-hub van Nederland. Websites voor Eindhoven&apos;s high-tech industrie, startups en innovatieve bedrijven.",
       features: ["High-tech focus", "Brainport regio", "Innovatie-gericht", "Tech-startup ecosystem"],
       keywords: ["website laten maken Eindhoven", "tech website Eindhoven", "startup website"],
       population: "235k+ inwoners",
@@ -61,7 +62,7 @@ export default function DutchRegionalTargeting() {
     {
       name: "Groningen",
       province: "Groningen",
-      description: "Noordelijke kwaliteit en innovatie. Websites voor Groningen's energie sector, universiteit en lokale bedrijven.",
+      description: "Noordelijke kwaliteit en innovatie. Websites voor Groningen&apos;s energie sector, universiteit en lokale bedrijven.",
       features: ["Energie sector", "Universitaire omgeving", "Noordelijke kwaliteit", "Duurzame focus"],
       keywords: ["website laten maken Groningen", "webdesign Noord-Nederland", "energie website"],
       population: "235k+ inwoners",
@@ -70,7 +71,7 @@ export default function DutchRegionalTargeting() {
     {
       name: "Almere",
       province: "Flevoland",
-      description: "Snelgroeiende stad met moderne bedrijven. Websites voor Almere's dynamische ondernemersklimaat.",
+      description: "Snelgroeiende stad met moderne bedrijven. Websites voor Almere&apos;s dynamische ondernemersklimaat.",
       features: ["Snelle groei", "Moderne bedrijven", "Jonge demografie", "Digitale innovatie"],
       keywords: ["website ontwikkeling Almere", "moderne website Almere", "webdesign Flevoland"],
       population: "215k+ inwoners",
@@ -93,7 +94,7 @@ export default function DutchRegionalTargeting() {
     },
     {
       name: "Zuid-Holland", 
-      description: "Haven, overheid en zakelijke dienstverlening. Robuuste websites voor Zuid-Holland's diverse economie.",
+      description: "Haven, overheid en zakelijke dienstverlening. Robuuste websites voor Zuid-Holland&apos;s diverse economie.",
       cities: ["Rotterdam", "Den Haag", "Leiden", "Dordrecht"],
       keywords: ["website Zuid-Holland", "haven website", "overheid website"]
     }
@@ -128,7 +129,7 @@ export default function DutchRegionalTargeting() {
         {/* Major Cities Grid */}
         <div className="mb-20">
           <h3 className="text-2xl sm:text-3xl font-bold mb-8 text-center">
-            Grote steden & regio's
+            Grote steden &amp; regio&apos;s
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -283,22 +284,22 @@ export default function DutchRegionalTargeting() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
+            <Button
               href="/contact"
-              className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-cyan-400 to-purple-400 text-black font-semibold rounded-lg hover:from-cyan-300 hover:to-purple-300 transition-all duration-300 transform hover:scale-105"
+              variant="primary"
             >
               Start uw project
               <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </Link>
+            </Button>
             
-            <Link 
+            <Button
               href="/diensten"
-              className="inline-flex items-center justify-center px-8 py-3 border border-cyan-400/30 text-cyan-300 rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300"
+              variant="secondary"
             >
               Bekijk onze diensten
-            </Link>
+            </Button>
           </div>
         </div>
       </div>

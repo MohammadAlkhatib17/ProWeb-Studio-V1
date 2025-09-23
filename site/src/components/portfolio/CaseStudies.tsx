@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Button } from '@/components/Button';
 import { useState } from 'react';
 
 interface CaseStudy {
@@ -208,7 +209,7 @@ export default function CaseStudies() {
                 </div>
                 <div>
                   <blockquote className="text-lg text-white mb-4 italic">
-                    "{currentCase.testimonial.text}"
+                    &ldquo;{currentCase.testimonial.text}&rdquo;
                   </blockquote>
                   <div>
                     <div className="font-semibold text-stellar-400">{currentCase.testimonial.author}</div>
@@ -253,15 +254,16 @@ export default function CaseStudies() {
 
             {/* CTA Button */}
             <div className="mt-8 text-center">
-              <a
+              <Button
                 href="/contact"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-stellar-500 to-cosmic-500 hover:from-stellar-400 hover:to-cosmic-400 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+                variant="primary"
+                size="large"
               >
                 Start Jullie Succesverhaal
                 <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </a>
+              </Button>
             </div>
           </div>
         </motion.div>

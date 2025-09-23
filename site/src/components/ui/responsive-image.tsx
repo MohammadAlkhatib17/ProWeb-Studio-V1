@@ -72,10 +72,16 @@ export function ResponsiveImage({
       className
     ),
     // Add fetchpriority for LCP elements in supporting browsers
-    ...(isLCP && { fetchpriority: 'high' as any }),
+    ...(isLCP && { fetchpriority: 'high' as const }),
     ...props,
   };
 
+  // Ensure alt prop is always provided
+  if (!imageProps.alt) {
+    imageProps.alt = '';
+  }
+
+  // eslint-disable-next-line jsx-a11y/alt-text
   return <Image {...imageProps} />;
 }
 
@@ -145,6 +151,7 @@ interface BackgroundImageProps extends Omit<ResponsiveImageProps, 'fill' | 'size
   /**
    * Background images should fill their container
    */
+  containerClassName?: string;
 }
 
 /**
@@ -155,11 +162,13 @@ export function BackgroundImage({
   priority = false,
   quality = 75,
   className,
+  alt = '',
   ...props 
 }: BackgroundImageProps) {
   return (
     <ResponsiveImage
       {...props}
+      alt={alt}
       fill
       priority={priority}
       quality={quality}

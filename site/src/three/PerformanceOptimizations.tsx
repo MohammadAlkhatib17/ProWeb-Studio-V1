@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { Suspense, useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'

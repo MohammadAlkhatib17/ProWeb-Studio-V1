@@ -22,9 +22,28 @@ const routeTranslations: Record<string, string> = {
   'werkwijze': 'Werkwijze',
   'speeltuin': 'Speeltuin',
   'overzicht': 'Overzicht',
+  'overzicht-site': 'Site Overzicht',
   'privacy': 'Privacy',
   'voorwaarden': 'Voorwaarden',
   'sitemap': 'Sitemap',
+  // Service-specific routes
+  'webdesign': 'Webdesign',
+  'webshop': 'Webshop',
+  'seo': 'SEO Optimalisatie',
+  '3d-experiences': '3D Ervaringen',
+  'maintenance': 'Onderhoud',
+  // Location-specific routes
+  'amsterdam': 'Amsterdam',
+  'rotterdam': 'Rotterdam',
+  'utrecht': 'Utrecht',
+  'den-haag': 'Den Haag',
+  'eindhoven': 'Eindhoven',
+  'tilburg': 'Tilburg',
+  'groningen': 'Groningen',
+  'almere': 'Almere',
+  'breda': 'Breda',
+  'nijmegen': 'Nijmegen',
+  'locaties': 'Locaties',
 };
 
 export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {

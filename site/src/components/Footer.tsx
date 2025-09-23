@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site.config';
+import { footerLinkGroups } from '@/config/internal-linking.config';
 import Logo from '@/components/Logo';
+import { Button } from '@/components/Button';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -45,160 +47,129 @@ export default function Footer() {
   return (
     <footer className="bg-cosmic-800/20 border-t border-cosmic-700 py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6">
       <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-8">
-          <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 mb-8">
+          <div className="lg:col-span-2">
             <div className="mb-3 transform hover:scale-105 transition-transform duration-300">
               <Logo variant="full" size="lg" withGlow={true} animated={true} />
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed -mt-1">
+            <p className="text-gray-400 text-sm leading-relaxed -mt-1 mb-6">
               {siteConfig.tagline}
             </p>
+            
+            {/* Newsletter signup */}
+            <div>
+              <h4 className="font-semibold mb-4 text-cyan-400">
+                Digitale Innovatie in je Inbox
+              </h4>
+              <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+                Blijf op de hoogte van de nieuwste trends in webontwikkeling,
+                3D-technologie en digitale transformatie. Exclusieve inzichten van
+                onze experts.
+              </p>
+              <form className="space-y-3" onSubmit={handleSubmit}>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <label htmlFor="newsletter-email" className="sr-only">
+                    E-mailadres voor nieuwsbrief
+                  </label>
+                  <input
+                    type="email"
+                    id="newsletter-email"
+                    name="email"
+                    placeholder="jouw@email.nl"
+                    className="sm:flex-1 px-4 py-3 min-h-[44px] bg-cosmic-800/60 border border-cosmic-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={status === 'sending'}
+                  />
+                  <Button
+                    as="button"
+                    type="submit"
+                    variant="primary"
+                    className="whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed sm:min-w-[140px]"
+                    disabled={status === 'sending'}
+                  >
+                    {status === 'sending' ? 'Bezig...' : 'Inschrijven'}
+                  </Button>
+                </div>
+                {status === 'success' && (
+                  <p className="text-xs text-green-400">Bedankt voor je inschrijving!</p>
+                )}
+                {status === 'error' && (
+                  <p className="text-xs text-red-400">{errorMessage}</p>
+                )}
+                {status === 'idle' && (
+                  <p className="text-xs text-gray-500">
+                    Geen spam, alleen waardevolle content. Uitschrijven kan altijd.
+                  </p>
+                )}
+              </form>
+            </div>
           </div>
 
-          <div>
-            <h4 className="font-semibold mb-4">Navigatie</h4>
-            <nav aria-label="Footer navigation">
-              <ul className="space-y-2">
-                {siteConfig.navigation.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="text-gray-400 hover:text-cyan-400 text-sm min-h-[44px] inline-flex items-center py-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
+          {/* Strategic Link Groups */}
+          {footerLinkGroups.map((group) => (
+            <div key={group.title}>
+              <h4 className="font-semibold mb-4">{group.title}</h4>
+              <nav aria-label={`${group.title} navigation`}>
+                <ul className="space-y-2">
+                  {group.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className={`text-sm min-h-[44px] inline-flex items-center py-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded ${
+                          link.priority === 'high' 
+                            ? 'text-white hover:text-cyan-300 font-medium' 
+                            : 'text-gray-400 hover:text-cyan-400'
+                        }`}
+                      >
+                        {link.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          ))}
+        </div>
 
-          <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li>
-                <a
-                  href={`mailto:${siteConfig.email}`}
-                  className="hover:text-cyan-400 min-h-[44px] inline-flex items-center py-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-                >
-                  {siteConfig.email}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`tel:${siteConfig.phone}`}
-                  className="hover:text-cyan-400 min-h-[44px] inline-flex items-center py-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-                >
-                  {siteConfig.phone}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold mb-4 text-cyan-400">
-              Digitale Innovatie in je Inbox
-            </h4>
-            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-              Blijf op de hoogte van de nieuwste trends in webontwikkeling,
-              3D-technologie en digitale transformatie. Exclusieve inzichten van
-              onze experts.
-            </p>
-            <form className="space-y-3" onSubmit={handleSubmit}>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <label htmlFor="newsletter-email" className="sr-only">
-                  E-mailadres voor nieuwsbrief
-                </label>
-                <input
-                  type="email"
-                  id="newsletter-email"
-                  name="email"
-                  placeholder="jouw@email.nl"
-                  className="sm:flex-1 px-4 py-3 min-h-[44px] bg-cosmic-800/60 border border-cosmic-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={status === 'sending'}
-                />
-                <button
-                  type="submit"
-                  className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-sm hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900 whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed min-h-[44px] touch-target sm:min-w-[140px]"
-                  disabled={status === 'sending'}
-                >
-                  {status === 'sending' ? 'Bezig...' : 'Inschrijven'}
-                </button>
-              </div>
-              {status === 'success' && (
-                <p className="text-xs text-green-400">Bedankt voor je inschrijving!</p>
+        {/* Contact Information */}
+        <div className="mt-8 pt-8 border-t border-cosmic-700/50">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 text-sm text-gray-400">
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="hover:text-cyan-400 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+              >
+                {siteConfig.email}
+              </a>
+              <span className="hidden sm:inline text-cosmic-600">•</span>
+              <a
+                href={`tel:${siteConfig.phone}`}
+                className="hover:text-cyan-400 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+              >
+                {siteConfig.phone}
+              </a>
+              {process.env.NEXT_PUBLIC_KVK && (
+                <>
+                  <span className="hidden sm:inline text-cosmic-600">•</span>
+                  <span>KVK: {process.env.NEXT_PUBLIC_KVK}</span>
+                </>
               )}
-              {status === 'error' && (
-                <p className="text-xs text-red-400">{errorMessage}</p>
+              {process.env.NEXT_PUBLIC_BTW && (
+                <>
+                  <span className="hidden sm:inline text-cosmic-600">•</span>
+                  <span>BTW: {process.env.NEXT_PUBLIC_BTW}</span>
+                </>
               )}
-              {status === 'idle' && (
-                <p className="text-xs text-gray-500">
-                  Geen spam, alleen waardevolle content. Uitschrijven kan altijd.
-                </p>
-              )}
-            </form>
+            </div>
           </div>
         </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/70">
-          <Link
-            href="/privacy"
-            aria-label="Privacybeleid"
-            className="hover:text-white transition-colors min-h-[44px] inline-flex items-center py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-          >
-            Privacybeleid
-          </Link>
+          <span>&copy; {new Date().getFullYear()} {siteConfig.name}. Alle rechten voorbehouden.</span>
           <span aria-hidden>•</span>
-          <Link
-            href="/voorwaarden"
-            aria-label="Algemene voorwaarden"
-            className="hover:text-white transition-colors min-h-[44px] inline-flex items-center py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-          >
-            Algemene voorwaarden
-          </Link>
-          <span aria-hidden>•</span>
-          <a
-            href="/sitemap.xml"
-            aria-label="Sitemap"
-            className="hover:text-white transition-colors min-h-[44px] inline-flex items-center py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-          >
-            Sitemap
-          </a>
-          <span aria-hidden>•</span>
-          <Link
-            href="/overzicht-site"
-            aria-label="Site-overzicht"
-            className="hover:text-white transition-colors min-h-[44px] inline-flex items-center py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-          >
-            Site-overzicht
-          </Link>
-          <span aria-hidden>•</span>
-          <a
-            href={`mailto:${siteConfig.contact?.inbox ?? 'contact@prowebstudio.nl'}`}
-            aria-label="Contact per e-mail"
-            className="hover:text-white transition-colors min-h-[44px] inline-flex items-center py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-          >
-            Contact
-          </a>
-          {process.env.NEXT_PUBLIC_KVK && (
-            <>
-              <span aria-hidden>•</span>
-              <span className="text-white/70">KVK: {process.env.NEXT_PUBLIC_KVK}</span>
-            </>
-          )}
-          {process.env.NEXT_PUBLIC_BTW && (
-            <>
-              <span aria-hidden>•</span>
-              <span className="text-white/70">BTW: {process.env.NEXT_PUBLIC_BTW}</span>
-            </>
-          )}
-        </div>
-
-        <div className="border-t border-cosmic-700 pt-8 mt-8 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} {siteConfig.name}. Alle rechten voorbehouden.</p>
+          <span>Gemaakt met ❤️ in Nederland</span>
         </div>
       </div>
     </footer>

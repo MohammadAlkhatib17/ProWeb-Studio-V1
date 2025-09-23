@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- * Core Web Vitals monitoring and image optimization validation
- * Provides comprehensive performance tracking and alerts for optimization regressions
+ * Advanced performance monitoring for Dutch market optimization
+ * Tracks Core Web Vitals, network conditions, and user interactions
  */
 
 // Types for Web Vitals metrics

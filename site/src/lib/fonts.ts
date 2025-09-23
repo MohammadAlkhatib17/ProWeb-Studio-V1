@@ -64,8 +64,10 @@ export const fontFallbackCSS = `
   }
 `;
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- * Font loading strategies for different content types
+ * Font optimization and loading strategies
+ * Optimized for Dutch typography and reading patterns
  */
 export const fontStrategies = {
   critical: 'swap', // Above-the-fold content

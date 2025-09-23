@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { siteConfig } from '@/config/site.config';
+import { Button } from '@/components/Button';
 
 // Component that showcases Dutch business culture integration and terminology
 export default function DutchBusinessCulture() {
@@ -198,14 +198,14 @@ export default function DutchBusinessCulture() {
                       className="bg-gradient-to-br from-neutral-800/30 to-neutral-900/30 border border-neutral-700 rounded-lg p-6 hover:border-cyan-400/30 transition-all duration-300"
                     >
                       <h5 className="text-lg font-semibold text-white mb-3">
-                        "{termData.term}"
+                        &ldquo;{termData.term}&rdquo;
                       </h5>
                       <p className="text-gray-300 text-sm mb-4 leading-relaxed">
                         {termData.explanation}
                       </p>
                       <div className="bg-purple-400/10 border border-purple-400/20 rounded-lg p-3">
                         <p className="text-sm text-purple-200 italic">
-                          "{termData.usage}"
+                          &ldquo;{termData.usage}&rdquo;
                         </p>
                       </div>
                     </div>
@@ -259,22 +259,22 @@ export default function DutchBusinessCulture() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
+            <Button
               href="/over-ons"
-              className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-cyan-400 to-purple-400 text-black font-semibold rounded-lg hover:from-cyan-300 hover:to-purple-300 transition-all duration-300 transform hover:scale-105"
+              variant="primary"
             >
               Leer ons kennen
               <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </Link>
+            </Button>
             
-            <Link 
+            <Button
               href="/werkwijze"
-              className="inline-flex items-center justify-center px-6 py-3 border border-cyan-400/30 text-cyan-300 rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300"
+              variant="secondary"
             >
               Onze werkwijze
-            </Link>
+            </Button>
           </div>
 
           {/* Key Dutch business principles */}

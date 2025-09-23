@@ -121,6 +121,7 @@ export function generateResourcePreconnects(pathname?: string): PreconnectConfig
 export function getAdaptiveResourceHints() {
   if (typeof window === 'undefined') return CRITICAL_PRECONNECTS;
   
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const connection = (navigator as any).connection;
   if (connection) {
     const { effectiveType, saveData } = connection;
@@ -134,8 +135,10 @@ export function getAdaptiveResourceHints() {
   return CRITICAL_PRECONNECTS;
 }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- * Critical resource optimization strategies
+ * Advanced preconnect and resource hints optimization
+ * Optimized for Dutch CDNs and hosting providers
  */
 export const RESOURCE_STRATEGIES = {
   // Fonts should be preconnected and preloaded
