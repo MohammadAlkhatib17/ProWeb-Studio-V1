@@ -31,19 +31,11 @@ export const metadata: Metadata = {
 };
 
 import SpeeltuinClient from './SpeeltuinClient';
-import Image from 'next/image';
+
 
 export default function Page() {
   return (
     <main className="relative overflow-hidden content-safe-top pt-20 md:pt-24">
-      <Image
-        src="/assets/hero_portal_background.avif"
-        alt=""
-        fill
-        sizes="100vw"
-        className="object-cover opacity-55 pointer-events-none -z-10"
-        decoding="async"
-      />
       <SpeeltuinClient />
     </main>
   );

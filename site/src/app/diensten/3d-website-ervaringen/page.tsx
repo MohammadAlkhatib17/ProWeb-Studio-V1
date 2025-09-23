@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { BackgroundImage } from '@/components/ui/responsive-image';
+
 import Link from 'next/link';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Button } from '@/components/Button';
@@ -200,14 +200,6 @@ export default function ThreeDWebsiteErvaringen() {
       {/* Breadcrumbs */}
       <Breadcrumbs />
       
-      {/* Background */}
-      <BackgroundImage
-        src="/assets/nebula_services_background.avif"
-        alt=""
-        className="opacity-60"
-        priority
-      />
-
       {/* Hero Section */}
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
         <div className="max-w-4xl mx-auto text-center">

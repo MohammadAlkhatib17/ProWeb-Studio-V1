@@ -5,7 +5,7 @@ import { locations, services, getNearbyLocations } from '@/config/internal-linki
 import Breadcrumbs from '@/components/Breadcrumbs';
 import RelatedServices from '@/components/RelatedServices';
 import ContentSuggestions from '@/components/ContentSuggestions';
-import { BackgroundImage } from '@/components/ui/responsive-image';
+
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
@@ -123,15 +123,6 @@ export default function LocationPage({ params }: LocationPageProps) {
     <main className="pt-20 md:pt-24 relative overflow-hidden">
       <Breadcrumbs />
       
-      {/* Background */}
-      <BackgroundImage
-        src="/assets/nebula_services_background.avif"
-        alt=""
-        priority={true}
-        quality={85}
-        className="opacity-30 pointer-events-none -z-10"
-      />
-
       {/* Schema */}
       <script
         type="application/ld+json"

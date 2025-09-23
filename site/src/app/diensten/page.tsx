@@ -6,7 +6,7 @@ export const revalidate = 7200; // 2 hours - services content is fairly stable
 export const fetchCache = 'force-cache';
 
 import { Suspense } from 'react';
-import { BackgroundImage } from '@/components/ui/responsive-image';
+
 import Link from 'next/link';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Button } from '@/components/Button';
@@ -127,17 +127,6 @@ export default function Diensten() {
       {/* Breadcrumbs */}
       <Breadcrumbs />
       
-      {/* Preload the LCP background image for this page */}
-      <link rel="preload" as="image" href="/assets/nebula_services_background.avif" type="image/avif" />
-      
-      {/* Full-bleed page background to unify top edge */}
-      <BackgroundImage
-        src="/assets/nebula_services_background.avif"
-        alt=""
-        priority={true}
-        quality={85}
-        className="opacity-50 pointer-events-none -z-10"
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

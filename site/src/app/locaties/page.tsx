@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { locations } from '@/config/internal-linking.config';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ContentSuggestions from '@/components/ContentSuggestions';
-import { BackgroundImage } from '@/components/ui/responsive-image';
+
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
@@ -72,15 +72,6 @@ export default function LocatiesPage() {
     <main className="pt-20 md:pt-24 relative overflow-hidden">
       <Breadcrumbs />
       
-      {/* Background */}
-      <BackgroundImage
-        src="/assets/nebula_services_background.avif"
-        alt=""
-        priority={true}
-        quality={85}
-        className="opacity-30 pointer-events-none -z-10"
-      />
-
       {/* Schema */}
       <script
         type="application/ld+json"
