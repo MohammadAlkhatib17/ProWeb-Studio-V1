@@ -98,6 +98,43 @@
     backdrop-filter: blur(16px) saturate(180%);
   }
 
+  .gradient-text-primary {
+    color: #148cff; /* Fallback color */
+    background: linear-gradient(to right, #148cff, #ff00ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .gradient-text-error {
+    color: #f87171; /* Fallback color */
+    background: linear-gradient(to right, #f87171, #fb923c, #fbbf24);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .gradient-text-404 {
+    color: #148cff; /* Fallback color */
+    background: linear-gradient(to right, #148cff, #ff00ff, #00ffff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Ensure fallback for browsers that don't support background-clip: text */
+  @supports not (background-clip: text) {
+    .gradient-text-primary {
+      color: #148cff;
+    }
+    .gradient-text-error {
+      color: #f87171;
+    }
+    .gradient-text-404 {
+      color: #148cff;
+    }
+  }
+
   .glow-text {
     text-shadow:
       0 0 20px rgba(var(--cosmic-accent), 0.5),

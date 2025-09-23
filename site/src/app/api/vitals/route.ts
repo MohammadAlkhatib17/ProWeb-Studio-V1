@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'edge';
-// EU-first region priority: Amsterdam (for Dutch users), Frankfurt, Paris, Stockholm
-export const preferredRegion = ['ams1', 'fra1', 'cdg1', 'arn1'];
+// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
+export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 interface WebVitalMetric {
   name: string;

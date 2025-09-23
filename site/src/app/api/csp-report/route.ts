@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-// EU-first region priority: Frankfurt, Paris, Stockholm, Amsterdam prioritizing NL traffic
-export const preferredRegion = ['fra1', 'cdg1', 'arn1', 'ams1'];
+// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
+export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 // CSP Report-Only 48h Window Started: 2025-09-18T00:00:00Z
 // Switch to enforcement after monitoring period ends: 2025-09-20T00:00:00Z

@@ -3,8 +3,8 @@ import { ImageResponse } from 'next/og';
 import { siteConfig } from '@/config/site.config';
 
 export const runtime = 'edge';
-// EU-first region priority: Frankfurt, Paris, Stockholm prioritizing NL traffic
-export const preferredRegion = ['fra1', 'cdg1', 'arn1'];
+// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
+export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 export async function GET() {
   const desc = siteConfig.description;

@@ -53,7 +53,7 @@ export default function NotFound() {
         <div className="max-w-2xl mx-auto text-center">
           {/* Error Code */}
           <div className="mb-8">
-            <h1 className="text-8xl sm:text-9xl lg:text-[12rem] font-bold text-transparent bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-400 bg-clip-text leading-none">
+            <h1 className="text-8xl sm:text-9xl lg:text-[12rem] font-bold gradient-text-404 leading-none">
               404
             </h1>
           </div>

@@ -22,7 +22,6 @@ Disallow: /*.json$
 Disallow: /*.xml$
 Disallow: /sw.js
 Disallow: /offline.html
-Disallow: /overzicht/
 Disallow: /overzicht-site/
 Disallow: /.well-known/
 Disallow: /manifest.json

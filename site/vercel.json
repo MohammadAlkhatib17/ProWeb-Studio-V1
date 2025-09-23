@@ -8,9 +8,15 @@
     },
     "src/app/api/*/route.js": {
       "runtime": "edge"
+    },
+    "src/app/api/contact/route.ts": {
+      "runtime": "nodejs18.x"
+    },
+    "src/app/api/csp-report/route.ts": {
+      "runtime": "nodejs18.x"
     }
   },
-  "regions": ["ams1", "dub1", "fra1"],
+  "regions": ["cdg1", "lhr1", "fra1"],
   "headers": [
     {
       "source": "/(.*)",

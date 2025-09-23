@@ -21,12 +21,6 @@ const DUTCH_IP_RANGES = [
   '185.', '188.', '193.', '194.', '195.', '212.', '213.', '217.'
 ];
 
-const EDGE_REGIONS = {
-  netherlands: ['ams1', 'dub1'],
-  europe: ['fra1', 'lhr1', 'cdg1'],
-  global: ['iad1', 'sfo1', 'sin1']
-};
-
 function getGeographicHint(ip: string, countryHeader?: string): string {
   // Check if IP appears to be from Netherlands
   if (DUTCH_IP_RANGES.some(range => ip.startsWith(range))) {
@@ -227,7 +221,7 @@ export async function middleware(req: NextRequest) {
 
   // Add geographic and performance headers
   response.headers.set('X-Geographic-Hint', geoHint);
-  response.headers.set('X-Edge-Region', geoHint === 'nl' ? 'ams1' : geoHint === 'eu' ? 'fra1' : 'global');
+  response.headers.set('X-Edge-Region', geoHint === 'nl' ? 'lhr1' : geoHint === 'eu' ? 'fra1' : 'cdg1');
   
   // Enhanced caching for Dutch users
   if (geoHint === 'nl' && !path.startsWith('/api/')) {

@@ -1,5 +1,11 @@
 import { MetadataRoute } from 'next';
 
+// Edge runtime configuration for better performance and region distribution
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
+// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
+export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
+
 interface SitemapEntry {
   url: string;
   lastModified: Date;

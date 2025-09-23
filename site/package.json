@@ -32,6 +32,7 @@
     "analyze:generate": "node scripts/analyze-bundle-data.js",
     "bundle:compare": "node scripts/bundle-compare.js",
     "seo:preflight": "tsx scripts/seo-preflight.ts",
+    "seo:validate-sitemap": "node scripts/validate-sitemap.mjs",
     "lhci:collect": "lhci collect --config=lighthouserc.json",
     "lhci:assert": "lhci assert --config=lighthouserc.json",
     "lhci:collect:mobile": "lhci collect --config=lighthouserc.mobile.json",

@@ -84,7 +84,7 @@ export default function Error({ error, reset }: ErrorProps) {
                   />
                 </svg>
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-transparent bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 bg-clip-text leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold gradient-text-error leading-tight">
                 Oeps!
               </h1>
             </div>

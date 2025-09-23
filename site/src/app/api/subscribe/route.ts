@@ -4,8 +4,8 @@ import { z } from 'zod';
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-// EU-first region priority: Amsterdam (for Dutch users), Frankfurt, Paris, Stockholm
-export const preferredRegion = ['ams1', 'fra1', 'cdg1', 'arn1'];
+// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
+export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 const subscribeSchema = z.object({
   email: z.string().email('Ongeldig e-mailadres.'),
