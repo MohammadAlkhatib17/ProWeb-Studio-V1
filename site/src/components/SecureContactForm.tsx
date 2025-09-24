@@ -283,7 +283,7 @@ export default function SecureContactForm() {
 
   return (
     <>
-      <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-32 px-4 sm:px-6 min-h-[60vh] grid place-items-center overflow-hidden">
+      <section className="relative py-section xl:py-32 px-4 sm:px-6 min-h-[60vh] grid place-items-center overflow-hidden">
         <div className="relative z-10 w-full max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           <div className="space-y-8">
             <div className="space-y-4">
@@ -294,7 +294,7 @@ export default function SecureContactForm() {
                 </span>{' '}
                 realiseren
               </h1>
-              <p className="text-base sm:text-lg text-gray-300 leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-200 leading-relaxed">
                 Klaar om jouw online aanwezigheid naar het volgende niveau te
                 tillen? Vertel ons over jouw project en ontdek hoe ProWeb
                 Studio jouw digitale doelen kan realiseren.
@@ -308,7 +308,7 @@ export default function SecureContactForm() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white">Direct Contact</h3>
-                  <p className="text-gray-300">{siteConfig.email}</p>
+                  <p className="text-slate-200">{siteConfig.email}</p>
                 </div>
               </div>
 
@@ -318,7 +318,7 @@ export default function SecureContactForm() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white">Telefonisch</h3>
-                  <p className="text-gray-300">{siteConfig.phone}</p>
+                  <p className="text-slate-200">{siteConfig.phone}</p>
                 </div>
               </div>
 
@@ -328,7 +328,7 @@ export default function SecureContactForm() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white">Beschikbaarheid</h3>
-                  <p className="text-gray-300">
+                  <p className="text-slate-200">
                     Ma-Vr: 9:00-18:00
                     <br />
                     Weekend: Op afspraak
@@ -348,7 +348,7 @@ export default function SecureContactForm() {
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
                   Start jouw project
                 </h2>
-                <p className="text-gray-300">
+                <p className="text-slate-200">
                   Vul het onderstaande formulier in en we nemen binnen 24 uur
                   contact met je op.
                 </p>
@@ -371,7 +371,7 @@ export default function SecureContactForm() {
                     name="name"
                     value={form.name}
                     onChange={onChange}
-                    className="w-full px-4 py-3 min-h-[44px] bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 min-h-[44px] bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-300 focus:shadow-lg focus:shadow-cyan-500/40 focus:shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all duration-300"
                     placeholder="Jouw naam"
                     required
                     maxLength={100}
@@ -390,7 +390,7 @@ export default function SecureContactForm() {
                     name="email"
                     value={form.email}
                     onChange={onChange}
-                    className="w-full px-4 py-3 min-h-[44px] bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 min-h-[44px] bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-500/25 transition-all duration-300"
                     placeholder="jouw@email.nl"
                     required
                     maxLength={254}
@@ -410,7 +410,7 @@ export default function SecureContactForm() {
                   name="phone"
                   value={form.phone}
                   onChange={onChange}
-                  className="w-full px-4 py-3 min-h-[44px] bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 min-h-[44px] bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-500/25 transition-all duration-300"
                   placeholder="+31686412430"
                   autoComplete="tel"
                 />
@@ -452,10 +452,10 @@ export default function SecureContactForm() {
                       key={type.id}
                       type="button"
                       onClick={() => onToggleType(type.id)}
-                      className={`p-3 rounded-lg border text-left transition-all min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-cosmic-900 ${
+                      className={`p-3 rounded-lg border text-left transition-all min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-cosmic-900 ${
                         form.projectTypes.includes(type.id)
                           ? 'bg-blue-500/30 border-blue-400 text-white'
-                          : 'bg-white/5 border-white/20 text-gray-300 hover:bg-white/10'
+                          : 'bg-white/5 border-white/20 text-slate-200 hover:bg-white/10'
                       }`}
                     >
                       <span className="text-sm font-medium">{type.label}</span>
@@ -477,14 +477,14 @@ export default function SecureContactForm() {
                   value={form.message}
                   onChange={onChange}
                   rows={5}
-                  className="w-full px-4 py-3 min-h-[88px] bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+                  className="w-full px-4 py-3 min-h-[88px] bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-400 focus:shadow-lg focus:shadow-cyan-500/25 transition-all duration-300 resize-vertical"
                   placeholder="Beschrijf jouw project, doelen, en eventuele specifieke wensen..."
                   required
                   maxLength={5000}
                 />
                 <div className="flex justify-between items-center">
                   {errors.message && <p className="text-red-400 text-sm" role="alert" aria-live="polite">{errors.message}</p>}
-                  <p className="text-gray-400 text-xs ml-auto">
+                  <p className="text-slate-400 text-xs ml-auto">
                     {form.message.length}/5000 karakters
                   </p>
                 </div>
@@ -510,7 +510,7 @@ export default function SecureContactForm() {
                 <button
                   type="submit"
                   disabled={status === 'sending' || (!isTest && !recaptchaLoaded)}
-                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 rounded-lg transition-all duration-300 hover:from-blue-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 min-h-[44px] touch-target focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-cosmic-900"
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 rounded-lg transition-all duration-300 hover:from-blue-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 min-h-[44px] touch-target focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-cosmic-900"
                 >
                   {status === 'sending' ? (
                     <span className="flex items-center justify-center gap-2">
@@ -537,7 +537,7 @@ export default function SecureContactForm() {
                   )}
                 </button>
 
-                <p className="text-xs text-gray-400 text-center">
+                <p className="text-xs text-slate-400 text-center">
                   Dit formulier is beveiligd met reCAPTCHA v3. Door te versturen ga je akkoord met onze{' '}
                   <a href="/privacy" className="text-blue-400 hover:underline min-h-[44px] inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded">
                     privacyverklaring

@@ -228,7 +228,7 @@ export default function OnderhoudenSupport() {
       <Breadcrumbs />
       
       {/* Hero Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             Website Onderhoud &{' '}
@@ -236,7 +236,7 @@ export default function OnderhoudenSupport() {
               Support
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Zorgeloos website beheer met professioneel onderhoud, hosting management, 
             security monitoring en 24/7 technische ondersteuning.
           </p>
@@ -262,7 +262,7 @@ export default function OnderhoudenSupport() {
       </section>
 
       {/* Features Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -271,7 +271,7 @@ export default function OnderhoudenSupport() {
                 Website Care
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Van technisch onderhoud tot hosting management - wij zorgen voor alle 
               aspecten van uw website zodat u zich kunt richten op uw business.
             </p>
@@ -285,10 +285,10 @@ export default function OnderhoudenSupport() {
               >
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
-                <p className="text-gray-300 mb-6">{feature.description}</p>
+                <p className="text-slate-200 mb-6">{feature.description}</p>
                 <ul className="space-y-2">
                   {feature.details.map((detail, detailIndex) => (
-                    <li key={detailIndex} className="text-sm text-gray-400 flex items-center">
+                    <li key={detailIndex} className="text-sm text-slate-400 flex items-center">
                       <span className="text-primary-400 mr-2">✓</span>
                       {detail}
                     </li>
@@ -301,7 +301,7 @@ export default function OnderhoudenSupport() {
       </section>
 
       {/* Support Packages Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-cosmic-900/50">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -310,7 +310,7 @@ export default function OnderhoudenSupport() {
                 Pakketten
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Kies het support niveau dat past bij uw website en business behoeften.
             </p>
           </div>
@@ -333,18 +333,18 @@ export default function OnderhoudenSupport() {
                   </div>
                 )}
                 <h3 className="text-xl font-semibold text-white mb-3">{pkg.type}</h3>
-                <p className="text-gray-300 text-sm mb-4">{pkg.description}</p>
+                <p className="text-slate-200 text-sm mb-4">{pkg.description}</p>
                 <div className="text-2xl font-bold text-primary-400 mb-2">
                   {pkg.price}
                 </div>
-                <div className="text-sm text-gray-400 mb-6">
+                <div className="text-sm text-slate-400 mb-6">
                   Response: {pkg.responseTime}
                 </div>
                 <div className="mb-6">
                   <h4 className="text-sm font-semibold text-white mb-3">Inbegrepen:</h4>
                   <ul className="space-y-2">
                     {pkg.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="text-sm text-gray-300 flex items-center">
+                      <li key={featureIndex} className="text-sm text-slate-200 flex items-center">
                         <span className="text-primary-400 mr-2">✓</span>
                         {feature}
                       </li>
@@ -370,7 +370,7 @@ export default function OnderhoudenSupport() {
       </section>
 
       {/* Maintenance Services Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -379,7 +379,7 @@ export default function OnderhoudenSupport() {
                 Services
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Uitgebreide onderhouds diensten om uw website in optimale staat te houden.
             </p>
           </div>
@@ -392,10 +392,10 @@ export default function OnderhoudenSupport() {
               >
                 <div className="text-4xl mb-4">{service.icon}</div>
                 <h3 className="text-lg font-semibold text-white mb-3">{service.name}</h3>
-                <p className="text-gray-300 text-sm mb-4">{service.description}</p>
+                <p className="text-slate-200 text-sm mb-4">{service.description}</p>
                 <div className="space-y-1">
                   {service.tasks.map((task, taskIndex) => (
-                    <div key={taskIndex} className="text-xs text-gray-400">
+                    <div key={taskIndex} className="text-xs text-slate-400">
                       • {task}
                     </div>
                   ))}
@@ -407,7 +407,7 @@ export default function OnderhoudenSupport() {
       </section>
 
       {/* Monitoring Tools Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-cosmic-900/50">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -416,7 +416,7 @@ export default function OnderhoudenSupport() {
                 & Analytics
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Geavanceerde monitoring tools voor complete inzichten in uw website prestaties.
             </p>
           </div>
@@ -428,12 +428,12 @@ export default function OnderhoudenSupport() {
                 className="bg-cosmic-800/40 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300"
               >
                 <h3 className="text-xl font-semibold text-white mb-3">{tool.tool}</h3>
-                <p className="text-gray-300 text-sm mb-6">{tool.description}</p>
+                <p className="text-slate-200 text-sm mb-6">{tool.description}</p>
                 <div className="grid grid-cols-2 gap-4">
                   {tool.features.map((feature, featureIndex) => (
                     <div
                       key={featureIndex}
-                      className="text-xs text-gray-400 bg-cosmic-700/30 rounded-lg p-3 text-center"
+                      className="text-xs text-slate-400 bg-cosmic-700/30 rounded-lg p-3 text-center"
                     >
                       {feature}
                     </div>
@@ -446,7 +446,7 @@ export default function OnderhoudenSupport() {
       </section>
 
       {/* Process Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -455,7 +455,7 @@ export default function OnderhoudenSupport() {
                 Proces
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Gestructureerde aanpak voor optimaal website beheer en onderhoud.
             </p>
           </div>
@@ -493,7 +493,7 @@ export default function OnderhoudenSupport() {
               >
                 <div className="text-2xl font-bold text-primary-400 mb-3">{phase.step}</div>
                 <h3 className="text-lg font-semibold text-white mb-3">{phase.title}</h3>
-                <p className="text-gray-300 text-sm mb-3">{phase.description}</p>
+                <p className="text-slate-200 text-sm mb-3">{phase.description}</p>
                 <div className="text-xs text-primary-300 font-medium">{phase.duration}</div>
                 {index < 3 && (
                   <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500"></div>
@@ -514,7 +514,7 @@ export default function OnderhoudenSupport() {
               {faqItems.map((item, index) => (
                 <div key={index} className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-white mb-3">{item.question}</h3>
-                  <p className="text-gray-300 leading-relaxed">{item.answer}</p>
+                  <p className="text-slate-200 leading-relaxed">{item.answer}</p>
                 </div>
               ))}
             </div>
@@ -523,7 +523,7 @@ export default function OnderhoudenSupport() {
       </ErrorBoundary>
 
       {/* CTA Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Zorgeloos{' '}
@@ -531,7 +531,7 @@ export default function OnderhoudenSupport() {
               Website Beheer
             </span>
           </h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-200 mb-8 max-w-2xl mx-auto">
             Laat ons uw website beheren zodat u zich kunt focussen op wat u het beste doet: 
             uw business laten groeien.
           </p>
@@ -597,7 +597,7 @@ export default function OnderhoudenSupport() {
                     <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">
                       {service.title}
                     </h3>
-                    <p className="text-gray-400 text-sm">{service.description}</p>
+                    <p className="text-slate-400 text-sm">{service.description}</p>
                   </Link>
                 ))}
               </div>

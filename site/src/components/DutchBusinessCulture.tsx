@@ -1,5 +1,8 @@
 import { siteConfig } from '@/config/site.config';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/Button';
+import { fadeInUp, staggerContainer, staggerItem, defaultViewport } from '@/lib/motion';
 
 // Component that showcases Dutch business culture integration and terminology
 export default function DutchBusinessCulture() {
@@ -121,27 +124,36 @@ export default function DutchBusinessCulture() {
   ];
 
   return (
-    <section className="py-16 px-4 sm:px-6">
+    <motion.section 
+      className="py-section px-4 sm:px-6"
+      initial="initial"
+      whileInView="animate"
+      viewport={defaultViewport}
+      variants={staggerContainer}
+    >
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div className="text-center mb-16" variants={fadeInUp}>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 glow-text">
             Nederlandse bedrijfscultuur in webdesign
           </h2>
-          <p className="text-lg sm:text-xl text-gray-300 max-w-4xl mx-auto mb-8">
+          <p className="text-lg sm:text-xl text-slate-200 max-w-4xl mx-auto mb-8">
             Websites die perfect aansluiten bij de Nederlandse manier van ondernemen. 
             Met respect voor onze zakelijke cultuur en begrip van wat Nederlandse ondernemers echt nodig hebben.
           </p>
-        </div>
+        </motion.div>
 
         {/* Cultural Values */}
-        <div className="mb-20">
+        <motion.div className="mb-20" variants={fadeInUp}>
           <h3 className="text-2xl sm:text-3xl font-bold mb-12 text-center">
             Nederlandse waarden in ons werk
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            variants={staggerContainer}
+          >
             {culturalValues.map((value, index) => (
               <div 
                 key={index}
@@ -151,23 +163,23 @@ export default function DutchBusinessCulture() {
                   <span className="text-3xl mr-4">{value.icon}</span>
                   <div>
                     <h4 className="text-xl font-bold text-white mb-2">{value.title}</h4>
-                    <p className="text-gray-300 leading-relaxed mb-4">
+                    <p className="text-slate-200 leading-relaxed mb-4">
                       {value.description}
                     </p>
                   </div>
                 </div>
                 
                 <div className="bg-cyan-400/5 border border-cyan-400/20 rounded-lg p-4 mb-4">
-                  <h5 className="text-sm font-semibold text-cyan-400 mb-2">Zakelijke waarde:</h5>
-                  <p className="text-sm text-gray-300">{value.businessValue}</p>
+                  <h5 className="text-sm font-semibold text-cyan-300 mb-2">Zakelijke waarde:</h5>
+                  <p className="text-sm text-slate-200">{value.businessValue}</p>
                 </div>
                 
                 <div>
                   <h5 className="text-sm font-semibold text-white mb-3">Praktische voorbeelden:</h5>
                   <ul className="space-y-2">
                     {value.examples.map((example, exampleIndex) => (
-                      <li key={exampleIndex} className="flex items-center text-sm text-gray-300">
-                        <span className="text-cyan-400 mr-2">✓</span>
+                      <li key={exampleIndex} className="flex items-center text-sm text-slate-200">
+                        <span className="text-cyan-300 mr-2">✓</span>
                         {example}
                       </li>
                     ))}
@@ -175,8 +187,8 @@ export default function DutchBusinessCulture() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Business Terminology */}
         <div className="mb-20">
@@ -187,7 +199,7 @@ export default function DutchBusinessCulture() {
           <div className="space-y-12">
             {businessTerms.map((category, categoryIndex) => (
               <div key={categoryIndex}>
-                <h4 className="text-xl font-bold mb-6 text-cyan-400 border-b border-cyan-400/20 pb-2">
+                <h4 className="text-xl font-bold mb-6 text-cyan-300 border-b border-cyan-400/20 pb-2">
                   {category.category}
                 </h4>
                 
@@ -200,7 +212,7 @@ export default function DutchBusinessCulture() {
                       <h5 className="text-lg font-semibold text-white mb-3">
                         &ldquo;{termData.term}&rdquo;
                       </h5>
-                      <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+                      <p className="text-slate-200 text-sm mb-4 leading-relaxed">
                         {termData.explanation}
                       </p>
                       <div className="bg-purple-400/10 border border-purple-400/20 rounded-lg p-3">
@@ -232,15 +244,15 @@ export default function DutchBusinessCulture() {
                   <span className="text-2xl mr-4">{insight.icon}</span>
                   <div>
                     <h4 className="font-semibold text-white mb-2">Markt inzicht</h4>
-                    <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                    <p className="text-slate-200 text-sm leading-relaxed mb-4">
                       {insight.insight}
                     </p>
                   </div>
                 </div>
                 
                 <div className="bg-neutral-800/50 border border-neutral-600 rounded-lg p-4">
-                  <h5 className="text-sm font-semibold text-cyan-400 mb-2">Onze aanpak:</h5>
-                  <p className="text-sm text-gray-300">{insight.action}</p>
+                  <h5 className="text-sm font-semibold text-cyan-300 mb-2">Onze aanpak:</h5>
+                  <p className="text-sm text-slate-200">{insight.action}</p>
                 </div>
               </div>
             ))}
@@ -252,7 +264,7 @@ export default function DutchBusinessCulture() {
           <h3 className="text-2xl font-bold mb-4 text-white">
             Websites die passen bij Nederlandse ondernemers
           </h3>
-          <p className="text-gray-300 mb-8 max-w-3xl mx-auto">
+          <p className="text-slate-200 mb-8 max-w-3xl mx-auto">
             Wij begrijpen de Nederlandse bedrijfscultuur omdat we er zelf deel van uitmaken. 
             Van transparante prijzen tot betrouwbare afspraken - wij spreken uw taal, 
             letterlijk en figuurlijk.
@@ -280,20 +292,20 @@ export default function DutchBusinessCulture() {
           {/* Key Dutch business principles */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-neutral-600">
             <div className="text-center">
-              <div className="text-cyan-400 font-semibold text-lg mb-1">100%</div>
-              <div className="text-gray-400 text-sm">Nederlandse kwaliteit</div>
+              <div className="text-cyan-300 font-semibold text-lg mb-1">100%</div>
+              <div className="text-slate-300 text-sm">Nederlandse kwaliteit</div>
             </div>
             <div className="text-center">
-              <div className="text-cyan-400 font-semibold text-lg mb-1">24u</div>
-              <div className="text-gray-400 text-sm">Reactietijd max</div>
+              <div className="text-cyan-300 font-semibold text-lg mb-1">24u</div>
+              <div className="text-slate-300 text-sm">Reactietijd max</div>
             </div>
             <div className="text-center">
-              <div className="text-cyan-400 font-semibold text-lg mb-1">0</div>
-              <div className="text-gray-400 text-sm">Verborgen kosten</div>
+              <div className="text-cyan-300 font-semibold text-lg mb-1">0</div>
+              <div className="text-slate-300 text-sm">Verborgen kosten</div>
             </div>
             <div className="text-center">
-              <div className="text-cyan-400 font-semibold text-lg mb-1">∞</div>
-              <div className="text-gray-400 text-sm">Nazorg & support</div>
+              <div className="text-cyan-300 font-semibold text-lg mb-1">∞</div>
+              <div className="text-slate-300 text-sm">Nazorg & support</div>
             </div>
           </div>
         </div>
@@ -352,6 +364,6 @@ export default function DutchBusinessCulture() {
           }),
         }}
       />
-    </section>
+    </motion.section>
   );
 }

@@ -31,7 +31,7 @@ export default function ContentSuggestions({
           <h2 className="text-xl sm:text-2xl font-bold text-white mb-3">
             {title}
           </h2>
-          <p className="text-gray-400">
+          <p className="text-slate-400">
             Ontdek meer over ProWeb Studio en onze mogelijkheden
           </p>
         </div>
@@ -47,10 +47,10 @@ export default function ContentSuggestions({
                 <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors">
                   {suggestion.title}
                 </h3>
-                <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                <p className="text-slate-400 text-sm leading-relaxed mb-4">
                   {suggestion.description}
                 </p>
-                <div className="inline-flex items-center text-cyan-400 text-sm font-medium">
+                <div className="inline-flex items-center text-cyan-300 text-sm font-medium">
                   Bekijken
                   <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
                     →
@@ -98,7 +98,7 @@ export function CompactContentSuggestions({
                 <div className="font-medium text-white group-hover:text-cyan-300 transition-colors mb-1">
                   {suggestion.title}
                 </div>
-                <div className="text-sm text-gray-400 leading-relaxed">
+                <div className="text-sm text-slate-400 leading-relaxed">
                   {suggestion.description}
                 </div>
               </Link>

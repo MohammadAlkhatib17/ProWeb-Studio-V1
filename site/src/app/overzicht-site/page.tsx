@@ -124,12 +124,12 @@ export default function SitemapPage() {
       />
 
       {/* Hero Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+      <section className="py-12 sm:py-section px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 glow-text">
             Site Overzicht ProWeb Studio
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+          <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl mx-auto mb-8">
             Navigeer gemakkelijk door alle pagina&apos;s van ProWeb Studio. Van diensten tot portfolio, 
             van technische showcases tot contactinformatie - vind hier alles wat u zoekt.
           </p>
@@ -148,7 +148,7 @@ export default function SitemapPage() {
                     <h2 className="text-xl sm:text-2xl font-bold text-cyan-300">
                       {section.title}
                     </h2>
-                    <p className="text-gray-400 text-sm mt-1">
+                    <p className="text-slate-400 text-sm mt-1">
                       {section.description}
                     </p>
                   </div>
@@ -164,10 +164,10 @@ export default function SitemapPage() {
                         <h3 className="font-semibold text-white group-hover:text-cyan-300 transition-colors">
                           {link.title}
                         </h3>
-                        <p className="text-gray-400 text-sm mt-1 leading-relaxed">
+                        <p className="text-slate-400 text-sm mt-1 leading-relaxed">
                           {link.description}
                         </p>
-                        <div className="flex items-center mt-2 text-cyan-400 text-sm">
+                        <div className="flex items-center mt-2 text-cyan-300 text-sm">
                           <span>Bezoek pagina</span>
                           <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
                         </div>
@@ -187,7 +187,7 @@ export default function SitemapPage() {
           <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-center gradient-text">
             Onze Expertisegebieden
           </h2>
-          <p className="text-gray-300 text-center mb-12 max-w-3xl mx-auto">
+          <p className="text-slate-200 text-center mb-12 max-w-3xl mx-auto">
             ProWeb Studio specialiseert zich in diverse aspecten van moderne webdevelopment. 
             Ontdek onze kerncompetenties en hoe wij uw digitale ambities kunnen realiseren.
           </p>
@@ -200,8 +200,8 @@ export default function SitemapPage() {
                 </h3>
                 <ul className="space-y-2">
                   {category.keywords.map((keyword, keywordIndex) => (
-                    <li key={keywordIndex} className="text-gray-300 text-sm flex items-center">
-                      <span className="text-cyan-400 mr-2 text-xs">▸</span>
+                    <li key={keywordIndex} className="text-slate-200 text-sm flex items-center">
+                      <span className="text-cyan-300 mr-2 text-xs">▸</span>
                       {keyword}
                     </li>
                   ))}
@@ -218,7 +218,7 @@ export default function SitemapPage() {
           <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-white">
             Snelle Acties
           </h2>
-          <p className="text-gray-300 mb-8">
+          <p className="text-slate-200 mb-8">
             Weet u al wat u zoekt? Spring direct naar de meest populaire pagina&apos;s.
           </p>
           
@@ -257,7 +257,7 @@ export default function SitemapPage() {
           <h2 className="text-xl sm:text-2xl font-bold mb-4 text-white">
             Klaar om uw Website Project te Starten?
           </h2>
-          <p className="text-gray-300 mb-6">
+          <p className="text-slate-200 mb-6">
             Van concept tot conversie - ProWeb Studio realiseert digitale oplossingen 
             die uw bedrijf naar het volgende niveau tillen.
           </p>

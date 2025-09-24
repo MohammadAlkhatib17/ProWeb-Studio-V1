@@ -65,20 +65,20 @@ export default function Card({
       />
 
       <div className="relative z-10">
-        <span className="text-sm text-cyan-400 font-medium tracking-wide uppercase mb-3 block group-hover:text-cyan-300 transition-colors duration-300">
+        <span className="text-sm text-cyan-300 font-medium tracking-wide uppercase mb-3 block group-hover:text-cyan-300 transition-colors duration-300">
           {category}
         </span>
         <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 group-hover:text-cyan-300 transition-colors duration-300 leading-tight">
           {title}
         </h3>
-        <p className="text-gray-300 text-sm mb-6 leading-relaxed">
+        <p className="text-slate-200 text-sm mb-6 leading-relaxed">
           {description}
         </p>
         <div className="flex items-center justify-between">
           <span className="text-magenta-400 font-semibold text-base sm:text-lg group-hover:text-magenta-300 transition-colors duration-300">
             {metrics}
           </span>
-          <span className="text-cyan-400 text-base sm:text-lg md:text-xl group-hover:translate-x-1 transition-transform duration-300">
+          <span className="text-cyan-300 text-base sm:text-lg md:text-xl group-hover:translate-x-1 transition-transform duration-300">
             →
           </span>
         </div>

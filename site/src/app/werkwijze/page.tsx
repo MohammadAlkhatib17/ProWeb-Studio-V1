@@ -56,13 +56,13 @@ export default function Werkwijze() {
         pageTitle={metadata.title as string}
         pageDescription={metadata.description as string}
       />
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+      <section className="py-12 sm:py-section px-4 sm:px-6">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 glow-text">
               Werkwijze — website laten maken: van intake tot launch
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-cyan-400 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-2xl mx-auto">
               Een bewezen proces dat resultaat garandeert
             </p>
           </div>
@@ -94,29 +94,29 @@ export default function Werkwijze() {
                 className="glass p-6 rounded-lg hover:border-cyan-500/50 transition-all"
               >
                 <div className="flex items-center mb-4">
-                  <span className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-400 mr-3">
+                  <span className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mr-3">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold">{step.name}</h3>
                 </div>
-                <p className="text-gray-300">{step.description}</p>
+                <p className="text-slate-200">{step.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-cosmic-800/20">
+      <section className="py-12 sm:py-section px-4 sm:px-6 bg-cosmic-800/20">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-12">
             Onze Principes
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             <div className="glass p-6 sm:p-7 md:p-8 rounded-lg">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-cyan-400">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-cyan-300">
                 Transparantie
               </h3>
-              <p className="text-gray-300">
+              <p className="text-slate-200">
                 Open communicatie tijdens het hele proces. Je weet altijd waar
                 we staan.
               </p>
@@ -125,16 +125,16 @@ export default function Werkwijze() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-magenta-400">
                 Innovatie
               </h3>
-              <p className="text-gray-300">
+              <p className="text-slate-200">
                 We gebruiken de nieuwste technologieën om je voorsprong te
                 geven.
               </p>
             </div>
             <div className="glass p-6 sm:p-7 md:p-8 rounded-lg">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-cyan-400">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-cyan-300">
                 Kwaliteit
               </h3>
-              <p className="text-gray-300">
+              <p className="text-slate-200">
                 Geen compromissen. Elk detail wordt geperfectioneerd.
               </p>
             </div>
@@ -142,7 +142,7 @@ export default function Werkwijze() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-magenta-400">
                 Partnership
               </h3>
-              <p className="text-gray-300">
+              <p className="text-slate-200">
                 We zijn niet alleen leverancier, maar strategische partner in
                 jouw groei.
               </p>
@@ -153,7 +153,7 @@ export default function Werkwijze() {
 
       <section
         id="seo-content"
-        className="prose prose-invert max-w-none py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8"
+        className="prose prose-invert max-w-none py-section px-4 sm:px-6 lg:px-8"
       >
         <h1>Een Duidelijk Proces voor een Succesvolle Website</h1>
         <p>
@@ -218,11 +218,11 @@ export default function Werkwijze() {
         </p>
         <p>
           Ontdek meer over{' '}
-          <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">
+          <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">
             onze webdevelopment diensten
           </Link>{' '}
           of bekijk{' '}
-          <Link href="/speeltuin" className="text-cyan-400 hover:text-cyan-300">
+          <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300">
             voorbeelden van onze innovatieve 3D-technologie
           </Link>{' '}
           om te zien hoe wij uw visie tot leven brengen.

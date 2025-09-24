@@ -40,18 +40,18 @@ export default function OverOnsPage() {
         pageTitle={metadata.title as string}
         pageDescription={metadata.description as string}
       />
-      <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 text-center overflow-hidden">
+      <section className="relative py-section px-4 sm:px-6 text-center overflow-hidden">
         <div className="relative z-10 max-w-4xl mx-auto">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 glow-text">
             Architecten van de Digitale Toekomst
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-cyan-400 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-3xl mx-auto">
             Wij zijn ProWeb Studio. We zijn een team van strategen, ontwerpers en ontwikkelaars met een gedeelde passie: het bouwen van buitengewone digitale ervaringen.
           </p>
         </div>
       </section>
 
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+      <section className="py-12 sm:py-section px-4 sm:px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="prose prose-invert max-w-none">
             <h2>Onze Filosofie: Voorbij het Traditionele</h2>
@@ -70,21 +70,21 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-cosmic-800/20">
+      <section className="py-12 sm:py-section px-4 sm:px-6 bg-cosmic-800/20">
         <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">Onze Missie</h2>
-            <p className="text-base sm:text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg text-slate-200 leading-relaxed max-w-3xl mx-auto">
               Onze missie is het empoweren van Nederlandse bedrijven door het creëren van digitale ervaringen die niet alleen technisch superieur zijn, maar ook een diepe, blijvende indruk achterlaten. We transformeren complexe ideeën in intuïtieve, snelle en meeslepende websites die groei stimuleren.
             </p>
         </div>
       </section>
 
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6">
+      <section className="py-section px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight">
             Klaar om samen te bouwen?
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-slate-200 mb-12 max-w-3xl mx-auto leading-relaxed">
             Uw visie verdient de beste technologie en een team dat uw ambitie deelt. Laten we het gesprek starten.
           </p>
           <Link

@@ -201,7 +201,7 @@ export default function ThreeDWebsiteErvaringen() {
       <Breadcrumbs />
       
       {/* Hero Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             3D Website{' '}
@@ -209,7 +209,7 @@ export default function ThreeDWebsiteErvaringen() {
               Ervaringen
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Onderscheidende websites met interactieve 3D ervaringen. WebGL, Three.js en 
             immersieve visualisaties die indruk maken en converteren.
           </p>
@@ -235,7 +235,7 @@ export default function ThreeDWebsiteErvaringen() {
       </section>
 
       {/* Features Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -244,7 +244,7 @@ export default function ThreeDWebsiteErvaringen() {
                 3D Technologieën
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               We gebruiken cutting-edge web technologieën om 3D ervaringen te creëren 
               die werken in elke moderne browser.
             </p>
@@ -258,10 +258,10 @@ export default function ThreeDWebsiteErvaringen() {
               >
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
-                <p className="text-gray-300 mb-6">{feature.description}</p>
+                <p className="text-slate-200 mb-6">{feature.description}</p>
                 <ul className="space-y-2">
                   {feature.details.map((detail, detailIndex) => (
-                    <li key={detailIndex} className="text-sm text-gray-400 flex items-center">
+                    <li key={detailIndex} className="text-sm text-slate-400 flex items-center">
                       <span className="text-primary-400 mr-2">✓</span>
                       {detail}
                     </li>
@@ -274,7 +274,7 @@ export default function ThreeDWebsiteErvaringen() {
       </section>
 
       {/* Experience Types Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-cosmic-900/50">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -283,7 +283,7 @@ export default function ThreeDWebsiteErvaringen() {
                 Types
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Van eenvoudige product viewers tot complexe virtual environments - 
               we realiseren elke 3D visie.
             </p>
@@ -305,7 +305,7 @@ export default function ThreeDWebsiteErvaringen() {
                     {type.complexity}
                   </span>
                 </div>
-                <p className="text-gray-300 text-sm mb-4">{type.description}</p>
+                <p className="text-slate-200 text-sm mb-4">{type.description}</p>
                 <div className="text-xl font-bold text-primary-400 mb-4">
                   Vanaf {type.startingPrice}
                 </div>
@@ -315,7 +315,7 @@ export default function ThreeDWebsiteErvaringen() {
                     {type.useCases.map((useCase, useCaseIndex) => (
                       <div
                         key={useCaseIndex}
-                        className="text-xs text-gray-400 bg-cosmic-700/30 rounded-lg p-2 text-center"
+                        className="text-xs text-slate-400 bg-cosmic-700/30 rounded-lg p-2 text-center"
                       >
                         {useCase}
                       </div>
@@ -337,7 +337,7 @@ export default function ThreeDWebsiteErvaringen() {
       </section>
 
       {/* Technologies Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -346,7 +346,7 @@ export default function ThreeDWebsiteErvaringen() {
                 Stack
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               We werken met de meest geavanceerde tools en frameworks voor 
               professionele 3D web development.
             </p>
@@ -360,10 +360,10 @@ export default function ThreeDWebsiteErvaringen() {
               >
                 <div className="text-4xl mb-4">{tech.icon}</div>
                 <h3 className="text-lg font-semibold text-white mb-3">{tech.name}</h3>
-                <p className="text-gray-300 text-sm mb-4">{tech.description}</p>
+                <p className="text-slate-200 text-sm mb-4">{tech.description}</p>
                 <div className="space-y-1">
                   {tech.applications.map((app, appIndex) => (
-                    <div key={appIndex} className="text-xs text-gray-400">
+                    <div key={appIndex} className="text-xs text-slate-400">
                       {app}
                     </div>
                   ))}
@@ -375,7 +375,7 @@ export default function ThreeDWebsiteErvaringen() {
       </section>
 
       {/* Process Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-cosmic-900/50">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -384,7 +384,7 @@ export default function ThreeDWebsiteErvaringen() {
                 Proces
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Van concept tot immersieve 3D ervaring - professioneel en gestructureerd.
             </p>
           </div>
@@ -428,7 +428,7 @@ export default function ThreeDWebsiteErvaringen() {
               >
                 <div className="text-2xl font-bold text-primary-400 mb-3">{phase.step}</div>
                 <h3 className="text-lg font-semibold text-white mb-3">{phase.title}</h3>
-                <p className="text-gray-300 text-sm mb-3">{phase.description}</p>
+                <p className="text-slate-200 text-sm mb-3">{phase.description}</p>
                 <div className="text-xs text-primary-300 font-medium">{phase.duration}</div>
                 {index < 4 && (
                   <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500"></div>
@@ -449,7 +449,7 @@ export default function ThreeDWebsiteErvaringen() {
               {faqItems.map((item, index) => (
                 <div key={index} className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-white mb-3">{item.question}</h3>
-                  <p className="text-gray-300 leading-relaxed">{item.answer}</p>
+                  <p className="text-slate-200 leading-relaxed">{item.answer}</p>
                 </div>
               ))}
             </div>
@@ -458,7 +458,7 @@ export default function ThreeDWebsiteErvaringen() {
       </ErrorBoundary>
 
       {/* CTA Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Klaar voor een{' '}
@@ -466,7 +466,7 @@ export default function ThreeDWebsiteErvaringen() {
               3D Website?
             </span>
           </h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-200 mb-8 max-w-2xl mx-auto">
             Laten we uw visie omzetten in een interactieve 3D ervaring die uw bezoekers 
             zal verbazen en uw merk onderscheidt.
           </p>
@@ -532,7 +532,7 @@ export default function ThreeDWebsiteErvaringen() {
                     <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">
                       {service.title}
                     </h3>
-                    <p className="text-gray-400 text-sm">{service.description}</p>
+                    <p className="text-slate-400 text-sm">{service.description}</p>
                   </Link>
                 ))}
               </div>

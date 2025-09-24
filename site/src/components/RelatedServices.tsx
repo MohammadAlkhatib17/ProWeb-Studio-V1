@@ -32,7 +32,7 @@ export default function RelatedServices({
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
             {currentService ? 'Gerelateerde Diensten' : 'Onze Populaire Diensten'}
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-slate-400 max-w-2xl mx-auto">
             {currentService 
               ? 'Ontdek andere diensten die perfect aansluiten bij uw behoeften'
               : 'Professionele webdiensten voor Nederlandse bedrijven'
@@ -51,10 +51,10 @@ export default function RelatedServices({
                 <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors">
                   {service.title}
                 </h3>
-                <p className="text-gray-400 text-sm leading-relaxed flex-grow">
+                <p className="text-slate-400 text-sm leading-relaxed flex-grow">
                   {service.description}
                 </p>
-                <div className="mt-4 flex items-center text-cyan-400 text-sm font-medium">
+                <div className="mt-4 flex items-center text-cyan-300 text-sm font-medium">
                   Meer informatie
                   <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
                     →

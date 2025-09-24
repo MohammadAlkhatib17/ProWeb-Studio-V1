@@ -81,14 +81,14 @@ export default function LocatiesPage() {
       />
 
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32">
+      <section className="relative py-section-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Webdesign Nederland
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Lokale expertise, nationale kwaliteit. ProWeb Studio biedt professionele 
             webdesign diensten in alle grote Nederlandse steden.
           </p>
@@ -102,7 +102,7 @@ export default function LocatiesPage() {
             </Link>
             <Link
               href="/portfolio"
-              className="inline-flex items-center px-8 py-4 border border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-cosmic-900 font-semibold rounded-lg transition-all duration-300"
+              className="inline-flex items-center px-8 py-4 border border-cyan-400 text-cyan-300 hover:bg-cyan-400 hover:text-cosmic-900 font-semibold rounded-lg transition-all duration-300"
             >
               Bekijk Portfolio
             </Link>
@@ -111,13 +111,13 @@ export default function LocatiesPage() {
       </section>
 
       {/* Locations Grid */}
-      <section className="py-16 md:py-24">
+      <section className="py-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
               Onze Serviceregio&apos;s
             </h2>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
               Van de Randstad tot Brabant, van Groningen tot Zeeland - 
               wij bieden lokale service met nationale expertise.
             </p>
@@ -125,7 +125,7 @@ export default function LocatiesPage() {
 
           {Object.entries(locationsByRegion).map(([region, regionLocations]) => (
             <div key={region} className="mb-12">
-              <h3 className="text-2xl font-bold text-cyan-400 mb-6 text-center">
+              <h3 className="text-2xl font-bold text-cyan-300 mb-6 text-center">
                 {region}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -147,7 +147,7 @@ export default function LocatiesPage() {
                         )}
                       </div>
                       
-                      <p className="text-gray-400 text-sm leading-relaxed flex-grow mb-4">
+                      <p className="text-slate-400 text-sm leading-relaxed flex-grow mb-4">
                         {location.description}
                       </p>
                       
@@ -172,7 +172,7 @@ export default function LocatiesPage() {
                         </div>
                       </div>
                       
-                      <div className="mt-4 flex items-center text-cyan-400 text-sm font-medium">
+                      <div className="mt-4 flex items-center text-cyan-300 text-sm font-medium">
                         Bekijk diensten in {location.name}
                         <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
                           →
@@ -188,12 +188,12 @@ export default function LocatiesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-r from-cosmic-900 to-cosmic-800">
+      <section className="py-section bg-gradient-to-r from-cosmic-900 to-cosmic-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Uw Stad Niet Gevonden?
           </h2>
-          <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+          <p className="text-lg text-slate-200 mb-8 leading-relaxed">
             Geen probleem! We werken met klanten door heel Nederland. 
             Dankzij moderne technologie en bewezen processen leveren we 
             overal dezelfde hoge kwaliteit.

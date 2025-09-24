@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 // /src/components/Logo.tsx
+import Image from 'next/image';
 
 export interface LogoProps {
   variant?: 'full' | 'icon';
@@ -32,10 +32,13 @@ export default function Logo({
   if (variant === 'icon') {
     return (
       <div className={baseClasses}>
-        <img
+        <Image
           src="/assets/logo/logo-proweb-icon.svg"
           alt="ProWeb Studio Icoon"
+          width={64}
+          height={64}
           className={`h-full w-full ${animationEffect}`}
+          priority
         />
       </div>
     );
@@ -47,15 +50,18 @@ export default function Logo({
       className={`inline-flex items-center ${baseClasses}`}
       aria-label="ProWeb Studio Logo"
     >
-      <img
+      <Image
         src="/assets/logo/logo-proweb-lockup.svg"
         alt="ProWeb Studio Logo"
+        width={200}
+        height={64}
         className={`h-full w-auto ${animationEffect}`}
         style={{
           filter: withGlow
             ? 'drop-shadow(0 0 10px rgba(52, 211, 238, 0.3))'
             : 'none',
         }}
+        priority
       />
     </div>
   );

@@ -134,7 +134,7 @@ export default function VoorwaardenPage() {
             E-mail:{' '}
             <a
               href={`mailto:${contactEmail}`}
-              className="text-cyan-400 hover:text-cyan-300"
+              className="text-cyan-300 hover:text-cyan-300"
             >
               {contactEmail}
             </a>
@@ -143,7 +143,7 @@ export default function VoorwaardenPage() {
             Telefoon:{' '}
             <a
               href={`tel:${phone}`}
-              className="text-cyan-400 hover:text-cyan-300"
+              className="text-cyan-300 hover:text-cyan-300"
             >
               {phone}
             </a>

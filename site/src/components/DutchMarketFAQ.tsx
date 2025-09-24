@@ -1,5 +1,7 @@
 import { siteConfig } from '@/config/site.config';
+import { useState } from 'react';
 import { Button } from '@/components/Button';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 
 // Dutch Market FAQ Component with Regional and Business-Specific Content
 export default function DutchMarketFAQ() {
@@ -92,13 +94,13 @@ export default function DutchMarketFAQ() {
   const categories = [...new Set(faqs.map(faq => faq.category))];
 
   return (
-    <section className="py-16 px-4 sm:px-6">
+    <section className="py-section px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 glow-text">
             Veelgestelde vragen van Nederlandse ondernemers
           </h2>
-          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-slate-200 max-w-3xl mx-auto">
             Antwoorden op de belangrijkste vragen over website laten maken, 
             specifiek voor de Nederlandse markt en bedrijfscultuur.
           </p>
@@ -106,7 +108,7 @@ export default function DutchMarketFAQ() {
 
         {categories.map((category, categoryIndex) => (
           <div key={category} className="mb-12">
-            <h3 className="text-2xl font-bold mb-6 text-cyan-400 border-b border-cyan-400/20 pb-2">
+            <h3 className="text-2xl font-bold mb-6 text-cyan-300 border-b border-cyan-400/20 pb-2">
               {category}
             </h3>
             
@@ -116,21 +118,19 @@ export default function DutchMarketFAQ() {
                 .map((faq, faqIndex) => (
                   <details 
                     key={`${categoryIndex}-${faqIndex}`}
-                    className="group bg-neutral-800/30 border border-neutral-700 rounded-lg overflow-hidden hover:border-cyan-400/30 transition-colors duration-300"
+                    className="group bg-neutral-800/30 border border-neutral-700 rounded-lg overflow-hidden hover:border-cyan-400/30 transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-cyan-400/10"
                   >
                     <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
                       <h4 className="text-lg font-semibold text-white pr-4 group-hover:text-cyan-300 transition-colors duration-300">
                         {faq.question}
                       </h4>
-                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-400/20 flex items-center justify-center group-open:rotate-180 transition-transform duration-300">
-                        <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-400/20 flex items-center justify-center group-open:rotate-180 transition-all duration-500 ease-in-out group-hover:bg-cyan-400/30">
+                        <ChevronDown className="w-4 h-4 text-cyan-300 transition-all duration-300 ease-in-out group-open:scale-110" />
                       </div>
                     </summary>
                     
-                    <div className="px-6 pb-6">
-                      <p className="text-gray-300 leading-relaxed">
+                    <div className="px-6 pb-6 animate-fade-in">
+                      <p className="text-slate-200 leading-relaxed">
                         {faq.answer}
                       </p>
                       
@@ -157,7 +157,7 @@ export default function DutchMarketFAQ() {
           <h3 className="text-2xl font-bold mb-4 text-white">
             Nog vragen over website laten maken?
           </h3>
-          <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+          <p className="text-slate-200 mb-6 max-w-2xl mx-auto">
             Elke ondernemer heeft unieke vragen en uitdagingen. We beantwoorden graag 
             uw specifieke vragen over website ontwikkeling, SEO, of digitale strategie.
           </p>
@@ -166,9 +166,7 @@ export default function DutchMarketFAQ() {
             variant="primary"
           >
             Stel uw vraag
-            <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
+            <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </div>
       </div>

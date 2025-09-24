@@ -205,7 +205,7 @@ export default function SEOOptimalisatie() {
       <Breadcrumbs />
       
       {/* Hero Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             SEO{' '}
@@ -213,7 +213,7 @@ export default function SEOOptimalisatie() {
               Optimalisatie
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Verhoog uw zichtbaarheid in Google met datagedreven SEO strategieën. 
             Technische SEO, content optimalisatie en link building voor duurzame groei.
           </p>
@@ -239,7 +239,7 @@ export default function SEOOptimalisatie() {
       </section>
 
       {/* Features Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -248,7 +248,7 @@ export default function SEOOptimalisatie() {
                 SEO Service
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Van technische optimalisatie tot content strategie - wij zorgen voor alle 
               aspecten van moderne zoekmachine optimalisatie.
             </p>
@@ -262,10 +262,10 @@ export default function SEOOptimalisatie() {
               >
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
-                <p className="text-gray-300 mb-6">{feature.description}</p>
+                <p className="text-slate-200 mb-6">{feature.description}</p>
                 <ul className="space-y-2">
                   {feature.details.map((detail, detailIndex) => (
-                    <li key={detailIndex} className="text-sm text-gray-400 flex items-center">
+                    <li key={detailIndex} className="text-sm text-slate-400 flex items-center">
                       <span className="text-primary-400 mr-2">✓</span>
                       {detail}
                     </li>
@@ -278,7 +278,7 @@ export default function SEOOptimalisatie() {
       </section>
 
       {/* SEO Packages Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-cosmic-900/50">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -287,7 +287,7 @@ export default function SEOOptimalisatie() {
                 Pakketten
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Van eenmalige audits tot doorlopende SEO begeleiding - 
               kies het pakket dat past bij uw doelen.
             </p>
@@ -310,18 +310,18 @@ export default function SEOOptimalisatie() {
                     {pkg.complexity}
                   </span>
                 </div>
-                <p className="text-gray-300 text-sm mb-4">{pkg.description}</p>
+                <p className="text-slate-200 text-sm mb-4">{pkg.description}</p>
                 <div className="text-xl font-bold text-primary-400 mb-2">
                   {pkg.price}
                 </div>
-                <div className="text-sm text-gray-400 mb-6">
+                <div className="text-sm text-slate-400 mb-6">
                   Doorlooptijd: {pkg.duration}
                 </div>
                 <div className="mb-6">
                   <h4 className="text-sm font-semibold text-white mb-3">Inbegrepen:</h4>
                   <ul className="space-y-2">
                     {pkg.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="text-sm text-gray-300 flex items-center">
+                      <li key={featureIndex} className="text-sm text-slate-200 flex items-center">
                         <span className="text-primary-400 mr-2">✓</span>
                         {feature}
                       </li>
@@ -343,7 +343,7 @@ export default function SEOOptimalisatie() {
       </section>
 
       {/* SEO Services Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -352,7 +352,7 @@ export default function SEOOptimalisatie() {
                 SEO Diensten
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Onze expertise spans alle facetten van moderne SEO - 
               van keyword research tot technische implementatie.
             </p>
@@ -366,10 +366,10 @@ export default function SEOOptimalisatie() {
               >
                 <div className="text-4xl mb-4">{service.icon}</div>
                 <h3 className="text-lg font-semibold text-white mb-3">{service.name}</h3>
-                <p className="text-gray-300 text-sm mb-4">{service.description}</p>
+                <p className="text-slate-200 text-sm mb-4">{service.description}</p>
                 <div className="space-y-1">
                   {service.benefits.map((benefit, benefitIndex) => (
-                    <div key={benefitIndex} className="text-xs text-gray-400">
+                    <div key={benefitIndex} className="text-xs text-slate-400">
                       • {benefit}
                     </div>
                   ))}
@@ -381,7 +381,7 @@ export default function SEOOptimalisatie() {
       </section>
 
       {/* Process Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-cosmic-900/50">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -390,7 +390,7 @@ export default function SEOOptimalisatie() {
                 Werkwijze
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Onze datagedreven aanpak zorgt voor meetbare en duurzame SEO resultaten.
             </p>
           </div>
@@ -440,7 +440,7 @@ export default function SEOOptimalisatie() {
               >
                 <div className="text-xl font-bold text-primary-400 mb-3">{phase.step}</div>
                 <h3 className="text-lg font-semibold text-white mb-3">{phase.title}</h3>
-                <p className="text-gray-300 text-sm mb-3">{phase.description}</p>
+                <p className="text-slate-200 text-sm mb-3">{phase.description}</p>
                 <div className="text-xs text-primary-300 font-medium">{phase.duration}</div>
                 {index < 5 && (
                   <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500"></div>
@@ -461,7 +461,7 @@ export default function SEOOptimalisatie() {
               {faqItems.map((item, index) => (
                 <div key={index} className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-white mb-3">{item.question}</h3>
-                  <p className="text-gray-300 leading-relaxed">{item.answer}</p>
+                  <p className="text-slate-200 leading-relaxed">{item.answer}</p>
                 </div>
               ))}
             </div>
@@ -470,7 +470,7 @@ export default function SEOOptimalisatie() {
       </ErrorBoundary>
 
       {/* CTA Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Start met{' '}
@@ -478,7 +478,7 @@ export default function SEOOptimalisatie() {
               SEO Optimalisatie
             </span>
           </h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-200 mb-8 max-w-2xl mx-auto">
             Laten we uw website naar de top van Google brengen met professionele 
             SEO strategieën die resultaten opleveren.
           </p>
@@ -544,7 +544,7 @@ export default function SEOOptimalisatie() {
                     <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">
                       {service.title}
                     </h3>
-                    <p className="text-gray-400 text-sm">{service.description}</p>
+                    <p className="text-slate-400 text-sm">{service.description}</p>
                   </Link>
                 ))}
               </div>

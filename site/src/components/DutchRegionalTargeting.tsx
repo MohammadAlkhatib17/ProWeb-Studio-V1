@@ -101,7 +101,7 @@ export default function DutchRegionalTargeting() {
   ];
 
   return (
-    <section className="py-16 px-4 sm:px-6">
+    <section className="py-section px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
@@ -109,7 +109,7 @@ export default function DutchRegionalTargeting() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 glow-text">
             Website laten maken door heel Nederland
           </h2>
-          <p className="text-lg sm:text-xl text-gray-300 max-w-4xl mx-auto mb-8">
+          <p className="text-lg sm:text-xl text-slate-200 max-w-4xl mx-auto mb-8">
             Van Amsterdam tot Groningen, van Rotterdam tot Maastricht - wij bedienen Nederlandse 
             ondernemers door het hele land. Lokale kennis, landelijke kwaliteit.
           </p>
@@ -141,22 +141,22 @@ export default function DutchRegionalTargeting() {
                 <div className="mb-4">
                   <h4 className="text-xl font-bold text-white mb-1">{region.name}</h4>
                   <p className="text-sm text-cyan-300">{region.province}</p>
-                  <div className="flex justify-between text-xs text-gray-400 mt-2">
+                  <div className="flex justify-between text-xs text-slate-400 mt-2">
                     <span>{region.population}</span>
                     <span>{region.businesses}</span>
                   </div>
                 </div>
                 
-                <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+                <p className="text-slate-200 text-sm mb-4 leading-relaxed">
                   {region.description}
                 </p>
                 
                 <div className="mb-4">
-                  <h5 className="text-sm font-semibold text-cyan-400 mb-2">Specialisaties:</h5>
-                  <ul className="text-xs text-gray-300 space-y-1">
+                  <h5 className="text-sm font-semibold text-cyan-300 mb-2">Specialisaties:</h5>
+                  <ul className="text-xs text-slate-200 space-y-1">
                     {region.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-center">
-                        <span className="text-cyan-400 mr-2">•</span>
+                        <span className="text-cyan-300 mr-2">•</span>
                         {feature}
                       </li>
                     ))}
@@ -199,12 +199,12 @@ export default function DutchRegionalTargeting() {
                 className="bg-gradient-to-br from-neutral-800/40 to-neutral-900/40 border border-neutral-700 rounded-lg p-6 hover:border-cyan-400/30 transition-all duration-300"
               >
                 <h4 className="text-xl font-bold text-white mb-3">{province.name}</h4>
-                <p className="text-gray-300 mb-4 leading-relaxed">
+                <p className="text-slate-200 mb-4 leading-relaxed">
                   {province.description}
                 </p>
                 
                 <div className="mb-4">
-                  <h5 className="text-sm font-semibold text-cyan-400 mb-2">Belangrijkste steden:</h5>
+                  <h5 className="text-sm font-semibold text-cyan-300 mb-2">Belangrijkste steden:</h5>
                   <div className="flex flex-wrap gap-2">
                     {province.cities.map((city, cityIndex) => (
                       <span 
@@ -241,34 +241,34 @@ export default function DutchRegionalTargeting() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-cyan-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-cyan-400 text-xl">🇳🇱</span>
+                <span className="text-cyan-300 text-xl">🇳🇱</span>
               </div>
               <h4 className="font-semibold text-white mb-2">Nederlandse kennis</h4>
-              <p className="text-sm text-gray-300">Begrip van lokale markt, cultuur en zakelijke gewoonten</p>
+              <p className="text-sm text-slate-200">Begrip van lokale markt, cultuur en zakelijke gewoonten</p>
             </div>
             
             <div className="text-center">
               <div className="w-12 h-12 bg-cyan-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-cyan-400 text-xl">⚡</span>
+                <span className="text-cyan-300 text-xl">⚡</span>
               </div>
               <h4 className="font-semibold text-white mb-2">Snelle communicatie</h4>
-              <p className="text-sm text-gray-300">Zelfde tijdzone, directe bereikbaarheid, snelle reacties</p>
+              <p className="text-sm text-slate-200">Zelfde tijdzone, directe bereikbaarheid, snelle reacties</p>
             </div>
             
             <div className="text-center">
               <div className="w-12 h-12 bg-cyan-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-cyan-400 text-xl">🔒</span>
+                <span className="text-cyan-300 text-xl">🔒</span>
               </div>
               <h4 className="font-semibold text-white mb-2">Nederlandse compliance</h4>
-              <p className="text-sm text-gray-300">GDPR/AVG, BTW, Nederlandse wetgeving - alles geregeld</p>
+              <p className="text-sm text-slate-200">GDPR/AVG, BTW, Nederlandse wetgeving - alles geregeld</p>
             </div>
             
             <div className="text-center">
               <div className="w-12 h-12 bg-cyan-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <span className="text-cyan-400 text-xl">🤝</span>
+                <span className="text-cyan-300 text-xl">🤝</span>
               </div>
               <h4 className="font-semibold text-white mb-2">Persoonlijke service</h4>
-              <p className="text-sm text-gray-300">Van video calls tot on-site meetings - wat u prefereert</p>
+              <p className="text-sm text-slate-200">Van video calls tot on-site meetings - wat u prefereert</p>
             </div>
           </div>
         </div>
@@ -278,7 +278,7 @@ export default function DutchRegionalTargeting() {
           <h3 className="text-2xl font-bold mb-4 text-white">
             Klaar om uw website te laten maken?
           </h3>
-          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-slate-200 mb-8 max-w-2xl mx-auto">
             Ongeacht waar in Nederland uw bedrijf gevestigd is, wij helpen u met een 
             professionele website die resultaat levert voor uw lokale of landelijke markt.
           </p>

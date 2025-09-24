@@ -12,7 +12,7 @@ const TechPlaygroundScene = dynamic(() => import('@/components/TechPlaygroundSce
     <div className="absolute inset-0 flex items-center justify-center bg-slate-900/60">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
-        <p className="text-cyan-400 text-sm">Loading 3D Experience...</p>
+        <p className="text-cyan-300 text-sm">Loading 3D Experience...</p>
         <p className="text-gray-500 text-xs mt-2">Optimizing for your device</p>
       </div>
     </div>
@@ -106,14 +106,14 @@ export default function SpeeltuinClient() {
   };
 
   return (
-    <main className="relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 overflow-x-hidden w-full max-w-full pt-safe pb-safe content-safe-top pt-20 md:pt-24">
+    <main className="relative py-section px-4 sm:px-6 lg:px-8 overflow-x-hidden w-full max-w-full pt-safe pb-safe content-safe-top pt-20 md:pt-24">
       <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto w-full overflow-x-hidden">
         {/* Hero Section */}
         <section className="text-center mb-12 md:mb-16 px-2 sm:px-0">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in break-words">
             Onze Expertise in Actie
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-cyan-400 max-w-4xl mx-auto leading-relaxed animate-slide-up break-words">
+          <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-4xl mx-auto leading-relaxed animate-slide-up break-words">
             Waarom u foto&apos;s laten zien als we de magie live kunnen
             demonstreren? Dit is geen portfolio; dit is onze interactieve
             tech-speeltuin. Hier heeft u de controle. Ervaar zelf de kracht van
@@ -195,8 +195,8 @@ export default function SpeeltuinClient() {
                 interactionHeat > 0.7
                   ? 'text-cyan-300 glow-text'
                   : interactionHeat > 0.3
-                    ? 'text-cyan-400'
-                    : 'text-gray-400'
+                    ? 'text-cyan-300'
+                    : 'text-slate-400'
               }`}
             >
               {animationState === 'perpetual'
@@ -254,7 +254,7 @@ export default function SpeeltuinClient() {
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 WebGL/Three.js
               </h3>
-              <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed">
                 De basis voor hardware-versnelde 3D-graphics in de browser,
                 waardoor complexe en vloeiende visuele ervaringen mogelijk zijn
                 zonder plugins.
@@ -264,7 +264,7 @@ export default function SpeeltuinClient() {
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 React Three Fiber
               </h3>
-              <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed">
                 Een krachtige React-renderer voor Three.js. Het stelt ons in
                 staat om declaratieve, herbruikbare 3D-componenten te bouwen die
                 naadloos integreren in onze webapplicaties.
@@ -274,7 +274,7 @@ export default function SpeeltuinClient() {
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 Real-time Lighting
               </h3>
-              <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed">
                 Dynamische belichting en schaduwen die in real-time reageren op
                 uw interactie, wat zorgt voor een diepere en meer meeslepende
                 visuele ervaring.
@@ -289,7 +289,7 @@ export default function SpeeltuinClient() {
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight break-words">
               Klaar om uw eigen ervaring te bouwen?
             </h2>
-            <p className="text-base sm:text-lg md:text-xl mb-8 sm:mb-12 text-gray-300 max-w-3xl mx-auto leading-relaxed break-words">
+            <p className="text-base sm:text-lg md:text-xl mb-8 sm:mb-12 text-slate-200 max-w-3xl mx-auto leading-relaxed break-words">
               Wat u hier ziet is slechts een glimp van wat we kunnen realiseren.
               Laten we bespreken hoe we deze technologie kunnen inzetten om uw
               bedrijfsdoelen te bereiken.

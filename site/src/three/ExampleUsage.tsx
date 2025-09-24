@@ -19,7 +19,7 @@ export default function ShowcasePage() {
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             Interactive 3D Portfolio
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-200 max-w-2xl mx-auto">
             Experience our capabilities through immersive 3D visualizations
           </p>
         </div>
@@ -40,7 +40,7 @@ export default function ShowcasePage() {
         <section className="space-y-16">
           <div>
             <h2 className="text-2xl font-bold text-white mb-4">Portfolio Computer</h2>
-            <p className="text-gray-300 mb-6">
+            <p className="text-slate-200 mb-6">
               Interactive laptop model showcasing our web development portfolio
             </p>
             <OptimizedPortfolioComputer className="max-w-2xl mx-auto" />
@@ -48,7 +48,7 @@ export default function ShowcasePage() {
 
           <div>
             <h2 className="text-2xl font-bold text-white mb-4">E-commerce Solutions</h2>
-            <p className="text-gray-300 mb-6">
+            <p className="text-slate-200 mb-6">
               3D visualization of our e-commerce product development capabilities
             </p>
             <OptimizedEcommerceShowcase className="max-w-2xl mx-auto" />
@@ -56,7 +56,7 @@ export default function ShowcasePage() {
 
           <div>
             <h2 className="text-2xl font-bold text-white mb-4">Brand Identity</h2>
-            <p className="text-gray-300 mb-6">
+            <p className="text-slate-200 mb-6">
               Dynamic 3D representation of brand identity and design services
             </p>
             <OptimizedBrandIdentityModel className="max-w-2xl mx-auto" />

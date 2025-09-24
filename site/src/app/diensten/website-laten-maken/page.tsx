@@ -166,7 +166,7 @@ export default function WebsiteLatenMaken() {
       <Breadcrumbs />
       
       {/* Hero Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
             Website Laten{' '}
@@ -174,7 +174,7 @@ export default function WebsiteLatenMaken() {
               Maken
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Professionele websites die converteren. Van concept tot lancering - 
             responsive, snel en geoptimaliseerd voor Nederlandse bedrijven.
           </p>
@@ -200,7 +200,7 @@ export default function WebsiteLatenMaken() {
       </section>
 
       {/* Features Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -209,7 +209,7 @@ export default function WebsiteLatenMaken() {
                 ProWeb Studio
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Wij combineren creatief design met moderne technologie om websites te bouwen 
               die niet alleen mooi zijn, maar ook presteren.
             </p>
@@ -223,10 +223,10 @@ export default function WebsiteLatenMaken() {
               >
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
-                <p className="text-gray-300 mb-6">{feature.description}</p>
+                <p className="text-slate-200 mb-6">{feature.description}</p>
                 <ul className="space-y-2">
                   {feature.details.map((detail, detailIndex) => (
-                    <li key={detailIndex} className="text-sm text-gray-400 flex items-center">
+                    <li key={detailIndex} className="text-sm text-slate-400 flex items-center">
                       <span className="text-primary-400 mr-2">✓</span>
                       {detail}
                     </li>
@@ -239,7 +239,7 @@ export default function WebsiteLatenMaken() {
       </section>
 
       {/* Website Types Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20 bg-cosmic-900/50">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -248,7 +248,7 @@ export default function WebsiteLatenMaken() {
                 Prijzen
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Van eenvoudige landingspagina&apos;s tot complexe bedrijfswebsites - 
               wij hebben de expertise voor elk type website.
             </p>
@@ -262,13 +262,13 @@ export default function WebsiteLatenMaken() {
               >
                 <div className="text-center">
                   <h3 className="text-xl font-semibold text-white mb-3">{type.type}</h3>
-                  <p className="text-gray-300 text-sm mb-4">{type.description}</p>
+                  <p className="text-slate-200 text-sm mb-4">{type.description}</p>
                   <div className="text-2xl font-bold text-primary-400 mb-4">
                     Vanaf {type.startingPrice}
                   </div>
                   <ul className="space-y-2 mb-6">
                     {type.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="text-xs text-gray-400 flex items-center">
+                      <li key={featureIndex} className="text-xs text-slate-400 flex items-center">
                         <span className="text-primary-400 mr-2">✓</span>
                         {feature}
                       </li>
@@ -290,7 +290,7 @@ export default function WebsiteLatenMaken() {
       </section>
 
       {/* Process Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -299,7 +299,7 @@ export default function WebsiteLatenMaken() {
                 Ontwikkelproces
               </span>
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
               Van eerste gesprek tot succesvolle lancering - transparant en professioneel.
             </p>
           </div>
@@ -331,7 +331,7 @@ export default function WebsiteLatenMaken() {
               >
                 <div className="text-4xl font-bold text-primary-400 mb-4">{phase.step}</div>
                 <h3 className="text-xl font-semibold text-white mb-4">{phase.title}</h3>
-                <p className="text-gray-300 mb-4">{phase.description}</p>
+                <p className="text-slate-200 mb-4">{phase.description}</p>
                 <div className="text-sm text-primary-300 font-medium">{phase.duration}</div>
                 {index < 2 && (
                   <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500"></div>
@@ -352,7 +352,7 @@ export default function WebsiteLatenMaken() {
               {faqItems.map((item, index) => (
                 <div key={index} className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-white mb-3">{item.question}</h3>
-                  <p className="text-gray-300 leading-relaxed">{item.answer}</p>
+                  <p className="text-slate-200 leading-relaxed">{item.answer}</p>
                 </div>
               ))}
             </div>
@@ -361,7 +361,7 @@ export default function WebsiteLatenMaken() {
       </ErrorBoundary>
 
       {/* CTA Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Klaar om uw{' '}
@@ -369,7 +369,7 @@ export default function WebsiteLatenMaken() {
               Website te Laten Maken?
             </span>
           </h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-200 mb-8 max-w-2xl mx-auto">
             Neem contact op voor een vrijblijvend gesprek over uw website project. 
             We denken graag mee over de beste aanpak voor uw situatie.
           </p>
@@ -435,7 +435,7 @@ export default function WebsiteLatenMaken() {
                     <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">
                       {service.title}
                     </h3>
-                    <p className="text-gray-400 text-sm">{service.description}</p>
+                    <p className="text-slate-400 text-sm">{service.description}</p>
                   </Link>
                 ))}
               </div>

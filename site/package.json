@@ -66,6 +66,7 @@
     "dompurify": "^3.2.6",
     "framer-motion": "^12.23.13",
     "isomorphic-dompurify": "^2.26.0",
+    "lucide-react": "^0.544.0",
     "next": "^14.2.5",
     "nodemailer": "^6.9.8",
     "react": "^18.2.0",

@@ -97,7 +97,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
               return (
                 <li key={item.href} className="flex items-center">
                   {index > 0 && (
-                    <span className="text-gray-400 mx-2 select-none" aria-hidden="true">
+                    <span className="text-slate-400 mx-2 select-none" aria-hidden="true">
                       →
                     </span>
                   )}
@@ -105,7 +105,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
                   {index === 0 ? (
                     <Link
                       href={item.href}
-                      className="text-gray-400 hover:text-cyan-300 transition-colors duration-200 flex items-center"
+                      className="text-slate-400 hover:text-cyan-300 transition-colors duration-200 flex items-center"
                       aria-label="Ga naar homepage"
                     >
                       <span className="text-base" aria-hidden="true">🏠</span>
@@ -121,7 +121,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
                   ) : (
                     <Link
                       href={item.href}
-                      className="text-gray-400 hover:text-cyan-300 transition-colors duration-200"
+                      className="text-slate-400 hover:text-cyan-300 transition-colors duration-200"
                     >
                       {item.title}
                     </Link>

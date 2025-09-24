@@ -141,7 +141,7 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
             <p className="text-sm font-medium text-gray-900 dark:text-white">
               App installeren
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-slate-400">
               Voeg ProWeb Studio toe aan je startscherm voor snelle toegang
             </p>
           </div>
@@ -149,7 +149,7 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
         <div className="mt-4 flex space-x-2">
           <button
             onClick={handleInstallClick}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-3 px-4 rounded-md transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-3 px-4 rounded-md transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
           >
             Installeren
           </button>

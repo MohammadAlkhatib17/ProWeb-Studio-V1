@@ -84,10 +84,44 @@ const config: Config = {
           600: '#990099',
         },
         cyan: {
-          400: '#00ffff',
-          500: '#00cccc',
-          600: '#009999',
+          50: '#ecfeff',
+          100: '#cdfaff', 
+          200: '#a5f3fc',
+          300: '#67e8f9',
+          400: '#22d3ee',
+          500: '#06b6d4',
+          600: '#0891b2',
+          700: '#0e7490',
+          800: '#155e75',
+          900: '#164e63',
         },
+        gray: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
+        },
+      },
+      // Accessibility-improved colors for WCAG AA compliance
+      accessibility: {
+        // These colors provide better contrast on dark backgrounds
+        'text-primary': '#f8fafc', // slate-50 - better than gray-300
+        'text-secondary': '#e2e8f0', // slate-200 - better than gray-400  
+        'text-accent': '#67e8f9', // cyan-300 - better than cyan-400
+        'text-muted': '#94a3b8', // slate-400 - accessible muted text
+      },
+      // Standard section spacing for consistent vertical rhythm
+      spacing: {
+        'section-sm': '4rem', // 64px - compact sections (py-16)
+        'section': '6rem', // 96px - standard section padding (py-24)
+        'section-lg': '8rem', // 128px - featured sections (py-32)
+        'section-xl': '10rem', // 160px - hero/landing sections (py-40)
       },
       animation: {
         float: 'float 6s ease-in-out infinite',

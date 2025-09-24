@@ -158,26 +158,33 @@ interface CaseCardProps {
 
 function CaseCard({ title, metric, desc, linkText, linkHref }: CaseCardProps) {
   return (
-    <article className="rounded-2xl border border-cosmic-700/60 bg-cosmic-800/40 p-6 sm:p-7 md:p-8 hover:bg-cosmic-800/60 transition-all duration-300 hover:border-cosmic-600/80 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden">
+    <article className="rounded-2xl border border-cosmic-700/60 bg-cosmic-800/40 p-6 sm:p-7 md:p-8 hover:bg-cosmic-800/60 transition-all duration-300 hover:border-cosmic-600/80 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden flex flex-col h-full">
       {/* Subtle gradient overlay on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-      <div className="relative z-10">
-        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 group-hover:text-cyan-300 transition-colors duration-300 leading-tight">
+      <div className="relative z-10 flex flex-col h-full">
+        {/* Icon placeholder for future enhancement - currently using emoji/text */}
+        <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-2xl">
+          {title.includes('3D') ? '🎯' : title.includes('Webshop') ? '🛒' : '🌐'}
+        </div>
+        
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 group-hover:text-cyan-300 transition-colors duration-300 leading-tight text-center">
           {title}
         </h3>
-        <p className="text-cyan-400 font-semibold text-base sm:text-lg mb-4 group-hover:text-cyan-300 transition-colors duration-300">
+        <p className="text-cyan-300 font-semibold text-base sm:text-lg mb-4 group-hover:text-cyan-300 transition-colors duration-300 text-center">
           {metric}
         </p>
-        <p className="text-gray-300 leading-relaxed text-sm mb-4">{desc}</p>
+        <p className="text-slate-200 leading-relaxed text-sm mb-4 flex-grow text-center">{desc}</p>
         {linkText && linkHref && (
-          <Link 
-            href={linkHref}
-            className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors duration-200 text-sm font-medium"
-          >
-            {linkText}
-            <span className="ml-1">→</span>
-          </Link>
+          <div className="text-center mt-auto">
+            <Link 
+              href={linkHref}
+              className="inline-flex items-center text-cyan-300 hover:text-cyan-300 transition-colors duration-200 text-sm font-medium"
+            >
+              {linkText}
+              <span className="ml-1">→</span>
+            </Link>
+          </div>
         )}
       </div>
     </article>
@@ -224,7 +231,7 @@ export default function HomePage() {
         </div>
 
         {/* Hero content with enhanced typography */}
-        <div className="relative z-10 text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-12 sm:py-16 md:py-20 lg:py-24">
+        <div className="relative z-10 text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-section">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-extrabold text-shadow-sharp tracking-tight leading-tight mb-8 motion-safe:animate-fade-in">
             Website Laten Maken die Indruk Maakt. En Converteert.
           </h1>
@@ -251,24 +258,24 @@ export default function HomePage() {
             </Button>
           </div>
 
-          <p className="mt-12 text-gray-400 text-sm motion-safe:animate-fade-in-delayed">
+          <p className="mt-12 text-slate-400 text-sm motion-safe:animate-fade-in-delayed">
             Vertrouwd door founders, misb en scale-ups die vooruit willen.
           </p>
         </div>
       </section>
 
       {/* Rest of the sections remain unchanged */}
-      <section aria-label="Cases" className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 glass">
+      <section aria-label="Cases" className="py-section px-4 sm:px-6 glass">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-center leading-tight">
             Webdesign Nederland: Meetbare Impact, Elke Keer Weer
           </h2>
-          <p className="text-gray-400 text-center mb-16 max-w-3xl mx-auto">
+          <p className="text-slate-400 text-center mb-16 max-w-3xl mx-auto">
             We bouwen niet zomaar websites — we leveren digitale groeimotoren
-            die presteren. Bekijk onze <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">complete service portfolio</Link> en 
-            <Link href="/werkwijze" className="text-cyan-400 hover:text-cyan-300 ml-1">gestructureerde ontwikkelingsproces</Link>.
+            die presteren. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">complete service portfolio</Link> en 
+            <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300 ml-1">gestructureerde ontwikkelingsproces</Link>.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-stretch">
             <CaseCard
               title="Website Laten Maken: Fundament voor Groei"
               metric="Razendsnelle Next.js Websites"
@@ -295,7 +302,7 @@ export default function HomePage() {
       </section>
 
       {/* Process section remains unchanged */}
-      <section aria-label="Process" className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6">
+      <section aria-label="Process" className="py-section px-4 sm:px-6">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-16 text-center leading-tight">
             Website Ontwikkeling: Van Visie naar Virtuoze Uitvoering
@@ -308,10 +315,10 @@ export default function HomePage() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 group-hover:text-cyan-300 transition-colors duration-300">
                 Webdesign Strategie
               </h3>
-              <p className="text-gray-400">
+              <p className="text-slate-400">
                 Deep-dive in uw doelen, markt en gebruikers. We vertalen
-                ambities naar een technisch stappenplan voor <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">professionele website ontwikkeling</Link>. 
-                <Link href="/werkwijze" className="text-cyan-400 hover:text-cyan-300 ml-1">
+                ambities naar een technisch stappenplan voor <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">professionele website ontwikkeling</Link>. 
+                <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300 ml-1">
                   Lees meer over onze strategische aanpak
                 </Link>.
               </p>
@@ -323,10 +330,10 @@ export default function HomePage() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 group-hover:text-cyan-300 transition-colors duration-300">
                 UX/UI Design
               </h3>
-              <p className="text-gray-400">
+              <p className="text-slate-400">
                 Van wireframes tot pixel-perfect designs. UI/UX die converteert
-                én uw merk versterkt. Ontdek onze <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">webdesign service</Link> en 
-                <Link href="/speeltuin" className="text-cyan-400 hover:text-cyan-300 ml-1">creatieve 3D design voorbeelden</Link>.
+                én uw merk versterkt. Ontdek onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">webdesign service</Link> en 
+                <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300 ml-1">creatieve 3D design voorbeelden</Link>.
               </p>
             </div>
             <div className="text-center group">
@@ -336,10 +343,10 @@ export default function HomePage() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 group-hover:text-cyan-300 transition-colors duration-300">
                 Website Ontwikkeling
               </h3>
-              <p className="text-gray-400">
+              <p className="text-slate-400">
                 Clean code, moderne stack, 100% maatwerk. Gebouwd voor snelheid,
-                schaal en toekomst. Bekijk onze <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">technische expertise</Link> en 
-                <Link href="/werkwijze" className="text-cyan-400 hover:text-cyan-300 ml-1">development methodiek</Link>.
+                schaal en toekomst. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">technische expertise</Link> en 
+                <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300 ml-1">development methodiek</Link>.
               </p>
             </div>
             <div className="text-center group">
@@ -349,10 +356,10 @@ export default function HomePage() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 group-hover:text-cyan-300 transition-colors duration-300">
                 SEO & Groei Optimalisatie
               </h3>
-              <p className="text-gray-400">
+              <p className="text-slate-400">
                 Continue optimalisatie op basis van data. A/B testing, SEO, en
-                conversion rate optimization voor <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">maximale website performance</Link>.
-                <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300 ml-1">
+                conversion rate optimization voor <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">maximale website performance</Link>.
+                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300 ml-1">
                   Bekijk onze optimalisatie services
                 </Link>.
               </p>
@@ -364,7 +371,7 @@ export default function HomePage() {
       {/* 3D Tech section with enhanced background */}
       <section
         aria-label="3D Technology"
-        className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 relative overflow-hidden"
+        className="py-section px-4 sm:px-6 relative overflow-hidden"
       >
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -372,15 +379,15 @@ export default function HomePage() {
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight">
                 3D Websites Nederland: De Toekomst is 3D. Wij Bouwen Die Vandaag.
               </h2>
-              <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 leading-relaxed">
-                Transformeer uw producten in interactieve ervaringen met onze <Link href="/speeltuin" className="text-cyan-400 hover:text-cyan-300">3D website ontwikkeling</Link>. Van
+              <p className="text-base sm:text-lg md:text-xl text-slate-200 mb-8 leading-relaxed">
+                Transformeer uw producten in interactieve ervaringen met onze <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300">3D website ontwikkeling</Link>. Van
                 configurators tot virtuele showrooms — wij pushen de grenzen van
-                het web. Bekijk onze <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">innovatieve webdevelopment services</Link>.
+                het web. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">innovatieve webdevelopment services</Link>.
               </p>
               <ul className="space-y-4 mb-8">
                 <li className="flex items-start gap-3">
                   <span className="text-base sm:text-lg md:text-xl mt-1">→</span>
-                  <span className="text-gray-300">
+                  <span className="text-slate-200">
                     <strong className="text-white">
                       Real-time 3D Rendering:
                     </strong>{' '}
@@ -389,14 +396,14 @@ export default function HomePage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-base sm:text-lg md:text-xl mt-1">→</span>
-                  <span className="text-gray-300">
+                  <span className="text-slate-200">
                     <strong className="text-white">WebGL & Three.js:</strong>{' '}
                     Cutting-edge tech, maximale browser support
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-base sm:text-lg md:text-xl mt-1">→</span>
-                  <span className="text-gray-300">
+                  <span className="text-slate-200">
                     <strong className="text-white">Performance First:</strong>{' '}
                     Geoptimaliseerd voor mobile en desktop
                   </span>
@@ -421,16 +428,16 @@ export default function HomePage() {
       </section>
 
       {/* CTA section remains unchanged */}
-      <section aria-label="Call to action" className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6">
+      <section aria-label="Call to action" className="py-section px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight">
             Website Laten Maken: Klaar om de Sprong te Maken?
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-slate-200 mb-12 max-w-3xl mx-auto leading-relaxed">
             Of u nu een startup bent die wil opschalen, of een enterprise die
             digitaal wil transformeren — wij zijn er om uw visie werkelijkheid
-            te maken. Ontdek waarom bedrijven kiezen voor onze <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">professionele website ontwikkeling services</Link> 
-            en <Link href="/werkwijze" className="text-cyan-400 hover:text-cyan-300">bewezen projectaanpak</Link>.
+            te maken. Ontdek waarom bedrijven kiezen voor onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">professionele website ontwikkeling services</Link> 
+            en <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300">bewezen projectaanpak</Link>.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button
@@ -454,7 +461,7 @@ export default function HomePage() {
       {/* Enhanced SEO Content Section with Proper Semantic Structure */}
       <section
         id="seo-content"
-        className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-cosmic-900/30"
+        className="py-section px-4 sm:px-6 lg:px-8 bg-cosmic-900/30"
       >
         <div className="max-w-4xl mx-auto">
           <article className="prose prose-invert prose-lg max-w-none">
@@ -462,7 +469,7 @@ export default function HomePage() {
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-center gradient-text">
                 Website Laten Maken Nederland: Uw Expert Partner voor Digitale Groei
               </h2>
-              <p className="text-xl text-center text-gray-300 mb-12 max-w-3xl mx-auto">
+              <p className="text-xl text-center text-slate-200 mb-12 max-w-3xl mx-auto">
                 ProWeb Studio transformeert uw bedrijfsvisie in krachtige digitale ervaringen. 
                 Of u nu een <strong>professionele website wilt laten maken</strong>, uw bestaande site wilt vernieuwen, 
                 of een complete <strong>webshop laten ontwikkelen</strong> – wij zijn uw strategische partner 
@@ -478,10 +485,10 @@ export default function HomePage() {
               
               <div className="grid md:grid-cols-2 gap-8 mb-12">
                 <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-400">
+                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
                     🚀 Nederlandse Webdesign Excellence
                   </h4>
-                  <p className="text-gray-300">
+                  <p className="text-slate-200">
                     Als leading <strong>webdesign bureau Nederland</strong> behalen onze websites perfecte Core Web Vitals scores 
                     en laden binnen 1 seconde. Dit betekent betere Google rankings, hogere conversies en tevreden bezoekers 
                     die langer op uw site blijven. <strong>Website laten maken</strong> betekent bij ons investeren in performance.
@@ -489,24 +496,24 @@ export default function HomePage() {
                 </div>
                 
                 <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-400">
+                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
                     🎨 Innovatieve 3D Web Ervaringen
                   </h4>
-                  <p className="text-gray-300">
+                  <p className="text-slate-200">
                     Van interactieve productconfigurators tot meeslepende WebGL-animaties – 
                     wij creëren <strong>moderne websites</strong> die uw bezoekers verbazen en uw merk onvergetelijk maken. 
                     Ontdek waarom steeds meer Nederlandse bedrijven kiezen voor onze unieke 
-                    <Link href="/speeltuin" className="text-cyan-400 hover:text-cyan-300 ml-1">
+                    <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300 ml-1">
                       3D website ontwikkeling diensten
                     </Link>.
                   </p>
                 </div>
                 
                 <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-400">
+                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
                     📈 SEO & Marketing Geoptimaliseerde Websites
                   </h4>
-                  <p className="text-gray-300">
+                  <p className="text-slate-200">
                     Elke regel code schrijven we met zoekmachine-optimalisatie in gedachten. 
                     Van technische SEO tot contentstructuur – uw <strong>professionele website</strong> wordt gevonden 
                     door uw ideale klanten. Lokale SEO voor Nederlandse markten is onze specialiteit.
@@ -514,10 +521,10 @@ export default function HomePage() {
                 </div>
                 
                 <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-400">
+                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
                     🛡️ Veilige & Schaalbare Website Architectuur
                   </h4>
-                  <p className="text-gray-300">
+                  <p className="text-slate-200">
                     Met geavanceerde beveiligingsprotocollen, CSP-headers en continue monitoring 
                     zorgen we dat uw <strong>zakelijke website</strong> en klantgegevens optimaal beschermd zijn. 
                     Gebouwd voor groei: onze websites schalen mee met uw bedrijfssucces.
@@ -530,22 +537,22 @@ export default function HomePage() {
               <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
                 Website Ontwikkeling Nederland: Van Concept tot Conversie
               </h3>
-              <p className="text-gray-300 mb-6">
+              <p className="text-slate-200 mb-6">
                 Als specialist in <strong>website laten maken</strong> hanteren wij een bewezen 
                 methodiek die uw succes garandeert. Of u nu een <strong>responsive website</strong>, 
                 <strong>webshop</strong>, of <strong>corporate website</strong> nodig heeft – 
                 onze gestructureerde aanpak zorgt voor resultaten. Ontdek hoe wij uw digitale ambities 
                 realiseren in onze gedetailleerde{' '}
-                <Link href="/werkwijze" className="text-cyan-400 hover:text-cyan-300">
+                <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300">
                   werkwijze en projectaanpak voor website ontwikkeling
                 </Link>.
               </p>
 
               <div className="bg-gradient-to-r from-cosmic-800/40 to-cosmic-700/40 p-6 rounded-xl border border-cosmic-600/60 mb-8">
-                <h4 className="text-xl font-semibold mb-4 text-cyan-400">
+                <h4 className="text-xl font-semibold mb-4 text-cyan-300">
                   Complete Website Laten Maken Dienstverlening:
                 </h4>
-                <ul className="grid md:grid-cols-2 gap-3 text-gray-300">
+                <ul className="grid md:grid-cols-2 gap-3 text-slate-200">
                   <li>✓ Strategische digitale consultancy & marktanalyse</li>
                   <li>✓ Gebruiksvriendelijk UX/UI design & prototyping</li>
                   <li>✓ Frontend & backend website ontwikkeling</li>
@@ -561,9 +568,9 @@ export default function HomePage() {
                 </ul>
               </div>
 
-              <p className="text-gray-300 mb-8">
+              <p className="text-slate-200 mb-8">
                 Bekijk ons complete overzicht van{' '}
-                <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">
+                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">
                   professionele webdesign en website ontwikkeling diensten Nederland
                 </Link>{' '}
                 om te ontdekken hoe wij uw specifieke doelen kunnen realiseren met een 
@@ -581,7 +588,7 @@ export default function HomePage() {
                   <h4 className="text-xl font-semibold mb-3 text-white">
                     🏢 MKB & Nederlandse Ondernemers
                   </h4>
-                  <p className="text-gray-300">
+                  <p className="text-slate-200">
                     Wilt u een <strong>professionele website laten maken</strong> die uw lokale 
                     of nationale markt verovert? Wij specialiseren ons in <strong>zakelijke websites</strong> voor het 
                     Nederlandse MKB die direct impact hebben op uw omzet en merkbekendheid. Van Amsterdam, 
@@ -594,7 +601,7 @@ export default function HomePage() {
                   <h4 className="text-xl font-semibold mb-3 text-white">
                     🚀 Startups & Scale-ups Nederland
                   </h4>
-                  <p className="text-gray-300">
+                  <p className="text-slate-200">
                     Voor ambitieuze Nederlandse startups die snel willen groeien, ontwikkelen wij schaalbare 
                     platforms die meegroeien met uw succes. Van MVP tot enterprise-oplossing – 
                     wij denken mee in uw groeistrategie. <strong>Moderne websites</strong> die investeerders 
@@ -606,7 +613,7 @@ export default function HomePage() {
                   <h4 className="text-xl font-semibold mb-3 text-white">
                     🏭 Enterprise & Corporates
                   </h4>
-                  <p className="text-gray-300">
+                  <p className="text-slate-200">
                     Complexe <strong>corporate websites</strong> en digitale ecosystemen zijn onze specialiteit. 
                     Wij integreren naadloos met uw bestaande systemen en processen voor een 
                     toekomstbestendige digitale infrastructuur. Van multinationals tot Nederlandse marktleiders – 
@@ -618,7 +625,7 @@ export default function HomePage() {
                   <h4 className="text-xl font-semibold mb-3 text-white">
                     🛍️ E-commerce & Webshop Ontwikkeling
                   </h4>
-                  <p className="text-gray-300">
+                  <p className="text-slate-200">
                     <strong>Webshop laten maken</strong> die daadwerkelijk verkoopt? Onze e-commerce specialisten 
                     ontwikkelen krachtige online winkels geoptimaliseerd voor de Nederlandse consument. 
                     Integraties met Mollie, Adyen, iDEAL, en andere Nederlandse betaalmethoden zijn standaard. 
@@ -628,17 +635,17 @@ export default function HomePage() {
               </div>
 
               <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-8 rounded-xl border border-cyan-500/20 mb-8">
-                <h4 className="text-xl font-semibold mb-4 text-cyan-400">
+                <h4 className="text-xl font-semibold mb-4 text-cyan-300">
                   🗺️ Website Laten Maken in Heel Nederland
                 </h4>
-                <p className="text-gray-300 mb-4">
+                <p className="text-slate-200 mb-4">
                   Als Nederlands <strong>webdesign bureau</strong> bedienen wij klanten door het hele land. 
                   Van de Randstad tot de provincies – onze lokale marktkennis zorgt voor websites 
                   die aansluiten bij uw doelgroep:
                 </p>
-                <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-300">
+                <div className="grid md:grid-cols-3 gap-4 text-sm text-slate-200">
                   <div>
-                    <strong className="text-cyan-400">Randstad:</strong>
+                    <strong className="text-cyan-300">Randstad:</strong>
                     <ul className="mt-2 space-y-1">
                       <li>• Website maken Amsterdam</li>
                       <li>• Webdesign Rotterdam</li>
@@ -648,7 +655,7 @@ export default function HomePage() {
                     </ul>
                   </div>
                   <div>
-                    <strong className="text-cyan-400">Noord & Oost:</strong>
+                    <strong className="text-cyan-300">Noord & Oost:</strong>
                     <ul className="mt-2 space-y-1">
                       <li>• Webdesign Groningen</li>
                       <li>• Website maken Enschede</li>
@@ -658,7 +665,7 @@ export default function HomePage() {
                     </ul>
                   </div>
                   <div>
-                    <strong className="text-cyan-400">Zuid Nederland:</strong>
+                    <strong className="text-cyan-300">Zuid Nederland:</strong>
                     <ul className="mt-2 space-y-1">
                       <li>• Website Eindhoven</li>
                       <li>• Webdesign Tilburg</li>
@@ -679,7 +686,7 @@ export default function HomePage() {
               <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
                 Over ProWeb Studio: Uw Digitale Partner in Nederland
               </h3>
-              <p className="text-gray-300 mb-6">
+              <p className="text-slate-200 mb-6">
                 Als Nederlandse website specialist met internationale expertise combineren wij 
                 lokale marktkennis met wereldklasse technologie. Ons team van ervaren developers, 
                 designers en strategen heeft één doel: uw digitale succes realiseren door 
@@ -687,16 +694,16 @@ export default function HomePage() {
                 voor Nederlandse bedrijven.
               </p>
               
-              <p className="text-gray-300 mb-8">
+              <p className="text-slate-200 mb-8">
                 Leer meer{' '}
-                <Link href="/over-ons" className="text-cyan-400 hover:text-cyan-300">
+                <Link href="/over-ons" className="text-cyan-300 hover:text-cyan-300">
                   over ons team, onze missie en Nederlandse webdesign expertise
                 </Link>{' '}
                 om Nederlandse bedrijven te helpen groeien met innovatieve webtechnologie. 
-                Bekijk ook onze <Link href="/werkwijze" className="text-cyan-400 hover:text-cyan-300">
+                Bekijk ook onze <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300">
                   gestructureerde ontwikkelingsmethodiek
                 </Link> en{' '}
-                <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300">
+                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">
                   uitgebreide service portfolio
                 </Link>.
               </p>
@@ -706,11 +713,11 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold mb-4 text-white">
                 Website Laten Maken: Klaar om te Starten?
               </h3>
-              <p className="text-gray-300 mb-6">
+              <p className="text-slate-200 mb-6">
                 Start vandaag nog met een gratis strategiesessie voor uw <strong>website laten maken project</strong>. 
                 We bespreken uw doelen, uitdagingen en mogelijkheden voor digitale groei. 
                 Ontdek waarom ondernemers door heel Nederland kiezen voor onze 
-                <Link href="/diensten" className="text-cyan-400 hover:text-cyan-300 ml-1">professionele webdesign services</Link>.
+                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300 ml-1">professionele webdesign services</Link>.
               </p>
               <Button
                 href="/contact"

@@ -151,18 +151,16 @@ export default function Diensten() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in">
               Meer dan Code. Oplossingen die Groeien.
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-cyan-400 max-w-4xl mx-auto leading-relaxed animate-slide-up">
-              Elke dienst die we aanbieden is een samensmelting van strategie,
-              creativiteit en technologische excellentie. We bouwen geen
-              websites; we bouwen groeimotoren. Ontdek hoe onze expertise uw
-              visie kan omzetten in een meetbaar digitaal succes.
+                        <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-4xl mx-auto leading-relaxed animate-slide-up">
+              Ontdek onze complete oplossingen voor professionele websites, 
+              van moderne webdesign tot geavanceerde functionaliteiten.
             </p>
           </div>
         </div>
       </section>
 
       {/* Services grid */}
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6">
+      <section className="py-section px-4 sm:px-6">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {services.map((service, i) => {
@@ -185,7 +183,7 @@ export default function Diensten() {
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 group-hover:text-cyan-300 transition-colors duration-300">
                     {service.title}
                   </h3>
-                  <p className="text-gray-300 mb-8 leading-relaxed">
+                  <p className="text-slate-200 mb-8 leading-relaxed">
                     {service.description}
                   </p>
                   <h4 className="font-semibold text-cyan-300 mb-4">
@@ -194,7 +192,7 @@ export default function Diensten() {
                   <ul className="space-y-3">
                     {service.features.map((feature, j) => (
                       <li key={j} className="flex items-center text-sm">
-                        <span className="text-cyan-400 mr-3 font-bold text-lg">
+                        <span className="text-cyan-300 mr-3 font-bold text-lg">
                           ✓
                         </span>
                         <span className="text-gray-200">{feature}</span>
@@ -210,13 +208,13 @@ export default function Diensten() {
       </section>
 
       {/* Tech Stack Section */}
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 bg-cosmic-800/20 border-t border-cosmic-700/60">
+      <section className="py-section px-4 sm:px-6 bg-cosmic-800/20 border-t border-cosmic-700/60">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight">
               Onze Technologische Kern
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed">
               Wij geloven in het kiezen van het juiste gereedschap voor elke
               uitdaging. Onze expertise ligt in een moderne, performante en
               schaalbare technologiestack, ontworpen om u een
@@ -227,7 +225,7 @@ export default function Diensten() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 text-center">
             <div className="glass p-6 rounded-lg">
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">Frontend</h3>
-              <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-slate-200">
                 <li>Next.js</li>
                 <li>React</li>
                 <li>TypeScript</li>
@@ -239,7 +237,7 @@ export default function Diensten() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
                 3D & Animatie
               </h3>
-              <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-slate-200">
                 <li>WebGL</li>
                 <li>Three.js</li>
                 <li>React Three Fiber</li>
@@ -249,7 +247,7 @@ export default function Diensten() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
                 Backend & CMS
               </h3>
-              <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-slate-200">
                 <li>Headless CMS (o.a. Sanity, Contentful)</li>
                 <li>Node.js</li>
                 <li>Vercel Serverless Functions</li>
@@ -259,7 +257,7 @@ export default function Diensten() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
                 Deployment & Infrastructuur
               </h3>
-              <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-slate-200">
                 <li>Vercel</li>
                 <li>Netlify</li>
                 <li>AWS</li>
@@ -270,7 +268,7 @@ export default function Diensten() {
       </section>
 
       {/* Related Services & Internal Links Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+      <section className="py-12 sm:py-section px-4 sm:px-6">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-12 text-center gradient-text">
             Ontdek Meer van ProWeb Studio
@@ -281,13 +279,13 @@ export default function Diensten() {
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
                 🏗️ Onze Werkwijze
               </h3>
-              <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+              <p className="text-slate-200 mb-4 text-sm leading-relaxed">
                 Ontdek hoe wij van idee naar realisatie werken. Van strategische planning 
                 tot technische implementatie en doorlopende optimalisatie.
               </p>
               <Link 
                 href="/werkwijze" 
-                className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium"
+                className="inline-flex items-center text-cyan-300 hover:text-cyan-300 transition-colors text-sm font-medium"
               >
                 Bekijk onze projectaanpak
                 <span className="ml-1">→</span>
@@ -298,13 +296,13 @@ export default function Diensten() {
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
                 🎮 3D Technologie Speeltuin
               </h3>
-              <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+              <p className="text-slate-200 mb-4 text-sm leading-relaxed">
                 Ervaar de kracht van moderne webtechnologie. Interactieve 3D-ervaringen, 
                 WebGL-experimenten en innovatieve gebruikersinterfaces.
               </p>
               <Link 
                 href="/speeltuin" 
-                className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium"
+                className="inline-flex items-center text-cyan-300 hover:text-cyan-300 transition-colors text-sm font-medium"
               >
                 Ontdek onze 3D showcases
                 <span className="ml-1">→</span>
@@ -315,13 +313,13 @@ export default function Diensten() {
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
                 👥 Over ProWeb Studio
               </h3>
-              <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+              <p className="text-slate-200 mb-4 text-sm leading-relaxed">
                 Leer het team kennen achter de innovatieve weboplossingen. Onze missie, 
                 visie en de expertise die we inzetten voor uw digitale succes.
               </p>
               <Link 
                 href="/over-ons" 
-                className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium"
+                className="inline-flex items-center text-cyan-300 hover:text-cyan-300 transition-colors text-sm font-medium"
               >
                 Ontmoet het team
                 <span className="ml-1">→</span>
@@ -334,7 +332,7 @@ export default function Diensten() {
             <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white">
               Klaar voor een Website die Indruk Maakt?
             </h3>
-            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+            <p className="text-slate-200 mb-6 max-w-2xl mx-auto">
               Van concept tot conversie - wij realiseren digitale oplossingen die uw bedrijf 
               naar het volgende niveau tillen. Plan een gratis strategiesessie en ontdek de mogelijkheden.
             </p>
@@ -359,14 +357,14 @@ export default function Diensten() {
       </section>
 
       {/* Call to action */}
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 relative overflow-hidden">
+      <section className="py-section px-4 sm:px-6 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none -z-10 bg-gradient-to-b from-transparent via-cosmic-900/15 to-transparent" />
         <div className="absolute inset-0 pointer-events-none -z-10 portal-gradient opacity-40" />
         <div className="max-w-4xl mx-auto text-center glass rounded-2xl p-6 sm:p-8 md:p-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 leading-tight">
             Op maat gemaakte oplossingen
           </h2>
-          <p className="text-base sm:text-lg md:text-xl mb-12 text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl mb-12 text-slate-200 max-w-3xl mx-auto leading-relaxed">
             Elk project is uniek. Laten we samen jouw perfecte oplossing bouwen
             die jouw verwachtingen overtreft.
           </p>

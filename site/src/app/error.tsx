@@ -94,12 +94,12 @@ export default function Error({ error, reset }: ErrorProps) {
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
                 Er is iets misgegaan
               </h2>
-              <p className="text-lg text-gray-300 max-w-md mx-auto leading-relaxed">
+              <p className="text-lg text-slate-200 max-w-md mx-auto leading-relaxed">
                 Er is een onverwachte fout opgetreden. 
                 Dit kan tijdelijk zijn - probeer het opnieuw.
               </p>
               {error.digest && (
-                <p className="text-sm text-gray-400 font-mono bg-cosmic-800/30 px-3 py-2 rounded border border-cosmic-700/30 inline-block">
+                <p className="text-sm text-slate-400 font-mono bg-cosmic-800/30 px-3 py-2 rounded border border-cosmic-700/30 inline-block">
                   Fout ID: {error.digest}
                 </p>
               )}
@@ -117,7 +117,7 @@ export default function Error({ error, reset }: ErrorProps) {
               
               <button
                 onClick={() => window.location.reload()}
-                className="text-gray-300 hover:text-primary-300 transition-colors font-medium"
+                className="text-slate-200 hover:text-primary-300 transition-colors font-medium"
               >
                 Of ververs de pagina →
               </button>
@@ -132,7 +132,7 @@ export default function Error({ error, reset }: ErrorProps) {
                 {troubleshootingSteps.map((step, index) => (
                   <li key={index} className="flex items-start">
                     <span className="text-primary-400 mr-3 mt-1">•</span>
-                    <span className="text-gray-300">{step}</span>
+                    <span className="text-slate-200">{step}</span>
                   </li>
                 ))}
               </ul>
@@ -151,7 +151,7 @@ export default function Error({ error, reset }: ErrorProps) {
                     <h4 className="text-md font-semibold text-white mb-1 group-hover:text-primary-300 transition-colors">
                       {link.label}
                     </h4>
-                    <p className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
+                    <p className="text-xs text-slate-400 group-hover:text-slate-200 transition-colors">
                       {link.description}
                     </p>
                   </div>
@@ -164,7 +164,7 @@ export default function Error({ error, reset }: ErrorProps) {
         {/* Footer Info */}
         <footer className="relative z-20 px-4 sm:px-6 lg:px-8 py-8 text-center">
           <div className="max-w-7xl mx-auto">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-slate-400">
               Probleem blijft bestaan? Neem contact op:{' '}
               <a 
                 href={`tel:${siteConfig.phone}`}

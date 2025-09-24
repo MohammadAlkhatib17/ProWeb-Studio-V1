@@ -35,8 +35,8 @@ export function Button(props: ButtonComponentProps) {
   const sizeClasses = size === 'large' ? 'px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 text-base sm:text-lg min-h-[44px]' : 'px-6 py-3 sm:px-8 sm:py-3.5 text-base min-h-[44px]';
   const variantClasses =
     variant === 'primary'
-      ? 'bg-gradient-to-r from-cyan-500 to-magenta-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/25 text-black'
-      : 'border border-cyan-500/60 hover:bg-cyan-500/10 hover:border-cyan-400 text-cyan-100 hover:shadow-lg hover:shadow-cyan-500/20';
+      ? 'bg-gradient-to-r from-cyan-500 to-magenta-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] text-black'
+      : 'border border-cyan-500/60 hover:bg-cyan-500/10 hover:border-cyan-400 text-cyan-100 hover:shadow-lg hover:shadow-cyan-500/30 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]';
 
   const combinedClasses = `${baseClasses} ${sizeClasses} ${variantClasses} ${className}`;
 

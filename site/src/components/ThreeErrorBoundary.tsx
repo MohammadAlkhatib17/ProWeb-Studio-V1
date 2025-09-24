@@ -71,7 +71,7 @@ export default class ThreeErrorBoundary extends Component<Props, State> {
               <h3 className="text-lg font-semibold text-white mb-2">
                 3D Content Unavailable
               </h3>
-              <p className="text-gray-400 text-sm mb-4">
+              <p className="text-slate-400 text-sm mb-4">
                 The 3D experience couldn&apos;t load. This might be due to device limitations or WebGL not being supported.
               </p>
             </div>
@@ -79,14 +79,14 @@ export default class ThreeErrorBoundary extends Component<Props, State> {
             <div className="space-y-3">
               <button
                 onClick={this.handleRetry}
-                className="w-full px-4 py-3 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-cosmic-900"
+                className="w-full px-4 py-3 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-cosmic-900"
               >
                 Try Again
               </button>
             </div>
             
             <details className="mt-4 text-left">
-              <summary className="text-xs text-gray-500 cursor-pointer hover:text-gray-400 min-h-[44px] flex items-center py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-cosmic-900 rounded">
+              <summary className="text-xs text-gray-500 cursor-pointer hover:text-slate-400 min-h-[44px] flex items-center py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-cosmic-900 rounded">
                 Technical Details
               </summary>
               <pre className="mt-2 text-xs text-red-300 bg-red-900/20 p-2 rounded overflow-auto max-h-32">

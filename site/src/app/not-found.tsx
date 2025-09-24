@@ -63,7 +63,7 @@ export default function NotFound() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
               Pagina niet gevonden
             </h2>
-            <p className="text-lg text-gray-300 max-w-md mx-auto leading-relaxed">
+            <p className="text-lg text-slate-200 max-w-md mx-auto leading-relaxed">
               De pagina die u zocht bestaat niet of is verplaatst. 
               Geen zorgen, we helpen u graag verder.
             </p>
@@ -82,7 +82,7 @@ export default function NotFound() {
                   <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">
                     {link.label}
                   </h3>
-                  <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                  <p className="text-sm text-slate-400 group-hover:text-slate-200 transition-colors">
                     {link.description}
                   </p>
                 </div>
@@ -102,7 +102,7 @@ export default function NotFound() {
             
             <Link
               href="/contact"
-              className="text-gray-300 hover:text-primary-300 transition-colors font-medium"
+              className="text-slate-200 hover:text-primary-300 transition-colors font-medium"
             >
               Of neem contact op →
             </Link>
@@ -113,7 +113,7 @@ export default function NotFound() {
       {/* Footer Info */}
       <footer className="relative z-20 px-4 sm:px-6 lg:px-8 py-8 text-center">
         <div className="max-w-7xl mx-auto">
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-slate-400">
             Hulp nodig? Bel ons op{' '}
             <a 
               href={`tel:${siteConfig.phone}`}

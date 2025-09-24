@@ -81,6 +81,22 @@ export default function Header() {
         >
           {siteConfig.navigation.map((item) => {
             const isActive = pathname === item.href;
+            const isContactLink = item.href === '/contact';
+            
+            if (isContactLink) {
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="font-medium transition-all duration-300 relative group py-2 px-4 rounded-lg border border-cyan-500/60 hover:border-cyan-400 hover:bg-cyan-500/10 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900 min-h-[44px] inline-flex items-center text-cyan-100 hover:text-white hover:shadow-lg hover:shadow-cyan-500/30"
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <span className="relative z-10">{item.name}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-magenta-500/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </Link>
+              );
+            }
+            
             return (
               <Link
                 key={item.href}
@@ -88,7 +104,7 @@ export default function Header() {
                 className={`font-medium transition-all duration-300 relative group py-3 px-3 rounded-lg hover:bg-cyan-400/5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900 min-h-[44px] inline-flex items-center ${
                   isActive 
                     ? 'text-white' 
-                    : 'text-gray-300 hover:text-white'
+                    : 'text-slate-200 hover:text-white'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >

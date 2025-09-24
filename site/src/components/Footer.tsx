@@ -57,23 +57,23 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-cosmic-800/20 border-t border-cosmic-700 py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6">
+    <footer className="bg-cosmic-800/20 border-t border-cosmic-700 py-section px-4 sm:px-6">
       <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 mb-8">
           <div className="lg:col-span-2">
             <div className="mb-3 transform hover:scale-105 transition-transform duration-300">
               <Logo variant="full" size="lg" withGlow={true} animated={true} />
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed -mt-1 mb-6">
+            <p className="text-slate-400 text-sm leading-relaxed -mt-1 mb-6">
               {siteConfig.tagline}
             </p>
             
             {/* Newsletter signup */}
             <div>
-              <h4 className="font-semibold mb-4 text-cyan-400">
+              <h4 className="font-semibold mb-4 text-cyan-300">
                 Digitale Innovatie in je Inbox
               </h4>
-              <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+              <p className="text-slate-400 text-sm mb-6 leading-relaxed">
                 Blijf op de hoogte van de nieuwste trends in webontwikkeling,
                 3D-technologie en digitale transformatie. Exclusieve inzichten van
                 onze experts.
@@ -132,7 +132,7 @@ export default function Footer() {
                         className={`text-sm min-h-[44px] inline-flex items-center py-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded ${
                           link.priority === 'high' 
                             ? 'text-white hover:text-cyan-300 font-medium' 
-                            : 'text-gray-400 hover:text-cyan-400'
+                            : 'text-slate-400 hover:text-cyan-300'
                         }`}
                       >
                         {link.title}
@@ -148,17 +148,17 @@ export default function Footer() {
         {/* Contact Information */}
         <div className="mt-8 pt-8 border-t border-cosmic-700/50">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="flex flex-col sm:flex-row gap-4 text-sm text-gray-400">
+            <div className="flex flex-col sm:flex-row gap-4 text-sm text-slate-400">
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="hover:text-cyan-400 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+                className="hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
               >
                 {siteConfig.email}
               </a>
               <span className="hidden sm:inline text-cosmic-600">•</span>
               <a
                 href={`tel:${siteConfig.phone}`}
-                className="hover:text-cyan-400 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+                className="hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
               >
                 {siteConfig.phone}
               </a>

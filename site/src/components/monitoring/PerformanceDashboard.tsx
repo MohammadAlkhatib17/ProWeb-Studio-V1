@@ -101,7 +101,7 @@ export function PerformanceDashboard({
   };
 
   const getMetricColor = (value: number | null, type: string): string => {
-    if (value === null) return 'text-gray-400';
+    if (value === null) return 'text-slate-400';
     
     const thresholds = {
       LCP: { good: 2500, poor: 4000 },
@@ -127,7 +127,7 @@ export function PerformanceDashboard({
       <div className="space-y-1">
         {Object.entries(metrics).map(([key, value]) => (
           <div key={key} className="flex justify-between items-center">
-            <span className="text-gray-300">{key}:</span>
+            <span className="text-slate-200">{key}:</span>
             <span className={getMetricColor(value, key)}>
               {formatMetric(value, key)}
             </span>
@@ -136,7 +136,7 @@ export function PerformanceDashboard({
       </div>
       {dutchOptimized && (
         <div className="mt-2 pt-2 border-t border-gray-600">
-          <div className="text-xs text-gray-400">
+          <div className="text-xs text-slate-400">
             Optimized for Dutch users
           </div>
         </div>
