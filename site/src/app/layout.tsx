@@ -15,7 +15,7 @@ import HeroBackground from '@/components/HeroBackground';
 import TopVignetteOverlay from '@/components/layout/TopVignetteOverlay';
 import PWAServiceWorker from '@/components/PWAServiceWorker';
 import DutchPerformanceMonitor from '@/components/DutchPerformanceMonitor';
-import { primaryFont, generateFontPreloads } from '@/lib/fonts';
+import { primaryFont } from '@/lib/fonts';
 import { generateResourcePreconnects } from '@/lib/preconnect';
 
 // Initialize environment validation for production deployments
@@ -208,8 +208,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const nonce = headers().get('X-Nonce') || undefined;
-  // IMPORTANT: Any <Script> components added in the future must receive nonce={nonce} for CSP compliance
+  const headersList = headers();
+  const nonce = headersList.get('X-Nonce') || '';
   
   return (
     <html lang="nl-NL">
@@ -247,26 +247,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://cal.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://cal.com" />
         
-        {/* Preload critical fonts for better LCP */}
-        {generateFontPreloads().map((fontPreload, index) => (
-          <link
-            key={index}
-            rel={fontPreload.rel}
-            href={fontPreload.href}
-            as={fontPreload.as}
-            type={fontPreload.type}
-            crossOrigin={fontPreload.crossOrigin}
-          />
-        ))}
+        {/* Font preloads are handled automatically by Next.js */}
         
-        {/* Preload critical LCP images */}
-        <link
-          rel="preload"
-          as="image"
-          href="/assets/hero/nebula_helix.avif"
-          imageSrcSet="/assets/hero/nebula_helix.avif 1920w, /assets/hero/nebula_helix.webp 1920w"
-          imageSizes="100vw"
-        />
+        {/* Critical image preloads are handled by Next.js Image component */}
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />

@@ -52,17 +52,49 @@
     min-height: 100%;
   }
 
-  h1,
-  h2,
-  h3,
+  /* Enhanced Typographic Hierarchy for Readability & SEO */
+  h1 {
+    line-height: 1.1;
+    font-weight: 800;
+    text-rendering: optimizeLegibility;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    scroll-margin-top: var(--header-offset);
+    color: rgb(255, 255, 255);
+  }
+
+  h2 {
+    line-height: 1.15;
+    font-weight: 700;
+    text-rendering: optimizeLegibility;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+    margin-top: 2.5rem;
+    scroll-margin-top: var(--header-offset);
+    color: rgb(255, 255, 255);
+  }
+
+  h3 {
+    line-height: 1.2;
+    font-weight: 600;
+    text-rendering: optimizeLegibility;
+    letter-spacing: -0.005em;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    scroll-margin-top: var(--header-offset);
+    color: rgb(103, 232, 249); /* cyan-300 for sections */
+  }
+
   h4,
   h5,
   h6 {
-    line-height: 1.2;
-    font-weight: 700;
+    line-height: 1.25;
+    font-weight: 600;
     text-rendering: optimizeLegibility;
-    /* Ensure anchor targets don't hide under sticky header */
+    margin-bottom: 0.75rem;
+    margin-top: 1.5rem;
     scroll-margin-top: var(--header-offset);
+    color: rgb(255, 255, 255);
   }
 
   /* Additional scroll margin for any element that might be used as an anchor target */
@@ -71,8 +103,24 @@
   }
 
   p {
-    line-height: 1.7;
+    line-height: 1.75;
     text-rendering: optimizeLegibility;
+    margin-bottom: 1.25rem;
+    color: rgb(203, 213, 225); /* slate-300 for better readability */
+    max-width: 75ch; /* Optimal reading line length */
+  }
+
+  /* Enhanced readability for content sections */
+  article p,
+  section p {
+    font-size: 1.0625rem; /* 17px - optimal reading size */
+    line-height: 1.8;
+  }
+
+  /* Strong elements in brand colors */
+  strong {
+    color: rgb(255, 255, 255);
+    font-weight: 600;
   }
 
   ::selection {

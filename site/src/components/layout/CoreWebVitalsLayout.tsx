@@ -41,14 +41,14 @@ export function CoreWebVitalsLayout({
       ))}
       
       {/* Font preloads for faster text rendering */}
-      {enableAdvancedOptimizations && fontPreloads.map((font, index) => (
+      {enableAdvancedOptimizations && fontPreloads.length > 0 && fontPreloads.map((font, index) => (
         <link
           key={index}
           rel={font.rel}
           href={font.href}
           as={font.as}
           type={font.type}
-          crossOrigin={font.crossOrigin as 'anonymous' | 'use-credentials'}
+          crossOrigin={font.crossOrigin}
           {...(font.fetchpriority && { fetchpriority: font.fetchpriority })}
         />
       ))}

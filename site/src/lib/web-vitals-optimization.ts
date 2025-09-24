@@ -4,39 +4,22 @@
  * Specifically tuned for Dutch users and network conditions
  */
 
+interface FontPreload {
+  rel: string;
+  href: string;
+  as: string;
+  type: string;
+  crossOrigin?: 'anonymous' | 'use-credentials';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
 /**
  * Enhanced font preloading with Dutch language optimization
  */
-export function getOptimizedFontPreloads() {
-  return [
-    // Critical Inter font weights for Dutch content
-    {
-      rel: 'preload',
-      href: '/fonts/inter-latin-400.woff2',
-      as: 'font',
-      type: 'font/woff2',
-      crossOrigin: 'anonymous',
-      // Dutch-specific optimization: Regular weight is most used
-      fetchpriority: 'high' as const,
-    },
-    {
-      rel: 'preload', 
-      href: '/fonts/inter-latin-600.woff2',
-      as: 'font',
-      type: 'font/woff2',
-      crossOrigin: 'anonymous',
-      // Semi-bold for headings
-      fetchpriority: 'high' as const,
-    },
-    // Fallback font metrics for better CLS
-    {
-      rel: 'preload',
-      href: 'data:font/woff2;base64,', // System font fallback
-      as: 'font',
-      type: 'font/woff2',
-      crossOrigin: 'anonymous',
-    },
-  ];
+export function getOptimizedFontPreloads(): FontPreload[] {
+  // Return empty array as Next.js handles font preloading automatically
+  // with proper optimization for fonts loaded via next/font/google
+  return [];
 }
 
 /**
@@ -109,7 +92,7 @@ export function getOptimalImageStrategy(isAboveFold: boolean = false) {
   const baseStrategy = {
     loading: isAboveFold ? 'eager' as const : 'lazy' as const,
     decoding: 'async' as const,
-    fetchpriority: isAboveFold ? 'high' as const : 'auto' as const,
+    fetchPriority: isAboveFold ? 'high' as const : 'auto' as const,
   };
   
   if (typeof window === 'undefined') return baseStrategy;

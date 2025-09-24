@@ -43,7 +43,8 @@ export default function Scene3D({ children, className, adaptive = true }: Scene3
           {children}
           {adaptive && <AdaptiveDpr />}
           {adaptive && <PerformanceMonitor />}
-          <Preload all />
+          {/* Preload only critical scene assets to reduce preload warnings */}
+          <Preload />
         </Suspense>
       </Canvas>
     </div>

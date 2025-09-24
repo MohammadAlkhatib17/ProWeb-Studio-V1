@@ -236,9 +236,9 @@ export default function HomePage() {
             Website Laten Maken die Indruk Maakt. En Converteert.
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-cyan-100 mb-12 max-w-4xl mx-auto motion-safe:animate-slide-up">
-            Wij transformeren uw idee tot een razendsnelle, interactieve
-            ervaring — van <Link href="/diensten" className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2">corporate websites en webshops</Link> tot meeslepende <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2">3D-websites</Link> die uw
-            bezoekers boeien en uw bedrijf laten groeien. Ontdek onze <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2">bewezen aanpak voor website ontwikkeling</Link>.
+            In het digitale tijdperk is uw website meer dan een visitekaartje — het is uw universum. Daarom transformeren wij uw idee tot een razendsnelle, interactieve
+            ervaring die uw merk tot leven brengt. Van <Link href="/diensten" className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2">corporate websites en webshops</Link> tot meeslepende <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2">3D-websites</Link> — wij architectureren digitale 
+            ervaringen die uw bezoekers boeien en uw bedrijf laten groeien. Ontdek onze <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2">bewezen aanpak voor website ontwikkeling</Link>.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -247,19 +247,19 @@ export default function HomePage() {
               variant="primary"
               size="large"
             >
-              Website laten maken - Start project
+              Start jouw digitale transformatie
             </Button>
             <Button
               href="/werkwijze"
               variant="secondary"
               size="large"
             >
-              Ontdek onze werkwijze →
+              Zo maken wij dit mogelijk →
             </Button>
           </div>
 
           <p className="mt-12 text-slate-400 text-sm motion-safe:animate-fade-in-delayed">
-            Vertrouwd door founders, misb en scale-ups die vooruit willen.
+            Vertrouwd door ondernemers, MKB en scale-ups die digitale vooruitgang omarmen.
           </p>
         </div>
       </section>
@@ -268,33 +268,33 @@ export default function HomePage() {
       <section aria-label="Cases" className="py-section px-4 sm:px-6 glass">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-center leading-tight">
-            Webdesign Nederland: Meetbare Impact, Elke Keer Weer
+            Webdesign Nederland: Waar Visie Meetbare Impact Wordt
           </h2>
           <p className="text-slate-400 text-center mb-16 max-w-3xl mx-auto">
-            We bouwen niet zomaar websites — we leveren digitale groeimotoren
-            die presteren. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">complete service portfolio</Link> en 
-            <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300 ml-1">gestructureerde ontwikkelingsproces</Link>.
+            Elke website die wij bouwen vertelt een verhaal van transformatie. We architectureren niet zomaar digitale platforms — we creëren groeimotoren
+            die uw ambities naar werkelijkheid transformeren. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">complete service portfolio</Link> en 
+            <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300 ml-1">gestructureerde ontwikkelingsproces</Link> die deze resultaten mogelijk maken.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-stretch">
             <CaseCard
-              title="Website Laten Maken: Fundament voor Groei"
+              title="Website Laten Maken: Waar Ambities Groeien"
               metric="Razendsnelle Next.js Websites"
-              desc="Wij bouwen op maat gemaakte, veilige en SEO-geoptimaliseerde websites die de kern van uw digitale aanwezigheid vormen en klaar zijn voor de toekomst."
-              linkText="Ontdek onze webdevelopment diensten"
+              desc="Elke **website laten maken** begint met uw visie. Wij architectureren op maat gemaakte, veilige en SEO-geoptimaliseerde digitale ecosystemen die de kern van uw ondernemingsstrategie vormen — gebouwd voor vandaag, klaar voor morgen."
+              linkText="Zie hoe wij dit voor jou realiseren"
               linkHref="/diensten"
             />
             <CaseCard
-              title="Meeslepende 3D Ervaringen"
+              title="3D Ervaringen: Het Onmogelijke Mogelijk"
               metric="Interactieve WebGL & R3F"
-              desc="Transformeer uw merk met unieke 3D-productvisualisaties en interactieve ervaringen die bezoekers boeien en een onvergetelijke indruk achterlaten."
-              linkText="Bekijk onze 3D speeltuin"
+              desc="In een wereld vol standaardwebsites creëren wij digitale wonderen. Onze 3D-productvisualisaties en interactieve ervaringen transformeren gewone bezoekers in betrokken klanten die uw merk nooit vergeten."
+              linkText="Ervaar de 3D magie zelf"
               linkHref="/speeltuin"
             />
             <CaseCard
-              title="Webshop Laten Maken: E-commerce Oplossingen"
+              title="Webshop Laten Maken: Verkopen Herontdacht"
               metric="Conversiegerichte Webshops"
-              desc="Van ontwerp tot implementatie, wij creëren krachtige webshops die niet alleen prachtig zijn, maar ook ontworpen om uw online verkoop te maximaliseren."
-              linkText="Leer meer over onze aanpak"
+              desc="Een **webshop laten maken** is meer dan technologie — het is psychologie in code. Wij creëren e-commerce ervaringen die niet alleen prachtig zijn, maar intuïtief begrijpen hoe uw klanten denken en kopen."
+              linkText="Ontdek het geheim van onze aanpak"
               linkHref="/werkwijze"
             />
           </div>
@@ -305,7 +305,7 @@ export default function HomePage() {
       <section aria-label="Process" className="py-section px-4 sm:px-6">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-16 text-center leading-tight">
-            Website Ontwikkeling: Van Visie naar Virtuoze Uitvoering
+            Website Ontwikkeling: Waar Visie Virtuoze Werkelijkheid Wordt
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             <div className="text-center group">
@@ -316,11 +316,11 @@ export default function HomePage() {
                 Webdesign Strategie
               </h3>
               <p className="text-slate-400">
-                Deep-dive in uw doelen, markt en gebruikers. We vertalen
-                ambities naar een technisch stappenplan voor <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">professionele website ontwikkeling</Link>. 
+                Elke grote transformatie begint met een diepe duik in uw digitale DNA. We ontcijferen uw doelen, markt en gebruikers om ambities 
+                te vertalen naar een kristalhelder technisch stappenplan voor <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">professionele website ontwikkeling</Link>. 
                 <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300 ml-1">
                   Lees meer over onze strategische aanpak
-                </Link>.
+                </Link> die visies omzet in virtuoze realiteit.
               </p>
             </div>
             <div className="text-center group">
@@ -331,8 +331,8 @@ export default function HomePage() {
                 UX/UI Design
               </h3>
               <p className="text-slate-400">
-                Van wireframes tot pixel-perfect designs. UI/UX die converteert
-                én uw merk versterkt. Ontdek onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">webdesign service</Link> en 
+                Hier ontstaat de magie tussen psychologie en pixels. Van eerste wireframes tot adembenemende designs creëren wij UI/UX ervaringen die niet alleen converteren,
+                maar uw merkidentiteit versterken en gebruikers raken. Ontdek onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">webdesign service</Link> en 
                 <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300 ml-1">creatieve 3D design voorbeelden</Link>.
               </p>
             </div>
@@ -344,9 +344,9 @@ export default function HomePage() {
                 Website Ontwikkeling
               </h3>
               <p className="text-slate-400">
-                Clean code, moderne stack, 100% maatwerk. Gebouwd voor snelheid,
-                schaal en toekomst. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">technische expertise</Link> en 
-                <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300 ml-1">development methodiek</Link>.
+                Hier wordt code tot kunst, technologie tot transformatie. Met kristalheldere code, cutting-edge stack en 100% maatwerk bouwen wij digitale ervaringen 
+                die niet alleen razendsnel zijn, maar meegroeien met uw ambities. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">technische expertise</Link> en 
+                <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300 ml-1">development methodiek</Link> die toekomst realiteit maakt.
               </p>
             </div>
             <div className="text-center group">
@@ -357,8 +357,8 @@ export default function HomePage() {
                 SEO & Groei Optimalisatie
               </h3>
               <p className="text-slate-400">
-                Continue optimalisatie op basis van data. A/B testing, SEO, en
-                conversion rate optimization voor <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">maximale website performance</Link>.
+                Data vertelt verhalen, wij luisteren en handelen. Door continue optimalisatie op basis van intelligente analyses transformeren we inzichten in impact. 
+                A/B testing, SEO-magie, en conversie-optimalisatie zorgen voor <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">maximale website performance</Link> die groeit met uw succes.
                 <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300 ml-1">
                   Bekijk onze optimalisatie services
                 </Link>.
@@ -377,12 +377,12 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight">
-                3D Websites Nederland: De Toekomst is 3D. Wij Bouwen Die Vandaag.
+                3D Websites Nederland: Waar Het Onmogelijke Werkelijkheid Wordt
               </h2>
               <p className="text-base sm:text-lg md:text-xl text-slate-200 mb-8 leading-relaxed">
-                Transformeer uw producten in interactieve ervaringen met onze <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300">3D website ontwikkeling</Link>. Van
-                configurators tot virtuele showrooms — wij pushen de grenzen van
-                het web. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">innovatieve webdevelopment services</Link>.
+                In een digitale wereld vol vlakke ervaringen creëren wij dimensies die ontroeren. Wij transformeren uw producten en visies in levensechte, 
+                interactieve **3D website** ervaringen die de grenzen tussen fysiek en digitaal doen vervagen. Van configurators tot virtuele showrooms — 
+                wij architectureren de toekomst van het web, vandaag. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">innovatieve webdevelopment services</Link>.
               </p>
               <ul className="space-y-4 mb-8">
                 <li className="flex items-start gap-3">
@@ -590,10 +590,10 @@ export default function HomePage() {
                   </h4>
                   <p className="text-slate-200">
                     Wilt u een <strong>professionele website laten maken</strong> die uw lokale 
-                    of nationale markt verovert? Wij specialiseren ons in <strong>zakelijke websites</strong> voor het 
-                    Nederlandse MKB die direct impact hebben op uw omzet en merkbekendheid. Van Amsterdam, 
-                    Rotterdam en Utrecht tot Groningen, Eindhoven en Maastricht – uw lokale aanwezigheid 
-                    versterken met een <strong>responsive website</strong> is onze expertise.
+                    of nationale markt verovert? Wij specialiseren ons in <strong>zakelijke websites</strong> en <strong>bedrijfswebsites</strong> voor het 
+                    Nederlandse MKB die direct impact hebben op uw digitale aanwezigheid, omzet en merkbekendheid. Van Amsterdam, 
+                    Rotterdam en Utrecht tot Groningen, Eindhoven en Maastricht – uw online etalage versterken met een <strong>responsive website</strong> 
+                    en toekomstgerichte webtechnologie is onze passie.
                   </p>
                 </div>
                 
@@ -603,8 +603,8 @@ export default function HomePage() {
                   </h4>
                   <p className="text-slate-200">
                     Voor ambitieuze Nederlandse startups die snel willen groeien, ontwikkelen wij schaalbare 
-                    platforms die meegroeien met uw succes. Van MVP tot enterprise-oplossing – 
-                    wij denken mee in uw groeistrategie. <strong>Moderne websites</strong> die investeerders 
+                    digitale platforms die meegroeien met uw succes. Van MVP en <strong>startup website</strong> tot enterprise-oplossing – 
+                    wij denken strategisch mee in uw groei-roadmap. <strong>Moderne websites</strong> en innovatieve web applicaties die investeerders 
                     imponeren en klanten converteren, geoptimaliseerd voor de Nederlandse markt en internationale expansie.
                   </p>
                 </div>
@@ -711,13 +711,13 @@ export default function HomePage() {
 
             <footer className="bg-gradient-to-r from-cyan-500/10 to-magenta-500/10 p-8 rounded-xl border border-cyan-500/20 text-center">
               <h3 className="text-2xl font-bold mb-4 text-white">
-                Website Laten Maken: Klaar om te Starten?
+                Klaar om Jouw Digitale Verhaal te Schrijven?
               </h3>
               <p className="text-slate-200 mb-6">
-                Start vandaag nog met een gratis strategiesessie voor uw <strong>website laten maken project</strong>. 
-                We bespreken uw doelen, uitdagingen en mogelijkheden voor digitale groei. 
-                Ontdek waarom ondernemers door heel Nederland kiezen voor onze 
-                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300 ml-1">professionele webdesign services</Link>.
+                Laten we samen ontdekken hoe jouw <strong>website laten maken project</strong> een game-changer wordt voor je business. 
+                In een gratis strategiegesprek verkennen we jouw doelen, dromen en mogelijkheden voor digitale groei. 
+                Ontdek waarom ambitieuze ondernemers door heel Nederland kiezen voor onze 
+                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300 ml-1">innovatieve webdesign aanpak</Link>.
               </p>
               <Button
                 href="/contact"
@@ -725,8 +725,8 @@ export default function HomePage() {
                 size="large"
                 className="gap-2"
               >
-                Plan Gratis Website Strategiesessie
-                <span>→</span>
+                Start met een gratis strategiegesprek
+                <span>✨</span>
               </Button>
             </footer>
           </article>

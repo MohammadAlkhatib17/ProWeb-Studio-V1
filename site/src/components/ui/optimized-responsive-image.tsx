@@ -95,8 +95,8 @@ export function OptimizedResponsiveImage({
       'will-change-transform',
       className
     ),
-    // Add fetchpriority for LCP elements in supporting browsers
-    ...(isLCP && { fetchpriority: 'high' as 'high' | 'low' | 'auto' }),
+    // Add fetchPriority for LCP elements in supporting browsers
+    ...(isLCP && { fetchPriority: 'high' as 'high' | 'low' | 'auto' }),
     // Enhanced placeholder strategy
     placeholder: loadingStrategy.placeholder || 'blur',
     // Add optimized loading attributes

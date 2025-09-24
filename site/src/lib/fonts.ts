@@ -20,17 +20,12 @@ export const primaryFont = Inter({
 
 /**
  * Font preload configurations for critical fonts
- * These should be added to the document head for LCP optimization
+ * Note: Next.js generates hashed font filenames, so we should not preload specific files
+ * Instead, we rely on Next.js built-in font optimization and preload strategies
  */
 export const fontPreloads = [
-  {
-    href: '/_next/static/media/inter-latin.woff2',
-    as: 'font',
-    type: 'font/woff2',
-    crossOrigin: 'anonymous',
-    // Preload only the most critical font weights
-    descriptor: 'font-weight: 400 700;',
-  },
+  // Remove static font preloads as Next.js handles this automatically
+  // with hashed filenames that change between builds
 ] as const;
 
 /**
@@ -77,15 +72,12 @@ export const fontStrategies = {
 
 /**
  * Generate font preload links for critical fonts
+ * Returns empty array as Next.js handles font preloading automatically
  */
 export function generateFontPreloads() {
-  return fontPreloads.map(font => ({
-    rel: 'preload',
-    href: font.href,
-    as: font.as,
-    type: font.type,
-    crossOrigin: font.crossOrigin,
-  }));
+  // Return empty array as Next.js handles font optimization automatically
+  // with proper preloading strategies for fonts with hashed filenames
+  return [];
 }
 
 /**

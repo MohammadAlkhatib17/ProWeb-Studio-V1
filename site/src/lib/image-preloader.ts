@@ -25,7 +25,7 @@ export function generateImagePreload({
     as: 'image',
     href: src,
     ...(sizes && { imageSizes: sizes }),
-    ...(priority && { fetchpriority: priority }),
+    ...(priority && { fetchPriority: priority }),
     ...(type && { type }),
   };
 }
@@ -111,7 +111,7 @@ export function useImagePreloader() {
     link.as = 'image';
     link.href = src;
     if (priority === 'high') {
-      link.setAttribute('fetchpriority', 'high');
+      link.setAttribute('fetchpriority', 'high'); // Note: DOM attribute remains lowercase
     }
     
     document.head.appendChild(link);

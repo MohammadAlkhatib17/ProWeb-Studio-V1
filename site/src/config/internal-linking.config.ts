@@ -185,13 +185,13 @@ export const footerLinkGroups: LinkGroup[] = [
     ]
   },
   {
-    title: 'Bedrijf',
+    title: 'Ontdek ProWeb',
     links: [
-      { title: 'Over ProWeb Studio', href: '/over-ons', priority: 'medium' },
-      { title: 'Onze Werkwijze', href: '/werkwijze', priority: 'medium' },
-      { title: 'Portfolio', href: '/portfolio', priority: 'medium' },
-      { title: 'Speeltuin', href: '/speeltuin', priority: 'low' },
-      { title: 'Contact', href: '/contact', priority: 'high' }
+      { title: 'Nederlandse Webdesign Experts', href: '/over-ons', priority: 'medium' },
+      { title: 'Website Ontwikkeling Proces', href: '/werkwijze', priority: 'medium' },
+      { title: 'Onze Webdesign Case Studies', href: '/portfolio', priority: 'medium' },
+      { title: '3D Website Innovaties', href: '/speeltuin', priority: 'low' },
+      { title: 'Website Project Starten', href: '/contact', priority: 'high' }
     ]
   },
   {

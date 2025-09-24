@@ -71,12 +71,12 @@ export default function Footer() {
             {/* Newsletter signup */}
             <div>
               <h4 className="font-semibold mb-4 text-cyan-300">
-                Digitale Innovatie in je Inbox
+                Digitale Magie Direct in je Inbox
               </h4>
               <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-                Blijf op de hoogte van de nieuwste trends in webontwikkeling,
-                3D-technologie en digitale transformatie. Exclusieve inzichten van
-                onze experts.
+                Wil je weten hoe de toekomst van het web eruitziet? Ontvang maandelijks 
+                onze nieuwste inzichten over webdesign, 3D-innovaties en digitale trends 
+                die jouw business vooruit helpen. Geen spam, alleen waardevolle kennis.
               </p>
               <form className="space-y-3" onSubmit={handleSubmit}>
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -112,7 +112,7 @@ export default function Footer() {
                 )}
                 {status === 'idle' && (
                   <p className="text-xs text-gray-500">
-                    Geen spam, alleen waardevolle content. Uitschrijven kan altijd.
+                    We respecteren je inbox. Uitschrijven doe je met één klik.
                   </p>
                 )}
               </form>
@@ -179,9 +179,9 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/70">
-          <span>&copy; {new Date().getFullYear()} {siteConfig.name}. Alle rechten voorbehouden.</span>
+          <span>&copy; {new Date().getFullYear()} {siteConfig.name}. Met trots gemaakt in Nederland.</span>
           <span aria-hidden>•</span>
-          <span>Gemaakt met ❤️ in Nederland</span>
+          <span>Gebouwd met passie voor de digitale toekomst ❤️</span>
         </div>
       </div>
     </footer>

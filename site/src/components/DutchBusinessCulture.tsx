@@ -1,8 +1,7 @@
 import { siteConfig } from '@/config/site.config';
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/Button';
-import { fadeInUp, staggerContainer, staggerItem, defaultViewport } from '@/lib/motion';
+import { fadeInUp, staggerContainer, defaultViewport } from '@/lib/motion';
 
 // Component that showcases Dutch business culture integration and terminology
 export default function DutchBusinessCulture() {

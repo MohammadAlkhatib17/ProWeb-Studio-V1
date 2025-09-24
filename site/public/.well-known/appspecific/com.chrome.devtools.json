@@ -1,0 +1,10 @@
+{
+  "name": "ProWeb Studio Development Tools",
+  "version": "1.0.0",
+  "description": "Chrome DevTools configuration for ProWeb Studio",
+  "author": "ProWeb Studio",
+  "permissions": [],
+  "chrome_url_overrides": {},
+  "content_scripts": [],
+  "web_accessible_resources": []
+}

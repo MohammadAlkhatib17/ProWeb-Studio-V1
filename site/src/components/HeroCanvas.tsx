@@ -54,7 +54,8 @@ export default function HeroCanvas({ children, className }: Props) {
       >
         <Suspense fallback={null}>
           {children}
-          <Preload all />
+          {/* Preload only critical scene assets to reduce preload warnings */}
+          <Preload />
         </Suspense>
       </Canvas>
     </div>

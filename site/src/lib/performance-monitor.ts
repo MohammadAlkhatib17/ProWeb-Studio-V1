@@ -285,7 +285,7 @@ export class WebVitalsMonitor {
   private checkImagePriority(src: string): boolean {
     // Check if image has priority attribute (simplified check)
     const images = document.querySelectorAll('img[src*="' + src.split('/').pop() + '"]');
-    return Array.from(images).some(img => img.hasAttribute('fetchpriority') || (img as any).priority);
+    return Array.from(images).some(img => img.hasAttribute('fetchpriority') || (img as any).fetchPriority || (img as any).priority);
   }
   
   private recordMetric(metric: WebVitalsMetric) {

@@ -1,5 +1,4 @@
 import { siteConfig } from '@/config/site.config';
-import { useState } from 'react';
 import { Button } from '@/components/Button';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 

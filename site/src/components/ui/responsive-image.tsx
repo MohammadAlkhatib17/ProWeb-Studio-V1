@@ -71,8 +71,8 @@ export function ResponsiveImage({
       !props.fill && 'h-auto w-full max-w-full',
       className
     ),
-    // Add fetchpriority for LCP elements in supporting browsers
-    ...(isLCP && { fetchpriority: 'high' as const }),
+    // Add fetchPriority for LCP elements in supporting browsers
+    ...(isLCP && { fetchPriority: 'high' as const }),
     ...props,
   };
 
