@@ -237,8 +237,8 @@ export default function HomePage() {
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-cyan-100 mb-12 max-w-4xl mx-auto motion-safe:animate-slide-up">
             In het digitale tijdperk is uw website meer dan een visitekaartje — het is uw universum. Daarom transformeren wij uw idee tot een razendsnelle, interactieve
-            ervaring die uw merk tot leven brengt. Van <Link href="/diensten" className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2">corporate websites en webshops</Link> tot meeslepende <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2">3D-websites</Link> — wij architectureren digitale 
-            ervaringen die uw bezoekers boeien en uw bedrijf laten groeien. Ontdek onze <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-200 underline underline-offset-2">bewezen aanpak voor website ontwikkeling</Link>.
+            ervaring die uw merk tot leven brengt. Van corporate websites en webshops tot meeslepende 3D-ervaringen — wij architectureren digitale 
+            platforms die uw bezoekers boeien en uw bedrijf laten groeien. Met onze bewezen ontwikkelmethodiek realiseren we websites die niet alleen mooi zijn, maar ook daadwerkelijk presteren.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -258,9 +258,45 @@ export default function HomePage() {
             </Button>
           </div>
 
-          <p className="mt-12 text-slate-400 text-sm motion-safe:animate-fade-in-delayed">
-            Vertrouwd door ondernemers, MKB en scale-ups die digitale vooruitgang omarmen.
-          </p>
+          {/* Limited Time Promotional Banner */}
+          <div className="mt-8 motion-safe:animate-fade-in-delayed">
+            <div className="relative mx-auto max-w-md">
+              {/* Animated glow effect */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-magenta-500 to-cyan-500 rounded-lg blur opacity-75 animate-pulse"></div>
+              
+              {/* Main promotional banner */}
+              <div className="relative bg-gradient-to-r from-cyan-500/20 to-magenta-500/20 backdrop-blur-sm border border-cyan-300/30 rounded-lg px-6 py-4 text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <span className="text-yellow-400 text-sm font-bold">🎉 BEPERKTE TIJD</span>
+                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-bounce">HOT</span>
+                </div>
+                
+                <div className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-magenta-300 mb-1">
+                  30% KORTING
+                </div>
+                
+                <p className="text-sm text-cyan-200 font-medium mb-2">
+                  Op alle website projecten
+                </p>
+                
+                <div className="flex items-center justify-center gap-2 text-xs text-slate-300">
+                  <span className="flex items-center gap-1">
+                    <svg className="w-3 h-3 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Geldig 6 maanden
+                  </span>
+                  <span className="text-slate-400">•</span>
+                  <span className="flex items-center gap-1">
+                    <svg className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                    </svg>
+                    Geen verborgen kosten
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -272,8 +308,7 @@ export default function HomePage() {
           </h2>
           <p className="text-slate-400 text-center mb-16 max-w-3xl mx-auto">
             Elke website die wij bouwen vertelt een verhaal van transformatie. We architectureren niet zomaar digitale platforms — we creëren groeimotoren
-            die uw ambities naar werkelijkheid transformeren. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">complete service portfolio</Link> en 
-            <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300 ml-1">gestructureerde ontwikkelingsproces</Link> die deze resultaten mogelijk maken.
+            die uw ambities naar werkelijkheid transformeren. Onze complete service portfolio en gestructureerde ontwikkelingsproces maken deze resultaten mogelijk.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-stretch">
             <CaseCard
