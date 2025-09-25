@@ -286,6 +286,16 @@ const nextConfig = {
     ];
   },
 
+  // Rewrites for API routing
+  async rewrites() {
+    return [
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap',
+      },
+    ];
+  },
+
   // Domain redirects - Fallback for ensuring www redirects to apex domain
   // Primary redirects should be configured at platform level (Vercel)
   async redirects() {
