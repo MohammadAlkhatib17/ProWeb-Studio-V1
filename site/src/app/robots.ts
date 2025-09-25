@@ -44,7 +44,6 @@ export default function robots(): MetadataRoute.Robots {
           '*.xml$',          // XML files except sitemap
           '/sw.js',          // Service worker
           '/offline.html',   // Offline page
-          '/overzicht/',     // Internal overview pages
           '/overzicht-site/', // Internal site overview
           '/.well-known/',   // Hidden directories
           '/manifest.json',  // PWA manifest
@@ -70,7 +69,6 @@ export default function robots(): MetadataRoute.Robots {
           '/_next/',
           '/api/',
           '/admin/',
-          '/overzicht/',
           '/overzicht-site/',
         ],
         // No crawl delay for Googlebot as it's well-behaved
@@ -92,7 +90,6 @@ export default function robots(): MetadataRoute.Robots {
           '/_next/',
           '/api/',
           '/admin/',
-          '/overzicht/',
           '/overzicht-site/',
         ],
         crawlDelay: 2, // Slightly more conservative for Bing

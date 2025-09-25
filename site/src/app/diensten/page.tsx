@@ -345,7 +345,7 @@ export default function Diensten() {
                 Plan Gratis Strategiesessie
               </Button>
               <Button
-                href="/overzicht"
+                href="/portfolio"
                 variant="secondary"
                 size="large"
               >

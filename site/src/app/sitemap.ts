@@ -57,6 +57,104 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFreq: 'weekly', // Portfolio gets updated with new projects
       lastModified: new Date(),
     },
+    // Service detail pages - High priority for SEO
+    {
+      path: '/diensten/website-laten-maken',
+      priority: 0.8, // High priority service page
+      changeFreq: 'weekly', // Service details may evolve
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/diensten/webshop-laten-maken',
+      priority: 0.8, // High priority service page
+      changeFreq: 'weekly', // Service details may evolve
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/diensten/seo-optimalisatie',
+      priority: 0.8, // High priority service page
+      changeFreq: 'weekly', // SEO knowledge evolves frequently
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/diensten/3d-website-ervaringen',
+      priority: 0.7, // Specialized service page
+      changeFreq: 'monthly', // 3D tech updates monthly
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/diensten/onderhoud-support',
+      priority: 0.7, // Support service page
+      changeFreq: 'monthly', // Support info updates monthly
+      lastModified: new Date('2025-09-24'),
+    },
+    // Location pages - Critical for local SEO
+    {
+      path: '/locaties',
+      priority: 0.8, // Location index: important for local SEO
+      changeFreq: 'monthly', // Location info updates monthly
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/amsterdam',
+      priority: 0.7, // Major city: high local SEO value
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/rotterdam',
+      priority: 0.7, // Major city: high local SEO value
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/utrecht',
+      priority: 0.7, // Major city: high local SEO value
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/den-haag',
+      priority: 0.7, // Major city: high local SEO value
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/eindhoven',
+      priority: 0.6, // Important regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/tilburg',
+      priority: 0.6, // Regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/groningen',
+      priority: 0.6, // Regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/almere',
+      priority: 0.6, // Growing city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/breda',
+      priority: 0.6, // Regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/nijmegen',
+      priority: 0.6, // Regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
     {
       path: '/werkwijze',
       priority: 0.8, // Process: important for understanding value prop
@@ -68,12 +166,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8, // About: important for trust and credibility
       changeFreq: 'monthly', // Team and company info updates monthly
       lastModified: new Date('2025-09-05'),
-    },
-    {
-      path: '/overzicht',
-      priority: 0.6, // Overview: moderate importance
-      changeFreq: 'monthly', // Site overview changes occasionally
-      lastModified: new Date('2025-09-01'),
     },
     {
       path: '/overzicht-site',
@@ -94,6 +186,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date('2025-08-01'),
     },
     // Note: /speeltuin is excluded as it's marked noindex in middleware
+    // Note: /overzicht has been permanently removed from the site
   ];
 
   return routes.map((route) => ({

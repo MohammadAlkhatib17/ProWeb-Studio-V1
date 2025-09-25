@@ -2,8 +2,8 @@ import Script from 'next/script';
 
 // Helper function to build absolute URLs safely
 const SITE_URL = (
-  process.env.SITE_URL ??
   process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.SITE_URL ??
   'https://prowebstudio.nl'
 ).replace(/\/+$/, '');
 

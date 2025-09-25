@@ -164,8 +164,10 @@ export default function DutchMarketFAQ() {
             href="/contact"
             variant="primary"
           >
-            Stel uw vraag
-            <ArrowRight className="ml-2 w-4 h-4" />
+            <span className="flex items-center gap-2">
+              Stel uw vraag
+              <ArrowRight className="w-4 h-4" />
+            </span>
           </Button>
         </div>
       </div>

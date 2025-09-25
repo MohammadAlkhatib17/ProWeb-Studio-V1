@@ -1,10 +1,10 @@
 export const siteConfig = {
-  name: process.env.SITE_NAME || 'ProWeb Studio',
+  name: process.env.NEXT_PUBLIC_SITE_NAME || process.env.SITE_NAME || 'ProWeb Studio',
   tagline: 'Digitale innovatie met kosmische impact',
   description:
     'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D‑websites die scoren in Google en converteren.',
-  url: (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, ''),
-  email: process.env.CONTACT_INBOX || 'contact@prowebstudio.nl',
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, ''),
+  email: process.env.NEXT_PUBLIC_CONTACT_INBOX || process.env.CONTACT_INBOX || 'contact@prowebstudio.nl',
   phone: '+31686412430',
   social: {
     linkedin: 'https://linkedin.com/company/proweb-studio',
@@ -28,7 +28,7 @@ export const siteConfig = {
       process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN || 'prowebstudio.nl',
   },
   contact: {
-    inbox: process.env.CONTACT_INBOX || 'contact@prowebstudio.nl',
+    inbox: process.env.NEXT_PUBLIC_CONTACT_INBOX || process.env.CONTACT_INBOX || 'contact@prowebstudio.nl',
   },
 };
 

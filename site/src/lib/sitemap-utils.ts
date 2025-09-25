@@ -13,7 +13,6 @@ export const ROUTE_TO_FILE_MAP: Record<string, string> = {
   '/over-ons': 'src/app/over-ons/page.tsx',
   '/privacy': 'src/app/privacy/page.tsx',
   '/voorwaarden': 'src/app/voorwaarden/page.tsx',
-  '/overzicht': 'src/app/overzicht/page.tsx',
 };
 
 /**

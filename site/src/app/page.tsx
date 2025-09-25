@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     },
   },
   other: {
-    'google-site-verification': process.env.GOOGLE_SITE_VERIFICATION || '',
+    'google-site-verification': process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || process.env.GOOGLE_SITE_VERIFICATION || '',
     'revisit-after': '3 days',
     'distribution': 'web',
     'rating': 'general',
@@ -126,9 +126,11 @@ export const metadata: Metadata = {
 };
 
 import dynamicImport from 'next/dynamic';
+import Link from 'next/link';
 import SEOSchema from '@/components/SEOSchema';
 import FAQSection from '@/components/sections/FAQSection';
 import DutchMarketFAQ from '@/components/DutchMarketFAQ';
+import { Button } from '@/components/Button';
 
 const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
   ssr: false,
@@ -139,8 +141,6 @@ const HeroScene = dynamicImport(() => import('@/three/HeroScene'), {
   ssr: false,
   loading: () => null,
 });
-import Link from 'next/link';
-import { Button } from '@/components/Button';
 
 // Dynamic import for 3D hexagonal prism scene with performance optimization
 const HexagonalPrism = dynamicImport(() => import('@/three/HexagonalPrism'), {

@@ -147,7 +147,7 @@ export default function PortfolioSchema() {
     name: siteConfig.name,
     description: 'Nederlandse web development studio gespecialiseerd in 3D websites, e-commerce platforms en mobiele applicaties',
     url: siteConfig.url,
-    logo: `${siteConfig.url}/logo-proweb-icon.svg`,
+    logo: `${siteConfig.url}/assets/logo/logo-proweb-icon.svg`,
     email: siteConfig.email,
     telephone: siteConfig.phone,
     address: {

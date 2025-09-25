@@ -54,7 +54,6 @@ const sitemapSections = [
     icon: '🎨',
     links: [
       { href: '/portfolio', title: 'Portfolio', description: 'Bekijk onze gerealiseerde webprojecten en case studies' },
-      { href: '/overzicht', title: 'Project Overzicht', description: 'Overzicht van onze diensten en werkwijze' },
       { href: '/speeltuin', title: '3D Technologie Speeltuin', description: 'Interactieve demonstraties van moderne webtechnologie' },
     ]
   },
@@ -242,7 +241,7 @@ export default function SitemapPage() {
               3D Showcases
             </Link>
             <Link 
-              href="/overzicht"
+              href="/portfolio"
               className="p-4 border-2 border-gray-600 text-gray-100 rounded-lg hover:bg-white/10 transition-all duration-300"
             >
               Portfolio

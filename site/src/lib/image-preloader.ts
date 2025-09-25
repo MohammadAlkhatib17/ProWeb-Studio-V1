@@ -58,7 +58,7 @@ export const CRITICAL_IMAGES = {
   contactBeacon: '/assets/glowing_beacon_contact.avif',
   
   // Logo and branding
-  logoIcon: '/logo-proweb-icon.svg',
+  logoIcon: '/assets/logo/logo-proweb-icon.svg',
   
   // Team/About images
   teamCoreStar: '/assets/team_core_star.webp',

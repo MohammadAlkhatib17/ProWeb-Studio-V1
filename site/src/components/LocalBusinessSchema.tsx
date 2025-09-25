@@ -3,9 +3,9 @@ import { siteConfig } from '@/config/site.config';
 
 // Helper function to build absolute URLs safely
 const SITE_URL = (
-  process.env.SITE_URL ??
   process.env.NEXT_PUBLIC_SITE_URL ??
-  'https://prowebstudio.nl' // fallback only for build-time
+  process.env.SITE_URL ??
+  'https://prowebstudio.nl'
 ).replace(/\/+$/, '');
 
 function abs(path: string): string {
@@ -89,7 +89,7 @@ export default function LocalBusinessSchema({
       abs('/assets/logo/logo-proweb-icon.svg'),
     ],
     telephone: siteConfig.phone,
-    email: process.env.CONTACT_INBOX || siteConfig.email,
+    email: process.env.NEXT_PUBLIC_CONTACT_INBOX || process.env.CONTACT_INBOX || siteConfig.email,
     foundingDate: '2024',
     founder: {
       '@type': 'Person',
