@@ -20,10 +20,10 @@ interface SitemapEntry {
   priority: number;
 }
 
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+import { getSiteUrl } from '@/lib/siteUrl';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = SITE_URL; // Already normalized
+  const baseUrl = getSiteUrl();
 
   // Define routes with their respective priorities and change frequencies
   // Enhanced with more specific lastModified dates and better priority distribution
@@ -209,10 +209,10 @@ export async function generateDynamicSitemapEntries(): Promise<SitemapEntry[]> {
 
   // Example of how to add blog posts
   /*
-  const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+  const base = getSiteUrl();
   blogPosts.forEach((post) => {
     dynamicEntries.push({
-      url: `${SITE_URL}/blog/${post.slug}`,
+      url: `${base}/blog/${post.slug}`,
       lastModified: new Date(post.updatedAt),
       changeFrequency: 'monthly',
       priority: 0.6,
@@ -222,10 +222,10 @@ export async function generateDynamicSitemapEntries(): Promise<SitemapEntry[]> {
 
   // Example of how to add portfolio/case study items
   /*
-  const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+  const base = getSiteUrl();
   portfolioItems.forEach((item) => {
     dynamicEntries.push({
-      url: `${SITE_URL}/portfolio/${item.slug}`,
+      url: `${base}/portfolio/${item.slug}`,
       lastModified: new Date(item.updatedAt),
       changeFrequency: 'yearly',
       priority: 0.5,

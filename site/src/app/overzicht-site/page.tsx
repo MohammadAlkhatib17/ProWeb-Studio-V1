@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SEOSchema from '@/components/SEOSchema';
 import Breadcrumbs from '@/components/Breadcrumbs';
-
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+import { getSiteUrl } from '@/lib/siteUrl';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
@@ -13,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Site Overzicht – Alle pagina&apos;s van ProWeb Studio | Website navigatie',
   description: 'Volledig overzicht van ProWeb Studio. Vind gemakkelijk alle pagina&apos;s, diensten, portfolio en contactinformatie voor professionele webdevelopment in Nederland.',
   alternates: {
-    canonical: '/overzicht-site',
+    canonical: `${getSiteUrl()}/overzicht-site`,
     languages: { 
       'nl-NL': '/overzicht-site',
       'x-default': '/overzicht-site'
@@ -22,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Site Overzicht – ProWeb Studio',
     description: 'Volledig overzicht van ProWeb Studio. Vind gemakkelijk alle pagina\'s, diensten, portfolio en contactinformatie.',
-    url: `${SITE_URL}/overzicht-site`,
+    url: `${getSiteUrl()}/overzicht-site`,
     type: 'website',
     locale: 'nl_NL',
   },

@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import { BackgroundImage } from '@/components/ui/responsive-image';
 import SecureContactForm from '@/components/SecureContactForm';
 import SEOSchema from '@/components/SEOSchema';
-
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+import { getSiteUrl } from '@/lib/siteUrl';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
@@ -14,7 +12,7 @@ export const metadata: Metadata = {
   description:
     'Start uw website project vandaag. Gratis adviesgesprek over website laten maken, webshop bouwen of webdesign. Reactie binnen 1 werkdag. Video of op locatie in Nederland.',
   alternates: {
-    canonical: '/contact',
+    canonical: `${getSiteUrl()}/contact`,
     languages: { 
       'nl-NL': '/contact',
       'x-default': '/contact'
@@ -24,7 +22,7 @@ export const metadata: Metadata = {
     title: 'Contact ProWeb Studio | Website laten maken afspraak | Nederland',
     description:
       'Start uw website project vandaag. Gratis adviesgesprek over website laten maken, webshop bouwen of webdesign. Reactie binnen 1 werkdag. Video of op locatie in Nederland.',
-    url: `${SITE_URL}/contact`,
+    url: `${getSiteUrl()}/contact`,
     type: 'website',
     locale: 'nl_NL',
   },

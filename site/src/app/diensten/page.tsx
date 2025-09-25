@@ -16,16 +16,14 @@ import FAQSection from '@/components/sections/FAQSection';
 import DutchMarketFAQ from '@/components/DutchMarketFAQ';
 import RelatedServices from '@/components/RelatedServices';
 import ContentSuggestions from '@/components/ContentSuggestions';
-
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+import { getSiteUrl } from '@/lib/siteUrl';
 
 export const metadata: Metadata = {
   title: 'Website laten maken & Webshop bouwen | Nederlandse webdesign diensten – ProWeb Studio',
   description:
     'Professionele website laten maken of webshop bouwen voor Nederlandse bedrijven. Responsive webdesign, SEO-optimalisatie, iDEAL integratie. Betrouwbare partner voor uw digitale groei.',
   alternates: {
-    canonical: '/diensten',
+    canonical: `${getSiteUrl()}/diensten`,
     languages: { 
       'nl-NL': '/diensten',
       'x-default': '/diensten'
@@ -35,7 +33,7 @@ export const metadata: Metadata = {
     title: 'Website laten maken & Webshop bouwen | Nederlandse webdesign diensten – ProWeb Studio',
     description:
       'Maatwerk webdesign & development met 3D-ervaringen, technische SEO, Core Web Vitals en headless CMS. Gericht op groei en resultaat.',
-    url: `${SITE_URL}/diensten`,
+    url: `${getSiteUrl()}/diensten`,
     type: 'website',
     locale: 'nl_NL',
   },
@@ -88,22 +86,23 @@ const services = [
 ];
 
 export default function Diensten() {
+  const base = getSiteUrl();
   // Generate JSON-LD schema for services
   const servicesSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    '@id': `${SITE_URL}/diensten#services`,
+    '@id': `${base}/diensten#services`,
     inLanguage: 'nl-NL',
     itemListElement: services.map((service, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       item: {
         '@type': 'Service',
-        '@id': `${SITE_URL}/diensten#service-${index + 1}`,
+        '@id': `${base}/diensten#service-${index + 1}`,
         name: service.title,
         description: service.description,
         provider: {
-          '@id': `${SITE_URL}#organization`,
+          '@id': `${base}#organization`,
         },
         areaServed: {
           '@type': 'Place',
@@ -116,7 +115,7 @@ export default function Diensten() {
         serviceType: service.features.join(', '),
         inLanguage: 'nl-NL',
         hasFAQ: {
-          '@id': `${SITE_URL}/diensten#faq`,
+          '@id': `${base}/diensten#faq`,
         },
       },
     })),

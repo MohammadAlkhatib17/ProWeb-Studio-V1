@@ -4,7 +4,7 @@ import { siteConfig } from '@/config/site.config';
 import SEOSchema from '@/components/SEOSchema';
 
 // Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+import { getSiteUrl } from '@/lib/siteUrl';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description:
     'Lees hoe wij met persoonsgegevens omgaan: welke data we verzamelen, waarom, bewaartermijnen en uw rechten.',
   alternates: { 
-    canonical: '/privacy',
+    canonical: `${getSiteUrl()}/privacy`,
     languages: { 
       'nl-NL': '/privacy',
       'x-default': '/privacy'
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: 'Privacybeleid – ProWeb Studio',
     description:
       'Lees hoe wij met persoonsgegevens omgaan: welke data we verzamelen, waarom, bewaartermijnen en uw rechten.',
-    url: `${SITE_URL}/privacy`,
+    url: `${getSiteUrl()}/privacy`,
     type: 'website',
     locale: 'nl_NL',
   },
