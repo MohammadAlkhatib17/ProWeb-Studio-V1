@@ -1,9 +1,15 @@
 'use client';
 // src/three/CrystalLogo.tsx
-import { MeshTransmissionMaterial } from '@react-three/drei';
-import * as THREE from 'three';
-import { useMemo, useRef } from 'react';
+import { IcosahedronGeometry, Mesh } from 'three';
+import { useMemo, useRef, lazy, Suspense } from 'react';
 import { useFrame } from '@react-three/fiber';
+
+// Dynamically import the heavy transmission material
+const TransmissionMaterial = lazy(() => 
+  import('@/three/materials/TransmissionMaterial').then(module => ({
+    default: module.TransmissionMaterial
+  }))
+);
 
 type CrystalProps = {
   tint?: string;
@@ -18,8 +24,8 @@ export function CrystalLogo({
   thickness = 0.6,
   rotationSpeed = 0.25,
 }: CrystalProps) {
-  const ref = useRef<THREE.Mesh>(null!);
-  const geom = useMemo(() => new THREE.IcosahedronGeometry(1.1, 1), []);
+  const ref = useRef<Mesh>(null!);
+  const geom = useMemo(() => new IcosahedronGeometry(1.1, 1), []);
 
   useFrame((_, delta) => {
     if (!ref.current) return;
@@ -29,21 +35,19 @@ export function CrystalLogo({
 
   return (
     <mesh ref={ref} geometry={geom} position={[0, 0, 0.2]}>
-      <MeshTransmissionMaterial
-        backside
-        samples={8}
-        transmission={1}
-        roughness={roughness}
-        thickness={thickness}
-        chromaticAberration={0.02}
-        anisotropy={0.2}
-        distortion={0.08}
-        distortionScale={0.4}
-        temporalDistortion={0.2}
-        ior={1.3}
-        attenuationDistance={1.2}
-        attenuationColor={tint}
-      />
+      <Suspense fallback={<meshStandardMaterial color={tint} />}>
+        <TransmissionMaterial
+          backside
+          samples={8}
+          transmission={1}
+          roughness={roughness}
+          thickness={thickness}
+          chromaticAberration={0.02}
+          anisotropy={0.2}
+          distortion={0.08}
+          color={tint}
+        />
+      </Suspense>
     </mesh>
   );
 }

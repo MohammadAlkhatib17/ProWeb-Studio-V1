@@ -1,5 +1,13 @@
 'use client';
-import * as THREE from 'three';
+import { 
+  Points, 
+  BufferGeometry, 
+  BufferAttribute, 
+  Mesh,
+  MeshBasicMaterial,
+  AdditiveBlending,
+  DoubleSide
+} from 'three';
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import ParallaxRig from '@/three/ParallaxRig';
@@ -16,7 +24,7 @@ function LightParticles({
   count?: number;
   reduced?: boolean;
 }) {
-  const particles = useRef<THREE.Points>(null!);
+  const particles = useRef<Points>(null!);
 
   const { positions, scales } = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -39,9 +47,9 @@ function LightParticles({
   }, [count]);
 
   const geometry = useMemo(() => {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
+    const geo = new BufferGeometry();
+    geo.setAttribute('position', new BufferAttribute(positions, 3));
+    geo.setAttribute('scale', new BufferAttribute(scales, 1));
     return geo;
   }, [positions, scales]);
 
@@ -75,7 +83,7 @@ function LightParticles({
         transparent
         opacity={0.6}
         sizeAttenuation
-        blending={THREE.AdditiveBlending}
+        blending={AdditiveBlending}
         depthWrite={false}
       />
     </points>
@@ -84,13 +92,13 @@ function LightParticles({
 
 // Enhanced volumetric light
 function VolumetricLight() {
-  const light = useRef<THREE.Mesh>(null!);
+  const light = useRef<Mesh>(null!);
 
   useFrame((state) => {
     if (!light.current) return;
     const time = state.clock.elapsedTime;
     light.current.rotation.z = time * 0.3;
-    const material = light.current.material as THREE.MeshBasicMaterial;
+    const material = light.current.material as MeshBasicMaterial;
     material.opacity = 0.1 + Math.sin(time) * 0.05;
   });
 
@@ -101,9 +109,9 @@ function VolumetricLight() {
         color="#00d9ff"
         transparent
         opacity={0.1}
-        side={THREE.DoubleSide}
+        side={DoubleSide}
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={AdditiveBlending}
       />
     </mesh>
   );

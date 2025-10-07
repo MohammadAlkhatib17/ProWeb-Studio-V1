@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { siteConfig } from '@/config/site.config';
 import { Button } from '@/components/Button';
+import { NonceScript } from '@/lib/nonce';
 
 // Regional targeting component for major Dutch cities and regions
 export default function DutchRegionalTargeting() {
@@ -305,40 +306,37 @@ export default function DutchRegionalTargeting() {
       </div>
 
       {/* Structured Data for Regional Coverage */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Service',
-            '@id': `${siteConfig.url}/regional-coverage`,
-            name: 'Website laten maken door heel Nederland',
-            description: 'Professionele website ontwikkeling voor bedrijven door heel Nederland. Van Amsterdam tot Groningen, lokale kennis met landelijke kwaliteit.',
-            provider: {
-              '@type': 'Organization',
-              '@id': `${siteConfig.url}#organization`,
-              name: siteConfig.name,
-              url: siteConfig.url,
-            },
-            areaServed: regions.map(region => ({
-              '@type': 'City',
-              name: region.name,
-              addressRegion: region.province,
-              addressCountry: 'NL'
-            })),
-            serviceArea: [
-              {
-                '@type': 'Country',
-                name: 'Netherlands',
-                '@id': 'https://en.wikipedia.org/wiki/Netherlands'
-              }
-            ],
-            inLanguage: 'nl-NL',
-            serviceType: 'Website ontwikkeling en webdesign',
-            keywords: regions.flatMap(region => region.keywords).join(', ')
-          }),
-        }}
-      />
+      <NonceScript>
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          '@id': `${siteConfig.url}/regional-coverage`,
+          name: 'Website laten maken door heel Nederland',
+          description: 'Professionele website ontwikkeling voor bedrijven door heel Nederland. Van Amsterdam tot Groningen, lokale kennis met landelijke kwaliteit.',
+          provider: {
+            '@type': 'Organization',
+            '@id': `${siteConfig.url}#organization`,
+            name: siteConfig.name,
+            url: siteConfig.url,
+          },
+          areaServed: regions.map(region => ({
+            '@type': 'City',
+            name: region.name,
+            addressRegion: region.province,
+            addressCountry: 'NL'
+          })),
+          serviceArea: [
+            {
+              '@type': 'Country',
+              name: 'Netherlands',
+              '@id': 'https://en.wikipedia.org/wiki/Netherlands'
+            }
+          ],
+          inLanguage: 'nl-NL',
+          serviceType: 'Website ontwikkeling en webdesign',
+          keywords: regions.flatMap(region => region.keywords).join(', ')
+        })}
+      </NonceScript>
     </section>
   );
 }

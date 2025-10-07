@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import { BackgroundImage } from '@/components/ui/responsive-image';
-import SecureContactForm from '@/components/SecureContactForm';
+import ServerContactForm from '@/components/ServerContactForm';
 import SEOSchema from '@/components/SEOSchema';
+import { NonceScript } from '@/lib/nonce';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
-export const dynamic = 'force-static';
-export const revalidate = 60 * 60 * 24;
+export const dynamic = 'force-dynamic'; // Allow server-side processing for forms
+export const revalidate = false;
 
 export const metadata: Metadata = {
   title: 'Contact ProWeb Studio | Website laten maken afspraak | Nederland',
@@ -30,7 +30,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactPage() {
+interface ContactPageProps {
+  searchParams: { success?: string; error?: string };
+}
+
+export default function ContactPage({ searchParams }: ContactPageProps) {
   return (
     <main className="content-safe-top pt-20 md:pt-24 relative overflow-hidden">
       <SEOSchema
@@ -38,15 +42,17 @@ export default function ContactPage() {
         pageTitle={metadata.title as string}
         pageDescription={metadata.description as string}
       />
-      {/* Full-bleed background to avoid top seam */}
-      <BackgroundImage
-        src="/assets/glowing_beacon_contact.avif"
-        alt=""
-        priority={true}
-        quality={85}
-        className="opacity-30 pointer-events-none -z-10"
+      {/* Pure CSS background image to avoid client JS */}
+      <div 
+        className="fixed inset-0 opacity-30 pointer-events-none -z-10"
+        style={{
+          backgroundImage: "url('/assets/glowing_beacon_contact.avif')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
       />
-      <SecureContactForm />
+      <ServerContactForm searchParams={searchParams} />
       <section
         id="seo-content"
         className="prose prose-invert max-w-none px-6 md:px-8 lg:px-12 py-12 md:py-16"
@@ -87,38 +93,35 @@ export default function ContactPage() {
         </p>
       </section>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: [
-              {
-                '@type': 'Question',
-                name: 'Hoe snel reageren jullie?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Binnen één werkdag.',
-                },
+      <NonceScript>
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: [
+            {
+              '@type': 'Question',
+              name: 'Hoe snel reageren jullie?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Binnen één werkdag.',
               },
-              {
-                '@type': 'Question',
-                name: 'Kunnen we NDA tekenen?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Ja, op verzoek.' },
+            },
+            {
+              '@type': 'Question',
+              name: 'Kunnen we NDA tekenen?',
+              acceptedAnswer: { '@type': 'Answer', text: 'Ja, op verzoek.' },
+            },
+            {
+              '@type': 'Question',
+              name: 'Werken jullie remote of op locatie?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Beide opties zijn mogelijk.',
               },
-              {
-                '@type': 'Question',
-                name: 'Werken jullie remote of op locatie?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Beide opties zijn mogelijk.',
-                },
-              },
-            ],
-          }),
-        }}
-      />
+            },
+          ],
+        })}
+      </NonceScript>
     </main>
   );
 }

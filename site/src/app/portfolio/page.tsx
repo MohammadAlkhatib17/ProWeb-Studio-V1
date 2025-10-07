@@ -53,7 +53,11 @@ export const metadata: Metadata = {
     images: ['/assets/og/portfolio-og.jpg']
   },
   alternates: {
-    canonical: `${siteConfig.url}/portfolio`
+    canonical: `${siteConfig.url}/portfolio`,
+    languages: { 
+      'nl-NL': `${siteConfig.url}/portfolio`,
+      'x-default': `${siteConfig.url}/portfolio`
+    },
   }
 };
 

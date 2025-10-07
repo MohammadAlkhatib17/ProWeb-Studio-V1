@@ -1,0 +1,43 @@
+{
+  "pipeline": {
+    "version": "1.0.0",
+    "completedAt": "2025-10-07T21:46:30.392Z",
+    "duration": "0.07s",
+    "status": "success"
+  },
+  "summary": {
+    "filesProcessed": 0,
+    "originalSize": "0 Bytes",
+    "optimizedSize": "0 Bytes",
+    "totalReduction": "0.0%",
+    "compressionRatio": "NaN:1",
+    "targetAchieved": false
+  },
+  "geometry": {
+    "exported": 0,
+    "totalSize": "0 Bytes",
+    "formats": [
+      "glb"
+    ]
+  },
+  "gltf": {
+    "optimized": 0,
+    "meshoptEnabled": true,
+    "dracoEnabled": false,
+    "averageReduction": "0%"
+  },
+  "textures": {
+    "converted": 0,
+    "ktx2Enabled": true,
+    "formats": []
+  },
+  "output": {
+    "directory": "./public/assets/optimized",
+    "structure": {
+      "models": "public/assets/optimized/models",
+      "textures": "public/assets/optimized/textures",
+      "manifests": "public/assets/optimized/manifests",
+      "assetManifest": "public/assets/optimized/asset-manifest.json"
+    }
+  }
+}

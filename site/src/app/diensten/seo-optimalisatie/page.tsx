@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
-import Link from 'next/link';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Button } from '@/components/Button';
 import SEOSchema from '@/components/SEOSchema';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import FAQSection from '@/components/sections/FAQSection';
+import RelatedServices from '@/components/RelatedServices';
+import RelatedLocations from '@/components/RelatedLocations';
 
 export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - service content is fairly stable
@@ -506,50 +507,24 @@ export default function SEOOptimalisatie() {
       {/* Related Services */}
       <ErrorBoundary>
         <Suspense fallback={<div className="h-64 bg-cosmic-900/30" />}>
-          <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 bg-cosmic-900/30">
-            <div className="max-w-7xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-12 text-center">
-                Gerelateerde{' '}
-                <span className="gradient-text-primary">
-                  Diensten
-                </span>
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {[
-                  {
-                    title: 'Website Laten Maken',
-                    description: 'SEO-geoptimaliseerde websites vanaf de basis',
-                    href: '/diensten/website-laten-maken',
-                    icon: '🌐'
-                  },
-                  {
-                    title: 'Webshop Laten Maken',
-                    description: 'E-commerce SEO voor maximale zichtbaarheid',
-                    href: '/diensten/webshop-laten-maken',
-                    icon: '🛒'
-                  },
-                  {
-                    title: 'Onderhoud & Support',
-                    description: 'Continue SEO monitoring en optimalisatie',
-                    href: '/diensten/onderhoud-support',
-                    icon: '🔧'
-                  }
-                ].map((service, index) => (
-                  <Link
-                    key={index}
-                    href={service.href}
-                    className="group bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6 hover:border-primary-500/50 transition-all duration-300 hover:scale-105"
-                  >
-                    <div className="text-3xl mb-4">{service.icon}</div>
-                    <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">
-                      {service.title}
-                    </h3>
-                    <p className="text-slate-400 text-sm">{service.description}</p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
+          <RelatedServices 
+            currentService="/diensten/seo-optimalisatie"
+            maxItems={5}
+            className="bg-cosmic-900/30"
+          />
+        </Suspense>
+      </ErrorBoundary>
+
+      {/* Related Locations */}
+      <ErrorBoundary>
+        <Suspense fallback={<div className="h-64 bg-cosmic-900/30" />}>
+          <RelatedLocations 
+            currentService="/diensten/seo-optimalisatie"
+            maxItems={6}
+            className="bg-cosmic-900/20"
+            title="SEO Optimalisatie in Deze Steden"
+            description="Lokale en nationale SEO diensten beschikbaar in grote Nederlandse steden"
+          />
         </Suspense>
       </ErrorBoundary>
     </main>

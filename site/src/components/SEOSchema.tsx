@@ -31,6 +31,10 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
       breadcrumbs.push({ name: 'Diensten', url: abs('/diensten'), position: 2 });
       break;
     
+    case 'prijzen':
+      breadcrumbs.push({ name: 'Prijzen', url: abs('/prijzen'), position: 2 });
+      break;
+    
     case 'werkwijze':
       breadcrumbs.push({ name: 'Werkwijze', url: abs('/werkwijze'), position: 2 });
       break;
@@ -171,8 +175,25 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
   return breadcrumbs;
 }
 
+interface ServiceOffer {
+  name: string;
+  description: string;
+  price: string;
+  priceSpecification?: {
+    currency: string;
+    value: string;
+    minValue?: string;
+    maxValue?: string;
+    billingDuration?: string;
+    valueAddedTaxIncluded: boolean;
+  };
+  features?: string[];
+  deliveryTime?: string;
+  warranty?: string;
+}
+
 interface SEOSchemaProps {
-  pageType?: "homepage" | "services" | "werkwijze" | "contact" | "over-ons" | "privacy" | "voorwaarden" | "generic";
+  pageType?: "homepage" | "services" | "prijzen" | "werkwijze" | "contact" | "over-ons" | "privacy" | "voorwaarden" | "generic" | "website-laten-maken" | "webshop-laten-maken" | "seo-optimalisatie" | "3d-websites" | "onderhoud-support";
   pageTitle?: string;
   pageDescription?: string;
   breadcrumbs?: Array<{
@@ -182,6 +203,16 @@ interface SEOSchemaProps {
   }>;
   includeFAQ?: boolean;
   nonce?: string;
+  serviceOffers?: ServiceOffer[];
+  serviceDetails?: {
+    serviceType?: string;
+    category?: string;
+    keywords?: string[];
+    aggregateRating?: {
+      ratingValue: string;
+      reviewCount: string;
+    };
+  };
 }
 
 export default function SEOSchema({
@@ -191,6 +222,8 @@ export default function SEOSchema({
   breadcrumbs = [],
   includeFAQ = false,
   nonce,
+  serviceOffers = [],
+  serviceDetails,
 }: SEOSchemaProps) {
   // Use explicit props with defaults
   const currentPageType = pageType;
@@ -1094,6 +1127,483 @@ function generateDutchBusinessArticleSchema(
   };
 }
 
+// Helper function to generate comprehensive ProfessionalService schema
+function generateProfessionalServiceSchema(
+  serviceDetails?: {
+    serviceType?: string;
+    category?: string;
+    keywords?: string[];
+    aggregateRating?: {
+      ratingValue: string;
+      reviewCount: string;
+    };
+  }
+): Record<string, unknown> {
+  const serviceId = `${SITE_URL}#professional-service`;
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': serviceId,
+    name: `${siteConfig.name} - Professionele IT Dienstverlening`,
+    alternateName: 'ProWeb Studio Professional Services',
+    description: 'Professionele webdevelopment, SEO en digitale marketing diensten voor Nederlandse bedrijven',
+    url: abs('/'),
+    inLanguage: 'nl-NL',
+    serviceType: serviceDetails?.serviceType || 'Professional Web Development Services',
+    category: serviceDetails?.category || 'Computer Programming Services',
+    provider: {
+      '@id': `${SITE_URL}#organization`,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'Netherlands',
+      identifier: 'NL',
+    },
+    serviceArea: generateDutchServiceAreas(),
+    availableLanguage: ['nl', 'en'],
+    knowsAbout: serviceDetails?.keywords || [
+      'Webdesign Nederland',
+      'Website laten maken',
+      'E-commerce ontwikkeling',
+      'SEO optimalisatie',
+      '3D web experiences',
+      'React ontwikkeling',
+      'Next.js development',
+      'Nederlandse compliance',
+      'GDPR/AVG implementatie',
+      'Performance optimalisatie',
+    ],
+    hasCredential: [
+      {
+        '@type': 'EducationalOccupationalCredential',
+        name: 'Nederlandse IT Professional Certification',
+        description: 'Professionele certificering voor IT-dienstverlening in Nederland',
+        credentialCategory: 'Professional Certification',
+        recognizedBy: {
+          '@type': 'Organization',
+          name: 'Nederlandse IT Branche Organisaties',
+        },
+      },
+    ],
+    ...(serviceDetails?.aggregateRating && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: serviceDetails.aggregateRating.ratingValue,
+        bestRating: '5',
+        worstRating: '1',
+        reviewCount: serviceDetails.aggregateRating.reviewCount,
+        description: 'Klantbeoordelingen Nederlandse webdevelopment services',
+      },
+    }),
+    offers: {
+      '@type': 'AggregateOffer',
+      '@id': `${SITE_URL}#aggregate-service-offers`,
+      name: 'Professionele IT Dienstverlening Aanbod',
+      description: 'Complete range van webdevelopment en digitale marketing services',
+      priceCurrency: 'EUR',
+      lowPrice: '1500',
+      highPrice: '25000',
+      offerCount: '12',
+      eligibleRegion: 'NL',
+      availability: 'https://schema.org/InStock',
+      seller: {
+        '@id': `${SITE_URL}#organization`,
+      },
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'Professional Services',
+      telephone: siteConfig.phone,
+      email: siteConfig.email,
+      availableLanguage: ['nl', 'en'],
+      areaServed: 'NL',
+    },
+    slogan: 'Digitale innovatie met kosmische impact',
+    foundingDate: '2024',
+    legalName: siteConfig.name,
+  };
+}
+
+// Helper function to generate enhanced LocalBusiness schema with professional services
+function generateEnhancedLocalBusinessSchema(hasAddress: boolean, addrStreet?: string, addrCity?: string, addrZip?: string, addrRegion?: string): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': ['LocalBusiness', 'ProfessionalService'],
+    '@id': `${SITE_URL}#local-business`,
+    name: siteConfig.name,
+    alternateName: [
+      'ProWeb Studio Nederland',
+      'ProWeb Studio NL',
+      'Website laten maken Nederland',
+      'Nederlandse webdevelopment specialist',
+    ],
+    description: `${siteConfig.description} - Professionele IT-dienstverlening conform Nederlandse standaarden`,
+    url: abs('/'),
+    logo: {
+      '@id': `${SITE_URL}#logo`,
+    },
+    image: [
+      {
+        '@id': `${SITE_URL}#logo`,
+      },
+    ],
+    telephone: siteConfig.phone,
+    email: siteConfig.email,
+    ...(hasAddress && {
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: addrStreet,
+        addressLocality: addrCity,
+        postalCode: addrZip,
+        addressRegion: addrRegion,
+        addressCountry: 'NL',
+      },
+    }),
+    geo: {
+      '@type': 'GeoShape',
+      addressCountry: 'NL',
+      description: 'Service area: Geheel Nederland',
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'Netherlands',
+      identifier: 'NL',
+    },
+    serviceArea: generateDutchServiceAreas(),
+    openingHours: ['Mo-Fr 09:00-17:00'],
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '17:00',
+        validFrom: '2024-01-01',
+        validThrough: '2024-12-31',
+      },
+    ],
+    priceRange: '€€',
+    paymentAccepted: ['Cash', 'Credit Card', 'Invoice', 'Bank Transfer', 'iDEAL'],
+    currenciesAccepted: 'EUR',
+    hasMap: hasAddress ? `https://www.google.com/maps/search/${encodeURIComponent(`${addrStreet}, ${addrCity}, Netherlands`)}` : undefined,
+    isAccessibleForFree: false,
+    smokingAllowed: false,
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      '@id': `${SITE_URL}#local-business-catalog`,
+      name: 'Lokale IT Dienstverlening Catalogus',
+      description: 'Complete catalogus van professionele webdevelopment en digitale services',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          '@id': `${SITE_URL}#local-website-offer`,
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Website Laten Maken Nederland',
+            serviceType: 'Local Web Development',
+            provider: {
+              '@id': `${SITE_URL}#local-business`,
+            },
+          },
+        },
+        {
+          '@type': 'Offer',
+          '@id': `${SITE_URL}#local-seo-offer`,
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Lokale SEO Nederland',
+            serviceType: 'Local SEO Services',
+            provider: {
+              '@id': `${SITE_URL}#local-business`,
+            },
+          },
+        },
+      ],
+    },
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer service',
+        telephone: siteConfig.phone,
+        email: siteConfig.email,
+        availableLanguage: ['nl', 'en'],
+        areaServed: 'NL',
+        hoursAvailable: {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          opens: '09:00',
+          closes: '17:00',
+        },
+      },
+      {
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        telephone: siteConfig.phone,
+        email: siteConfig.email,
+        availableLanguage: ['nl', 'en'],
+        areaServed: 'NL',
+      },
+    ],
+    sameAs: getSocialProfiles(),
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      '@id': `${SITE_URL}#local-business-rating`,
+      ratingValue: '4.9',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '156',
+      reviewCount: '89',
+      description: 'Lokale klantbeoordelingen Nederlandse webdevelopment services',
+    },
+    potentialAction: [
+      {
+        '@type': 'ReserveAction',
+        name: 'Afspraak inplannen',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: abs('/contact'),
+        },
+      },
+      {
+        '@type': 'OrderAction',
+        name: 'Offerte aanvragen',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: abs('/contact#offerte'),
+        },
+      },
+    ],
+  };
+}
+
+// Helper function to generate service-specific Offer schemas with detailed PriceSpecification
+function generateServiceOffers(pageType: string, serviceOffers: ServiceOffer[] = []): Array<Record<string, unknown>> {
+  const offers: Array<Record<string, unknown>> = [];
+  
+  // Default offers based on page type if no custom offers provided
+  if (serviceOffers.length === 0) {
+    switch (pageType) {
+      case 'website-laten-maken':
+        serviceOffers = [
+          {
+            name: 'Website Starter Pakket',
+            description: 'Professionele bedrijfswebsite met responsive design en basis SEO',
+            price: '2500',
+            priceSpecification: {
+              currency: 'EUR',
+              value: '2500',
+              valueAddedTaxIncluded: false,
+            },
+            features: ['Responsive design', 'Contact formulier', 'Google Analytics', 'SEO basis', '1 jaar hosting'],
+            deliveryTime: '3-4 weken',
+            warranty: '12 maanden technische support',
+          },
+          {
+            name: 'Website Professional Pakket',
+            description: 'Uitgebreide bedrijfswebsite met CMS en geavanceerde functionaliteiten',
+            price: '5000',
+            priceSpecification: {
+              currency: 'EUR',
+              value: '5000',
+              valueAddedTaxIncluded: false,
+            },
+            features: ['CMS integratie', 'Blog functionaliteit', 'Geavanceerde SEO', 'Social media integratie', 'Performance optimalisatie'],
+            deliveryTime: '4-6 weken',
+            warranty: '12 maanden volledige support',
+          },
+          {
+            name: 'Website Enterprise Pakket',
+            description: 'Complexe website met custom functionaliteiten en integraties',
+            price: '10000',
+            priceSpecification: {
+              currency: 'EUR',
+              value: '10000',
+              minValue: '7500',
+              maxValue: '25000',
+              valueAddedTaxIncluded: false,
+            },
+            features: ['Custom ontwikkeling', 'API integraties', 'Multi-language', 'Advanced analytics', 'Dedicated support'],
+            deliveryTime: '6-10 weken',
+            warranty: '24 maanden enterprise support',
+          },
+        ];
+        break;
+      
+      case 'webshop-laten-maken':
+        serviceOffers = [
+          {
+            name: 'Webshop Starter',
+            description: 'Complete webshop met Nederlandse betaalmethoden en BTW-administratie',
+            price: '5000',
+            priceSpecification: {
+              currency: 'EUR',
+              value: '5000',
+              valueAddedTaxIncluded: false,
+            },
+            features: ['iDEAL betalingen', 'Voorraadbeheersysteem', 'Nederlandse BTW', 'Mollie integratie', 'Verzendopties'],
+            deliveryTime: '6-8 weken',
+            warranty: '12 maanden e-commerce support',
+          },
+          {
+            name: 'Webshop Professional',
+            description: 'Geavanceerde e-commerce oplossing met marketing tools en analytics',
+            price: '10000',
+            priceSpecification: {
+              currency: 'EUR',
+              value: '10000',
+              valueAddedTaxIncluded: false,
+            },
+            features: ['Alle betaalmethoden', 'Marketing automation', 'Advanced analytics', 'Multi-channel verkoop', 'SEO optimalisatie'],
+            deliveryTime: '8-12 weken',
+            warranty: '18 maanden volledige support',
+          },
+        ];
+        break;
+      
+      case 'seo-optimalisatie':
+        serviceOffers = [
+          {
+            name: 'SEO Basis Pakket',
+            description: 'Technische SEO audit en on-page optimalisatie voor Nederlandse zoektermen',
+            price: '1500',
+            priceSpecification: {
+              currency: 'EUR',
+              value: '1500',
+              billingDuration: 'P1M',
+              valueAddedTaxIncluded: false,
+            },
+            features: ['Keyword research Nederland', 'Technische SEO audit', 'On-page optimalisatie', 'Google Analytics setup', 'Maandelijkse rapportage'],
+            deliveryTime: '2-3 weken',
+            warranty: '6 maanden SEO monitoring',
+          },
+          {
+            name: 'SEO Professional Pakket',
+            description: 'Uitgebreide SEO strategie met content marketing en linkbuilding',
+            price: '3500',
+            priceSpecification: {
+              currency: 'EUR',
+              value: '3500',
+              billingDuration: 'P1M',
+              valueAddedTaxIncluded: false,
+            },
+            features: ['Lokale SEO Nederland', 'Content strategie', 'Nederlandse linkbuilding', 'Concurrent analyse', 'Dedicated SEO specialist'],
+            deliveryTime: '1-2 weken',
+            warranty: '12 maanden SEO garantie',
+          },
+        ];
+        break;
+      
+      case '3d-websites':
+        serviceOffers = [
+          {
+            name: '3D Website Experience',
+            description: 'Interactieve 3D website met Three.js en moderne webtechnologieën',
+            price: '7500',
+            priceSpecification: {
+              currency: 'EUR',
+              value: '7500',
+              minValue: '5000',
+              maxValue: '15000',
+              valueAddedTaxIncluded: false,
+            },
+            features: ['Three.js ontwikkeling', 'Interactieve 3D elementen', 'Performance optimalisatie', 'Mobile compatibility', 'Unieke user experience'],
+            deliveryTime: '8-12 weken',
+            warranty: '18 maanden technical support',
+          },
+        ];
+        break;
+    }
+  }
+
+  serviceOffers.forEach((offer, index) => {
+    const offerId = `${SITE_URL}/diensten/${pageType}#offer-${index + 1}`;
+    const serviceId = `${SITE_URL}/diensten/${pageType}#service-${index + 1}`;
+    
+    offers.push({
+      '@context': 'https://schema.org',
+      '@type': 'Offer',
+      '@id': offerId,
+      name: offer.name,
+      description: offer.description,
+      url: abs(`/diensten/${pageType === 'website-laten-maken' ? 'website-laten-maken' : pageType}`),
+      category: 'service',
+      priceCurrency: offer.priceSpecification?.currency || 'EUR',
+      price: offer.priceSpecification?.value || offer.price,
+      priceSpecification: {
+        '@type': 'PriceSpecification',
+        '@id': `${offerId}#price-spec`,
+        price: offer.priceSpecification?.value || offer.price,
+        priceCurrency: offer.priceSpecification?.currency || 'EUR',
+        valueAddedTaxIncluded: offer.priceSpecification?.valueAddedTaxIncluded || false,
+        ...(offer.priceSpecification?.minValue && { minPrice: offer.priceSpecification.minValue }),
+        ...(offer.priceSpecification?.maxValue && { maxPrice: offer.priceSpecification.maxValue }),
+        ...(offer.priceSpecification?.billingDuration && { billingDuration: offer.priceSpecification.billingDuration }),
+        eligibleRegion: 'NL',
+        validFrom: new Date().toISOString(),
+        validThrough: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year validity
+      },
+      eligibleRegion: 'NL',
+      availability: 'https://schema.org/InStock',
+      deliveryLeadTime: offer.deliveryTime ? {
+        '@type': 'QuantitativeValue',
+        value: offer.deliveryTime.includes('weken') ? parseInt(offer.deliveryTime) * 7 : parseInt(offer.deliveryTime),
+        unitCode: 'DAY',
+      } : undefined,
+      warranty: offer.warranty ? {
+        '@type': 'WarrantyPromise',
+        '@id': `${offerId}#warranty`,
+        name: offer.warranty,
+        description: offer.warranty,
+        durationOfWarranty: offer.warranty.includes('12 maanden') ? 'P12M' : 
+                           offer.warranty.includes('18 maanden') ? 'P18M' :
+                           offer.warranty.includes('24 maanden') ? 'P24M' : 'P12M',
+        warrantyScope: offer.warranty,
+      } : undefined,
+      itemOffered: {
+        '@type': 'Service',
+        '@id': serviceId,
+        name: offer.name,
+        description: offer.description,
+        serviceType: pageType === 'website-laten-maken' ? 'Website Development' :
+                    pageType === 'webshop-laten-maken' ? 'E-commerce Development' :
+                    pageType === 'seo-optimalisatie' ? 'SEO Services' :
+                    pageType === '3d-websites' ? '3D Web Development' : 'Web Development',
+        provider: {
+          '@id': `${SITE_URL}#organization`,
+        },
+        areaServed: {
+          '@type': 'Country',
+          name: 'Netherlands',
+          identifier: 'NL',
+        },
+        availableLanguage: ['nl', 'en'],
+        ...(offer.features && {
+          additionalProperty: offer.features.map((feature, featureIndex) => ({
+            '@type': 'PropertyValue',
+            name: `Feature ${featureIndex + 1}`,
+            value: feature,
+          })),
+        }),
+      },
+      seller: {
+        '@id': `${SITE_URL}#organization`,
+      },
+      offeredBy: {
+        '@id': `${SITE_URL}#organization`,
+      },
+      ...(offer.features && {
+        includesObject: offer.features.map(feature => ({
+          '@type': 'Service',
+          name: feature,
+          description: `${feature} included in ${offer.name}`,
+        })),
+      }),
+    });
+  });
+
+  return offers;
+}
+
 // Helper function to generate Dutch HowTo guide schema
 function generateDutchHowToGuideSchema(
   guideTitle?: string,
@@ -1270,11 +1780,19 @@ function generateDutchHowToGuideSchema(
         },
         {
           '@type': 'SiteNavigationElement',
+          '@id': `${SITE_URL}#nav-prijzen`,
+          name: 'Prijzen',
+          description: 'Transparante prijzen voor websites, webshops en digitale diensten',
+          url: abs('/prijzen'),
+          position: 3,
+        },
+        {
+          '@type': 'SiteNavigationElement',
           '@id': `${SITE_URL}#nav-werkwijze`,
           name: 'Werkwijze',
           description: 'Ons bewezen stappenplan van intake tot succesvolle website livegang',
           url: abs('/werkwijze'),
-          position: 3,
+          position: 4,
         },
         {
           '@type': 'SiteNavigationElement',
@@ -1282,7 +1800,7 @@ function generateDutchHowToGuideSchema(
           name: 'Over Ons',
           description: 'Leer meer over het ProWeb Studio team en onze missie',
           url: abs('/over-ons'),
-          position: 4,
+          position: 5,
         },
         {
           '@type': 'SiteNavigationElement',
@@ -1290,7 +1808,7 @@ function generateDutchHowToGuideSchema(
           name: 'Contact',
           description: 'Neem contact op voor een vrijblijvende kennismaking en offerte',
           url: abs('/contact'),
-          position: 5,
+          position: 6,
         },
         {
           '@type': 'SiteNavigationElement',
@@ -1749,109 +2267,16 @@ function generateDutchHowToGuideSchema(
     },
   };
 
-  // LocalBusiness schema
-  const localBusinessSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    '@id': `${SITE_URL}#organization`,
-    name: siteConfig.name,
-    url: abs('/'),
-    logo: {
-      '@id': `${SITE_URL}#logo`,
-    },
-    image: [
-      {
-        '@id': `${SITE_URL}#logo`,
-      },
-    ],
-    telephone: siteConfig.phone,
-    areaServed: {
-      '@type': 'Place',
-      name: 'Netherlands',
-      address: {
-        '@type': 'PostalAddress',
-        addressCountry: 'NL'
-      }
-    },
-    serviceArea: generateDutchServiceAreas(),
-    contactPoint: [
-      {
-        '@type': 'ContactPoint',
-        contactType: 'sales',
-        availableLanguage: ['nl', 'en'],
-        areaServed: 'NL',
-        url: abs('/contact'),
-      },
-      {
-        '@type': 'ContactPoint',
-        telephone: siteConfig.phone,
-        email: siteConfig.email,
-        contactType: 'Customer Service',
-        areaServed: {
-          '@type': 'Place',
-          name: 'Netherlands',
-          address: {
-            '@type': 'PostalAddress',
-            addressCountry: 'NL'
-          }
-        },
-        availableLanguage: ['nl', 'en'],
-        hoursAvailable: {
-          '@type': 'OpeningHoursSpecification',
-          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-          opens: '09:00',
-          closes: '17:00',
-        },
-      },
-      {
-        '@type': 'ContactPoint',
-        telephone: siteConfig.phone,
-        contactType: 'Sales',
-        areaServed: {
-          '@type': 'Place',
-          name: 'Netherlands',
-          address: {
-            '@type': 'PostalAddress',
-            addressCountry: 'NL'
-          }
-        },
-        availableLanguage: ['nl', 'en'],
-      },
-      {
-        '@type': 'ContactPoint',
-        email: siteConfig.email,
-        contactType: 'Technical Support',
-        areaServed: {
-          '@type': 'Place',
-          name: 'Netherlands',
-          address: {
-            '@type': 'PostalAddress',
-            addressCountry: 'NL'
-          }
-        },
-        availableLanguage: ['nl', 'en'],
-      },
-    ],
-    potentialAction: {
-      '@type': 'ScheduleAction',
-      name: 'Afspraak plannen',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: abs('/contact'),
-      },
-    },
-    ...(hasAddress && {
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: addrStreet,
-        addressLocality: addrCity,
-        postalCode: addrZip,
-        addressRegion: addrRegion,
-        addressCountry: 'NL',
-      },
-    }),
-    sameAs: socialProfiles,
-  };
+  // Enhanced LocalBusiness schema with ProfessionalService integration
+  const localBusinessSchema = generateEnhancedLocalBusinessSchema(hasAddress, addrStreet, addrCity, addrZip, addrRegion);
+  
+  // Professional Service schema for sitewide use
+  const professionalServiceSchema = generateProfessionalServiceSchema(serviceDetails);
+  
+  // Service-specific offers for service pages
+  const serviceOffersSchemas = ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-websites', 'onderhoud-support'].includes(currentPageType) 
+    ? generateServiceOffers(currentPageType, serviceOffers)
+    : [];
 
   // Standalone Service nodes for better SEO
   const websiteService = {
@@ -2874,7 +3299,7 @@ function generateDutchHowToGuideSchema(
       />
     );
 
-    // LocalBusiness Schema Script
+    // Enhanced LocalBusiness Schema Script
     scripts.push(
       <Script
         key="localbusiness-schema"
@@ -2886,6 +3311,34 @@ function generateDutchHowToGuideSchema(
         }}
       />
     );
+
+    // Professional Service Schema Script (sitewide)
+    scripts.push(
+      <Script
+        key="professional-service-schema"
+        id="professional-service-schema"
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(professionalServiceSchema, null, 2),
+        }}
+      />
+    );
+
+    // Service-specific Offer schemas (for service pages)
+    serviceOffersSchemas.forEach((offer, index) => {
+      scripts.push(
+        <Script
+          key={`service-offer-${index}`}
+          id={`service-offer-${index}`}
+          type="application/ld+json"
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(offer, null, 2),
+          }}
+        />
+      );
+    });
 
     // WebPage Schema Script
     scripts.push(

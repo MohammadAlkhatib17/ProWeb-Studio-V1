@@ -252,6 +252,22 @@ const nextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
+      // Images - long cache with immutable for optimal performance
+      {
+        source: '/:path*\\.(jpg|jpeg|png|webp|avif|gif|svg|ico)$',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
+      // 3D Assets - long cache with immutable for GLB, GLTF, and texture files
+      {
+        source: '/:path*\\.(glb|gltf|ktx2|bin|hdr|exr)$',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
       // Security-sensitive files
       {
         source: '/.well-known/:path*',

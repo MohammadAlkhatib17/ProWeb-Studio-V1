@@ -1,4 +1,5 @@
 import { siteConfig } from '@/config/site.config';
+import { NonceScript } from '@/lib/nonce';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/Button';
 import { fadeInUp, staggerContainer, defaultViewport } from '@/lib/motion';
@@ -311,58 +312,55 @@ export default function DutchBusinessCulture() {
       </div>
 
       {/* Structured Data for Dutch Business Culture */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Article',
-            '@id': `${siteConfig.url}/dutch-business-culture`,
-            headline: 'Nederlandse bedrijfscultuur in webdesign',
-            description: 'Hoe Nederlandse waarden en bedrijfscultuur worden geïntegreerd in professionele website ontwikkeling',
-            author: {
-              '@type': 'Organization',
-              '@id': `${siteConfig.url}#organization`,
-              name: siteConfig.name,
-              url: siteConfig.url,
+      <NonceScript>
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          '@id': `${siteConfig.url}/dutch-business-culture`,
+          headline: 'Nederlandse bedrijfscultuur in webdesign',
+          description: 'Hoe Nederlandse waarden en bedrijfscultuur worden geïntegreerd in professionele website ontwikkeling',
+          author: {
+            '@type': 'Organization',
+            '@id': `${siteConfig.url}#organization`,
+            name: siteConfig.name,
+            url: siteConfig.url,
+          },
+          publisher: {
+            '@type': 'Organization',
+            '@id': `${siteConfig.url}#organization`,
+            name: siteConfig.name,
+            url: siteConfig.url,
+          },
+          inLanguage: 'nl-NL',
+          about: [
+            {
+              '@type': 'Thing',
+              name: 'Nederlandse bedrijfscultuur',
+              description: 'Waarden en principes die de Nederlandse zakelijke omgeving kenmerken'
             },
-            publisher: {
-              '@type': 'Organization',
-              '@id': `${siteConfig.url}#organization`,
-              name: siteConfig.name,
-              url: siteConfig.url,
+            {
+              '@type': 'Thing', 
+              name: 'No-nonsense aanpak',
+              description: 'Nederlandse directheid en transparantie in zakelijke communicatie'
             },
-            inLanguage: 'nl-NL',
-            about: [
-              {
-                '@type': 'Thing',
-                name: 'Nederlandse bedrijfscultuur',
-                description: 'Waarden en principes die de Nederlandse zakelijke omgeving kenmerken'
-              },
-              {
-                '@type': 'Thing', 
-                name: 'No-nonsense aanpak',
-                description: 'Nederlandse directheid en transparantie in zakelijke communicatie'
-              },
-              {
-                '@type': 'Thing',
-                name: 'MKB-vriendelijk',
-                description: 'Oplossingen die passen bij midden- en kleinbedrijf behoeften'
-              }
-            ],
-            keywords: [
-              'Nederlandse bedrijfscultuur',
-              'no-nonsense aanpak', 
-              'MKB-vriendelijk',
-              'Nederlandse kwaliteit',
-              'transparante communicatie',
-              'pragmatische oplossingen',
-              'AVG/GDPR-proof',
-              'iDEAL-ready'
-            ].join(', ')
-          }),
-        }}
-      />
+            {
+              '@type': 'Thing',
+              name: 'MKB-vriendelijk',
+              description: 'Oplossingen die passen bij midden- en kleinbedrijf behoeften'
+            }
+          ],
+          keywords: [
+            'Nederlandse bedrijfscultuur',
+            'no-nonsense aanpak', 
+            'MKB-vriendelijk',
+            'Nederlandse kwaliteit',
+            'transparante communicatie',
+            'pragmatische oplossingen',
+            'AVG/GDPR-proof',
+            'iDEAL-ready'
+          ].join(', ')
+        })}
+      </NonceScript>
     </motion.section>
   );
 }
