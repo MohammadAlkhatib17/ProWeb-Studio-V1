@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 // Get canonical URL from environment with fallback
-import { getSiteUrl } from '@/lib/siteUrl';
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: { 
-    canonical: `${getSiteUrl()}/speeltuin`,
+    canonical: '/speeltuin',
     languages: { 
       'nl-NL': '/speeltuin',
       'x-default': '/speeltuin'
@@ -23,10 +23,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Tech Playground – ProWeb Studio',
     description: 'Experimenteer met WebGL, Three.js en 3D-interfaces. Onze speeltuin voor performance en UX-onderzoek.',
-    url: `${getSiteUrl()}/speeltuin`,
+    url: `${SITE_URL}/speeltuin`,
     type: 'website',
     locale: 'nl_NL',
-    images: [{ url: `${getSiteUrl()}/og`, width: 1200, height: 630 }],
+    images: [{ url: `${SITE_URL}/og`, width: 1200, height: 630 }],
   },
 };
 

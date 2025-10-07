@@ -3,16 +3,18 @@ import Link from 'next/link';
 import { locations } from '@/config/internal-linking.config';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ContentSuggestions from '@/components/ContentSuggestions';
-import { getSiteUrl } from '@/lib/siteUrl';
+
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
+
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const metadata: Metadata = {
   title: 'Webdesign Locaties Nederland | ProWeb Studio in alle grote steden',
   description: 'ProWeb Studio biedt professionele webdesign diensten in heel Nederland. Van Amsterdam tot Rotterdam, Utrecht tot Den Haag - lokale expertise voor uw website project.',
   alternates: {
-    canonical: `${getSiteUrl()}/locaties`,
+    canonical: '/locaties',
     languages: { 
       'nl-NL': '/locaties',
       'x-default': '/locaties'
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Webdesign Locaties Nederland | ProWeb Studio',
     description: 'Lokale webdesign expertise in alle grote Nederlandse steden. Maatwerk websites met persoonlijke service.',
-    url: `${getSiteUrl()}/locaties`,
+    url: `${SITE_URL}/locaties`,
     type: 'website',
     locale: 'nl_NL',
   },
@@ -31,7 +33,7 @@ export const metadata: Metadata = {
 const locationsSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  '@id': `${getSiteUrl()}/locaties#locations`,
+  '@id': `${SITE_URL}/locaties#locations`,
   inLanguage: 'nl-NL',
   name: 'ProWeb Studio Locaties Nederland',
   description: 'Webdesign en ontwikkeling diensten in Nederlandse steden',
@@ -40,7 +42,7 @@ const locationsSchema = {
     position: index + 1,
     item: {
       '@type': 'Place',
-      '@id': `${getSiteUrl()}/locaties/${location.slug}`,
+      '@id': `${SITE_URL}/locaties/${location.slug}`,
       name: location.name,
       description: location.description,
       address: {

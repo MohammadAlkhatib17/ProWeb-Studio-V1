@@ -8,13 +8,15 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
 import DynamicFlowingRibbons from '@/components/dynamic/DynamicFlowingRibbons';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { getSiteUrl } from '@/lib/siteUrl';
+
+// Get canonical URL from environment with fallback
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const metadata: Metadata = {
   title: 'Over ProWeb Studio | Nederlandse webdesign specialisten | Betrouwbare partner',
   description: 'Ontmoet het ProWeb Studio team. Nederlandse webdesign experts met transparante werkwijze en no-nonsense aanpak. Pragmatische oplossingen voor ondernemers die resultaat willen.',
   alternates: {
-    canonical: `${getSiteUrl()}/over-ons`,
+    canonical: '/over-ons',
     languages: { 
       'nl-NL': '/over-ons',
       'x-default': '/over-ons'
@@ -23,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Over ProWeb Studio | Nederlandse webdesign specialisten | Betrouwbare partner',
     description: 'Ontmoet het ProWeb Studio team. Nederlandse webdesign experts met transparante werkwijze en no-nonsense aanpak. Pragmatische oplossingen voor ondernemers die resultaat willen.',
-    url: `${getSiteUrl()}/over-ons`,
+    url: `${SITE_URL}/over-ons`,
     type: 'website',
     locale: 'nl_NL',
   },

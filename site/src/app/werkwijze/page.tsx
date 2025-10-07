@@ -10,14 +10,15 @@ import SEOSchema from '@/components/SEOSchema';
 import DynamicOrbitSystem from '@/components/dynamic/DynamicOrbitSystem';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
-import { getSiteUrl } from '@/lib/siteUrl';
+// Get canonical URL from environment with fallback
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const metadata: Metadata = {
   title: 'Website laten maken proces | Transparante werkwijze | ProWeb Studio Nederland',
   description:
     'Zo laten wij uw website maken: van intake tot launch in 5 stappen. Transparante communicatie, vaste prijzen, Nederlandse kwaliteit. Bekijk onze beproefde werkwijze.',
   alternates: {
-    canonical: `${getSiteUrl()}/werkwijze`,
+    canonical: '/werkwijze',
     languages: { 
       'nl-NL': '/werkwijze',
       'x-default': '/werkwijze'
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
     title: 'Website laten maken proces | Transparante werkwijze | ProWeb Studio Nederland',
     description:
       'Zo laten wij uw website maken: van intake tot launch in 5 stappen. Transparante communicatie, vaste prijzen, Nederlandse kwaliteit. Bekijk onze beproefde werkwijze.',
-    url: `${getSiteUrl()}/werkwijze`,
+    url: `${SITE_URL}/werkwijze`,
     type: 'website',
     locale: 'nl_NL',
   },

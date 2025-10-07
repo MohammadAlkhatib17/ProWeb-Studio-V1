@@ -4,7 +4,7 @@ import { siteConfig } from '@/config/site.config';
 import SEOSchema from '@/components/SEOSchema';
 
 // Get canonical URL from environment with fallback
-import { getSiteUrl } from '@/lib/siteUrl';
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description:
     'Voorwaarden voor offertes, overeenkomsten, levering, betaling, intellectuele eigendom en aansprakelijkheid.',
   alternates: { 
-    canonical: `${getSiteUrl()}/voorwaarden`,
+    canonical: '/voorwaarden',
     languages: { 
       'nl-NL': '/voorwaarden',
       'x-default': '/voorwaarden'
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: 'Algemene voorwaarden – ProWeb Studio',
     description:
       'Voorwaarden voor offertes, overeenkomsten, levering, betaling, intellectuele eigendom en aansprakelijkheid.',
-    url: `${getSiteUrl()}/voorwaarden`,
+    url: `${SITE_URL}/voorwaarden`,
     type: 'website',
     locale: 'nl_NL',
   },
