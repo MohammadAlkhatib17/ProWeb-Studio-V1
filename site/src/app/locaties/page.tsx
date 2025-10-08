@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { locations } from '@/config/internal-linking.config';
+import { dutchCities } from '@/config/local-seo.config';
+// Local SEO components are available but not used on main locations page
+import { CompactNearMeSearch } from '@/components/local-seo/NearMeSearch';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ContentSuggestions from '@/components/ContentSuggestions';
 
@@ -184,6 +187,94 @@ export default function LocatiesPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Featured Dutch Cities */}
+      <section className="py-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Alle Nederlandse Steden
+            </h2>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+              Bekijk onze complete dekking door heel Nederland met lokale SEO optimalisatie voor elke stad.
+            </p>
+            <div className="mt-8 flex justify-center">
+              <CompactNearMeSearch 
+                currentCity={dutchCities[0]}
+                className="flex-shrink-0"
+              />
+            </div>
+          </div>
+
+          {/* Dutch Cities Grid - Top 12 by population */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-12">
+            {dutchCities
+              .sort((a, b) => b.population - a.population)
+              .slice(0, 12)
+              .map((city) => (
+                <Link
+                  key={city.slug}
+                  href={`/locatie/${city.slug}`}
+                  className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-4 hover:border-cyan-400/50 transition-all duration-300 hover:bg-cosmic-800/50"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-lg font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                      {city.name}
+                    </h4>
+                    <span className="text-xs text-gray-500 bg-cosmic-700/50 px-2 py-1 rounded">
+                      {city.population.toLocaleString('nl-NL')}
+                    </span>
+                  </div>
+                  
+                  <div className="text-sm text-slate-400 mb-3">
+                    {city.province} • {city.localInfo.region}
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {city.keywords.primary.slice(0, 2).map((keyword, index) => (
+                      <span
+                        key={index}
+                        className="text-xs bg-cyan-400/10 text-cyan-300 px-2 py-1 rounded border border-cyan-400/20"
+                      >
+                        {keyword.split(' ').slice(0, 2).join(' ')}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <div className="flex items-center text-cyan-300 text-sm font-medium">
+                    Website laten maken
+                    <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
+                      →
+                    </span>
+                  </div>
+                </Link>
+              ))}
+          </div>
+
+          {/* View All Cities Link */}
+          <div className="text-center">
+            <div className="bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-8">
+              <h3 className="text-xl font-semibold text-white mb-4">
+                Alle {dutchCities.length} Steden Bekijken
+              </h3>
+              <p className="text-slate-400 mb-6">
+                Wij bieden lokale SEO geoptimaliseerde landing pages voor alle grote Nederlandse steden.
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 text-sm">
+                {dutchCities.slice(12).map((city) => (
+                  <Link
+                    key={city.slug}
+                    href={`/locatie/${city.slug}`}
+                    className="text-slate-400 hover:text-cyan-300 transition-colors"
+                  >
+                    {city.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

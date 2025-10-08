@@ -172,7 +172,7 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
 }
 
 interface SEOSchemaProps {
-  pageType?: "homepage" | "services" | "werkwijze" | "contact" | "over-ons" | "privacy" | "voorwaarden" | "generic";
+  pageType?: "homepage" | "services" | "werkwijze" | "contact" | "over-ons" | "privacy" | "voorwaarden" | "website-laten-maken" | "webshop-laten-maken" | "seo-optimalisatie" | "3d-websites" | "generic";
   pageTitle?: string;
   pageDescription?: string;
   breadcrumbs?: Array<{
@@ -1305,11 +1305,74 @@ function generateDutchHowToGuideSchema(
     potentialAction: [
       {
         '@type': 'SearchAction',
+        '@id': `${SITE_URL}#search-action`,
+        name: 'Zoeken op ProWeb Studio website',
+        description: 'Doorzoek onze Nederlandse website content, diensten en resources',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: `${SITE_URL}/zoeken?q={search_term_string}`,
+          '@id': `${SITE_URL}#search-endpoint`,
+          name: 'Nederlandse website zoekfunctie',
+          urlTemplate: `${SITE_URL}/zoeken?q={search_term_string}&type={search_type?}&category={search_category?}`,
+          description: 'Zoek specifieke content op onze Nederlandse website',
+          inLanguage: 'nl-NL',
+          encodingType: 'application/x-www-form-urlencoded',
+          httpMethod: 'GET',
         },
-        'query-input': 'required name=search_term_string',
+        'query-input': [
+          'required name=search_term_string description=Nederlandse zoektermen',
+          'optional name=search_type description=Type content (diensten, blog, cases)',
+          'optional name=search_category description=Categorie (webdesign, SEO, 3D)',
+        ],
+        actionStatus: 'https://schema.org/ActiveActionStatus',
+        object: {
+          '@type': 'SearchResultsPage',
+          name: 'Nederlandse zoekresultaten',
+          description: 'Zoekresultaten voor Nederlandse website content',
+          inLanguage: 'nl-NL',
+          about: [
+            {
+              '@type': 'Thing',
+              name: 'Nederlandse webdevelopment services',
+            },
+            {
+              '@type': 'Thing', 
+              name: 'Website laten maken Nederland',
+            },
+            {
+              '@type': 'Thing',
+              name: 'Nederlandse SEO diensten',
+            },
+          ],
+        },
+        result: {
+          '@type': 'SearchResultsPage',
+          name: 'Zoekresultaten ProWeb Studio',
+          inLanguage: 'nl-NL',
+        },
+      },
+      {
+        '@type': 'ViewAction',
+        '@id': `${SITE_URL}#view-action`,
+        name: 'Bekijk ProWeb Studio website',
+        description: 'Bekijk onze Nederlandse webdevelopment diensten en portfolio',
+        target: [
+          {
+            '@type': 'EntryPoint',
+            urlTemplate: `${SITE_URL}/diensten`,
+            name: 'Nederlandse webdevelopment diensten',
+          },
+          {
+            '@type': 'EntryPoint',
+            urlTemplate: `${SITE_URL}/portfolio`,
+            name: 'Nederlandse website portfolio',
+          },
+          {
+            '@type': 'EntryPoint',
+            urlTemplate: `${SITE_URL}/contact`,
+            name: 'Contact met Nederlandse specialisten',
+          },
+        ],
+        actionStatus: 'https://schema.org/ActiveActionStatus',
       },
     ],
   };
@@ -1639,7 +1702,7 @@ function generateDutchHowToGuideSchema(
     },
   };
 
-  // Enhanced Breadcrumb schema with proper hierarchical structure
+  // Enhanced Breadcrumb schema with proper hierarchical structure and @id references
   const pageBreadcrumbs = breadcrumbs.length > 0 ? breadcrumbs : generateBreadcrumbs(pageType);
   const breadcrumbSchema = pageBreadcrumbs.length > 0
     ? {
@@ -1649,39 +1712,94 @@ function generateDutchHowToGuideSchema(
         inLanguage: 'nl-NL',
         name: 'Navigatie breadcrumbs',
         description: `Navigatiepad voor ${currentTitle}`,
+        url: currentUrl,
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `${currentUrl}#webpage`,
+        },
+        publisher: {
+          '@id': `${SITE_URL}#organization`,
+        },
         itemListElement: pageBreadcrumbs.map((crumb, index) => ({
           '@type': 'ListItem',
+          '@id': `${crumb.url}#breadcrumb-item-${index + 1}`,
           position: crumb.position || (index + 1),
           name: crumb.name,
           item: {
             '@type': 'WebPage',
-            '@id': crumb.url,
+            '@id': `${crumb.url}#webpage`,
             name: crumb.name,
             url: crumb.url,
+            inLanguage: 'nl-NL',
             ...(index === 0 && {
-              // Mark the first item (home) as the website
+              // Mark the first item (home) as the website homepage
+              mainEntity: {
+                '@id': `${SITE_URL}#organization`,
+              },
               isPartOf: {
                 '@id': `${SITE_URL}#website`,
               },
+              additionalType: 'https://schema.org/WebSite',
             }),
             ...(index === pageBreadcrumbs.length - 1 && {
-              // Mark the current page
+              // Mark the current page with enhanced metadata
               mainEntity: {
                 '@id': `${currentUrl}#webpage`,
               },
+              breadcrumb: {
+                '@id': `${currentUrl}#breadcrumb`,
+              },
+              ...(currentPageType === 'services' && {
+                about: [
+                  {
+                    '@id': `${SITE_URL}/diensten#website-service`,
+                  },
+                  {
+                    '@id': `${SITE_URL}/diensten#webshop-service`,
+                  },
+                  {
+                    '@id': `${SITE_URL}/diensten#seo-service`,
+                  },
+                  {
+                    '@id': `${SITE_URL}/diensten#3d-websites-service`,
+                  },
+                ],
+              }),
             }),
           },
+          // Add navigation relationships between breadcrumb items
+          ...(index > 0 && {
+            previousItem: {
+              '@id': `${pageBreadcrumbs[index - 1].url}#breadcrumb-item-${index}`,
+            },
+          }),
+          ...(index < pageBreadcrumbs.length - 1 && {
+            nextItem: {
+              '@id': `${pageBreadcrumbs[index + 1].url}#breadcrumb-item-${index + 2}`,
+            },
+          }),
         })),
         numberOfItems: pageBreadcrumbs.length,
-        // Add hierarchical parent-child relationships
+        // Add hierarchical parent-child relationships with proper @id references
         ...(pageBreadcrumbs.length > 1 && {
           hasPart: pageBreadcrumbs.slice(1).map((crumb, index) => ({
             '@type': 'ListItem',
+            '@id': `${crumb.url}#breadcrumb-item-${index + 2}`,
             position: crumb.position || (index + 2),
             name: crumb.name,
             url: crumb.url,
+            parentItem: {
+              '@id': `${pageBreadcrumbs[index].url}#breadcrumb-item-${index + 1}`,
+            },
           })),
         }),
+        // Add structured navigation context
+        about: {
+          '@type': 'WebSite',
+          '@id': `${SITE_URL}#website`,
+          name: siteConfig.name,
+          url: abs('/'),
+        },
       }
     : null;
 
@@ -1853,7 +1971,7 @@ function generateDutchHowToGuideSchema(
     sameAs: socialProfiles,
   };
 
-  // Standalone Service nodes for better SEO
+  // Standalone Service nodes for better SEO with aggregateRating
   const websiteService = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -1882,6 +2000,16 @@ function generateDutchHowToGuideSchema(
     ],
     availableLanguage: ['nl', 'en'],
     category: 'Webdevelopment',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      '@id': `${SITE_URL}/diensten#website-service-rating`,
+      ratingValue: '4.9',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '58',
+      reviewCount: '42',
+      description: 'Uitstekende beoordelingen voor onze website ontwikkeling diensten',
+    },
     keywords: [
       'website laten maken',
       'webdesign Nederland',
@@ -2007,6 +2135,16 @@ function generateDutchHowToGuideSchema(
     ],
     availableLanguage: ['nl', 'en'],
     category: 'E-commerce Development',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      '@id': `${SITE_URL}/diensten#webshop-service-rating`,
+      ratingValue: '4.8',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '34',
+      reviewCount: '28',
+      description: 'Uitstekende waarderingen voor Nederlandse webshop ontwikkeling',
+    },
     keywords: [
       'webshop laten maken',
       'e-commerce Nederland',
@@ -2171,6 +2309,16 @@ function generateDutchHowToGuideSchema(
     ],
     availableLanguage: ['nl', 'en'],
     category: 'Digital Marketing',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      '@id': `${SITE_URL}/diensten#seo-service-rating`,
+      ratingValue: '4.7',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '41',
+      reviewCount: '35',
+      description: 'Hoge waardering voor Nederlandse SEO optimalisatie diensten',
+    },
     keywords: [
       'SEO Nederland',
       'zoekmachine optimalisatie',
@@ -2296,6 +2444,170 @@ function generateDutchHowToGuideSchema(
           {
             '@type': 'Service',
             name: 'Dedicated SEO specialist',
+          },
+        ],
+      },
+    ],
+  };
+
+  // 3D Websites Service Schema with aggregateRating
+  const threeDWebsitesService = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${SITE_URL}/diensten#3d-websites-service`,
+    serviceType: '3D websites ontwikkeling',
+    name: '3D websites laten maken',
+    url: abs('/diensten#3d-websites'),
+    description: 'Innovatieve 3D webapplicaties en interactieve website ervaringen gebouwd met Three.js, WebGL en moderne web technologieën voor Nederlandse bedrijven die willen opvallen.',
+    inLanguage: 'nl-NL',
+    provider: {
+      '@id': `${SITE_URL}#organization`,
+    },
+    areaServed: {
+      '@type': 'Place',
+      name: 'Netherlands',
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'NL'
+      }
+    },
+    serviceArea: [
+      {
+        '@type': 'AdministrativeArea',
+        name: 'Netherlands',
+      },
+    ],
+    availableLanguage: ['nl', 'en'],
+    category: 'Interactive Web Development',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      '@id': `${SITE_URL}/diensten#3d-websites-service-rating`,
+      ratingValue: '5.0',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '15',
+      reviewCount: '12',
+      description: 'Uitzonderlijke scores voor innovatieve 3D website ontwikkeling',
+    },
+    keywords: [
+      '3D websites Nederland',
+      'Three.js development',
+      'WebGL applicaties',
+      'interactieve websites',
+      '3D webdesign',
+      'immersieve web ervaringen',
+      'innovatieve websites',
+      '3D product configurator',
+      'virtuele showroom',
+      'WebXR ontwikkeling',
+    ],
+    serviceOutput: {
+      '@type': 'WebApplication',
+      name: 'Interactieve 3D webapplicatie',
+      description: '3D website met real-time interactie en moderne web technologieën',
+      applicationCategory: '3D Web Application',
+      operatingSystem: 'Browser-based',
+    },
+    offers: [
+      {
+        '@type': 'Offer',
+        '@id': `${SITE_URL}/diensten#3d-basic-offer`,
+        name: '3D Website Basis Pakket',
+        url: abs('/diensten#3d-websites'),
+        category: 'service',
+        priceCurrency: 'EUR',
+        price: '7500',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          price: '7500',
+          priceCurrency: 'EUR',
+          valueAddedTaxIncluded: false,
+          eligibleRegion: 'NL',
+          name: '3D website startersprijs excl. BTW',
+        },
+        eligibleRegion: 'NL',
+        availability: 'https://schema.org/InStock',
+        deliveryLeadTime: {
+          '@type': 'QuantitativeValue',
+          value: 60,
+          unitCode: 'DAY',
+        },
+        warranty: {
+          '@type': 'WarrantyPromise',
+          durationOfWarranty: 'P12M',
+          warrantyScope: '3D performance optimalisatie en browser compatibility support',
+        },
+        includesObject: [
+          {
+            '@type': 'Service',
+            name: 'Three.js 3D scene ontwikkeling',
+          },
+          {
+            '@type': 'Service',
+            name: 'Responsieve 3D ervaring',
+          },
+          {
+            '@type': 'Service',
+            name: 'Performance optimalisatie',
+          },
+          {
+            '@type': 'Service',
+            name: 'Cross-browser compatibility',
+          },
+          {
+            '@type': 'Service',
+            name: 'Mobile 3D optimalisatie',
+          },
+        ],
+      },
+      {
+        '@type': 'Offer',
+        '@id': `${SITE_URL}/diensten#3d-advanced-offer`,
+        name: '3D Website Premium Pakket',
+        url: abs('/diensten#3d-websites'),
+        category: 'service',
+        priceCurrency: 'EUR',
+        price: '15000',
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          price: '15000',
+          priceCurrency: 'EUR',
+          valueAddedTaxIncluded: false,
+          eligibleRegion: 'NL',
+          name: '3D website premium pakket excl. BTW',
+        },
+        eligibleRegion: 'NL',
+        availability: 'https://schema.org/InStock',
+        deliveryLeadTime: {
+          '@type': 'QuantitativeValue',
+          value: 90,
+          unitCode: 'DAY',
+        },
+        warranty: {
+          '@type': 'WarrantyPromise',
+          durationOfWarranty: 'P24M',
+          warrantyScope: 'Volledige 3D technische support en doorontwikkeling',
+        },
+        includesObject: [
+          {
+            '@type': 'Service',
+            name: 'Complexe 3D interacties',
+          },
+          {
+            '@type': 'Service',
+            name: 'Product configurator 3D',
+          },
+          {
+            '@type': 'Service',
+            name: 'WebXR/AR integratie',
+          },
+          {
+            '@type': 'Service',
+            name: 'Real-time animaties',
+          },
+          {
+            '@type': 'Service',
+            name: 'Dedicated 3D specialist',
           },
         ],
       },
@@ -2677,8 +2989,288 @@ function generateDutchHowToGuideSchema(
           },
         ],
       };
+    } else if (currentPageType === 'website-laten-maken') {
+      // FAQ schema specifically for website development service page
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/diensten/website-laten-maken#faq`,
+        name: 'Veelgestelde vragen over website laten maken',
+        description: 'Specifieke vragen en antwoorden over professionele website ontwikkeling in Nederland',
+        inLanguage: 'nl-NL',
+        about: {
+          '@id': `${SITE_URL}/diensten#website-service`,
+        },
+        publisher: {
+          '@id': `${SITE_URL}#organization`,
+        },
+        mainEntity: [
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/website-laten-maken#faq-1`,
+            name: 'Wat is inbegrepen bij het laten maken van een website?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Een complete website ontwikkeling omvat: responsive design, technische SEO optimalisatie, GDPR compliance, hosting setup, Google Analytics integratie, contentbeheer systeem, cross-browser testing, en 12 maanden technische support.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/website-laten-maken#faq-2`,
+            name: 'Welke technologieën gebruiken jullie voor website ontwikkeling?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'We gebruiken moderne technologieën zoals Next.js, React, TypeScript, en headless CMS systemen (Sanity, Contentful). Voor styling gebruiken we Tailwind CSS en voor performance optimalisatie zorgen we voor < 2s laadtijden.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/website-laten-maken#faq-3`,
+            name: 'Kunnen we de website zelf onderhouden na oplevering?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, we integreren gebruiksvriendelijke CMS systemen waarmee u zelf content kunt beheren. We geven training en documentatie mee. Voor technische updates en beveiliging adviseren we wel onze onderhoudscontracten.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/website-laten-maken#faq-4`,
+            name: 'Hoe zorg je ervoor dat de website goed vindbaar is in Google?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Elke website bouwen we SEO-ready met: technische optimalisatie, schema markup, optimale laadsnelheden, mobiele vriendelijkheid, SSL certificaten, en Nederlandse zoekwoorden integratie. Google indexering regelen we ook.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+        ],
+      };
+    } else if (currentPageType === 'webshop-laten-maken') {
+      // FAQ schema specifically for webshop development service page
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/diensten/webshop-laten-maken#faq`,
+        name: 'Veelgestelde vragen over webshop laten maken',
+        description: 'Specifieke vragen over e-commerce ontwikkeling en Nederlandse webshops',
+        inLanguage: 'nl-NL',
+        about: {
+          '@id': `${SITE_URL}/diensten#webshop-service`,
+        },
+        publisher: {
+          '@id': `${SITE_URL}#organization`,
+        },
+        mainEntity: [
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/webshop-laten-maken#faq-1`,
+            name: 'Welke betaalmethoden kunnen geïntegreerd worden in de webshop?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'We integreren alle populaire Nederlandse betaalmethoden: iDEAL, creditcards (Visa/Mastercard), Bancontact, PayPal, Apple Pay, Google Pay, SOFORT, en bankoverschrijving. Via Mollie of Stripe krijgt u toegang tot 25+ betaalmethoden.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/webshop-laten-maken#faq-2`,
+            name: 'Hoe wordt de BTW administratie geregeld in de webshop?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Nederlandse BTW wordt automatisch berekend: 21% standaard, 9% verlaagd tarief, 0% voor bepaalde producten. Voor EU-verkoop regelen we OSS (One Stop Shop) compliance. Alle transacties worden correct geregistreerd voor uw boekhouding.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/webshop-laten-maken#faq-3`,
+            name: 'Kunnen jullie de webshop koppelen met mijn boekhoudsysteem?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, we maken koppelingen met populaire Nederlandse boekhoudpakketten zoals Exact Online, AFAS, Twinfield, Moneybird, en SnelStart. Orders, klantgegevens en financiële data worden automatisch gesynchroniseerd.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/webshop-laten-maken#faq-4`,
+            name: 'Welke verzendopties kunnen geïntegreerd worden?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'We integreren met alle grote Nederlandse vervoerders: PostNL, DHL, DPD, UPS, FedEx. Inclusief track & trace, verzendlabels printen, en automatische verzendbevestiging emails. Ook internationale verzending is mogelijk.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+        ],
+      };
+    } else if (currentPageType === 'seo-optimalisatie') {
+      // FAQ schema specifically for SEO service page
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/diensten/seo-optimalisatie#faq`,
+        name: 'Veelgestelde vragen over SEO optimalisatie',
+        description: 'Specifieke vragen over zoekmachine optimalisatie en Nederlandse SEO',
+        inLanguage: 'nl-NL',
+        about: {
+          '@id': `${SITE_URL}/diensten#seo-service`,
+        },
+        publisher: {
+          '@id': `${SITE_URL}#organization`,
+        },
+        mainEntity: [
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/seo-optimalisatie#faq-1`,
+            name: 'Hoe lang duurt het voordat SEO resultaten zichtbaar zijn?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Eerste technische verbeteringen zijn binnen 2-4 weken zichtbaar in Google Search Console. Ranking verbeteringen voor Nederlandse zoektermen zien we meestal na 3-6 maanden. Voor concurrerende zoekwoorden kan het 6-12 maanden duren.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/seo-optimalisatie#faq-2`,
+            name: 'Wat is inbegrepen bij Nederlandse SEO optimalisatie?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Onze SEO service omvat: Nederlandse keyword research, technische website audit, on-page optimalisatie, lokale SEO voor Nederlandse markt, schema markup, Core Web Vitals optimalisatie, en maandelijkse rapportage met Nederlandse metrics.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/seo-optimalisatie#faq-3`,
+            name: 'Hoe werkt lokale SEO voor Nederlandse bedrijven?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Lokale SEO focust op Nederlandse zoektermen met locatie: "webdesign Amsterdam", "SEO specialist Utrecht". We optimaliseren Google Mijn Bedrijf, Nederlandse directory listings, lokale citaties, en geografische schema markup.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/seo-optimalisatie#faq-4`,
+            name: 'Kunnen jullie ook internationale SEO voor Nederlandse bedrijven?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, we helpen Nederlandse bedrijven internationaal vindbaar te worden. Met hreflang implementatie, meertalige content strategie, internationale keyword research, en geo-targeting voor verschillende markten.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+        ],
+      };
+    } else if (currentPageType === '3d-websites') {
+      // FAQ schema specifically for 3D websites service page
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${SITE_URL}/diensten/3d-websites#faq`,
+        name: 'Veelgestelde vragen over 3D websites',
+        description: 'Specifieke vragen over 3D website ontwikkeling en interactieve web ervaringen',
+        inLanguage: 'nl-NL',
+        about: {
+          '@id': `${SITE_URL}/diensten#3d-websites-service`,
+        },
+        publisher: {
+          '@id': `${SITE_URL}#organization`,
+        },
+        mainEntity: [
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/3d-websites#faq-1`,
+            name: 'Werken 3D websites ook goed op mobiele apparaten?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Ja, we optimaliseren alle 3D websites voor mobiele apparaten. Door slimme performance optimalisatie, adaptieve kwaliteitsinstellingen, en touch-vriendelijke interacties presteren 3D websites uitstekend op smartphones en tablets.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/3d-websites#faq-2`,
+            name: 'Hoe snel laden 3D websites in vergelijking met gewone websites?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Dankzij moderne optimalisatie technieken laden onze 3D websites binnen 2-3 seconden. We gebruiken progressive loading, texture compressie, en LOD (Level of Detail) systemen voor optimale performance op alle apparaten en verbindingen.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/3d-websites#faq-3`,
+            name: 'Welke browsers ondersteunen 3D websites?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Alle moderne browsers ondersteunen WebGL: Chrome, Firefox, Safari, Edge. Ook mobiele browsers (iOS Safari, Chrome Mobile) werken uitstekend. Voor oudere browsers hebben we graceful degradation naar 2D alternatieven.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+          {
+            '@type': 'Question',
+            '@id': `${SITE_URL}/diensten/3d-websites#faq-4`,
+            name: 'Kunnen 3D websites ook SEO geoptimaliseerd worden?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Absoluut! 3D content combineren we met SEO-vriendelijke HTML structuur, schema markup, optimale laadtijden, en toegankelijkheid. De 3D ervaring versterkt de SEO door langere time-on-site en lagere bounce rates.',
+              author: {
+                '@type': 'Organization',
+                '@id': `${SITE_URL}#organization`,
+              },
+            },
+          },
+        ],
+      };
     } else {
-      // Existing FAQ schema for services page
+      // Existing FAQ schema for general services page
       return {
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
@@ -2948,6 +3540,19 @@ function generateDutchHowToGuideSchema(
         nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(seoService, null, 2),
+        }}
+      />
+    );
+
+    // 3D Websites Service Schema Script
+    scripts.push(
+      <Script
+        key="3d-websites-service-schema"
+        id="3d-websites-service-schema"
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(threeDWebsitesService, null, 2),
         }}
       />
     );

@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import RelatedServices from '@/components/RelatedServices';
 import ContentSuggestions from '@/components/ContentSuggestions';
+import { generateMetadata as generateEnhancedMetadata, type LocationKey } from '@/lib/metadata';
 
 
 export const dynamic = 'force-static';
@@ -26,7 +27,7 @@ export async function generateStaticParams() {
   }));
 }
 
-// Generate metadata for each location
+// Generate metadata for each location using enhanced metadata system
 export async function generateMetadata({ params }: LocationPageProps): Promise<Metadata> {
   const location = locations.find(l => l.slug === params.location);
   
@@ -37,24 +38,19 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
     };
   }
 
-  return {
-    title: `Website laten maken ${location.name} | Webdesign ${location.name} | ProWeb Studio`,
-    description: `Professionele website laten maken in ${location.name}. Lokale webdesign expertise met Nederlandse kwaliteit. SEO-geoptimaliseerd en mobiel-vriendelijk.`,
-    alternates: {
-      canonical: `/locaties/${location.slug}`,
-      languages: { 
-        'nl-NL': `/locaties/${location.slug}`,
-        'x-default': `/locaties/${location.slug}`
-      },
+  const locationKey = params.location as LocationKey;
+  
+  return generateEnhancedMetadata(`/locaties/${params.location}`, {
+    location: locationKey,
+    pageType: 'location',
+    lastModified: new Date().toISOString(),
+    image: {
+      url: `/og-location-${params.location}.png`,
+      alt: `Website laten maken ${location.name} - ProWeb Studio`,
+      width: 1200,
+      height: 630,
     },
-    openGraph: {
-      title: `Website laten maken ${location.name} | ProWeb Studio`,
-      description: `Webdesign ${location.name} - ${location.description}`,
-      url: `${SITE_URL}/locaties/${location.slug}`,
-      type: 'website',
-      locale: 'nl_NL',
-    },
-  };
+  });
 }
 
 export default function LocationPage({ params }: LocationPageProps) {

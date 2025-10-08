@@ -44,7 +44,9 @@
     "validate:regions": "node scripts/validate-regions.js",
     "perf:validate": "./scripts/validate-performance.sh",
     "perf:test:dutch": "LIGHTHOUSE_CONFIG=dutch npm run lighthouse",
-    "perf:monitor": "npm run dev:perf && npm run perf:validate"
+    "perf:monitor": "npm run dev:perf && npm run perf:validate",
+    "core-web-vitals:validate": "./scripts/validate-core-web-vitals.sh",
+    "core-web-vitals:test": "npm run build:prod && npm start & sleep 5 && npm run core-web-vitals:validate && pkill -f 'next start'"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,md}": [

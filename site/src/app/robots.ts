@@ -26,13 +26,19 @@ export default function robots(): MetadataRoute.Robots {
         allow: [
           '/',
           '/diensten/',
+          '/diensten/website-laten-maken',
+          '/diensten/webshop-laten-maken',
+          '/diensten/seo-optimalisatie',
+          '/diensten/3d-website-ervaringen',
+          '/diensten/onderhoud-support',
           '/contact/',
           '/werkwijze/',
           '/portfolio/',
           '/over-ons/',
+          '/locaties/',
           '/privacy/',
           '/voorwaarden/',
-          '/sitemap.xml',
+          '/sitemap*.xml',    // Allow all sitemap files
           '/robots.txt',
         ],
         disallow: [
@@ -41,11 +47,10 @@ export default function robots(): MetadataRoute.Robots {
           '/api/',           // API routes
           '/admin/',         // Admin areas if any
           '*.json$',         // JSON files
-          '*.xml$',          // XML files except sitemap
           '/sw.js',          // Service worker
           '/offline.html',   // Offline page
           '/overzicht-site/', // Internal site overview
-          '/.well-known/',   // Hidden directories
+          '/.well-known/',   // Hidden directories except sitemap
           '/manifest.json',  // PWA manifest
         ],
         crawlDelay: 1, // Be respectful to servers
@@ -55,13 +60,19 @@ export default function robots(): MetadataRoute.Robots {
         allow: [
           '/',
           '/diensten/',
+          '/diensten/website-laten-maken',
+          '/diensten/webshop-laten-maken',
+          '/diensten/seo-optimalisatie',
+          '/diensten/3d-website-ervaringen',
+          '/diensten/onderhoud-support',
           '/contact/',
           '/werkwijze/',
           '/portfolio/',
           '/over-ons/',
+          '/locaties/',
           '/privacy/',
           '/voorwaarden/',
-          '/sitemap.xml',
+          '/sitemap*.xml',
           '/robots.txt',
         ],
         disallow: [
@@ -78,10 +89,16 @@ export default function robots(): MetadataRoute.Robots {
         allow: [
           '/',
           '/diensten/',
+          '/diensten/website-laten-maken',
+          '/diensten/webshop-laten-maken',
+          '/diensten/seo-optimalisatie',
+          '/diensten/3d-website-ervaringen',
+          '/diensten/onderhoud-support',
           '/contact/',
           '/werkwijze/',
           '/portfolio/',
           '/over-ons/',
+          '/locaties/',
           '/privacy/',
           '/voorwaarden/',
         ],
@@ -126,8 +143,11 @@ export default function robots(): MetadataRoute.Robots {
       }
     ],
     sitemap: [
-      `${base}/sitemap.xml`,
-      `${base}/sitemap-images.xml`, // We'll create this image sitemap
+      `${base}/sitemap-index.xml`, // Main sitemap index for better crawl management
+      `${base}/sitemap.xml`,        // Core pages sitemap
+      `${base}/sitemap-services.xml`, // Dedicated services sitemap
+      `${base}/sitemap-locations.xml`, // Dedicated locations sitemap  
+      `${base}/sitemap-images.xml`,  // Existing images sitemap
     ],
     host: 'prowebstudio.nl',
   };

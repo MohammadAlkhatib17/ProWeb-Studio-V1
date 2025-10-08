@@ -8,9 +8,16 @@ import { join } from 'path';
 export const ROUTE_TO_FILE_MAP: Record<string, string> = {
   '/': 'src/app/page.tsx',
   '/diensten': 'src/app/diensten/page.tsx',
+  '/diensten/website-laten-maken': 'src/app/diensten/website-laten-maken/page.tsx',
+  '/diensten/webshop-laten-maken': 'src/app/diensten/webshop-laten-maken/page.tsx',
+  '/diensten/seo-optimalisatie': 'src/app/diensten/seo-optimalisatie/page.tsx',
+  '/diensten/3d-website-ervaringen': 'src/app/diensten/3d-website-ervaringen/page.tsx',
+  '/diensten/onderhoud-support': 'src/app/diensten/onderhoud-support/page.tsx',
   '/werkwijze': 'src/app/werkwijze/page.tsx',
   '/contact': 'src/app/contact/page.tsx',
   '/over-ons': 'src/app/over-ons/page.tsx',
+  '/portfolio': 'src/app/portfolio/page.tsx',
+  '/locaties': 'src/app/locaties/page.tsx',
   '/privacy': 'src/app/privacy/page.tsx',
   '/voorwaarden': 'src/app/voorwaarden/page.tsx',
 };
@@ -20,9 +27,10 @@ export const ROUTE_TO_FILE_MAP: Record<string, string> = {
  */
 export const SERVICE_ROUTES = [
   '/diensten/website-laten-maken',
-  '/diensten/3d-website-ontwikkeling',
+  '/diensten/3d-website-ervaringen', // Updated to match actual route
   '/diensten/seo-optimalisatie',
   '/diensten/webshop-laten-maken',
+  '/diensten/onderhoud-support',
 ];
 
 /**

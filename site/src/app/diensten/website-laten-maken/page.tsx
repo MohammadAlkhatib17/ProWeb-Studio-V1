@@ -7,53 +7,24 @@ import { Button } from '@/components/Button';
 import SEOSchema from '@/components/SEOSchema';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import FAQSection from '@/components/sections/FAQSection';
+import { generateMetadata } from '@/lib/metadata';
 
 export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - service content is fairly stable
 export const fetchCache = 'force-cache';
 
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-
-export const metadata: Metadata = {
-  title: 'Website Laten Maken Nederland | Professionele Webdesign & Ontwikkeling – ProWeb Studio',
-  description:
-    'Website laten maken door Nederlandse webdesign experts. Responsive websites, moderne technologieën, SEO-geoptimaliseerd. Van concept tot lancering - transparante prijzen, snelle oplevering.',
-  alternates: {
-    canonical: `${SITE_URL}/diensten/website-laten-maken`,
-    languages: { 
-      'nl-NL': `${SITE_URL}/diensten/website-laten-maken`,
-      'x-default': `${SITE_URL}/diensten/website-laten-maken`
-    },
+// Enhanced service page metadata with all SEO optimizations
+export const metadata: Metadata = generateMetadata('/diensten/website-laten-maken', {
+  service: 'website-laten-maken',
+  pageType: 'service',
+  lastModified: new Date().toISOString(),
+  image: {
+    url: '/og-website-laten-maken.png',
+    alt: 'Website Laten Maken Nederland - ProWeb Studio Webdesign Services',
+    width: 1200,
+    height: 630,
   },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  openGraph: {
-    title: 'Website Laten Maken Nederland | Professionele Webdesign & Ontwikkeling – ProWeb Studio',
-    description: 'Website laten maken door Nederlandse webdesign experts. Responsive websites, moderne technologieën, SEO-geoptimaliseerd. Van concept tot lancering - transparante prijzen, snelle oplevering.',
-    url: `${SITE_URL}/diensten/website-laten-maken`,
-    type: 'website',
-    locale: 'nl_NL',
-    images: [{ url: `${SITE_URL}/og`, width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Website Laten Maken Nederland | Professionele Webdesign & Ontwikkeling – ProWeb Studio',
-    description: 'Website laten maken door Nederlandse webdesign experts. Responsive websites, moderne technologieën, SEO-geoptimaliseerd.',
-    images: [`${SITE_URL}/og`],
-  },
-};
+});
 
 const websiteFeatures = [
   {

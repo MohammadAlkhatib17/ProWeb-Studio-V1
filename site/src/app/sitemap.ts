@@ -1,11 +1,5 @@
 import { MetadataRoute } from 'next';
 
-// Edge runtime configuration for better performance and region distribution
-export const runtime = 'edge';
-export const dynamic = 'force-dynamic';
-// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
-export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
-
 interface SitemapEntry {
   url: string;
   lastModified: Date;
@@ -22,176 +16,88 @@ interface SitemapEntry {
 
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
+/**
+ * Maps route paths to their corresponding source files for git-based lastmod
+ */
+const ROUTE_FILE_MAP: Record<string, string[]> = {
+  '/': ['src/app/page.tsx', 'src/components/Hero.tsx', 'src/components/HeroCanvas.tsx'],
+  '/contact': ['src/app/contact/page.tsx', 'src/components/contact/ContactForm.tsx'],
+  '/portfolio': ['src/app/portfolio/page.tsx', 'src/components/portfolio/PortfolioGrid.tsx'],
+  '/werkwijze': ['src/app/werkwijze/page.tsx'],
+  '/over-ons': ['src/app/over-ons/page.tsx'],
+  '/overzicht-site': ['src/app/overzicht-site/page.tsx'],
+  '/privacy': ['src/app/privacy/page.tsx'],
+  '/voorwaarden': ['src/app/voorwaarden/page.tsx'],
+};
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE_URL; // Already normalized
 
-  // Define routes with their respective priorities and change frequencies
-  // Enhanced with more specific lastModified dates and better priority distribution
+  // Define main site routes with their respective priorities and change frequencies
+  // Enhanced with git-based lastModified dates and better priority distribution
+  // Service and location pages are now handled by separate dedicated sitemaps
   const routes: Array<{
     path: string;
     priority: number;
     changeFreq: SitemapEntry['changeFrequency'];
-    lastModified: Date;
+    files: string[];
   }> = [
     {
       path: '/',
       priority: 1.0, // Home: highest priority
       changeFreq: 'daily', // Home page changes frequently with updates
-      lastModified: new Date(), // Current date for fresh indexing
-    },
-    {
-      path: '/diensten',
-      priority: 0.9, // Services: very important for business
-      changeFreq: 'weekly', // Services evolve regularly
-      lastModified: new Date('2025-09-20'),
+      files: ROUTE_FILE_MAP['/'],
     },
     {
       path: '/contact',
       priority: 0.9, // Contact: critical for conversions
       changeFreq: 'monthly', // Contact info rarely changes
-      lastModified: new Date('2025-09-15'),
+      files: ROUTE_FILE_MAP['/contact'],
     },
     {
       path: '/portfolio',
       priority: 0.9, // Portfolio: critical for showcasing work
       changeFreq: 'weekly', // Portfolio gets updated with new projects
-      lastModified: new Date(),
+      files: ROUTE_FILE_MAP['/portfolio'],
     },
-    // Service detail pages - High priority for SEO
-    {
-      path: '/diensten/website-laten-maken',
-      priority: 0.8, // High priority service page
-      changeFreq: 'weekly', // Service details may evolve
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/diensten/webshop-laten-maken',
-      priority: 0.8, // High priority service page
-      changeFreq: 'weekly', // Service details may evolve
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/diensten/seo-optimalisatie',
-      priority: 0.8, // High priority service page
-      changeFreq: 'weekly', // SEO knowledge evolves frequently
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/diensten/3d-website-ervaringen',
-      priority: 0.7, // Specialized service page
-      changeFreq: 'monthly', // 3D tech updates monthly
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/diensten/onderhoud-support',
-      priority: 0.7, // Support service page
-      changeFreq: 'monthly', // Support info updates monthly
-      lastModified: new Date('2025-09-24'),
-    },
-    // Location pages - Critical for local SEO
-    {
-      path: '/locaties',
-      priority: 0.8, // Location index: important for local SEO
-      changeFreq: 'monthly', // Location info updates monthly
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/amsterdam',
-      priority: 0.7, // Major city: high local SEO value
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/rotterdam',
-      priority: 0.7, // Major city: high local SEO value
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/utrecht',
-      priority: 0.7, // Major city: high local SEO value
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/den-haag',
-      priority: 0.7, // Major city: high local SEO value
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/eindhoven',
-      priority: 0.6, // Important regional city
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/tilburg',
-      priority: 0.6, // Regional city
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/groningen',
-      priority: 0.6, // Regional city
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/almere',
-      priority: 0.6, // Growing city
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/breda',
-      priority: 0.6, // Regional city
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
-    {
-      path: '/locaties/nijmegen',
-      priority: 0.6, // Regional city
-      changeFreq: 'monthly', // Local content updates
-      lastModified: new Date('2025-09-24'),
-    },
+    // Note: Service pages (/diensten/*) are now handled by sitemap-services.xml
+    // Note: Location pages (/locaties/*) are now handled by sitemap-locations.xml
     {
       path: '/werkwijze',
       priority: 0.8, // Process: important for understanding value prop
       changeFreq: 'monthly', // Process documentation updates monthly
-      lastModified: new Date('2025-09-10'),
+      files: ROUTE_FILE_MAP['/werkwijze'],
     },
     {
       path: '/over-ons',
       priority: 0.8, // About: important for trust and credibility
       changeFreq: 'monthly', // Team and company info updates monthly
-      lastModified: new Date('2025-09-05'),
+      files: ROUTE_FILE_MAP['/over-ons'],
     },
     {
       path: '/overzicht-site',
       priority: 0.5, // Site overview: informational
       changeFreq: 'yearly', // Technical overview rarely changes
-      lastModified: new Date('2025-08-15'),
+      files: ROUTE_FILE_MAP['/overzicht-site'],
     },
     {
       path: '/privacy',
       priority: 0.4, // Privacy: legal requirement but lower conversion priority
       changeFreq: 'yearly', // Privacy policy updates annually or when regulations change
-      lastModified: new Date('2025-08-01'),
+      files: ROUTE_FILE_MAP['/privacy'],
     },
     {
       path: '/voorwaarden',
       priority: 0.4, // Terms: legal requirement but lower conversion priority
       changeFreq: 'yearly', // Terms update annually or when regulations change
-      lastModified: new Date('2025-08-01'),
+      files: ROUTE_FILE_MAP['/voorwaarden'],
     },
     // Note: /speeltuin is excluded as it's marked noindex in middleware
-    // Note: /overzicht has been permanently removed from the site
   ];
 
   return routes.map((route) => ({
     url: `${baseUrl}${route.path}`,
-    lastModified: route.lastModified,
+    lastModified: new Date(), // Use current date since we can't access file system
     changeFrequency: route.changeFreq,
     priority: route.priority,
   }));

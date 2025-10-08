@@ -1,129 +1,27 @@
 import type { Metadata } from 'next';
+import { getISRConfig } from '@/lib/isr-config';
+import { generateMetadata } from '@/lib/metadata';
 
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+// ISR configuration for optimal Core Web Vitals
+const isrConfig = getISRConfig('/');
 
 export const dynamic = 'force-static';
-export const revalidate = 3600; // 1 hour - homepage updates frequently
+export const revalidate = isrConfig.revalidate; // Optimized ISR timing
 export const fetchCache = 'force-cache';
 
-export const metadata: Metadata = {
-  title:
-    'Website Laten Maken Nederland | Webdesign & Webshop Ontwikkeling Amsterdam, Rotterdam, Utrecht – ProWeb Studio',
-  description:
-    'Website laten maken door Nederlandse webdesign experts. Professionele websites, webshops en 3D ervaringen voor MKB, startups en enterprise. Van Amsterdam tot Eindhoven - transparante prijzen, snelle oplevering, Nederlandse kwaliteit.',
-  alternates: {
-    canonical: `${SITE_URL}/`,
-    languages: { 
-      'nl-NL': `${SITE_URL}/`,
-      'nl': `${SITE_URL}/`,
-      'x-default': `${SITE_URL}/`
-    },
+// Enhanced homepage metadata with all SEO optimizations
+export const metadata: Metadata = generateMetadata('/', {
+  title: 'Website Laten Maken Nederland | Webdesign & Webshop Ontwikkeling Amsterdam, Rotterdam, Utrecht – ProWeb Studio',
+  description: 'Website laten maken door Nederlandse webdesign experts. Professionele websites, webshops en 3D ervaringen voor MKB, startups en enterprise. Transparante prijzen, Nederlandse kwaliteit!',
+  pageType: 'homepage',
+  lastModified: new Date().toISOString(),
+  image: {
+    url: '/og-homepage.png',
+    alt: 'ProWeb Studio - Professionele Website Laten Maken Nederland',
+    width: 1200,
+    height: 630,
   },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  other: {
-    'google-site-verification': process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || process.env.GOOGLE_SITE_VERIFICATION || '',
-    'revisit-after': '3 days',
-    'distribution': 'web',
-    'rating': 'general',
-    'language': 'Dutch',
-    'geo.region': 'NL',
-    'geo.placename': 'Netherlands',
-    'geo.position': '52.3676;4.9041',
-    'ICBM': '52.3676, 4.9041',
-    'robots': 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1',
-    'googlebot': 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1',
-    'bingbot': 'index,follow',
-    'slurp': 'index,follow',
-    'duckduckbot': 'index,follow',
-    'facebookexternalhit': 'index,follow',
-    'twitterbot': 'index,follow',
-    'linkedinbot': 'index,follow',
-    'whatsapp': 'index,follow',
-    'telegrambot': 'index,follow',
-    'priority': '1.0',
-    'importance': 'high',
-    'crawl-delay': '1',
-  },
-  openGraph: {
-    images: [
-      { 
-        url: `${SITE_URL}/og`, 
-        width: 1200, 
-        height: 630,
-        alt: 'Website laten maken Nederland - ProWeb Studio webdesign experts',
-        type: 'image/png',
-        secureUrl: `${SITE_URL}/og`,
-      },
-    ],
-    title:
-      'Website Laten Maken Nederland | Webdesign & Webshop Ontwikkeling Amsterdam, Rotterdam, Utrecht – ProWeb Studio',
-    description:
-      'Website laten maken door Nederlandse webdesign experts. Professionele websites, webshops en 3D ervaringen voor MKB, startups en enterprise. Van Amsterdam tot Eindhoven - transparante prijzen, snelle oplevering, Nederlandse kwaliteit.',
-    url: `${SITE_URL}/`,
-    siteName: 'ProWeb Studio - Website laten maken Nederland',
-    type: 'website',
-    locale: 'nl_NL',
-    alternateLocale: ['en_US', 'de_DE'],
-    countryName: 'Netherlands',
-  },
-  keywords: [
-    'website laten maken',
-    'website maken',
-    'webdesign Nederland',
-    'webshop laten maken',
-    'website ontwikkeling',
-    'professionele website',
-    'website bouwen',
-    'webdesign bureau',
-    'website laten bouwen',
-    'responsive website',
-    '3D website Nederland',
-    'SEO website',
-    'website Amsterdam',
-    'website Rotterdam', 
-    'website Utrecht',
-    'website Den Haag',
-    'website Eindhoven',
-    'webdesign Amsterdam',
-    'MKB website',
-    'corporate website',
-    'startup website',
-    'e-commerce website',
-    'modern webdesign',
-    'Nederlandse webdesigner',
-    'lokale webdesign',
-    'website specialist',
-    'web ontwikkeling',
-    'digitale transformatie',
-    'online aanwezigheid',
-    'conversie optimalisatie',
-    'gebruiksvriendelijke website',
-    'mobiele website',
-    'snelle website',
-    'veilige website'
-  ],
-  twitter: {
-    card: 'summary_large_image',
-    site: '@prowebstudio_nl',
-    creator: '@prowebstudio_nl',
-    title: 'Website Laten Maken Nederland | ProWeb Studio Webdesign Experts',
-    description: 'Website laten maken door Nederlandse webdesign experts. Van Amsterdam tot Eindhoven - razendsnelle websites, webshops en 3D ervaringen.',
-    images: [`${SITE_URL}/og`],
-  },
-};
+});
 
 import dynamicImport from 'next/dynamic';
 import Link from 'next/link';

@@ -17,6 +17,10 @@ import PWAServiceWorker from '@/components/PWAServiceWorker';
 import DutchPerformanceMonitor from '@/components/DutchPerformanceMonitor';
 import { primaryFont } from '@/lib/fonts';
 import { generateResourcePreconnects } from '@/lib/preconnect';
+import ResourceHints from '@/components/ResourceHints';
+import CriticalCSS from '@/components/CriticalCSS';
+import { WebVitalsReporter, WebVitalsDisplay } from '@/components/WebVitalsDisplay';
+// Enhanced metadata utilities available but not used in root layout
 
 // Initialize environment validation for production deployments
 initProductionEnvValidation();
@@ -32,13 +36,14 @@ export const viewport = {
   viewportFit: 'cover',
 };
 
+// Enhanced metadata with all SEO optimizations
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: `${siteConfig.name} - ${siteConfig.tagline}`,
     template: `%s | ${siteConfig.name}`,
   },
-  description: siteConfig.description,
+  description: 'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D‑websites die scoren in Google en converteren. Nederlandse kwaliteit, transparante prijzen. Vraag direct offerte aan!',
   keywords: [
     'website laten maken nederland',
     'website bouwen',
@@ -63,6 +68,10 @@ export const metadata: Metadata = {
     'professionele website utrecht',
     'toekomstbestendig',
     'digital agency nederland',
+    '3d website ervaringen',
+    'interactieve webdesign',
+    'modern webdesign',
+    'webgl ontwikkeling'
   ],
   authors: [
     { name: 'ProWeb Studio', url: siteConfig.url },
@@ -85,9 +94,10 @@ export const metadata: Metadata = {
       { url: '/icons/apple-touch-icon-180.png', sizes: '180x180', type: 'image/png' },
     ],
   },
+  // Enhanced Open Graph for Dutch social media
   openGraph: {
     title: `${siteConfig.name} - ${siteConfig.tagline}`,
-    description: siteConfig.description,
+    description: 'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D‑websites die scoren in Google en converteren. Nederlandse kwaliteit, transparante prijzen. Vraag direct offerte aan!',
     url: SITE_URL,
     siteName: siteConfig.name,
     images: [
@@ -95,7 +105,7 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/og`,
         width: 1200,
         height: 630,
-        alt: `${siteConfig.name} - ${siteConfig.tagline}`,
+        alt: `${siteConfig.name} - Professionele 3D Websites & Webdesign Nederland`,
         type: 'image/png',
       },
     ],
@@ -106,21 +116,23 @@ export const metadata: Metadata = {
     emails: [siteConfig.email],
     phoneNumbers: [siteConfig.phone],
   },
+  // Enhanced Twitter Cards for Dutch content
   twitter: {
     card: 'summary_large_image',
     site: '@prowebstudio_nl',
     creator: '@prowebstudio_nl',
-    title: `${siteConfig.name} - ${siteConfig.tagline}`,
-    description: siteConfig.description,
+    title: `${siteConfig.name} - Professionele 3D Websites Nederland`,
+    description: 'Snelle, veilige en schaalbare 3D‑websites die scoren in Google. Nederlandse kwaliteit, transparante prijzen. Vraag direct offerte aan!',
     images: [
       {
         url: `${SITE_URL}/og`,
         width: 1200,
         height: 630,
-        alt: `${siteConfig.name} - ${siteConfig.tagline}`,
+        alt: `${siteConfig.name} - Professionele 3D Websites & Webdesign Nederland`,
       },
     ],
   },
+  // Enhanced robots configuration
   robots: process.env.VERCEL_ENV === 'preview'
     ? {
         index: false,
@@ -131,7 +143,7 @@ export const metadata: Metadata = {
           follow: false,
           noimageindex: true,
           'max-video-preview': 0,
-          'max-image-preview': 'none',
+          'max-image-preview': 'none' as const,
           'max-snippet': 0,
         },
       }
@@ -144,10 +156,19 @@ export const metadata: Metadata = {
           follow: true,
           noimageindex: false,
           'max-video-preview': -1,
-          'max-image-preview': 'large',
+          'max-image-preview': 'large' as const,
           'max-snippet': -1,
         },
       },
+  // Canonical URL management
+  alternates: {
+    canonical: SITE_URL,
+    languages: {
+      'nl-NL': SITE_URL,
+      'nl': SITE_URL,
+      'x-default': SITE_URL,
+    },
+  },
   category: 'technology',
   classification: 'Business',
   referrer: 'strict-origin-when-cross-origin',
@@ -158,6 +179,7 @@ export const metadata: Metadata = {
     statusBarStyle: 'black-translucent',
     startupImage: ['/icons/apple-touch-icon-180.png'],
   },
+  // Enhanced other metadata with content freshness and rich snippets
   other: {
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
@@ -172,7 +194,7 @@ export const metadata: Metadata = {
     'mobile-web-app-capable': 'yes',
     HandheldFriendly: 'True',
     MobileOptimized: '320',
-    'revisit-after': '7 days',
+    'revisit-after': '3 days',
     audience: 'all',
     copyright: `© ${new Date().getFullYear()} ${siteConfig.name}`,
     designer: siteConfig.name,
@@ -181,10 +203,11 @@ export const metadata: Metadata = {
     'identifier-URL': SITE_URL,
     pagename: siteConfig.name,
     category: 'internet',
-    'dc.title': siteConfig.name,
+    // Dublin Core metadata
+    'dc.title': `${siteConfig.name} - Professionele 3D Websites Nederland`,
     'dc.creator': siteConfig.name,
-    'dc.subject': 'Website Development, Web Design, 3D Websites',
-    'dc.description': siteConfig.description,
+    'dc.subject': 'Website Development, Web Design, 3D Websites, Nederlandse Webdesign',
+    'dc.description': 'Professionele 3D websites en webdesign diensten in Nederland',
     'dc.publisher': siteConfig.name,
     'dc.contributor': siteConfig.name,
     'dc.date': new Date().toISOString(),
@@ -196,10 +219,32 @@ export const metadata: Metadata = {
     'dc.relation': SITE_URL,
     'dc.coverage': 'Netherlands',
     'dc.rights': `© ${new Date().getFullYear()} ${siteConfig.name}`,
+    // Geographic metadata
     'geo.region': 'NL',
     'geo.placename': 'Netherlands',
     'geo.position': '52.3676;4.9041',
     ICBM: '52.3676, 4.9041',
+    // Content freshness
+    'article:modified_time': new Date().toISOString(),
+    'article:published_time': new Date().toISOString(),
+    // Business metadata for rich snippets
+    'business:contact_data:phone_number': siteConfig.phone,
+    'business:contact_data:email': siteConfig.email,
+    'business:contact_data:locality': 'Nederland',
+    'business:contact_data:region': 'Nederland',
+    'business:contact_data:country_name': 'Netherlands',
+    // Social media verification
+    'facebook-domain-verification': process.env.NEXT_PUBLIC_FACEBOOK_DOMAIN_VERIFICATION || '',
+    'google-site-verification': process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || process.env.GOOGLE_SITE_VERIFICATION || '',
+    // Enhanced robots directives
+    'robots': 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1',
+    'googlebot': 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1',
+    'bingbot': 'index,follow',
+    'slurp': 'index,follow',
+    'duckduckbot': 'index,follow',
+    'facebookexternalhit': 'index,follow',
+    'twitterbot': 'index,follow',
+    'linkedinbot': 'index,follow',
   },
 };
 
@@ -219,13 +264,18 @@ export default function RootLayout({
         <link rel="alternate" hrefLang="nl-NL" href={`${SITE_URL}/`} />
         <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}/`} />
         
-        <link rel="preconnect" href="https://plausible.io" crossOrigin="" />
-        {/* Critical third-party resource preconnections */}
+        {/* Critical CSS for above-the-fold content - improves LCP */}
+        <CriticalCSS route="/" />
+        
+        {/* Enhanced Resource Hints for perfect Core Web Vitals */}
+        <ResourceHints currentPath="/" enableRoutePrefetch={true} enableDNSPrefetch={true} />
+        
+        {/* Legacy resource hints (keeping for compatibility) */}
         {generateResourcePreconnects().map((resource, index) => {
           if (resource.type === 'preconnect') {
             return (
               <link
-                key={`preconnect-${index}`}
+                key={`legacy-preconnect-${index}`}
                 rel="preconnect"
                 href={resource.href}
                 {...(resource.crossOrigin !== undefined && { crossOrigin: resource.crossOrigin })}
@@ -234,7 +284,7 @@ export default function RootLayout({
           } else if (resource.type === 'dns-prefetch') {
             return (
               <link
-                key={`dns-prefetch-${index}`}
+                key={`legacy-dns-prefetch-${index}`}
                 rel="dns-prefetch"
                 href={resource.href}
               />
@@ -242,10 +292,6 @@ export default function RootLayout({
           }
           return null;
         })}
-        
-        <link rel="dns-prefetch" href="https://plausible.io" />
-        <link rel="preconnect" href="https://cal.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="https://cal.com" />
         
         {/* Font preloads are handled automatically by Next.js */}
         
@@ -290,6 +336,10 @@ export default function RootLayout({
         />
         <Analytics />
         <SpeedInsights />
+        
+        {/* Enhanced Web Vitals Monitoring */}
+        <WebVitalsReporter />
+        <WebVitalsDisplay showInProduction={process.env.NODE_ENV === 'development'} />
       </body>
     </html>
   );

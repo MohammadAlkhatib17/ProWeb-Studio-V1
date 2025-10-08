@@ -98,17 +98,20 @@ const nextConfig = {
     optimizePackageImports: ['@react-three/fiber', '@react-three/drei', 'three'],
   },
   
-  // Image optimization
+  // Aggressive image optimization for perfect Core Web Vitals
   images: {
+    // Prioritize AVIF for maximum compression, fallback to WebP
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Comprehensive device size coverage for perfect responsive images
+    deviceSizes: [640, 750, 828, 1080, 1200, 1440, 1920, 2048, 3840],
+    // Extended image sizes for better granularity
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512, 640, 768],
+    // Long-term caching for static images
     minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    // Enable responsive images with optimized settings
     unoptimized: false,
-    // Remote patterns for external images (if needed)
+    // Remote patterns for external images
     remotePatterns: [
       {
         protocol: 'https',
@@ -116,40 +119,76 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
-      // Add more remote patterns as needed for external images
+      {
+        protocol: 'https',
+        hostname: 'vercel.com',
+        port: '',
+        pathname: '/**',
+      },
+      // Add other trusted domains as needed
     ],
-    // Enable loader for better performance
     loader: 'default',
-    // Domains for external images (legacy - prefer remotePatterns)
     domains: [],
   },
 
   // PWA and Service Worker: serve /public/sw.js directly as /sw.js
 
-  // Webpack optimization
+  // Advanced webpack optimization for perfect Core Web Vitals
   webpack: (config, { dev, isServer }) => {
-    // Optimize chunk splitting
+    // Enhanced chunk splitting for optimal loading
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000,
+        minChunks: 1,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
         cacheGroups: {
           default: {
             minChunks: 2,
             priority: -10,
             reuseExistingChunk: true,
           },
+          // Framework chunk for React, Next.js core
+          framework: {
+            test: /[\\/]node_modules[\\/](react|react-dom|next)[\\/]/,
+            name: 'framework',
+            priority: 40,
+            chunks: 'all',
+            enforce: true,
+          },
+          // Vendor libraries chunk
           vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            priority: -5,
+            test: /[\\/]node_modules[\\/](?!(react|react-dom|next|three|@react-three)[\\/])/,
+            name: 'vendor',
+            priority: 30,
+            chunks: 'all',
             reuseExistingChunk: true,
           },
+          // Three.js and related libraries (heavy 3D libs)
           three: {
             test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
             name: 'three',
-            priority: 10,
+            priority: 35,
+            chunks: 'async',
+            enforce: true,
+          },
+          // Animation libraries
+          animation: {
+            test: /[\\/]node_modules[\\/](framer-motion|lottie-web)[\\/]/,
+            name: 'animation',
+            priority: 25,
             chunks: 'async',
           },
+          // UI components chunk
+          ui: {
+            test: /[\\/]node_modules[\\/](lucide-react|@headlessui|@tailwindcss)[\\/]/,
+            name: 'ui',
+            priority: 20,
+            chunks: 'all',
+          },
+          // Common chunk for shared code
           common: {
             name: 'common',
             minChunks: 2,
@@ -159,6 +198,18 @@ const nextConfig = {
           },
         },
       };
+
+      // Enable aggressive tree shaking
+      config.optimization.usedExports = true;
+      config.optimization.sideEffects = false;
+      
+      // Enable module concatenation
+      config.optimization.concatenateModules = true;
+    }
+
+    // Optimize for development
+    if (dev) {
+      config.devtool = 'eval-cheap-module-source-map';
     }
 
     return config;

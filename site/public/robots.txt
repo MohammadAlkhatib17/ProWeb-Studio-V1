@@ -10,6 +10,8 @@ Allow: /portfolio/
 Allow: /over-ons/
 Allow: /privacy/
 Allow: /voorwaarden/
+Allow: /locaties/
+Allow: /locatie/
 Allow: /sitemap.xml
 Allow: /robots.txt
 
@@ -40,8 +42,13 @@ Allow: /
 Crawl-delay: 2
 
 # Sitemaps for indexing acceleration
+Sitemap: https://prowebstudio.nl/sitemap-index.xml
 Sitemap: https://prowebstudio.nl/sitemap.xml
-Sitemap: https://prowebstudio.nl/sitemap-0.xml
+Sitemap: https://prowebstudio.nl/sitemap-services.xml
+Sitemap: https://prowebstudio.nl/sitemap-locations.xml
+Sitemap: https://prowebstudio.nl/sitemap-images.xml
+Sitemap: https://prowebstudio.nl/sitemap-news.xml
+Sitemap: https://prowebstudio.nl/sitemap-videos.xml
 
 # Host for canonical clarity
 Host: prowebstudio.nl

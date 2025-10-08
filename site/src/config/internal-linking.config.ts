@@ -25,6 +25,7 @@ export interface LocationPage {
   description: string;
   relatedServices: string[];
   nearbyLocations: string[];
+  keyIndustries: string[];
 }
 
 // Main services with internal linking opportunities
@@ -75,7 +76,8 @@ export const locations: LocationPage[] = [
     population: 872680,
     description: 'Professionele webdesign en ontwikkeling in Amsterdam. Lokale expertise voor Nederlandse bedrijven.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen'],
-    nearbyLocations: ['haarlem', 'almere', 'utrecht']
+    nearbyLocations: ['haarlem', 'almere', 'utrecht'],
+    keyIndustries: ['financiële dienstverlening', 'toerisme', 'technologie', 'creatieve industrie']
   },
   {
     name: 'Rotterdam',
@@ -84,7 +86,8 @@ export const locations: LocationPage[] = [
     population: 651446,
     description: 'Webdesign Rotterdam - moderne websites voor bedrijven in de havenstad.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['den-haag', 'dordrecht', 'breda']
+    nearbyLocations: ['den-haag', 'dordrecht', 'breda'],
+    keyIndustries: ['logistiek', 'scheepvaart', 'petrochemie', 'architectuur']
   },
   {
     name: 'Utrecht',
@@ -93,7 +96,8 @@ export const locations: LocationPage[] = [
     population: 361924,
     description: 'Website laten maken Utrecht - centraal gelegen webdesign expertise.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen'],
-    nearbyLocations: ['amsterdam', 'hilversum', 'amersfoort']
+    nearbyLocations: ['amsterdam', 'hilversum', 'amersfoort'],
+    keyIndustries: ['onderwijs', 'gezondheidszorg', 'overheid', 'consultancy']
   },
   {
     name: 'Den Haag',
@@ -102,7 +106,8 @@ export const locations: LocationPage[] = [
     population: 548320,
     description: 'Webdesign Den Haag - professionele websites voor overheid en bedrijfsleven.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['rotterdam', 'leiden', 'delft']
+    nearbyLocations: ['rotterdam', 'leiden', 'delft'],
+    keyIndustries: ['overheid', 'internationale organisaties', 'juridische dienstverlening', 'diplomatie']
   },
   {
     name: 'Eindhoven',
@@ -111,7 +116,8 @@ export const locations: LocationPage[] = [
     population: 238326,
     description: 'Website ontwikkeling Eindhoven - innovatieve weboplossingen in Brainport.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['tilburg', 'breda', 'helmond']
+    nearbyLocations: ['tilburg', 'breda', 'helmond'],
+    keyIndustries: ['technologie', 'automotive', 'elektronica', 'design']
   },
   {
     name: 'Tilburg',
@@ -120,7 +126,8 @@ export const locations: LocationPage[] = [
     population: 223578,
     description: 'Webdesign Tilburg - kwaliteitswebsites voor bedrijven in Noord-Brabant.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['eindhoven', 'breda', 'den-bosch']
+    nearbyLocations: ['eindhoven', 'breda', 'den-bosch'],
+    keyIndustries: ['onderwijs', 'logistiek', 'dienstverlening', 'cultuur']
   },
   {
     name: 'Groningen',
@@ -129,7 +136,8 @@ export const locations: LocationPage[] = [
     population: 235287,
     description: 'Website laten maken Groningen - noordelijke expertise in webdesign.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['assen', 'leeuwarden', 'emmen']
+    nearbyLocations: ['assen', 'leeuwarden', 'emmen'],
+    keyIndustries: ['energie', 'landbouw', 'onderwijs', 'gezondheidszorg']
   },
   {
     name: 'Almere',
@@ -138,7 +146,8 @@ export const locations: LocationPage[] = [
     population: 218096,
     description: 'Webdesign Almere - moderne websites voor de snelstgroeiende stad.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['amsterdam', 'lelystad', 'hilversum']
+    nearbyLocations: ['amsterdam', 'lelystad', 'hilversum'],
+    keyIndustries: ['retail', 'woningbouw', 'dienstverlening', 'gezinsbedrijven']
   },
   {
     name: 'Breda',
@@ -147,7 +156,8 @@ export const locations: LocationPage[] = [
     population: 184403,
     description: 'Website ontwikkeling Breda - professionele weboplossingen in West-Brabant.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['tilburg', 'rotterdam', 'bergen-op-zoom']
+    nearbyLocations: ['tilburg', 'rotterdam', 'bergen-op-zoom'],
+    keyIndustries: ['voedingsindustrie', 'defensie', 'logistiek', 'toerisme']
   },
   {
     name: 'Nijmegen',
@@ -156,7 +166,8 @@ export const locations: LocationPage[] = [
     population: 179073,
     description: 'Webdesign Nijmegen - historische stad, moderne websites.',
     relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['arnhem', 'den-bosch', 'venlo']
+    nearbyLocations: ['arnhem', 'den-bosch', 'venlo'],
+    keyIndustries: ['onderwijs', 'gezondheidszorg', 'onderzoek', 'grenshandel']
   }
 ];
 

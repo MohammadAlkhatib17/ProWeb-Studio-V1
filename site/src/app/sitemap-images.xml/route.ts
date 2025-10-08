@@ -1,33 +1,32 @@
-// Edge runtime configuration for better performance and region distribution
-export const runtime = 'edge';
+import { 
+  scanImagesInDirectory, 
+  generateImageSitemapXML,
+  type ImageSitemapEntry 
+} from '@/lib/sitemap-advanced';
+import { existsSync } from 'fs';
+import { join } from 'path';
+
+// Remove edge runtime due to Node.js API requirements (fs/path)
 export const dynamic = 'force-dynamic';
-// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
-export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-
-interface ImageEntry {
-  loc: string; // Image URL
-  caption?: string; // Image caption
-  geoLocation?: string; // Geographic location of the image
-  title?: string; // Image title
-  license?: string; // License URL for the image
-}
-
-interface ImageSitemapEntry {
-  url: string; // Page URL containing the image
-  images: ImageEntry[];
-  lastModified?: string;
-}
 
 export async function GET() {
   const baseUrl = SITE_URL;
   
-  // Define all key images across the website with their metadata
-  const imageSitemapEntries: ImageSitemapEntry[] = [
+  // Dynamically scan for images in public directories
+  const publicDir = join(process.cwd(), 'public');
+  let allImageEntries: ImageSitemapEntry[] = [];
+  
+  if (existsSync(publicDir)) {
+    allImageEntries = scanImagesInDirectory(publicDir, baseUrl);
+  }
+  
+  // Add manually curated key images with detailed metadata
+  const curatedImageEntries: ImageSitemapEntry[] = [
     {
       url: `${baseUrl}/`,
-      lastModified: new Date().toISOString().split('T')[0],
+      lastModified: new Date(),
       images: [
         {
           loc: `${baseUrl}/assets/hero/nebula_helix.avif`,
@@ -63,7 +62,7 @@ export async function GET() {
     },
     {
       url: `${baseUrl}/diensten`,
-      lastModified: '2025-09-20',
+      lastModified: new Date('2025-09-20'),
       images: [
         {
           loc: `${baseUrl}/assets/nebula_services_background.avif`,
@@ -84,7 +83,7 @@ export async function GET() {
     },
     {
       url: `${baseUrl}/contact`,
-      lastModified: '2025-09-15',
+      lastModified: new Date('2025-09-15'),
       images: [
         {
           loc: `${baseUrl}/assets/glowing_beacon_contact.avif`,
@@ -101,7 +100,7 @@ export async function GET() {
     },
     {
       url: `${baseUrl}/over-ons`,
-      lastModified: '2025-09-05',
+      lastModified: new Date('2025-09-05'),
       images: [
         {
           loc: `${baseUrl}/assets/team_core_star.webp`,
@@ -122,7 +121,7 @@ export async function GET() {
     },
     {
       url: `${baseUrl}/werkwijze`,
-      lastModified: '2025-09-10',
+      lastModified: new Date('2025-09-10'),
       images: [
         {
           loc: `${baseUrl}/assets/logo/logo-proweb-lockup.svg`,
@@ -131,30 +130,23 @@ export async function GET() {
         },
       ],
     },
-    // Additional pages can be added here as the site grows
   ];
 
-  // Generate the XML content
-  const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-${imageSitemapEntries
-  .map(
-    (entry) => `  <url>
-    <loc>${entry.url}</loc>${entry.lastModified ? `\n    <lastmod>${entry.lastModified}</lastmod>` : ''}
-${entry.images
-  .map(
-    (image) => `    <image:image>
-      <image:loc>${image.loc}</image:loc>${image.caption ? `\n      <image:caption><![CDATA[${image.caption}]]></image:caption>` : ''}${image.title ? `\n      <image:title><![CDATA[${image.title}]]></image:title>` : ''}${image.geoLocation ? `\n      <image:geo_location>${image.geoLocation}</image:geo_location>` : ''}${image.license ? `\n      <image:license>${image.license}</image:license>` : ''}
-    </image:image>`
-  )
-  .join('\n')}
-  </url>`
-  )
-  .join('\n')}
-</urlset>`;
+  // Merge curated entries with dynamically scanned ones
+  // Avoid duplicates by preferring curated entries over dynamic ones
+  const mergedEntries = [...curatedImageEntries];
+  
+  for (const dynamicEntry of allImageEntries) {
+    const existingEntry = mergedEntries.find(entry => entry.url === dynamicEntry.url);
+    if (!existingEntry) {
+      mergedEntries.push(dynamicEntry);
+    }
+  }
 
-  return new Response(xmlContent, {
+  // Generate XML using the advanced system
+  const xml = generateImageSitemapXML(mergedEntries);
+
+  return new Response(xml, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
       'Cache-Control': 'public, max-age=86400, s-maxage=86400', // Cache for 24 hours
