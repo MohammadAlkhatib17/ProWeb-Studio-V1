@@ -1,15 +1,9 @@
 'use client';
 // src/three/HelixKnot.tsx
-import { useRef, useMemo, lazy, Suspense } from 'react';
-import { TorusKnotGeometry, Mesh } from 'three';
+import { useRef, useMemo } from 'react';
+import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-
-// Dynamically import the heavy transmission material
-const TransmissionMaterial = lazy(() => 
-  import('@/three/materials/TransmissionMaterial').then(module => ({
-    default: module.TransmissionMaterial
-  }))
-);
+import { MeshTransmissionMaterial } from '@react-three/drei';
 
 type Props = {
   color?: string;
@@ -17,9 +11,9 @@ type Props = {
 };
 
 export default function HelixKnot({ color = '#8b5cf6', speed = 0.25 }: Props) {
-  const ref = useRef<Mesh>(null!);
+  const ref = useRef<THREE.Mesh>(null!);
   const geom = useMemo(
-    () => new TorusKnotGeometry(0.95, 0.22, 220, 32, 2, 3),
+    () => new THREE.TorusKnotGeometry(0.95, 0.22, 220, 32, 2, 3),
     [],
   );
 
@@ -31,18 +25,21 @@ export default function HelixKnot({ color = '#8b5cf6', speed = 0.25 }: Props) {
 
   return (
     <mesh ref={ref} geometry={geom} position={[0, 0, 0.1]}>
-      <Suspense fallback={<meshStandardMaterial color={color} />}>
-        <TransmissionMaterial
-          transmission={1}
-          thickness={0.8}
-          roughness={0.18}
-          anisotropy={0.2}
-          chromaticAberration={0.015}
-          distortion={0.06}
-          color={color}
-          samples={8}
-        />
-      </Suspense>
+      <MeshTransmissionMaterial
+        transmission={1}
+        thickness={0.8}
+        roughness={0.18}
+        anisotropy={0.2}
+        chromaticAberration={0.015}
+        distortion={0.06}
+        distortionScale={0.4}
+        temporalDistortion={0.1}
+        ior={1.28}
+        attenuationColor={color}
+        attenuationDistance={1.15}
+        samples={8}
+        backside
+      />
     </mesh>
   );
 }

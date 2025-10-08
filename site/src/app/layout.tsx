@@ -76,13 +76,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   manifest: '/manifest.json',
-  alternates: {
-    canonical: SITE_URL,
-    languages: { 
-      'nl-NL': SITE_URL,
-      'x-default': SITE_URL
-    },
-  },
   icons: {
     icon: [
       { url: '/icons/favicon-32.png', sizes: '32x32', type: 'image/png' },
@@ -107,6 +100,7 @@ export const metadata: Metadata = {
       },
     ],
     locale: 'nl_NL',
+    alternateLocale: ['en_US', 'de_DE', 'fr_FR'],
     type: 'website',
     countryName: 'Netherlands',
     emails: [siteConfig.email],

@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next';
-import { locations } from '@/config/internal-linking.config';
 
 // Edge runtime configuration for better performance and region distribution
 export const runtime = 'edge';
@@ -26,9 +25,9 @@ const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'h
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE_URL; // Already normalized
 
-  // Define static routes with their respective priorities and change frequencies
+  // Define routes with their respective priorities and change frequencies
   // Enhanced with more specific lastModified dates and better priority distribution
-  const staticRoutes: Array<{
+  const routes: Array<{
     path: string;
     priority: number;
     changeFreq: SitemapEntry['changeFrequency'];
@@ -51,12 +50,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9, // Contact: critical for conversions
       changeFreq: 'monthly', // Contact info rarely changes
       lastModified: new Date('2025-09-15'),
-    },
-    {
-      path: '/prijzen',
-      priority: 0.9, // Pricing: very important for conversion
-      changeFreq: 'monthly', // Pricing updates occasionally
-      lastModified: new Date(),
     },
     {
       path: '/portfolio',
@@ -103,6 +96,66 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date('2025-09-24'),
     },
     {
+      path: '/locaties/amsterdam',
+      priority: 0.7, // Major city: high local SEO value
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/rotterdam',
+      priority: 0.7, // Major city: high local SEO value
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/utrecht',
+      priority: 0.7, // Major city: high local SEO value
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/den-haag',
+      priority: 0.7, // Major city: high local SEO value
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/eindhoven',
+      priority: 0.6, // Important regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/tilburg',
+      priority: 0.6, // Regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/groningen',
+      priority: 0.6, // Regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/almere',
+      priority: 0.6, // Growing city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/breda',
+      priority: 0.6, // Regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
+      path: '/locaties/nijmegen',
+      priority: 0.6, // Regional city
+      changeFreq: 'monthly', // Local content updates
+      lastModified: new Date('2025-09-24'),
+    },
+    {
       path: '/werkwijze',
       priority: 0.8, // Process: important for understanding value prop
       changeFreq: 'monthly', // Process documentation updates monthly
@@ -136,23 +189,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Note: /overzicht has been permanently removed from the site
   ];
 
-  // Generate dynamic location routes - sorted by population for priority ranking
-  const top10Cities = locations
-    .filter(location => location.population) // Ensure population data exists
-    .sort((a, b) => (b.population || 0) - (a.population || 0))
-    .slice(0, 10);
-
-  const locationRoutes = top10Cities.map((location, index) => ({
-    path: `/locaties/${location.slug}`,
-    priority: index < 4 ? 0.7 : 0.6, // Top 4 cities get higher priority
-    changeFreq: 'monthly' as const,
-    lastModified: new Date('2025-09-24'),
-  }));
-
-  // Combine static and dynamic routes
-  const allRoutes = [...staticRoutes, ...locationRoutes];
-
-  return allRoutes.map((route) => ({
+  return routes.map((route) => ({
     url: `${baseUrl}${route.path}`,
     lastModified: route.lastModified,
     changeFrequency: route.changeFreq,

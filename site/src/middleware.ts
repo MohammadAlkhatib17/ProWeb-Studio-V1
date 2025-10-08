@@ -261,58 +261,29 @@ export async function middleware(req: NextRequest) {
     response.headers.set('X-Cache-Strategy', 'dutch-optimized');
   }
   
-  // 8. Apply CSP based on page type
-  const isNonInteractivePages = [
-    '/privacy', '/voorwaarden', '/over-ons', '/werkwijze', '/overzicht-site',
-    '/diensten', '/diensten/website-laten-maken', '/diensten/webshop-laten-maken',
-    '/diensten/seo-optimalisatie', '/diensten/onderhoud-support', '/diensten/3d-website-ervaringen',
-    '/locaties'
-  ].includes(path) || path.startsWith('/locaties/') || path.startsWith('/diensten/');
-
-  const isInteractivePages = [
-    '/contact', '/speeltuin', '/portfolio'
-  ].includes(path) || path.startsWith('/speeltuin/') || path.startsWith('/portfolio/');
-
-  // Base CSP configuration
-  const baseCspDirectives = [
-    "default-src 'self'",
-    // Allow nonces for scripts and unsafe-inline for JSON-LD structured data only
-    `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com`,
-    `script-src-elem 'self' 'nonce-${nonce}' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com`,
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: https: blob:",
-    "media-src 'self' https:",
-    "connect-src 'self' https://api.cal.com https://www.google-analytics.com https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "frame-ancestors 'none'",
-    "form-action 'self'",
-    "upgrade-insecure-requests",
-    "report-uri /api/csp-report"
-  ];
-
-  if (isNonInteractivePages) {
-    // ENFORCED CSP for non-interactive pages
-    const cspValue = baseCspDirectives.join('; ');
-    response.headers.set('Content-Security-Policy', cspValue);
-    response.headers.set('Expect-CT', 'max-age=86400, enforce');
-    response.headers.set('X-Content-Type-Options', 'nosniff');
-  } else if (isInteractivePages) {
-    // Enhanced CSP for interactive pages (contact forms, cal.com integration)
-    const interactiveCspDirectives = [
-      ...baseCspDirectives.slice(0, -1), // Remove report-uri to add frame-src
+  // 8. Apply Contact-specific CSP with nonce
+  if (path === '/contact') {
+    const cspValue = [
+      "default-src 'self'",
+      // ENFORCED: Using nonces for inline scripts - no unsafe-inline or unsafe-eval
+      `script-src 'self' 'nonce-${nonce}' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com`,
+      `script-src-elem 'self' 'nonce-${nonce}' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com`,
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: https: blob:",
+      "media-src 'self' https:",
       "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com",
-      "report-uri /api/csp-report"
-    ];
-    const cspValue = interactiveCspDirectives.join('; ');
+      "connect-src 'self' https://api.cal.com https://www.google-analytics.com https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "frame-ancestors 'none'",
+      "form-action 'self'",
+      "upgrade-insecure-requests"
+    ].join('; ');
+    
     response.headers.set('Content-Security-Policy', cspValue);
     response.headers.set('Expect-CT', 'max-age=86400, enforce');
     response.headers.set('X-Content-Type-Options', 'nosniff');
-  } else {
-    // Report-only CSP for other pages during transition period
-    const cspValue = baseCspDirectives.join('; ');
-    response.headers.set('Content-Security-Policy-Report-Only', cspValue);
   }
   
   // 8. Apply X-Robots-Tag for speeltuin route and error pages

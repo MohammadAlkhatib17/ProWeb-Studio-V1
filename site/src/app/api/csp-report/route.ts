@@ -6,9 +6,10 @@ export const revalidate = 0;
 // Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
 export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
-// CSP Enforcement Active - 48h monitoring window started
-const CSP_MONITORING_START = new Date('2025-10-07T00:00:00Z');
-const CSP_MONITORING_END = new Date('2025-10-09T00:00:00Z');
+// CSP Report-Only 48h Window Started: 2025-09-18T00:00:00Z
+// Switch to enforcement after monitoring period ends: 2025-09-20T00:00:00Z
+const CSP_MONITORING_START = new Date('2025-09-18T00:00:00Z');
+const CSP_MONITORING_END = new Date('2025-09-20T00:00:00Z');
 
 export async function POST(req: NextRequest) {
   try {

@@ -46,9 +46,9 @@ export async function GET() {
       width: 1200,
       height: 630,
       headers: {
-        // Extended cache policy: 7 days s-maxage for OG images to reduce recomputation
-        // while maintaining 2 days SWR for reasonable updates
-        'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=172800',
+        // Conservative cache policy: 1 day for OG images to avoid unnecessary recomputation
+        // while still allowing for reasonable updates
+        'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=172800',
       },
     }
   );

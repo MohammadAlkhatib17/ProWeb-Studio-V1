@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { locations } from '@/config/internal-linking.config';
+import Link from 'next/link';
+import { locations, services, getNearbyLocations } from '@/config/internal-linking.config';
 import { Button } from '@/components/Button';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import RelatedServices from '@/components/RelatedServices';
-import RelatedLocations from '@/components/RelatedLocations';
 import ContentSuggestions from '@/components/ContentSuggestions';
 
 
@@ -19,15 +19,9 @@ interface LocationPageProps {
   };
 }
 
-// Generate static params for top 10 Dutch cities by population
+// Generate static params for all locations
 export async function generateStaticParams() {
-  // Sort locations by population (descending) and take top 10
-  const top10Cities = locations
-    .filter(location => location.population) // Ensure population data exists
-    .sort((a, b) => (b.population || 0) - (a.population || 0))
-    .slice(0, 10);
-
-  return top10Cities.map((location) => ({
+  return locations.map((location) => ({
     location: location.slug,
   }));
 }
@@ -70,7 +64,10 @@ export default function LocationPage({ params }: LocationPageProps) {
     notFound();
   }
 
-
+  const nearbyLocations = getNearbyLocations(location.slug);
+  const locationServices = services.filter(service => 
+    service.targetLocation?.includes(location.slug)
+  );
 
   // Location-specific schema
   const locationSchema = {
@@ -104,12 +101,13 @@ export default function LocationPage({ params }: LocationPageProps) {
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: `Webdesign Diensten ${location.name}`,
-      itemListElement: location.relatedServices.map((service, index) => ({
+      itemListElement: locationServices.map((service, index) => ({
         '@type': 'OfferCatalogItem',
         position: index + 1,
         itemOffered: {
           '@type': 'Service',
-          name: service.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()),
+          name: service.title,
+          description: service.description,
           areaServed: {
             '@type': 'City',
             name: location.name,
@@ -187,23 +185,97 @@ export default function LocationPage({ params }: LocationPageProps) {
         </div>
       </section>
 
-      {/* Local Services - Enhanced with more items */}
-      <RelatedServices 
-        currentLocation={location.slug}
-        maxItems={6}
-        excludeHrefs={[]}
-        className="py-section"
-      />
+      {/* Local Services */}
+      <section className="py-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Onze Diensten in {location.name}
+            </h2>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+              Professionele webdiensten speciaal afgestemd op de behoeften 
+              van bedrijven in {location.name} en omgeving.
+            </p>
+          </div>
 
-      {/* Nearby Locations - Enhanced with more items */}
-      <RelatedLocations 
-        currentLocation={location.slug}
-        maxItems={6}
-        excludeSlugs={[location.slug]}
-        className="py-section bg-cosmic-800/20"
-        title="Ook Actief in de Omgeving"
-        description={`Naast ${location.name} bedienen wij ook graag andere steden in de regio`}
-      />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {locationServices.map((service) => (
+              <div
+                key={service.href}
+                className="bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300"
+              >
+                <h3 className="text-xl font-semibold text-white mb-4">
+                  {service.title}
+                </h3>
+                <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                  {service.description}
+                </p>
+                <Link
+                  href={service.href}
+                  className="inline-flex items-center text-cyan-300 font-medium hover:text-cyan-200 transition-colors"
+                >
+                  Meer informatie
+                  <span className="ml-2">→</span>
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          {locationServices.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-slate-400 mb-6">
+                Alle onze diensten zijn beschikbaar in {location.name}.
+              </p>
+              <Link
+                href="/diensten"
+                className="inline-flex items-center px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-cosmic-900 font-semibold rounded-lg transition-colors duration-200"
+              >
+                Bekijk Alle Diensten
+                <span className="ml-2">→</span>
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Nearby Locations */}
+      {nearbyLocations.length > 0 && (
+        <section className="py-section bg-cosmic-800/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                Ook Actief in de Omgeving
+              </h2>
+              <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+                Naast {location.name} bedienen wij ook graag andere steden in de regio.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {nearbyLocations.map((nearbyLocation) => (
+                <Link
+                  key={nearbyLocation.slug}
+                  href={`/locaties/${nearbyLocation.slug}`}
+                  className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:bg-cosmic-800/50"
+                >
+                  <h3 className="text-lg font-semibold text-white group-hover:text-cyan-300 transition-colors mb-3">
+                    {nearbyLocation.name}
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-4">
+                    {nearbyLocation.description}
+                  </p>
+                  <div className="flex items-center text-cyan-300 text-sm font-medium">
+                    Bekijk diensten in {nearbyLocation.name}
+                    <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
+                      →
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Local SEO Content */}
       <section className="py-section">

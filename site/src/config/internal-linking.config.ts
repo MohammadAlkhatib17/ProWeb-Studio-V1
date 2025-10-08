@@ -235,105 +235,24 @@ export const contentSuggestions: Record<string, Array<{title: string; href: stri
 };
 
 // Get related services for a specific service
-export function getRelatedServices(currentService: string, maxItems: number = 3): ServiceLink[] {
+export function getRelatedServices(currentService: string): ServiceLink[] {
   const current = services.find(s => s.href.includes(currentService));
   if (!current) return [];
   
   return services.filter(s => 
     current.relatedServices.some(related => s.href.includes(related)) && 
     s.href !== current.href
-  ).slice(0, maxItems);
+  ).slice(0, 3);
 }
 
 // Get nearby locations for a specific location
-export function getNearbyLocations(currentLocation: string, maxItems: number = 3): LocationPage[] {
+export function getNearbyLocations(currentLocation: string): LocationPage[] {
   const current = locations.find(l => l.slug === currentLocation);
   if (!current) return [];
   
   return locations.filter(l => 
     current.nearbyLocations.includes(l.slug)
-  ).slice(0, maxItems);
-}
-
-// Get relevant locations for a specific service (5-8 items)
-export function getLocationsForService(serviceName: string, maxItems: number = 6): LocationPage[] {
-  const serviceKey = serviceName.toLowerCase().replace(/\s+/g, '-');
-  
-  return locations.filter(location => 
-    location.relatedServices.includes(serviceKey)
-  ).slice(0, maxItems);
-}
-
-// Get all services available in a specific location (5-8 items)
-export function getServicesForLocation(locationSlug: string, maxItems: number = 6, excludeHrefs: string[] = []): ServiceLink[] {
-  const filteredServices = services.filter(service => 
-    service.targetLocation?.includes(locationSlug) &&
-    !excludeHrefs.includes(service.href)
-  );
-  
-  // If we have fewer services than requested, add popular services to reach maxItems
-  if (filteredServices.length < maxItems) {
-    const additionalServices = services.filter(service => 
-      !service.targetLocation?.includes(locationSlug) &&
-      !excludeHrefs.includes(service.href) &&
-      !filteredServices.some(fs => fs.href === service.href)
-    ).slice(0, maxItems - filteredServices.length);
-    
-    filteredServices.push(...additionalServices);
-  }
-  
-  return filteredServices.slice(0, maxItems);
-}
-
-// Get smart location suggestions based on current context (avoids duplicates)
-export function getSmartLocationSuggestions(
-  currentLocationSlug?: string, 
-  excludeSlugs: string[] = [], 
-  maxItems: number = 6
-): LocationPage[] {
-  const suggestions: LocationPage[] = [];
-  
-  if (currentLocationSlug) {
-    // First add nearby locations
-    const nearby = getNearbyLocations(currentLocationSlug, 3);
-    suggestions.push(...nearby);
-  }
-  
-  // Then add popular locations (by population) that aren't already included
-  const allExcluded = [...excludeSlugs, currentLocationSlug, ...suggestions.map(s => s.slug)].filter(Boolean);
-  const popular = locations
-    .filter(location => !allExcluded.includes(location.slug))
-    .sort((a, b) => (b.population || 0) - (a.population || 0))
-    .slice(0, maxItems - suggestions.length);
-  
-  suggestions.push(...popular);
-  
-  return suggestions.slice(0, maxItems);
-}
-
-// Get smart service suggestions based on current context (avoids duplicates)
-export function getSmartServiceSuggestions(
-  currentServicePath?: string,
-  excludeHrefs: string[] = [],
-  maxItems: number = 6
-): ServiceLink[] {
-  const suggestions: ServiceLink[] = [];
-  
-  if (currentServicePath) {
-    // First add related services
-    const related = getRelatedServices(currentServicePath, 3);
-    suggestions.push(...related);
-  }
-  
-  // Then add popular services that aren't already included
-  const allExcluded = [...excludeHrefs, currentServicePath, ...suggestions.map(s => s.href)].filter(Boolean);
-  const popular = services
-    .filter(service => !allExcluded.includes(service.href))
-    .slice(0, maxItems - suggestions.length);
-  
-  suggestions.push(...popular);
-  
-  return suggestions.slice(0, maxItems);
+  ).slice(0, 3);
 }
 
 // Get content suggestions for current page

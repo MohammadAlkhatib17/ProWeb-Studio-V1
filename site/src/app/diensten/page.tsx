@@ -294,23 +294,6 @@ export default function Diensten() {
 
             <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
-                💰 Transparante Prijzen
-              </h3>
-              <p className="text-slate-200 mb-4 text-sm leading-relaxed">
-                Geen verborgen kosten, geen maandelijkse abonnementen. Bekijk onze eerlijke 
-                tarieven voor websites, webshops en 3D ervaringen.
-              </p>
-              <Link 
-                href="/prijzen" 
-                className="inline-flex items-center text-cyan-300 hover:text-cyan-300 transition-colors text-sm font-medium"
-              >
-                Bekijk alle prijzen
-                <span className="ml-1">→</span>
-              </Link>
-            </div>
-
-            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
-              <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
                 🎮 3D Technologie Speeltuin
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
@@ -362,11 +345,11 @@ export default function Diensten() {
                 Plan Gratis Strategiesessie
               </Button>
               <Button
-                href="/prijzen"
+                href="/portfolio"
                 variant="secondary"
                 size="large"
               >
-                Bekijk Transparante Prijzen
+                Bekijk Portfolio
               </Button>
             </div>
           </div>
@@ -428,9 +411,7 @@ export default function Diensten() {
           fundament. Wij bouwen maatwerk websites met een scherp oog voor
           snelheid, gebruiksvriendelijkheid en een conversiegericht ontwerp dat
           bezoekers omzet in klanten. Of u nu ZZP&apos;er bent of een groeiend
-          MKB-bedrijf runt, uw online groei is onze prioriteit. Bekijk onze{' '}
-          <Link href="/prijzen">transparante website prijzen</Link> voor een 
-          duidelijk overzicht van wat een professionele website kost.
+          MKB-bedrijf runt, uw online groei is onze prioriteit.
         </p>
         <h2>3D Web Experiences (WebGL/Three.js)</h2>
         <p>

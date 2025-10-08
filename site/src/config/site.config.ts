@@ -14,7 +14,6 @@ export const siteConfig = {
   navigation: [
     { name: 'Home', href: '/' },
     { name: 'Diensten', href: '/diensten' },
-    { name: 'Prijzen', href: '/prijzen' },
     { name: 'Portfolio', href: '/portfolio' },
     { name: 'Over Ons', href: '/over-ons' },
     { name: 'Speeltuin', href: '/speeltuin' },

@@ -1,85 +1,46 @@
 'use client';
 
 import Link from 'next/link';
-import { 
-  services, 
-  getSmartServiceSuggestions,
-  getServicesForLocation,
-  type ServiceLink 
-} from '@/config/internal-linking.config';
-
+import { services, getRelatedServices, type ServiceLink } from '@/config/internal-linking.config';
 
 interface RelatedServicesProps {
   currentService?: string;
-  currentLocation?: string;
   className?: string;
   showAll?: boolean;
   maxItems?: number;
-  excludeHrefs?: string[];
-  title?: string;
-  description?: string;
 }
 
 export default function RelatedServices({ 
   currentService, 
-  currentLocation,
   className = '',
   showAll = false,
-  maxItems = 6,
-  excludeHrefs = [],
-  title,
-  description
+  maxItems = 3 
 }: RelatedServicesProps) {
-  // Get related services based on context
-  let relatedServices: ServiceLink[] = [];
-  
-  if (currentLocation) {
-    // Show services available in this location
-    relatedServices = getServicesForLocation(currentLocation, maxItems, excludeHrefs);
-  } else if (currentService) {
-    // Show related services for current service
-    relatedServices = getSmartServiceSuggestions(currentService, excludeHrefs, maxItems);
-  } else {
-    // Show popular services
-    relatedServices = services
-      .filter(service => !excludeHrefs.includes(service.href))
-      .slice(0, maxItems);
-  }
+  // Get related services based on current service, or show popular services
+  const relatedServices = currentService 
+    ? getRelatedServices(currentService)
+    : services.slice(0, maxItems);
 
   if (relatedServices.length === 0) {
     return null;
   }
-
-  // Dynamic title and description based on context
-  const defaultTitle = currentLocation 
-    ? `Onze Diensten in ${currentLocation.charAt(0).toUpperCase() + currentLocation.slice(1)}`
-    : currentService 
-    ? 'Gerelateerde Diensten'
-    : 'Onze Populaire Diensten';
-
-  const defaultDescription = currentLocation
-    ? `Professionele webdiensten beschikbaar in ${currentLocation.charAt(0).toUpperCase() + currentLocation.slice(1)}`
-    : currentService 
-    ? 'Ontdek andere diensten die perfect aansluiten bij uw behoeften'
-    : 'Professionele webdiensten voor Nederlandse bedrijven';
 
   return (
     <section className={`py-12 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-            {title || defaultTitle}
+            {currentService ? 'Gerelateerde Diensten' : 'Onze Populaire Diensten'}
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto">
-            {description || defaultDescription}
+            {currentService 
+              ? 'Ontdek andere diensten die perfect aansluiten bij uw behoeften'
+              : 'Professionele webdiensten voor Nederlandse bedrijven'
+            }
           </p>
         </div>
 
-        <div className={`grid gap-6 ${
-          relatedServices.length >= 4 
-            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-        }`}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {relatedServices.map((service) => (
             <Link
               key={service.href}
@@ -151,8 +112,6 @@ export function RelatedServicesSchema({ relatedServices }: { relatedServices: Se
     })),
   };
 
-  // Note: Since this is a client component, we'll use standard approach
-  // The CSP nonce will be handled by the parent server component or middleware
   return (
     <script
       type="application/ld+json"
