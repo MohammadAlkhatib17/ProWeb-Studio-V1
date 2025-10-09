@@ -12,7 +12,30 @@
     --app-bg-gradient: radial-gradient(circle at 50% 30%, rgba(20, 140, 255, 0.1) 0%, rgba(255, 0, 255, 0.05) 40%, transparent 70%);
     /* Header offset for anchor scroll positioning - professional height */
     --header-offset: 80px; /* enhanced mobile header height */
+    
+    /* UI Component Variables */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 94.1%;
+    --radius: 0.5rem;
   }
+}
 
   @media (min-width: 768px) {
     :root {
@@ -134,7 +157,6 @@
   .skip-to-content {
     @apply absolute -top-full left-4 z-50 bg-cosmic-800 px-4 py-2 text-white focus:top-4;
   }
-}
 
 @layer utilities {
   .magnetic-hover {
