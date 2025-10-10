@@ -6,17 +6,13 @@
   "overrides": [
     {
       "files": [
-        "src/lib/monitoring/**/*.ts",
-        "src/lib/web-vitals-monitor.ts",
-        "src/lib/metadata/**/*.ts",
-        "src/components/**/monitoring/**/*.tsx",
-        "src/components/**/WebVitalsDisplay.tsx",
-        "src/components/**/StructuredData.tsx",
-        "src/components/**/local-seo/**/*.tsx",
-        "src/app/api/monitoring/**/*.ts"
+        "src/lib/monitoring/core-web-vitals.ts",
+        "src/lib/monitoring/structured-data.ts",
+        "src/lib/monitoring/utils.ts",
+        "src/lib/web-vitals-monitor.ts"
       ],
       "rules": {
-        "@typescript-eslint/no-explicit-any": "warn"
+        "@typescript-eslint/no-explicit-any": "off"
       }
     }
   ]

@@ -302,7 +302,7 @@ function RecentAlertsCard({ alerts }: { alerts: MonitoringAlert[] }) {
 }
 
 // Top Issues Card
-function TopIssuesCard({ issues }: { issues: any[] }) {
+function TopIssuesCard({ issues }: { issues: any[] }) { // eslint-disable-line @typescript-eslint/no-explicit-any
   const priorityIssues = issues
     .filter(issue => issue.impact === 'high')
     .slice(0, 5);
@@ -495,7 +495,7 @@ function SearchQueriesCard({ queries }: { queries: SearchQueryData[] }) {
 }
 
 // Competitor Insights Card
-function CompetitorInsightsCard({ insights }: { insights: any[] }) {
+function CompetitorInsightsCard({ insights }: { insights: any[] }) { // eslint-disable-line @typescript-eslint/no-explicit-any
   return (
     <Card>
       <CardHeader>

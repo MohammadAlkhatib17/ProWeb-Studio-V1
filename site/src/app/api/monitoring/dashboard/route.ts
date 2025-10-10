@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
         seoScore: getResultValue(seoHealth)?.score || 0,
         performanceScore: calculatePerformanceScore(getResultValue(coreWebVitals)),
         issuesCount: getResultValue(seoHealth)?.issues?.length || 0,
-        alertsCount: getResultValue(alerts)?.filter((a: any) => !a.resolved).length || 0,
+        alertsCount: getResultValue(alerts)?.filter((a) => !('resolved' in a && a.resolved)).length || 0,
       },
       recentAlerts: getResultValue(alerts) || [],
       coreWebVitals: getResultValue(coreWebVitals) || getDefaultWebVitals(),
@@ -232,27 +232,27 @@ function getResultValue<T>(result: PromiseSettledResult<T>): T | null {
   return result.status === 'fulfilled' ? result.value : null;
 }
 
-function calculatePerformanceScore(metrics: any): number {
+function calculatePerformanceScore(metrics: { lcp?: number; fid?: number; cls?: number; fcp?: number; ttfb?: number } | null): number {
   if (!metrics) return 0;
   
   // Simple scoring based on Core Web Vitals
   let score = 0;
   
   // LCP scoring
-  if (metrics.lcp <= 2500) score += 25;
-  else if (metrics.lcp <= 4000) score += 15;
+  if (metrics.lcp && metrics.lcp <= 2500) score += 25;
+  else if (metrics.lcp && metrics.lcp <= 4000) score += 15;
   
   // FID scoring
-  if (metrics.fid <= 100) score += 25;
-  else if (metrics.fid <= 300) score += 15;
+  if (metrics.fid && metrics.fid <= 100) score += 25;
+  else if (metrics.fid && metrics.fid <= 300) score += 15;
   
   // CLS scoring
-  if (metrics.cls <= 0.1) score += 25;
-  else if (metrics.cls <= 0.25) score += 15;
+  if (metrics.cls && metrics.cls <= 0.1) score += 25;
+  else if (metrics.cls && metrics.cls <= 0.25) score += 15;
   
   // TTFB scoring
-  if (metrics.ttfb <= 800) score += 25;
-  else if (metrics.ttfb <= 1800) score += 15;
+  if (metrics.ttfb && metrics.ttfb <= 800) score += 25;
+  else if (metrics.ttfb && metrics.ttfb <= 1800) score += 15;
   
   return score;
 }

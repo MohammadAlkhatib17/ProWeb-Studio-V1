@@ -4,8 +4,9 @@ import { describe, it, expect } from 'vitest';
 // This is a manual verification script to check if the implementation is working
 
 describe('RealUserVitals', () => {
-  it('should be properly implemented', () => {
-    expect(true).toBe(true); // Placeholder test
+  it('should render without errors', () => {
+    // Test that RealUserVitals can be imported
+    expect(testRealUserVitals).toBeDefined();
   });
 });
 

@@ -247,7 +247,7 @@ export interface MonitoringAlert {
   timestamp: number;
   acknowledged: boolean;
   resolved: boolean;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface AlertConfig {
@@ -297,7 +297,7 @@ export interface MonitoringDashboard {
 }
 
 // API responses
-export interface MonitoringAPIResponse<T = any> {
+export interface MonitoringAPIResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;

@@ -50,7 +50,7 @@ export interface NotificationPayload {
   recipient: string;
   subject: string;
   message: string;
-  data: any;
+  data: unknown;
 }
 
 export class DailyMonitoring {

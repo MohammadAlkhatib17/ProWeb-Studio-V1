@@ -14,7 +14,7 @@ import { siteConfig } from '@/config/site.config';
 
 interface StructuredDataProps {
   type: 'FAQ' | 'HowTo' | 'Product' | 'Service' | 'Organization' | 'LocalBusiness' | 'Article' | 'BreadcrumbList';
-  data: any;
+  data: unknown;
   nonce?: string;
 }
 
@@ -23,31 +23,31 @@ export default function StructuredData({ type, data, nonce }: StructuredDataProp
 
   switch (type) {
     case 'FAQ':
-      structuredData = generateFAQStructuredData(data);
+      structuredData = generateFAQStructuredData(data as { question: string; answer: string; }[]);
       break;
     case 'HowTo':
-      structuredData = generateHowToStructuredData(data);
+      structuredData = generateHowToStructuredData(data as { name: string; text: string; image?: string; }[]);
       break;
     case 'Product':
-      structuredData = generateProductStructuredData(data);
+      structuredData = generateProductStructuredData(data as { name: string; description: string; image: string; brand: string; offers: { price: string; priceCurrency: string; availability: string; }; });
       break;
     case 'Service':
-      structuredData = generateServiceStructuredData(data);
+      structuredData = generateServiceStructuredData(data as { name: string; description: string; provider: string; areaServed: string[]; serviceType: string; offers: { price: string; priceCurrency: string; description: string; }; });
       break;
     case 'Organization':
-      structuredData = generateOrganizationStructuredData(data);
+      structuredData = generateOrganizationStructuredData(data as { name: string; url: string; logo: string; description: string; address: { streetAddress: string; addressLocality: string; addressRegion: string; postalCode: string; addressCountry: string; }; contactPoint: { telephone: string; contactType: string; email: string; }; sameAs: string[]; });
       break;
     case 'LocalBusiness':
-      structuredData = generateLocalBusinessStructuredData(data);
+      structuredData = generateLocalBusinessStructuredData(data as { name: string; description: string; address: { streetAddress: string; addressLocality: string; addressRegion: string; postalCode: string; addressCountry: string; }; geo: { latitude: string; longitude: string; }; contactPoint: { telephone: string; contactType: string; email: string; }; sameAs: string[]; openingHours: string[]; });
       break;
     case 'Article':
-      structuredData = generateArticleStructuredData(data);
+      structuredData = generateArticleStructuredData(data as { headline: string; description: string; author: string; publisher: string; datePublished: string; dateModified: string; image: string; mainEntityOfPage: string; });
       break;
     case 'BreadcrumbList':
-      structuredData = generateBreadcrumbStructuredData(data);
+      structuredData = generateBreadcrumbStructuredData(data as { name: string; url: string; }[]);
       break;
     default:
-      structuredData = data;
+      return null;
   }
 
   return (
@@ -56,7 +56,7 @@ export default function StructuredData({ type, data, nonce }: StructuredDataProp
       type="application/ld+json"
       nonce={nonce}
       dangerouslySetInnerHTML={{
-        __html: generateJsonLd(structuredData),
+        __html: generateJsonLd(structuredData as Record<string, unknown>),
       }}
     />
   );

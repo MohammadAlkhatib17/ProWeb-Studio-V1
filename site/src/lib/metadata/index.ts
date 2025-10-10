@@ -142,7 +142,7 @@ export interface MetadataOptions {
     height?: number;
   };
   noIndex?: boolean;
-  schema?: Record<string, any>;
+  schema?: Record<string, unknown>;
 }
 
 // Generate dynamic title with location and service variables
@@ -238,7 +238,7 @@ export function generateOpenGraph(options: MetadataOptions, path: string): Metad
     images,
     locale: 'nl_NL',
     alternateLocale: ['en_US', 'de_DE', 'fr_FR'],
-    type: options.pageType ? pageTypeMetadata[options.pageType].type as any : 'website',
+    type: (options.pageType ? pageTypeMetadata[options.pageType].type : 'website') as 'website',
     countryName: 'Netherlands',
     emails: [siteConfig.email],
     phoneNumbers: [siteConfig.phone],

@@ -1,7 +1,7 @@
 // Structured snippet optimization for SERP features
 export interface StructuredSnippetOptions {
   type: 'FAQ' | 'HowTo' | 'Product' | 'Service' | 'Organization' | 'LocalBusiness' | 'Article' | 'BreadcrumbList';
-  data: Record<string, any>;
+  data: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 // FAQ structured data for SERP snippets
@@ -240,7 +240,7 @@ export function generateOrganizationStructuredData(org: {
 // Enhanced meta tags for rich snippets
 export function generateRichSnippetMeta(options: {
   type: string;
-  data: Record<string, any>;
+  data: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }): Record<string, string> {
   const meta: Record<string, string> = {};
   
@@ -274,7 +274,7 @@ export function generateRichSnippetMeta(options: {
 }
 
 // Generate JSON-LD script tag content
-export function generateJsonLd(data: Record<string, any>): string {
+export function generateJsonLd(data: Record<string, any>): string { // eslint-disable-line @typescript-eslint/no-explicit-any
   return JSON.stringify(data, null, 0);
 }
 

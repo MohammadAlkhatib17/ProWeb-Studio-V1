@@ -17,8 +17,8 @@ export function WebVitalsDisplay({
   showInProduction = false, 
   position = 'bottom-right' 
 }: WebVitalsDisplayProps) {
-  const [metrics, setMetrics] = useState<any[]>([]);
-  const [targets, setTargets] = useState<any>({});
+  const [metrics, setMetrics] = useState<Array<{ name: string; value: number; rating: string; id: string }>>([]);
+  const [targets, setTargets] = useState<Record<string, unknown>>({});
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

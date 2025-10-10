@@ -2,7 +2,7 @@ import { localBusinessData, type DutchCity } from '@/config/local-seo.config';
 
 interface LocalBusinessSchemaProps {
   city: DutchCity;
-  customData?: any;
+  customData?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export default function LocalBusinessSchema({ city, customData }: LocalBusinessSchemaProps) {

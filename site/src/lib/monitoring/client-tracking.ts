@@ -44,7 +44,7 @@ window.addEventListener('error', (event) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        url: (event.target as any).src,
+        url: (event.target as HTMLElement & { src?: string })?.src || 'unknown',
         referrer: document.referrer,
         userAgent: navigator.userAgent,
         timestamp: Date.now(),
