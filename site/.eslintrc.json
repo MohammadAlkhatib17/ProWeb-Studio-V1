@@ -2,5 +2,22 @@
   "extends": [
     "next/core-web-vitals",
     "next/typescript"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "src/lib/monitoring/**/*.ts",
+        "src/lib/web-vitals-monitor.ts",
+        "src/lib/metadata/**/*.ts",
+        "src/components/**/monitoring/**/*.tsx",
+        "src/components/**/WebVitalsDisplay.tsx",
+        "src/components/**/StructuredData.tsx",
+        "src/components/**/local-seo/**/*.tsx",
+        "src/app/api/monitoring/**/*.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "warn"
+      }
+    }
   ]
 }

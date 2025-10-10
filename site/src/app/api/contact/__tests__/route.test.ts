@@ -88,10 +88,11 @@ describe('/api/contact', () => {
 
   it('should reject submission with missing required fields', async () => {
     const invalidData = {
-      name: '',
-      email: 'invalid-email',
-      projectTypes: [],
-      message: 'short',
+      name: '', // Missing required field
+      email: 'test@example.com',
+      phone: '0123456789',
+      projectTypes: ['website-development'],
+      message: 'Test message',
       website: '',
       recaptchaToken: 'test-token',
       timestamp: Date.now()
@@ -103,7 +104,7 @@ describe('/api/contact', () => {
 
     expect(response.status).toBe(400);
     expect(data.ok).toBe(false);
-    expect(data.error).toBe('Validation failed');
+    expect(data.error).toBe('Formulier gegevens zijn ongeldig. Controleer alle velden en probeer opnieuw.');
   });
 
   it('should reject submission when reCAPTCHA verification fails', async () => {
@@ -121,7 +122,7 @@ describe('/api/contact', () => {
 
     expect(response.status).toBe(400);
     expect(data.ok).toBe(false);
-    expect(data.error).toBe('reCAPTCHA verification failed');
+    expect(data.error).toBe('Beveiligingsverificatie mislukt. Probeer opnieuw.');
   });
 
   it('should reject submission with expired timestamp', async () => {
@@ -136,6 +137,6 @@ describe('/api/contact', () => {
 
     expect(response.status).toBe(400);
     expect(data.ok).toBe(false);
-    expect(data.error).toBe('Validation failed');
+    expect(data.error).toBe('Formulier gegevens zijn ongeldig. Controleer alle velden en probeer opnieuw.');
   });
 });

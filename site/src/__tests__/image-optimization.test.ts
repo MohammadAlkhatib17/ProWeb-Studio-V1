@@ -196,10 +196,17 @@ describe('Integration Tests', () => {
       }
     };
     
-    // Verify all optimizations are enabled
-    Object.values(optimizationPipeline).forEach(category => {
-      Object.values(category).forEach(optimization => {
-        expect(optimization).toBe(true);
+    // Verify all optimizations are properly configured
+    Object.entries(optimizationPipeline).forEach(([categoryName, category]) => {
+      Object.entries(category).forEach(([, value]) => {
+        if (categoryName === 'nextImageConfig') {
+          // Next.js image config has array and number values
+          expect(value).toBeDefined();
+          expect(value).not.toBe(null);
+        } else {
+          // Other categories should have boolean values
+          expect(value).toBe(true);
+        }
       });
     });
   });

@@ -56,7 +56,6 @@ export interface NotificationPayload {
 export class DailyMonitoring {
   private siteUrl: string;
   private isRunning = false;
-  private lastRun: number = 0;
 
   constructor(siteUrl: string) {
     this.siteUrl = siteUrl;
@@ -136,7 +135,6 @@ export class DailyMonitoring {
       // Send notifications if needed
       await this.sendNotifications(result);
 
-      this.lastRun = timestamp;
       console.log(`Daily monitoring checks completed successfully`);
 
       return result;
@@ -194,7 +192,7 @@ export class DailyMonitoring {
 
     // Calculate score and identify issues
     seoHealth.score = this.calculateSEOScore(seoHealth);
-    seoHealth.issues = this.identifySEOIssues(seoHealth);
+    seoHealth.issues = this.identifySEOIssues();
 
     return seoHealth;
   }
@@ -790,7 +788,7 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
     return Math.round(score);
   }
 
-  private identifySEOIssues(_health: SEOHealthCheck) {
+  private identifySEOIssues() {
     // Would identify specific issues based on checks
     return [];
   }

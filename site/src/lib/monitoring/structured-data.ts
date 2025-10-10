@@ -92,7 +92,7 @@ export class StructuredDataTester {
       }
 
       // Check for rich snippet opportunities
-      richSnippets.push(...this.analyzeRichSnippetOpportunities(schemas, html));
+      richSnippets.push(...this.analyzeRichSnippetOpportunities(schemas));
 
       // Calculate coverage for this page
       const coverage = await this.calculateSchemaCoverage([url]);
@@ -304,7 +304,7 @@ export class StructuredDataTester {
     return { errors, warnings };
   }
 
-  private analyzeRichSnippetOpportunities(schemas: any[], _html: string): RichSnippetOpportunity[] {
+  private analyzeRichSnippetOpportunities(schemas: any[]): RichSnippetOpportunity[] {
     const opportunities: RichSnippetOpportunity[] = [];
 
     // Check for each rich snippet type
@@ -407,7 +407,7 @@ export class StructuredDataTester {
       return urlMatches
         .map(match => match.replace(/<\/?loc>/g, ''))
         .filter(url => url.startsWith('http'));
-    } catch (error) {
+    } catch {
       return [];
     }
   }

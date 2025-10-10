@@ -299,7 +299,7 @@ export function LocationSpecificTestimonials({ city }: { city: DutchCity }) {
               </div>
               
               <blockquote className="text-slate-300 italic leading-relaxed mb-4">
-                "{testimonial.text}"
+                &ldquo;{testimonial.text}&rdquo;
               </blockquote>
               
               <div className="text-xs text-cyan-400 uppercase tracking-wide">

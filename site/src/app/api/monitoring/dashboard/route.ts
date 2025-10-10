@@ -6,7 +6,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { structuredDataAutomation } from '@/lib/monitoring/structured-data';
-import { notFoundMonitor } from '@/lib/monitoring/not-found';
 import { AlertManager, PerformanceMonitor } from '@/lib/monitoring/utils';
 import type { MonitoringDashboard, MonitoringAPIResponse } from '@/lib/monitoring/types';
 
@@ -226,15 +225,6 @@ async function getAlerts() {
   } catch (error) {
     console.error('Failed to get alerts:', error);
     return [];
-  }
-}
-
-async function getNotFoundAnalytics() {
-  try {
-    return notFoundMonitor.getAnalytics(7); // Last 7 days
-  } catch (error) {
-    console.error('Failed to get 404 analytics:', error);
-    return null;
   }
 }
 

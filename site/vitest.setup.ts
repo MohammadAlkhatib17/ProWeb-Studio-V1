@@ -8,6 +8,21 @@ afterEach(() => {
   cleanup();
 });
 
+// Mock Next.js router
+import { vi } from 'vitest';
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+  }),
+  usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 // Provide default envs for tests where not explicitly mocked
 process.env.RECAPTCHA_SECRET_KEY ||= 'test-secret-key';
 process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ||= 'test-site-key';

@@ -352,6 +352,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/index.html',
+        destination: '/',
+        permanent: true,
+      },
+      {
         source: '/:path*',
         has: [
           {

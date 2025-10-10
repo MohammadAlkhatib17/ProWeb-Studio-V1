@@ -70,7 +70,7 @@ export function getLastModifiedDate(filePath: string): Date {
     if (gitDate) {
       return new Date(gitDate);
     }
-  } catch (error) {
+  } catch {
     // Git command failed, fall back to file system
   }
 
@@ -78,7 +78,7 @@ export function getLastModifiedDate(filePath: string): Date {
     // Fallback to file system modification time
     const stats = statSync(join(process.cwd(), filePath));
     return stats.mtime;
-  } catch (error) {
+  } catch {
     // File doesn't exist or can't be read
     return new Date();
   }

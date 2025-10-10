@@ -6,6 +6,7 @@ import {
 
 // Remove edge runtime due to Node.js API requirements in sitemap-advanced
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 

@@ -338,7 +338,7 @@ export function DutchTestimonialsSection() {
               </div>
               
               <blockquote className="text-slate-300 italic leading-relaxed">
-                "{testimonial.text}"
+                &ldquo;{testimonial.text}&rdquo;
               </blockquote>
               
               <div className="mt-4 text-xs text-cyan-400 uppercase tracking-wide">
