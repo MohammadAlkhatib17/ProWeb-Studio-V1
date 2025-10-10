@@ -11,7 +11,7 @@ import React from 'react';
 
 // Mock the dynamic imports for 3D components
 vi.mock('next/dynamic', () => ({
-  default: (importFn: () => Promise<unknown>, options?: { loading?: boolean }) => {
+  default: (_importFn: () => Promise<unknown>, options?: { loading?: boolean }) => {
     const MockComponent = () => React.createElement('div', { 
       'data-testid': options?.loading ? 'loading' : 'dynamic-component' 
     });
