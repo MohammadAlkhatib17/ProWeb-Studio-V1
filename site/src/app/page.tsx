@@ -56,9 +56,9 @@ interface CaseCardProps {
 
 function CaseCard({ title, metric, desc, linkText, linkHref }: CaseCardProps) {
   return (
-    <article className="rounded-2xl border border-cosmic-700/60 bg-cosmic-800/40 p-6 sm:p-7 md:p-8 hover:bg-cosmic-800/60 transition-all duration-300 hover:border-cosmic-600/80 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden flex flex-col h-full">
-      {/* Subtle gradient overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <article className="glass p-6 sm:p-7 md:p-8 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden flex flex-col h-full">
+      {/* Gradient overlay on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
 
       <div className="relative z-10 flex flex-col h-full">
         {/* Icon placeholder for future enhancement - currently using emoji/text */}
@@ -118,8 +118,6 @@ export default function HomePage() {
         aria-label="Hero"
         className="homepage-hero relative min-h-[92vh] grid place-items-center overflow-hidden"
       >
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/20 to-transparent z-0" />
-
         {/* 3D Portal Scene */}
         <div className="absolute inset-0">
           {/* Global HeroBackground is now rendered in RootLayout to unify the top edge site-wide. */}
@@ -129,8 +127,8 @@ export default function HomePage() {
         </div>
 
         {/* Hero content with enhanced typography */}
-        <div className="relative z-10 text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-section">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-extrabold text-shadow-sharp tracking-tight leading-tight mb-8 motion-safe:animate-fade-in">
+        <div className="relative z-10 text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-section" style={{background: 'none !important', backgroundColor: 'transparent !important'}}>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-extrabold text-shadow-sharp tracking-tight leading-tight mb-8 motion-safe:animate-fade-in" style={{background: 'none !important'}}>
             Website Laten Maken die Indruk Maakt. En Converteert.
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-cyan-100 mb-12 max-w-4xl mx-auto motion-safe:animate-slide-up">
@@ -199,7 +197,7 @@ export default function HomePage() {
       </section>
 
       {/* Rest of the sections remain unchanged */}
-      <section aria-label="Cases" className="py-section px-4 sm:px-6 glass">
+      <section aria-label="Cases" className="py-section px-4 sm:px-6">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-center leading-tight">
             Webdesign Nederland: Waar Visie Meetbare Impact Wordt
@@ -353,7 +351,7 @@ export default function HomePage() {
                 </span>
               </Button>
             </div>
-            <div className="h-[400px] rounded-2xl overflow-hidden border border-cosmic-700/60 bg-cosmic-800/20 relative">
+            <div className="h-[400px] rounded-2xl overflow-hidden glass relative hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group">
               <HexagonalPrism />
             </div>
           </div>
@@ -417,51 +415,67 @@ export default function HomePage() {
               </h3>
               
               <div className="grid md:grid-cols-2 gap-8 mb-12">
-                <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                    🚀 Nederlandse Webdesign Excellence
-                  </h4>
-                  <p className="text-slate-200">
-                    Als leading <strong>webdesign bureau Nederland</strong> behalen onze websites perfecte Core Web Vitals scores 
-                    en laden binnen 1 seconde. Dit betekent betere Google rankings, hogere conversies en tevreden bezoekers 
-                    die langer op uw site blijven. <strong>Website laten maken</strong> betekent bij ons investeren in performance.
-                  </p>
+                <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden">
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+                  <div className="relative z-10">
+                    <h4 className="text-xl font-semibold mb-3 text-cyan-300">
+                      🚀 Nederlandse Webdesign Excellence
+                    </h4>
+                    <p className="text-slate-200">
+                      Als leading <strong>webdesign bureau Nederland</strong> behalen onze websites perfecte Core Web Vitals scores 
+                      en laden binnen 1 seconde. Dit betekent betere Google rankings, hogere conversies en tevreden bezoekers 
+                      die langer op uw site blijven. <strong>Website laten maken</strong> betekent bij ons investeren in performance.
+                    </p>
+                  </div>
                 </div>
                 
-                <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                    🎨 Innovatieve 3D Web Ervaringen
-                  </h4>
-                  <p className="text-slate-200">
-                    Van interactieve productconfigurators tot meeslepende WebGL-animaties – 
-                    wij creëren <strong>moderne websites</strong> die uw bezoekers verbazen en uw merk onvergetelijk maken. 
-                    Ontdek waarom steeds meer Nederlandse bedrijven kiezen voor onze unieke 
-                    <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300 ml-1">
-                      3D website ontwikkeling diensten
-                    </Link>.
-                  </p>
+                <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden">
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+                  <div className="relative z-10">
+                    <h4 className="text-xl font-semibold mb-3 text-cyan-300">
+                      🎨 Innovatieve 3D Web Ervaringen
+                    </h4>
+                    <p className="text-slate-200">
+                      Van interactieve productconfigurators tot meeslepende WebGL-animaties – 
+                      wij creëren <strong>moderne websites</strong> die uw bezoekers verbazen en uw merk onvergetelijk maken. 
+                      Ontdek waarom steeds meer Nederlandse bedrijven kiezen voor onze unieke 
+                      <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300 ml-1">
+                        3D website ontwikkeling diensten
+                      </Link>.
+                    </p>
+                  </div>
                 </div>
                 
-                <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                    📈 SEO & Marketing Geoptimaliseerde Websites
-                  </h4>
-                  <p className="text-slate-200">
-                    Elke regel code schrijven we met zoekmachine-optimalisatie in gedachten. 
-                    Van technische SEO tot contentstructuur – uw <strong>professionele website</strong> wordt gevonden 
-                    door uw ideale klanten. Lokale SEO voor Nederlandse markten is onze specialiteit.
-                  </p>
+                <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden">
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+                  <div className="relative z-10">
+                    <h4 className="text-xl font-semibold mb-3 text-cyan-300">
+                      📈 SEO & Marketing Geoptimaliseerde Websites
+                    </h4>
+                    <p className="text-slate-200">
+                      Elke regel code schrijven we met zoekmachine-optimalisatie in gedachten. 
+                      Van technische SEO tot contentstructuur – uw <strong>professionele website</strong> wordt gevonden 
+                      door uw ideale klanten. Lokale SEO voor Nederlandse markten is onze specialiteit.
+                    </p>
+                  </div>
                 </div>
                 
-                <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                    🛡️ Veilige & Schaalbare Website Architectuur
-                  </h4>
-                  <p className="text-slate-200">
-                    Met geavanceerde beveiligingsprotocollen, CSP-headers en continue monitoring 
-                    zorgen we dat uw <strong>zakelijke website</strong> en klantgegevens optimaal beschermd zijn. 
-                    Gebouwd voor groei: onze websites schalen mee met uw bedrijfssucces.
-                  </p>
+                <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden">
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+                  <div className="relative z-10">
+                    <h4 className="text-xl font-semibold mb-3 text-cyan-300">
+                      🛡️ Veilige & Schaalbare Website Architectuur
+                    </h4>
+                    <p className="text-slate-200">
+                      Met geavanceerde beveiligingsprotocollen, CSP-headers en continue monitoring 
+                      zorgen we dat uw <strong>zakelijke website</strong> en klantgegevens optimaal beschermd zijn. 
+                      Gebouwd voor groei: onze websites schalen mee met uw bedrijfssucces.
+                    </p>
+                  </div>
                 </div>
               </div>
             </section>
@@ -481,10 +495,13 @@ export default function HomePage() {
                 </Link>.
               </p>
 
-              <div className="bg-gradient-to-r from-cosmic-800/40 to-cosmic-700/40 p-6 rounded-xl border border-cosmic-600/60 mb-8">
-                <h4 className="text-xl font-semibold mb-4 text-cyan-300">
-                  Complete Website Laten Maken Dienstverlening:
-                </h4>
+              <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden mb-8">
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+                <div className="relative z-10">
+                  <h4 className="text-xl font-semibold mb-4 text-cyan-300">
+                    Complete Website Laten Maken Dienstverlening:
+                  </h4>
                 <ul className="grid md:grid-cols-2 gap-3 text-slate-200">
                   <li>✓ Strategische digitale consultancy & marktanalyse</li>
                   <li>✓ Gebruiksvriendelijk UX/UI design & prototyping</li>
@@ -499,6 +516,7 @@ export default function HomePage() {
                   <li>✓ Integraties met Nederlandse betaalsystemen</li>
                   <li>✓ GDPR-compliant website implementatie</li>
                 </ul>
+                </div>
               </div>
 
               <p className="text-slate-200 mb-8">

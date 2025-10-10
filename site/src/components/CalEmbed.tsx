@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { siteConfig } from '@/config/site.config';
+import { Button } from '@/components/Button';
 
 // Check if the Cal.com URL is valid (not a placeholder)
 function isValidCalcomUrl(url: string): boolean {
@@ -43,12 +44,14 @@ export default function CalEmbed() {
   };
   return (
     <>
-      <button
+      <Button
+        as="button"
         onClick={handleClick}
-        className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-lg hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900"
+        variant="primary"
+        size="large"
       >
         Plan een call
-      </button>
+      </Button>
       {open && isValidUrl && (
         <div className="fixed inset-0 bg-black/70 z-50 grid place-items-center p-4">
           <div className="bg-cosmic-900 rounded-xl border border-cosmic-700/60 w-full max-w-3xl h-[80vh] overflow-hidden shadow-2xl">

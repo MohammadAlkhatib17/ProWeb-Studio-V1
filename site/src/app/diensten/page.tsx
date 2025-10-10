@@ -16,6 +16,10 @@ import FAQSection from '@/components/sections/FAQSection';
 import DutchMarketFAQ from '@/components/DutchMarketFAQ';
 import RelatedServices from '@/components/RelatedServices';
 import ContentSuggestions from '@/components/ContentSuggestions';
+import { 
+  PageTitle,
+  BodyText
+} from '@/components/unified/LayoutComponents';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -136,7 +140,7 @@ export default function Diensten() {
 
       {/* Hero section with 3D elements */}
       <section className="relative min-h-[75svh] md:min-h-[70vh] overflow-hidden flex items-center content-safe-top">
-  <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-cosmic-900/20 to-cosmic-900/40" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-cosmic-900/20 to-cosmic-900/40" />
 
         <Suspense
           fallback={<div className="absolute inset-0 bg-cosmic-900/50" />}
@@ -148,13 +152,13 @@ export default function Diensten() {
 
         <div className="relative z-10 w-full">
           <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in">
+            <PageTitle className="max-w-5xl mx-auto animate-fade-in">
               Meer dan Code. Oplossingen die Groeien.
-            </h1>
-                        <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-4xl mx-auto leading-relaxed animate-slide-up">
+            </PageTitle>
+            <BodyText className="max-w-4xl mx-auto text-cyan-300 animate-slide-up">
               Ontdek onze complete oplossingen voor professionele websites, 
               van moderne webdesign tot geavanceerde functionaliteiten.
-            </p>
+            </BodyText>
           </div>
         </div>
       </section>

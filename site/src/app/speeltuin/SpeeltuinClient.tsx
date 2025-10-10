@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import SceneHUD from '@/components/overlay/SceneHUD';
 import { LiveBadge, FooterLeft, FooterRight } from '@/components/overlay/HUDCopy';
+import { Button } from '@/components/Button';
 
 // Dynamically import the 3D component with loading fallback
 const TechPlaygroundScene = dynamic(() => import('@/components/TechPlaygroundScene'), {
@@ -294,12 +294,13 @@ export default function SpeeltuinClient() {
               Laten we bespreken hoe we deze technologie kunnen inzetten om uw
               bedrijfsdoelen te bereiken.
             </p>
-            <Link
+            <Button
               href="/contact"
-              className="touch-target inline-block px-6 py-3 sm:px-7 sm:py-3 md:px-8 md:py-3.5 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 text-base sm:text-lg"
+              variant="primary"
+              size="large"
             >
               Plan een strategiesessie
-            </Link>
+            </Button>
           </div>
         </section>
       </div>

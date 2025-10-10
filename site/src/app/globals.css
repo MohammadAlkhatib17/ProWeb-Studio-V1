@@ -8,7 +8,7 @@
     --cosmic-secondary: 255, 0, 255;
     --cosmic-accent: 0, 255, 255;
     /* App background variables for consistent theming */
-    --app-bg-color: #000d1a; /* cosmic-900 equivalent */
+    --app-bg-color: transparent; /* Make background transparent to show HeroBackground */
     --app-bg-gradient: radial-gradient(circle at 50% 30%, rgba(20, 140, 255, 0.1) 0%, rgba(255, 0, 255, 0.05) 40%, transparent 70%);
     /* Header offset for anchor scroll positioning - professional height */
     --header-offset: 80px; /* enhanced mobile header height */

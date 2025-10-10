@@ -6,6 +6,7 @@ import { dutchCities } from '@/config/local-seo.config';
 import { CompactNearMeSearch } from '@/components/local-seo/NearMeSearch';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ContentSuggestions from '@/components/ContentSuggestions';
+import { Button } from '@/components/Button';
 
 
 export const dynamic = 'force-static';
@@ -96,19 +97,20 @@ export default function LocatiesPage() {
             webdesign diensten in alle grote Nederlandse steden.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
+            <Button
               href="/contact"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+              variant="primary"
+              size="large"
             >
-              Start Uw Project
-              <span className="ml-2">→</span>
-            </Link>
-            <Link
+              Start Uw Project →
+            </Button>
+            <Button
               href="/portfolio"
-              className="inline-flex items-center px-8 py-4 border border-cyan-400 text-cyan-300 hover:bg-cyan-400 hover:text-cosmic-900 font-semibold rounded-lg transition-all duration-300"
+              variant="secondary"
+              size="large"
             >
               Bekijk Portfolio
-            </Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -289,13 +291,13 @@ export default function LocatiesPage() {
             Dankzij moderne technologie en bewezen processen leveren we 
             overal dezelfde hoge kwaliteit.
           </p>
-          <Link
+          <Button
             href="/contact"
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+            variant="primary"
+            size="large"
           >
-            Neem Contact Op
-            <span className="ml-2">→</span>
-          </Link>
+            Neem Contact Op →
+          </Button>
         </div>
       </section>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { SemanticSection, SemanticHeading } from '../layout/SemanticLayout';
 import { locations, services } from '@/config/internal-linking.config';
+import { Button } from '@/components/Button';
 
 interface InternalLinkingStrategyProps {
   currentPage?: 'service' | 'location' | 'home';
@@ -298,12 +299,12 @@ export function ServiceLocationCrossLinks({
           <p className="text-slate-300 mb-4">
             Wij bedienen bedrijven door heel Nederland met lokale expertise en persoonlijke service.
           </p>
-          <Link 
+          <Button 
             href="/locaties"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-magenta-500 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-magenta-600 transition-all duration-300"
+            variant="primary"
           >
             Bekijk Alle Locaties →
-          </Link>
+          </Button>
         </div>
       </div>
     </SemanticSection>

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { SemanticSection, SemanticHeading } from '../layout/SemanticLayout';
 import { CONTENT_CLUSTERS } from '@/config/dutch-seo.config';
 import { ContentCluster } from '../seo/DutchKeywordOptimization';
+import { Button } from '@/components/Button';
 
 interface ContentClusterHubProps {
   mainCluster: keyof typeof CONTENT_CLUSTERS;
@@ -92,18 +93,20 @@ export function WebsiteLatenMakenCluster({
               helpen u van concept tot succesvolle online aanwezigheid.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
+              <Button 
                 href="/contact?service=website-laten-maken"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-magenta-600 transition-all duration-300 transform hover:scale-105"
+                variant="primary"
+                size="large"
               >
                 Gratis Website Advies
-              </Link>
-              <Link 
+              </Button>
+              <Button 
                 href="/diensten/website-laten-maken"
-                className="inline-flex items-center px-8 py-4 border border-cyan-500 text-cyan-400 font-semibold rounded-full hover:bg-cyan-500 hover:text-white transition-all duration-300"
+                variant="secondary"
+                size="large"
               >
                 Bekijk Onze Diensten
-              </Link>
+              </Button>
             </div>
           </div>
 

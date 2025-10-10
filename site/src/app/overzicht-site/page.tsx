@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SEOSchema from '@/components/SEOSchema';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { Button } from '@/components/Button';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -222,30 +223,34 @@ export default function SitemapPage() {
           </p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link 
+            <Button 
               href="/contact"
-              className="p-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 transition-all duration-300 hover:shadow-xl"
+              variant="primary"
+              className="w-full"
             >
               Contact Opnemen
-            </Link>
-            <Link 
+            </Button>
+            <Button 
               href="/diensten"
-              className="p-4 border-2 border-cyan-400/60 text-cyan-100 rounded-lg hover:bg-cyan-400/10 transition-all duration-300"
+              variant="secondary"
+              className="w-full"
             >
               Bekijk Diensten
-            </Link>
-            <Link 
+            </Button>
+            <Button 
               href="/speeltuin"
-              className="p-4 border-2 border-magenta-400/60 text-magenta-100 rounded-lg hover:bg-magenta-400/10 transition-all duration-300"
+              variant="secondary"
+              className="w-full"
             >
               3D Showcases
-            </Link>
-            <Link 
+            </Button>
+            <Button 
               href="/portfolio"
-              className="p-4 border-2 border-gray-600 text-gray-100 rounded-lg hover:bg-white/10 transition-all duration-300"
+              variant="secondary"
+              className="w-full"
             >
               Portfolio
-            </Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -261,18 +266,20 @@ export default function SitemapPage() {
             die uw bedrijf naar het volgende niveau tillen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
+            <Button
               href="/contact"
-              className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold text-lg hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25"
+              variant="primary"
+              size="large"
             >
               Plan Gratis Strategiesessie
-            </Link>
-            <Link
+            </Button>
+            <Button
               href="/werkwijze"
-              className="px-8 py-4 border-2 border-gray-600 rounded-lg font-semibold text-lg hover:border-white hover:bg-white/10 transition-all duration-300"
+              variant="secondary"
+              size="large"
             >
               Ontdek Onze Werkwijze
-            </Link>
+            </Button>
           </div>
         </div>
       </section>

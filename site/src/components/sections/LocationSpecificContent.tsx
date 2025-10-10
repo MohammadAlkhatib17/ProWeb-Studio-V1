@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { SemanticSection, SemanticHeading, DutchContentWrapper } from '../layout/SemanticLayout';
 import { type DutchCity } from '@/config/dutch-seo.config';
 import { KeywordOptimizedHeading, DutchBusinessTerminology } from '../seo/DutchKeywordOptimization';
+import { Button } from '@/components/Button';
 
 interface LocationSpecificContentProps {
   city: DutchCity;
@@ -90,18 +91,20 @@ export function LocationSpecificHero({ city, serviceName = 'Website Laten Maken'
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link 
+              <Button 
                 href={`/contact?city=${city.slug}&service=${serviceSlug}`}
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-magenta-600 transition-all duration-300 transform hover:scale-105"
+                variant="primary"
+                size="large"
               >
                 {serviceName} {city.name} - Gratis Advies
-              </Link>
-              <Link 
+              </Button>
+              <Button 
                 href="/portfolio"
-                className="inline-flex items-center px-8 py-4 border border-cyan-500 text-cyan-400 font-semibold rounded-full hover:bg-cyan-500 hover:text-white transition-all duration-300"
+                variant="secondary"
+                size="large"
               >
                 {city.name} Website Voorbeelden
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -217,18 +220,18 @@ export function LocationSpecificServices({ city, className = '' }: LocationSpeci
               Neem contact op voor een vrijblijvend gesprek over uw website project.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
+              <Button 
                 href={`/contact?city=${city.slug}`}
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-magenta-500 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-magenta-600 transition-all duration-300"
+                variant="primary"
               >
                 Contact Opnemen - {city.name}
-              </Link>
-              <Link 
+              </Button>
+              <Button 
                 href={`/portfolio?location=${city.slug}`}
-                className="inline-flex items-center px-6 py-3 border border-cyan-500 text-cyan-400 font-semibold rounded-full hover:bg-cyan-500 hover:text-white transition-all duration-300"
+                variant="secondary"
               >
                 {city.name} Portfolio Bekijken
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

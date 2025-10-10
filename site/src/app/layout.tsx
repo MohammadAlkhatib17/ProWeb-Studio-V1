@@ -12,7 +12,6 @@ import SEOSchema from '@/components/SEOSchema';
 import { initProductionEnvValidation } from '@/lib/env.server';
 import BackgroundLayer from '@/components/layout/BackgroundLayer';
 import HeroBackground from '@/components/HeroBackground';
-import TopVignetteOverlay from '@/components/layout/TopVignetteOverlay';
 import PWAServiceWorker from '@/components/PWAServiceWorker';
 import DutchPerformanceMonitor from '@/components/DutchPerformanceMonitor';
 import { primaryFont } from '@/lib/fonts';
@@ -313,8 +312,6 @@ export default function RootLayout({
          * wrappers fully transparent.
          */}
   <HeroBackground />
-  {/* Global top vignette to unify luminance behind the header across routes */}
-  <TopVignetteOverlay />
         <a href="#main" className="skip-to-content">
           Ga naar hoofdinhoud
         </a>

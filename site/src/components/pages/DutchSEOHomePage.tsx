@@ -8,6 +8,7 @@ import { DutchSEOHeroSection, DutchBusinessServicesSection, DutchTrustSignalsSec
 import { InternalLinkingStrategy } from '@/components/navigation/InternalLinkingStrategy';
 import { WebsiteLatenMakenCluster } from '@/components/content/ContentClusters';
 import VoiceOptimizedFAQ from '@/components/sections/VoiceOptimizedFAQ';
+import { Button } from '@/components/Button';
 import { KeywordDensityOptimizer } from '@/components/seo/DutchKeywordOptimization';
 
 // Dynamic imports for performance
@@ -164,18 +165,20 @@ export default function DutchSEOHomePage({ cityName, serviceFocus }: DutchSEOHom
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-              <a 
+              <Button 
                 href={`/contact${cityName ? `?city=${cityName.toLowerCase()}` : ''}${serviceFocus ? `&service=${serviceFocus}` : ''}`}
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-magenta-600 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-cyan-500/25"
+                variant="primary"
+                size="large"
               >
                 Gratis Website Advies{cityName ? ` ${cityName}` : ''}
-              </a>
-              <a 
+              </Button>
+              <Button 
                 href="/portfolio"
-                className="inline-flex items-center px-8 py-4 border-2 border-cyan-500 text-cyan-400 font-semibold rounded-full hover:bg-cyan-500 hover:text-white transition-all duration-300"
+                variant="secondary"
+                size="large"
               >
                 Bekijk Nederlandse Website Voorbeelden
-              </a>
+              </Button>
             </div>
 
             {/* Trust indicators */}

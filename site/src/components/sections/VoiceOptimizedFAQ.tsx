@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SemanticSection, SemanticHeading } from '../layout/SemanticLayout';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { VOICE_SEARCH_FAQS } from '@/config/dutch-seo.config';
+import { Button } from '@/components/Button';
 
 interface VoiceOptimizedFAQProps {
   cityName?: string;
@@ -160,12 +161,13 @@ export default function VoiceOptimizedFAQ({
               Heeft u nog meer vragen over <strong>website laten maken</strong> of 
               <strong>webdesign</strong>? Neem gerust contact met ons op!
             </p>
-            <a 
+            <Button 
               href="/contact"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-magenta-600 transition-all duration-300 transform hover:scale-105"
+              variant="primary"
+              size="large"
             >
               Stel Uw Vraag - Gratis Advies
-            </a>
+            </Button>
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
 import { siteConfig } from '@/config/site.config';
+import { Button } from '@/components/Button';
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -107,13 +108,14 @@ export default function Error({ error, reset }: ErrorProps) {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <button
+              <Button
+                as="button"
                 onClick={reset}
-                className="group relative px-8 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-medium rounded-lg hover:from-primary-500 hover:to-secondary-500 transition-all duration-300 shadow-lg hover:shadow-xl"
+                variant="primary"
+                size="large"
               >
-                <span className="relative z-10">Probeer opnieuw</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-primary-700 to-secondary-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </button>
+                Probeer opnieuw
+              </Button>
               
               <button
                 onClick={() => window.location.reload()}

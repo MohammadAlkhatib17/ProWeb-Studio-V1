@@ -2,6 +2,12 @@ import type { Metadata } from 'next';
 import { BackgroundImage } from '@/components/ui/responsive-image';
 import SecureContactForm from '@/components/SecureContactForm';
 import SEOSchema from '@/components/SEOSchema';
+import { 
+  PageLayout, 
+  SectionLayout, 
+  SectionTitle,
+  BodyText
+} from '@/components/unified/LayoutComponents';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -32,7 +38,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="content-safe-top pt-20 md:pt-24 relative overflow-hidden">
+    <PageLayout className="relative overflow-hidden">
       <SEOSchema
         pageType="contact"
         pageTitle={metadata.title as string}
@@ -47,45 +53,50 @@ export default function ContactPage() {
         className="opacity-30 pointer-events-none -z-10"
       />
       <SecureContactForm />
-      <section
-        id="seo-content"
-        className="prose prose-invert max-w-none px-6 md:px-8 lg:px-12 py-12 md:py-16"
-      >
-        <h1>Start het gesprek</h1>
-        <p>
-          Vertel kort uw doel, doelgroep en gewenste deadline. We denken mee en
-          komen met een concreet voorstel.
-        </p>
-        <h2>Hoe wilt u contact?</h2>
-        <ul>
-          <li>
-            <strong>Formulier:</strong> naam, e‑mail, telefoon (optioneel),
-            projecttype, bericht.
-          </li>
-          <li>
-            <strong>Afspraak plannen:</strong> direct via onze agenda.
-          </li>
-          <li>
-            <strong>E‑mail/telefoon:</strong> contact@prowebstudio.nl — +31686412430.
-          </li>
-        </ul>
-        <h2>Wat gebeurt er daarna?</h2>
-        <p>
-          We bevestigen ontvangst, plannen een call en leveren na de intake een
-          duidelijke scope en planning.
-        </p>
-        <h2>FAQ</h2>
-        <p>
-          <strong>Hoe snel reageren jullie?</strong> Binnen één werkdag.
-        </p>
-        <p>
-          <strong>Kunnen we NDA tekenen?</strong> Ja, op verzoek.
-        </p>
-        <p>
-          <strong>Werken jullie remote of op locatie?</strong> Beide opties zijn
-          mogelijk.
-        </p>
-      </section>
+      
+      <SectionLayout variant="content" id="seo-content">
+        <div className="prose prose-invert max-w-none">
+          <SectionTitle as="h1">Start het gesprek</SectionTitle>
+          <BodyText>
+            Vertel kort uw doel, doelgroep en gewenste deadline. We denken mee en
+            komen met een concreet voorstel.
+          </BodyText>
+          
+          <SectionTitle>Hoe wilt u contact?</SectionTitle>
+          <ul className="space-y-3 text-slate-200">
+            <li>
+              <strong className="text-cyan-300">Formulier:</strong> naam, e‑mail, telefoon (optioneel),
+              projecttype, bericht.
+            </li>
+            <li>
+              <strong className="text-cyan-300">Afspraak plannen:</strong> direct via onze agenda.
+            </li>
+            <li>
+              <strong className="text-cyan-300">E‑mail/telefoon:</strong> contact@prowebstudio.nl — +31686412430.
+            </li>
+          </ul>
+          
+          <SectionTitle>Wat gebeurt er daarna?</SectionTitle>
+          <BodyText>
+            We bevestigen ontvangst, plannen een call en leveren na de intake een
+            duidelijke scope en planning.
+          </BodyText>
+          
+          <SectionTitle>FAQ</SectionTitle>
+          <div className="space-y-4">
+            <BodyText>
+              <strong className="text-cyan-300">Hoe snel reageren jullie?</strong> Binnen één werkdag.
+            </BodyText>
+            <BodyText>
+              <strong className="text-cyan-300">Kunnen we NDA tekenen?</strong> Ja, op verzoek.
+            </BodyText>
+            <BodyText>
+              <strong className="text-cyan-300">Werken jullie remote of op locatie?</strong> Beide opties zijn
+              mogelijk.
+            </BodyText>
+          </div>
+        </div>
+      </SectionLayout>
 
       <script
         type="application/ld+json"
@@ -119,6 +130,6 @@ export default function ContactPage() {
           }),
         }}
       />
-    </main>
+    </PageLayout>
   );
 }

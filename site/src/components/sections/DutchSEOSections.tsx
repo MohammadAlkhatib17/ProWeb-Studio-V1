@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { SemanticSection, SemanticHeading, DutchContentWrapper } from '../layout/SemanticLayout';
 import { DUTCH_TRUST_SIGNALS } from '@/config/dutch-seo.config';
+import { Button } from '@/components/Button';
 
 interface DutchSEOHomeSectionProps {
   cityName?: string;
@@ -71,18 +72,20 @@ export function DutchSEOHeroSection({ cityName, className = '' }: DutchSEOHomeSe
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
+            <Button 
               href="/contact"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-magenta-600 transition-all duration-300 transform hover:scale-105"
+              variant="primary"
+              size="large"
             >
               Website Laten Maken - Gratis Advies
-            </Link>
-            <Link 
+            </Button>
+            <Button 
               href="/portfolio"
-              className="inline-flex items-center px-8 py-4 border border-cyan-500 text-cyan-400 font-semibold rounded-full hover:bg-cyan-500 hover:text-white transition-all duration-300"
+              variant="secondary"
+              size="large"
             >
               Bekijk Onze Nederlandse Websites
-            </Link>
+            </Button>
           </div>
         </article>
       </SemanticSection>

@@ -31,7 +31,7 @@ export function Button(props: ButtonComponentProps) {
   } = props;
 
   const baseClasses =
-    'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 magnetic-hover relative overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-cosmic-900 min-h-[44px] touch-target cursor-pointer';
+    'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 magnetic-hover relative overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-cosmic-900 min-h-[44px] touch-target cursor-pointer no-underline hover:no-underline';
   const sizeClasses = size === 'large' ? 'px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 text-base sm:text-lg min-h-[44px]' : 'px-6 py-3 sm:px-8 sm:py-3.5 text-base min-h-[44px]';
   const variantClasses =
     variant === 'primary'

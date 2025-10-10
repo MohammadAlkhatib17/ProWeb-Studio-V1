@@ -30,7 +30,7 @@ export const CRITICAL_CSS = `
     font-family: inherit;
     line-height: inherit;
     color: #ffffff;
-    background-color: #000000;
+    background-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
