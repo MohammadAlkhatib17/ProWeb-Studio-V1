@@ -127,8 +127,8 @@ export default function HomePage() {
         </div>
 
         {/* Hero content with enhanced typography */}
-        <div className="relative z-10 text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-section" style={{background: 'none !important', backgroundColor: 'transparent !important'}}>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-extrabold text-shadow-sharp tracking-tight leading-tight mb-8 motion-safe:animate-fade-in" style={{background: 'none !important'}}>
+        <div className="text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-section">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-extrabold text-shadow-sharp tracking-tight leading-tight mb-8 motion-safe:animate-fade-in">
             Website Laten Maken die Indruk Maakt. En Converteert.
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-cyan-100 mb-12 max-w-4xl mx-auto motion-safe:animate-slide-up">
@@ -389,300 +389,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Enhanced SEO Content Section with Proper Semantic Structure */}
-      <section
-        id="seo-content"
-        className="py-section px-4 sm:px-6 lg:px-8 bg-cosmic-900/30"
-      >
-        <div className="max-w-4xl mx-auto">
-          <article className="prose prose-invert prose-lg max-w-none">
-            <header>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-center gradient-text">
-                Website Laten Maken Nederland: Uw Expert Partner voor Digitale Groei
-              </h2>
-              <p className="text-xl text-center text-slate-200 mb-12 max-w-3xl mx-auto">
-                ProWeb Studio transformeert uw bedrijfsvisie in krachtige digitale ervaringen. 
-                Of u nu een <strong>professionele website wilt laten maken</strong>, uw bestaande site wilt vernieuwen, 
-                of een complete <strong>webshop laten ontwikkelen</strong> – wij zijn uw strategische partner 
-                voor meetbare online groei in Nederland. Van Amsterdam tot Maastricht, van startup tot enterprise: 
-                <strong>website laten maken</strong> door ervaren Nederlandse webdesign specialisten.
-              </p>
-            </header>
 
-            <section>
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
-                Waarom ProWeb Studio Kiezen om Uw Website te Laten Maken?
-              </h3>
-              
-              <div className="grid md:grid-cols-2 gap-8 mb-12">
-                <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden">
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                  <div className="relative z-10">
-                    <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                      🚀 Nederlandse Webdesign Excellence
-                    </h4>
-                    <p className="text-slate-200">
-                      Als leading <strong>webdesign bureau Nederland</strong> behalen onze websites perfecte Core Web Vitals scores 
-                      en laden binnen 1 seconde. Dit betekent betere Google rankings, hogere conversies en tevreden bezoekers 
-                      die langer op uw site blijven. <strong>Website laten maken</strong> betekent bij ons investeren in performance.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden">
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                  <div className="relative z-10">
-                    <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                      🎨 Innovatieve 3D Web Ervaringen
-                    </h4>
-                    <p className="text-slate-200">
-                      Van interactieve productconfigurators tot meeslepende WebGL-animaties – 
-                      wij creëren <strong>moderne websites</strong> die uw bezoekers verbazen en uw merk onvergetelijk maken. 
-                      Ontdek waarom steeds meer Nederlandse bedrijven kiezen voor onze unieke 
-                      <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300 ml-1">
-                        3D website ontwikkeling diensten
-                      </Link>.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden">
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                  <div className="relative z-10">
-                    <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                      📈 SEO & Marketing Geoptimaliseerde Websites
-                    </h4>
-                    <p className="text-slate-200">
-                      Elke regel code schrijven we met zoekmachine-optimalisatie in gedachten. 
-                      Van technische SEO tot contentstructuur – uw <strong>professionele website</strong> wordt gevonden 
-                      door uw ideale klanten. Lokale SEO voor Nederlandse markten is onze specialiteit.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden">
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                  <div className="relative z-10">
-                    <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                      🛡️ Veilige & Schaalbare Website Architectuur
-                    </h4>
-                    <p className="text-slate-200">
-                      Met geavanceerde beveiligingsprotocollen, CSP-headers en continue monitoring 
-                      zorgen we dat uw <strong>zakelijke website</strong> en klantgegevens optimaal beschermd zijn. 
-                      Gebouwd voor groei: onze websites schalen mee met uw bedrijfssucces.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section>
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
-                Website Ontwikkeling Nederland: Van Concept tot Conversie
-              </h3>
-              <p className="text-slate-200 mb-6">
-                Als specialist in <strong>website laten maken</strong> hanteren wij een bewezen 
-                methodiek die uw succes garandeert. Of u nu een <strong>responsive website</strong>, 
-                <strong>webshop</strong>, of <strong>corporate website</strong> nodig heeft – 
-                onze gestructureerde aanpak zorgt voor resultaten. Ontdek hoe wij uw digitale ambities 
-                realiseren in onze gedetailleerde{' '}
-                <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300">
-                  werkwijze en projectaanpak voor website ontwikkeling
-                </Link>.
-              </p>
-
-              <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden mb-8">
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                <div className="relative z-10">
-                  <h4 className="text-xl font-semibold mb-4 text-cyan-300">
-                    Complete Website Laten Maken Dienstverlening:
-                  </h4>
-                <ul className="grid md:grid-cols-2 gap-3 text-slate-200">
-                  <li>✓ Strategische digitale consultancy & marktanalyse</li>
-                  <li>✓ Gebruiksvriendelijk UX/UI design & prototyping</li>
-                  <li>✓ Frontend & backend website ontwikkeling</li>
-                  <li>✓ E-commerce en professionele webshop oplossingen</li>
-                  <li>✓ Interactieve 3D visualisaties en WebGL animaties</li>
-                  <li>✓ SEO optimalisatie en technische performance</li>
-                  <li>✓ Betrouwbare hosting en website beheer Nederland</li>
-                  <li>✓ Conversie-optimalisatie (CRO) en A/B testing</li>
-                  <li>✓ Responsive design voor mobiel en desktop</li>
-                  <li>✓ Website onderhoud en veiligheidsmonitoring</li>
-                  <li>✓ Integraties met Nederlandse betaalsystemen</li>
-                  <li>✓ GDPR-compliant website implementatie</li>
-                </ul>
-                </div>
-              </div>
-
-              <p className="text-slate-200 mb-8">
-                Bekijk ons complete overzicht van{' '}
-                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">
-                  professionele webdesign en website ontwikkeling diensten Nederland
-                </Link>{' '}
-                om te ontdekken hoe wij uw specifieke doelen kunnen realiseren met een 
-                <strong> op maat gemaakte website</strong>.
-              </p>
-            </section>
-
-            <section>
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
-                Website Laten Maken: Voor Elk Type Nederlandse Organisatie
-              </h3>
-              
-              <div className="space-y-8 mb-12">
-                <div>
-                  <h4 className="text-xl font-semibold mb-3 text-white">
-                    🏢 MKB & Nederlandse Ondernemers
-                  </h4>
-                  <p className="text-slate-200">
-                    Wilt u een <strong>professionele website laten maken</strong> die uw lokale 
-                    of nationale markt verovert? Wij specialiseren ons in <strong>zakelijke websites</strong> en <strong>bedrijfswebsites</strong> voor het 
-                    Nederlandse MKB die direct impact hebben op uw digitale aanwezigheid, omzet en merkbekendheid. Van Amsterdam, 
-                    Rotterdam en Utrecht tot Groningen, Eindhoven en Maastricht – uw online etalage versterken met een <strong>responsive website</strong> 
-                    en toekomstgerichte webtechnologie is onze passie.
-                  </p>
-                </div>
-                
-                <div>
-                  <h4 className="text-xl font-semibold mb-3 text-white">
-                    🚀 Startups & Scale-ups Nederland
-                  </h4>
-                  <p className="text-slate-200">
-                    Voor ambitieuze Nederlandse startups die snel willen groeien, ontwikkelen wij schaalbare 
-                    digitale platforms die meegroeien met uw succes. Van MVP en <strong>startup website</strong> tot enterprise-oplossing – 
-                    wij denken strategisch mee in uw groei-roadmap. <strong>Moderne websites</strong> en innovatieve web applicaties die investeerders 
-                    imponeren en klanten converteren, geoptimaliseerd voor de Nederlandse markt en internationale expansie.
-                  </p>
-                </div>
-                
-                <div>
-                  <h4 className="text-xl font-semibold mb-3 text-white">
-                    🏭 Enterprise & Corporates
-                  </h4>
-                  <p className="text-slate-200">
-                    Complexe <strong>corporate websites</strong> en digitale ecosystemen zijn onze specialiteit. 
-                    Wij integreren naadloos met uw bestaande systemen en processen voor een 
-                    toekomstbestendige digitale infrastructuur. Van multinationals tot Nederlandse marktleiders – 
-                    <strong>enterprise website ontwikkeling</strong> die voldoet aan de hoogste beveiligings- en compliance eisen.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-xl font-semibold mb-3 text-white">
-                    🛍️ E-commerce & Webshop Ontwikkeling
-                  </h4>
-                  <p className="text-slate-200">
-                    <strong>Webshop laten maken</strong> die daadwerkelijk verkoopt? Onze e-commerce specialisten 
-                    ontwikkelen krachtige online winkels geoptimaliseerd voor de Nederlandse consument. 
-                    Integraties met Mollie, Adyen, iDEAL, en andere Nederlandse betaalmethoden zijn standaard. 
-                    Van kleine webwinkels tot enterprise e-commerce platforms.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-8 rounded-xl border border-cyan-500/20 mb-8">
-                <h4 className="text-xl font-semibold mb-4 text-cyan-300">
-                  🗺️ Website Laten Maken in Heel Nederland
-                </h4>
-                <p className="text-slate-200 mb-4">
-                  Als Nederlands <strong>webdesign bureau</strong> bedienen wij klanten door het hele land. 
-                  Van de Randstad tot de provincies – onze lokale marktkennis zorgt voor websites 
-                  die aansluiten bij uw doelgroep:
-                </p>
-                <div className="grid md:grid-cols-3 gap-4 text-sm text-slate-200">
-                  <div>
-                    <strong className="text-cyan-300">Randstad:</strong>
-                    <ul className="mt-2 space-y-1">
-                      <li>• Website maken Amsterdam</li>
-                      <li>• Webdesign Rotterdam</li>
-                      <li>• Website laten maken Utrecht</li>
-                      <li>• Webdevelopment Den Haag</li>
-                      <li>• Website Haarlem & Leiden</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <strong className="text-cyan-300">Noord & Oost:</strong>
-                    <ul className="mt-2 space-y-1">
-                      <li>• Webdesign Groningen</li>
-                      <li>• Website maken Enschede</li>
-                      <li>• Webdevelopment Arnhem</li>
-                      <li>• Website Nijmegen & Apeldoorn</li>
-                      <li>• Webdesign Zwolle & Almere</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <strong className="text-cyan-300">Zuid Nederland:</strong>
-                    <ul className="mt-2 space-y-1">
-                      <li>• Website Eindhoven</li>
-                      <li>• Webdesign Tilburg</li>
-                      <li>• Website maken Maastricht</li>
-                      <li>• Webdevelopment Breda</li>
-                      <li>• Website &apos;s-Hertogenbosch</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <FAQSection title="Veelgestelde Vragen">
-              <DutchMarketFAQ />
-            </FAQSection>
-
-            <section>
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
-                Over ProWeb Studio: Uw Digitale Partner in Nederland
-              </h3>
-              <p className="text-slate-200 mb-6">
-                Als Nederlandse website specialist met internationale expertise combineren wij 
-                lokale marktkennis met wereldklasse technologie. Ons team van ervaren developers, 
-                designers en strategen heeft één doel: uw digitale succes realiseren door 
-                <strong> websites te laten maken</strong> die daadwerkelijk resultaat opleveren 
-                voor Nederlandse bedrijven.
-              </p>
-              
-              <p className="text-slate-200 mb-8">
-                Leer meer{' '}
-                <Link href="/over-ons" className="text-cyan-300 hover:text-cyan-300">
-                  over ons team, onze missie en Nederlandse webdesign expertise
-                </Link>{' '}
-                om Nederlandse bedrijven te helpen groeien met innovatieve webtechnologie. 
-                Bekijk ook onze <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300">
-                  gestructureerde ontwikkelingsmethodiek
-                </Link> en{' '}
-                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">
-                  uitgebreide service portfolio
-                </Link>.
-              </p>
-            </section>
-
-            <footer className="bg-gradient-to-r from-cyan-500/10 to-magenta-500/10 p-8 rounded-xl border border-cyan-500/20 text-center">
-              <h3 className="text-2xl font-bold mb-4 text-white">
-                Klaar om Jouw Digitale Verhaal te Schrijven?
-              </h3>
-              <p className="text-slate-200 mb-6">
-                Laten we samen ontdekken hoe jouw <strong>website laten maken project</strong> een game-changer wordt voor je business. 
-                In een gratis strategiegesprek verkennen we jouw doelen, dromen en mogelijkheden voor digitale groei. 
-                Ontdek waarom ambitieuze ondernemers door heel Nederland kiezen voor onze 
-                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300 ml-1">innovatieve webdesign aanpak</Link>.
-              </p>
-              <Button
-                href="/contact"
-                variant="primary"
-                size="large"
-                className="gap-2"
-              >
-                Start met een gratis strategiegesprek
-                <span>✨</span>
-              </Button>
-            </footer>
-          </article>
-        </div>
+      {/* New transparent intro section - PHASE C: Clean in-flow content */}
+      <section className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 text-center space-y-6">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-shadow-sharp">
+          Website Laten Maken Nederland: Uw Expert Partner voor Digitale Groei
+        </h2>
+        <p className="text-base sm:text-lg md:text-xl text-white/80 leading-relaxed">
+          ProWeb Studio transformeert uw bedrijfsvisie in krachtige digitale ervaringen. 
+          Of u nu een <strong>professionele website wilt laten maken</strong>, uw bestaande site wilt vernieuwen, 
+          of een complete <strong>webshop laten ontwikkelen</strong> – wij zijn uw strategische partner 
+          voor meetbare online groei in Nederland. Van Amsterdam tot Maastricht, van startup tot enterprise: 
+          <strong>website laten maken</strong> door ervaren Nederlandse webdesign specialisten.
+        </p>
       </section>
+
+      <FAQSection title="Veelgestelde Vragen">
+        <DutchMarketFAQ />
+      </FAQSection>
     </main>
   );
 }

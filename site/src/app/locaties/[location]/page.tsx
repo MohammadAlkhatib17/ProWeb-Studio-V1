@@ -153,7 +153,7 @@ export default function LocationPage({ params }: LocationPageProps) {
         </div>
 
         {/* Hero content with enhanced typography */}
-        <div className="relative z-10 text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-section">
+        <div className="text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-section">
           <div className="flex items-center justify-center gap-3 mb-6">
             <span className="text-2xl">🏛️</span>
             <span className="text-cyan-300 font-medium">{location.region}</span>
