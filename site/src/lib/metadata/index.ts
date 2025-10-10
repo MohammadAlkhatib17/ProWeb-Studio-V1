@@ -81,6 +81,24 @@ export const serviceMetadata = {
     description: 'Betrouwbaar onderhoud en support voor jouw website',
     keywords: ['website onderhoud', 'website support', 'website beheer', 'technische support'],
     cta: 'Zorgeloos website beheer. Bekijk onze onderhoudsplannen!'
+  },
+  'content-marketing': {
+    title: 'Content Marketing',
+    description: 'Strategische content marketing die uw merk laat groeien',
+    keywords: ['content marketing', 'content strategie', 'blog artikelen', 'social media content'],
+    cta: 'Laat uw content werken voor uw business. Vraag content strategie aan!'
+  },
+  'ui-ux-design': {
+    title: 'UI/UX Design',
+    description: 'Gebruiksvriendelijke designs die converteren',
+    keywords: ['ui ux design', 'user experience', 'website design', 'gebruiksvriendelijk'],
+    cta: 'Design dat werkt. Ontdek onze UI/UX expertise!'
+  },
+  'conversion-optimalisatie': {
+    title: 'Conversion Optimalisatie',
+    description: 'Meer conversies uit uw bestaande website verkeer',
+    keywords: ['conversion optimalisatie', 'cro', 'meer conversies', 'website optimalisatie'],
+    cta: 'Meer conversies uit hetzelfde verkeer. Start conversion audit!'
   }
 } as const;
 

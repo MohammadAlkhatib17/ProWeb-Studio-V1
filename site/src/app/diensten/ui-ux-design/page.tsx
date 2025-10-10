@@ -8,13 +8,13 @@ export const revalidate = 7200; // 2 hours - service content is fairly stable
 export const fetchCache = 'force-cache';
 
 // Enhanced service page metadata with all SEO optimizations
-export const metadata: Metadata = generateMetadata('/diensten/onderhoud-support', {
-  service: 'onderhoud-support',
+export const metadata: Metadata = generateMetadata('/diensten/ui-ux-design', {
+  service: 'ui-ux-design',
   pageType: 'service',
   lastModified: new Date().toISOString(),
   image: {
-    url: '/og-webshop-laten-maken.png',
-    alt: 'Webshop Laten Maken Nederland - ProWeb Studio E-commerce Services',
+    url: '/og-ui-ux-design.png',
+    alt: 'UI/UX Design Nederland - ProWeb Studio Design Services',
     width: 1200,
     height: 630,
   },
@@ -22,11 +22,11 @@ export const metadata: Metadata = generateMetadata('/diensten/onderhoud-support'
 
 const servicePageData: ServicePageProps = {
   // Hero Section
-  title: 'Onderhoud & Support',
-  subtitle: 'Zorgeloos website onderhoud en technische support',
-  heroDescription: 'Van security updates tot performance monitoring - wij zorgen dat uw website altijd optimaal functioneert. Proactief onderhoud met 24/7 monitoring.',
-  primaryCTA: 'Gratis Support Consult',
-  secondaryCTA: 'Bekijk Support Plans',
+  title: 'UI/UX Design',
+  subtitle: 'Gebruiksvriendelijke designs die converteren',
+  heroDescription: 'Van wireframes tot clickable prototypes - wij ontwerpen intuïtieve gebruikerservaringen die uw bezoekers omzetten naar klanten. Data-driven design met focus op conversie.',
+  primaryCTA: 'Gratis Design Consult',
+  secondaryCTA: 'Bekijk Designs',
   
   // Features Section
   featuresTitle: 'Complete E-commerce Oplossing',
@@ -232,9 +232,9 @@ const servicePageData: ServicePageProps = {
   finalSecondaryCTA: 'Direct Bellen',
   
   // SEO
-  pageSlug: 'onderhoud-support'
+  pageSlug: 'ui-ux-design'
 };
 
-export default function OnderhoudSupport() {
+export default function UIUXDesign() {
   return <UnifiedServicePage {...servicePageData} />;
 }

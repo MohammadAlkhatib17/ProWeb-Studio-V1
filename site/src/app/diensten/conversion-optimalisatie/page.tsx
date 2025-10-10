@@ -8,8 +8,8 @@ export const revalidate = 7200; // 2 hours - service content is fairly stable
 export const fetchCache = 'force-cache';
 
 // Enhanced service page metadata with all SEO optimizations
-export const metadata: Metadata = generateMetadata('/diensten/onderhoud-support', {
-  service: 'onderhoud-support',
+export const metadata: Metadata = generateMetadata('/diensten/conversion-optimalisatie', {
+  service: 'conversion-optimalisatie',
   pageType: 'service',
   lastModified: new Date().toISOString(),
   image: {
@@ -22,11 +22,11 @@ export const metadata: Metadata = generateMetadata('/diensten/onderhoud-support'
 
 const servicePageData: ServicePageProps = {
   // Hero Section
-  title: 'Onderhoud & Support',
-  subtitle: 'Zorgeloos website onderhoud en technische support',
-  heroDescription: 'Van security updates tot performance monitoring - wij zorgen dat uw website altijd optimaal functioneert. Proactief onderhoud met 24/7 monitoring.',
-  primaryCTA: 'Gratis Support Consult',
-  secondaryCTA: 'Bekijk Support Plans',
+  title: 'Conversion Optimalisatie',
+  subtitle: 'Meer conversies uit uw bestaande verkeer',
+  heroDescription: 'Van A/B testing tot user behavior analyse - wij optimaliseren uw website voor maximale conversie. Datagedreven aanpak met meetbare resultaten.',
+  primaryCTA: 'Gratis Conversie Audit',
+  secondaryCTA: 'Bekijk Resultaten',
   
   // Features Section
   featuresTitle: 'Complete E-commerce Oplossing',
@@ -232,9 +232,9 @@ const servicePageData: ServicePageProps = {
   finalSecondaryCTA: 'Direct Bellen',
   
   // SEO
-  pageSlug: 'onderhoud-support'
+  pageSlug: 'conversion-optimalisatie'
 };
 
-export default function OnderhoudSupport() {
+export default function ConversionOptimalisatie() {
   return <UnifiedServicePage {...servicePageData} />;
 }

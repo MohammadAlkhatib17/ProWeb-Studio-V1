@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { dutchCities } from '@/config/local-seo.config';
+import { cities } from '@/data/cities';
 
 // Edge runtime configuration for better performance and region distribution
 export const runtime = 'edge';
@@ -22,8 +22,8 @@ function locationsSitemap(): MetadataRoute.Sitemap {
     }
   ];
 
-  // Generate location pages for all Dutch cities
-  const cityRoutes = dutchCities.map(city => {
+  // Generate CANONICAL location pages - only /locaties/ (plural) routes
+  const cityRoutes = cities.map(city => {
     // Priority based on population and business potential
     let priority = 0.6; // Default for smaller cities
     
@@ -36,46 +36,17 @@ function locationsSitemap(): MetadataRoute.Sitemap {
     }
 
     return {
-      path: `/locatie/${city.slug}`,
+      path: `/locaties/${city.slug}`, // CANONICAL: plural /locaties/
       priority,
       changeFreq: 'monthly' as const,
       lastModified: new Date('2025-10-08'),
     };
   });
 
-  // Add service-specific pages for major cities (top 10 by population)
-  const majorCities = dutchCities
-    .sort((a, b) => b.population - a.population)
-    .slice(0, 10);
-
-  const serviceRoutes = majorCities.flatMap(city => [
-    {
-      path: `/locatie/${city.slug}/webdesign`,
-      priority: 0.6,
-      changeFreq: 'monthly' as const,
-      lastModified: new Date('2025-10-08'),
-    },
-    {
-      path: `/locatie/${city.slug}/webontwikkeling`,
-      priority: 0.6,
-      changeFreq: 'monthly' as const,
-      lastModified: new Date('2025-10-08'),
-    },
-    {
-      path: `/locatie/${city.slug}/ecommerce`,
-      priority: 0.6,
-      changeFreq: 'monthly' as const,
-      lastModified: new Date('2025-10-08'),
-    },
-    {
-      path: `/locatie/${city.slug}/seo`,
-      priority: 0.6,
-      changeFreq: 'monthly' as const,
-      lastModified: new Date('2025-10-08'),
-    }
-  ]);
-
-  const allRoutes = [...locationRoutes, ...cityRoutes, ...serviceRoutes];
+  // Remove service-specific pages to simplify canonical structure  
+  // All city services are now handled through main /locaties/[location] page
+  
+  const allRoutes = [...locationRoutes, ...cityRoutes];
 
   return allRoutes.map((route) => ({
     url: `${baseUrl}${route.path}`,

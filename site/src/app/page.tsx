@@ -108,7 +108,7 @@ export default function HomePage() {
             <li><a href="/diensten/website-laten-maken">Website laten maken</a></li>
             <li><a href="/diensten/webshop-laten-maken">Webshop laten maken</a></li>
             <li><a href="/diensten/seo-optimalisatie">SEO optimalisatie</a></li>
-            <li><a href="/diensten/3d-websites">3D websites</a></li>
+            <li><a href="/diensten/3d-website-ervaringen">3D websites</a></li>
           </ul>
         </nav>
       </div>

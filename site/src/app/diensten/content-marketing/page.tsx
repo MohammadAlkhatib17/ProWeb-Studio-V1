@@ -8,13 +8,13 @@ export const revalidate = 7200; // 2 hours - service content is fairly stable
 export const fetchCache = 'force-cache';
 
 // Enhanced service page metadata with all SEO optimizations
-export const metadata: Metadata = generateMetadata('/diensten/onderhoud-support', {
-  service: 'onderhoud-support',
+export const metadata: Metadata = generateMetadata('/diensten/content-marketing', {
+  service: 'content-marketing',
   pageType: 'service',
   lastModified: new Date().toISOString(),
   image: {
-    url: '/og-webshop-laten-maken.png',
-    alt: 'Webshop Laten Maken Nederland - ProWeb Studio E-commerce Services',
+    url: '/og-content-marketing.png',
+    alt: 'Content Marketing Nederland - ProWeb Studio Content Services',
     width: 1200,
     height: 630,
   },
@@ -22,58 +22,58 @@ export const metadata: Metadata = generateMetadata('/diensten/onderhoud-support'
 
 const servicePageData: ServicePageProps = {
   // Hero Section
-  title: 'Onderhoud & Support',
-  subtitle: 'Zorgeloos website onderhoud en technische support',
-  heroDescription: 'Van security updates tot performance monitoring - wij zorgen dat uw website altijd optimaal functioneert. Proactief onderhoud met 24/7 monitoring.',
-  primaryCTA: 'Gratis Support Consult',
-  secondaryCTA: 'Bekijk Support Plans',
+  title: 'Content Marketing',
+  subtitle: 'Strategische content die uw merk laat groeien',
+  heroDescription: 'Van blog artikelen tot social media content - wij creëren waardevolle content die uw doelgroep betrekt en converteert. SEO-geoptimaliseerd en data-driven.',
+  primaryCTA: 'Gratis Content Strategie',
+  secondaryCTA: 'Bekijk Contentcases',
   
   // Features Section
-  featuresTitle: 'Complete E-commerce Oplossing',
-  featuresSubtitle: 'Van productbeheer tot betalingsverwerking - wij zorgen voor alle aspecten van moderne e-commerce.',
+  featuresTitle: 'Complete Content Marketing Strategie',
+  featuresSubtitle: 'Van contentplanning tot prestatiemonitoring - wij zorgen voor alle aspecten van succesvolle content marketing.',
   features: [
     {
-      title: 'Product Management',
-      description: 'Uitgebreid productcatalogus systeem met voorraad beheer',
-      icon: '📦',
+      title: 'Content Strategy',
+      description: 'Datagedreven contentstrategie afgestemd op uw doelgroep',
+      icon: '🎯',
       details: [
-        'Onbeperkt aantal producten',
-        'Varianten en opties beheer',
-        'Voorraad tracking & alerts',
-        'Bulk product import/export'
+        'Doelgroep analyse & persona ontwikkeling',
+        'Content calendar & redactionele planning',
+        'Competitive analysis & gap identificatie',
+        'Performance KPI\'s & success metrics'
       ]
     },
     {
-      title: 'Betaal Integraties',
-      description: 'Veilige betalingsverwerking met alle populaire methoden',
-      icon: '💳',
+      title: 'SEO Content Creation',
+      description: 'SEO-geoptimaliseerde content die rankt en converteert',
+      icon: '✍️',
       details: [
-        'iDEAL, Bancontact, PayPal integratie',
-        'Creditcard verwerking (Visa, Mastercard)',
-        'Achteraf betalen (Klarna, Afterpay)',
-        'PCI DSS compliant beveiliging'
+        'Keyword research & content optimalisatie',
+        'Blog artikelen & website content',
+        'Landing pages & product beschrijvingen',
+        'Long-form content & whitepapers'
       ]
     },
     {
-      title: 'Bestelling & Verzending',
-      description: 'Geautomatiseerd bestel- en verzendproces voor efficiëntie',
+      title: 'Social Media Content',
+      description: 'Engaging social media content voor alle platforms',
+      icon: '📱',
+      details: [
+        'Platform-specifieke content strategie',
+        'Visual content & graphic design',
+        'Video content & motion graphics',
+        'Community management & engagement'
+      ]
+    },
+    {
+      title: 'Content Analytics',
+      description: 'Uitgebreide analyse en rapportage van content prestaties',
       icon: '�',
       details: [
-        'Automatische bestelling notificaties',
-        'PostNL, DPD, UPS integratie',
-        'Track & trace functionaliteit',
-        'Verzendkosten calculator'
-      ]
-    },
-    {
-      title: 'Marketing & SEO',
-      description: 'E-commerce geoptimaliseerde marketing tools en SEO',
-      icon: '📈',
-      details: [
-        'Product SEO optimalisatie',
-        'Google Shopping integratie',
-        'Kortingscodes & promoties',
-        'E-mail marketing automation'
+        'Google Analytics & social insights',
+        'Content ROI & conversion tracking',
+        'Engagement metrics & audience analysis',
+        'Monthly performance reports'
       ]
     }
   ],
@@ -232,9 +232,9 @@ const servicePageData: ServicePageProps = {
   finalSecondaryCTA: 'Direct Bellen',
   
   // SEO
-  pageSlug: 'onderhoud-support'
+  pageSlug: 'content-marketing'
 };
 
-export default function OnderhoudSupport() {
+export default function ContentMarketing() {
   return <UnifiedServicePage {...servicePageData} />;
 }

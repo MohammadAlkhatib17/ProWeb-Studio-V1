@@ -69,12 +69,14 @@ export function ProWebStudioOrganization({ nonce }: { nonce?: string }) {
     url: siteConfig.url,
     logo: `${siteConfig.url}/icons/icon-512.png`,
     description: siteConfig.description,
-    address: {
-      streetAddress: 'Fictiestraat 123',
-      addressLocality: 'Amsterdam',
-      addressRegion: 'Noord-Holland',
-      postalCode: '1000 AB',
-      addressCountry: 'NL'
+    // Online-first business - no physical address
+    areaServed: {
+      '@type': 'Country',
+      name: 'Netherlands'
+    },
+    serviceArea: {
+      '@type': 'Country', 
+      name: 'Netherlands'
     },
     contactPoint: {
       telephone: siteConfig.phone,

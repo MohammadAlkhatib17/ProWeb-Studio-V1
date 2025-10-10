@@ -152,6 +152,13 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Route Canonicalization - Redirect /locatie/ to /locaties/
+  if (path.startsWith('/locatie/')) {
+    const url = req.nextUrl.clone();
+    url.pathname = path.replace('/locatie/', '/locaties/');
+    return NextResponse.redirect(url, 301); // Permanent redirect
+  }
+
   // Geographic optimization hints
   const geoHint = getGeographicHint(ip, country || undefined);
   
