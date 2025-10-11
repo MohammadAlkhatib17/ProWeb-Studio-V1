@@ -243,9 +243,9 @@ export default function UnifiedServicePage({
       <ErrorBoundary>
         <Suspense fallback={<div className="py-20 text-center text-white">Loading FAQ...</div>}>
           <FAQSection title={faqTitle}>
-            <div className="space-y-6">
+            <div className="space-y-3 md:space-y-4">
               {faqs.map((faq, index) => (
-                <FAQItem key={index} faq={faq} />
+                <FAQItem key={index} faq={faq} index={index} />
               ))}
             </div>
           </FAQSection>

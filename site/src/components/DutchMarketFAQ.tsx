@@ -1,7 +1,8 @@
 import { siteConfig } from '@/config/site.config';
 import { Button } from '@/components/Button';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { designSystem, designClasses } from '@/lib/design-system';
+import MobileFAQItem from '@/components/MobileFAQItem';
 
 // Dutch Market FAQ Component with Regional and Business-Specific Content
 export default function DutchMarketFAQ() {
@@ -98,7 +99,7 @@ export default function DutchMarketFAQ() {
       designSystem.components.contentSection,
       designSystem.spacing.container
     )}>
-      <div className={designSystem.spacing.contentContainer}>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 md:mb-16">
           <h2 className={designClasses(designSystem.typography.sectionTitle, "mb-6")}>
             Veelgestelde vragen van Nederlandse ondernemers
@@ -118,47 +119,19 @@ export default function DutchMarketFAQ() {
               {category}
             </h3>
             
-            <div className="space-y-4 md:space-y-6">
+            <div className="space-y-3 md:space-y-4">
               {faqs
                 .filter(faq => faq.category === category)
                 .map((faq, faqIndex) => (
-                  <details 
+                  <MobileFAQItem
                     key={`${categoryIndex}-${faqIndex}`}
-                    className={designClasses(
-                      designSystem.components.cardHover,
-                      "group overflow-hidden border-l-4 border-l-cyan-500/20 hover:border-l-cyan-400 hover:shadow-xl hover:shadow-cyan-400/10"
-                    )}
-                  >
-                    <summary className="flex items-start justify-between p-4 md:p-6 cursor-pointer list-none">
-                      <h4 className={designClasses(
-                        designSystem.typography.cardTitle,
-                        "pr-4 group-hover:text-cyan-300 transition-colors duration-300 mb-0"
-                      )}>
-                        {faq.question}
-                      </h4>
-                      <div className="flex-shrink-0 w-8 h-8 mt-1 rounded-full bg-cyan-400/10 flex items-center justify-center group-open:rotate-180 transition-all duration-300 ease-in-out group-hover:bg-cyan-400/20 border border-cyan-400/20">
-                        <ChevronDown className="w-4 h-4 text-cyan-300 transition-all duration-300 ease-in-out group-open:scale-110" />
-                      </div>
-                    </summary>
-                    
-                    <div className="px-4 md:px-6 pb-4 md:pb-6 animate-fade-in">
-                      <p className={designClasses(designSystem.typography.bodyPrimary, "mb-4")}>
-                        {faq.answer}
-                      </p>
-                      
-                      {/* Keywords for SEO context */}
-                      <div className="flex flex-wrap gap-2">
-                        {faq.keywords.map((keyword, keywordIndex) => (
-                          <span 
-                            key={keywordIndex}
-                            className="text-xs px-2 py-1 bg-cyan-400/5 text-cyan-300/80 rounded-full border border-cyan-400/10 hover:border-cyan-400/20 transition-colors duration-200"
-                          >
-                            {keyword}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </details>
+                    faq={{
+                      question: faq.question,
+                      answer: faq.answer,
+                      keywords: faq.keywords
+                    }}
+                    index={faqIndex}
+                  />
                 ))}
             </div>
           </div>
