@@ -1,6 +1,7 @@
 import { siteConfig } from '@/config/site.config';
 import { Button } from '@/components/Button';
 import { ArrowRight, ChevronDown } from 'lucide-react';
+import { designSystem, designClasses } from '@/lib/design-system';
 
 // Dutch Market FAQ Component with Regional and Business-Specific Content
 export default function DutchMarketFAQ() {
@@ -93,52 +94,64 @@ export default function DutchMarketFAQ() {
   const categories = [...new Set(faqs.map(faq => faq.category))];
 
   return (
-    <section className="py-section px-4 sm:px-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 glow-text">
+    <section className={designClasses(
+      designSystem.components.contentSection,
+      designSystem.spacing.container
+    )}>
+      <div className={designSystem.spacing.contentContainer}>
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className={designClasses(designSystem.typography.sectionTitle, "mb-6")}>
             Veelgestelde vragen van Nederlandse ondernemers
           </h2>
-          <p className="text-lg sm:text-xl text-slate-200 max-w-3xl mx-auto">
+          <p className={designClasses(designSystem.typography.bodyPrimary, "max-w-3xl mx-auto")}>
             Antwoorden op de belangrijkste vragen over website laten maken, 
             specifiek voor de Nederlandse markt en bedrijfscultuur.
           </p>
         </div>
 
         {categories.map((category, categoryIndex) => (
-          <div key={category} className="mb-12">
-            <h3 className="text-2xl font-bold mb-6 text-cyan-300 border-b border-cyan-400/20 pb-2">
+          <div key={category} className="mb-12 md:mb-16">
+            <h3 className={designClasses(
+              designSystem.typography.subsectionTitle, 
+              "mb-6 md:mb-8 border-b border-cyan-400/20 pb-3"
+            )}>
               {category}
             </h3>
             
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               {faqs
                 .filter(faq => faq.category === category)
                 .map((faq, faqIndex) => (
                   <details 
                     key={`${categoryIndex}-${faqIndex}`}
-                    className="group bg-neutral-800/30 border border-neutral-700 rounded-lg overflow-hidden hover:border-cyan-400/30 transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-cyan-400/10"
+                    className={designClasses(
+                      designSystem.components.cardHover,
+                      "group overflow-hidden border-l-4 border-l-cyan-500/20 hover:border-l-cyan-400 hover:shadow-xl hover:shadow-cyan-400/10"
+                    )}
                   >
-                    <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                      <h4 className="text-lg font-semibold text-white pr-4 group-hover:text-cyan-300 transition-colors duration-300">
+                    <summary className="flex items-start justify-between p-4 md:p-6 cursor-pointer list-none">
+                      <h4 className={designClasses(
+                        designSystem.typography.cardTitle,
+                        "pr-4 group-hover:text-cyan-300 transition-colors duration-300 mb-0"
+                      )}>
                         {faq.question}
                       </h4>
-                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-400/20 flex items-center justify-center group-open:rotate-180 transition-all duration-500 ease-in-out group-hover:bg-cyan-400/30">
+                      <div className="flex-shrink-0 w-8 h-8 mt-1 rounded-full bg-cyan-400/10 flex items-center justify-center group-open:rotate-180 transition-all duration-300 ease-in-out group-hover:bg-cyan-400/20 border border-cyan-400/20">
                         <ChevronDown className="w-4 h-4 text-cyan-300 transition-all duration-300 ease-in-out group-open:scale-110" />
                       </div>
                     </summary>
                     
-                    <div className="px-6 pb-6 animate-fade-in">
-                      <p className="text-slate-200 leading-relaxed">
+                    <div className="px-4 md:px-6 pb-4 md:pb-6 animate-fade-in">
+                      <p className={designClasses(designSystem.typography.bodyPrimary, "mb-4")}>
                         {faq.answer}
                       </p>
                       
                       {/* Keywords for SEO context */}
-                      <div className="mt-4 flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2">
                         {faq.keywords.map((keyword, keywordIndex) => (
                           <span 
                             key={keywordIndex}
-                            className="text-xs px-2 py-1 bg-cyan-400/10 text-cyan-300 rounded-full border border-cyan-400/20"
+                            className="text-xs px-2 py-1 bg-cyan-400/5 text-cyan-300/80 rounded-full border border-cyan-400/10 hover:border-cyan-400/20 transition-colors duration-200"
                           >
                             {keyword}
                           </span>
@@ -152,11 +165,15 @@ export default function DutchMarketFAQ() {
         ))}
 
         {/* Call to Action */}
-        <div className="mt-16 text-center bg-gradient-to-r from-cyan-400/10 to-purple-400/10 border border-cyan-400/20 rounded-lg p-8">
-          <h3 className="text-2xl font-bold mb-4 text-white">
+        <div className={designClasses(
+          designSystem.effects.glass,
+          "mt-12 md:mt-16 text-center p-6 md:p-8 rounded-xl border-l-4 border-l-cyan-500/30",
+          designSystem.effects.gradientSubtle
+        )}>
+          <h3 className={designClasses(designSystem.typography.subsectionTitle, "mb-4")}>
             Nog vragen over website laten maken?
           </h3>
-          <p className="text-slate-200 mb-6 max-w-2xl mx-auto">
+          <p className={designClasses(designSystem.typography.bodyPrimary, "mb-6 md:mb-8 max-w-2xl mx-auto")}>
             Elke ondernemer heeft unieke vragen en uitdagingen. We beantwoorden graag 
             uw specifieke vragen over website ontwikkeling, SEO, of digitale strategie.
           </p>

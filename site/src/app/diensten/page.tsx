@@ -151,7 +151,7 @@ export default function Diensten() {
         </Suspense>
 
         <div className="relative z-10 w-full">
-          <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <PageTitle className="max-w-5xl mx-auto animate-fade-in">
               Meer dan Code. Oplossingen die Groeien.
             </PageTitle>
@@ -165,7 +165,7 @@ export default function Diensten() {
 
       {/* Services grid */}
       <section className="py-section px-4 sm:px-6">
-        <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {services.map((service, i) => {
               // Map service indices to semantic IDs
@@ -213,12 +213,12 @@ export default function Diensten() {
 
       {/* Tech Stack Section */}
       <section className="py-section px-4 sm:px-6 bg-cosmic-800/20 border-t border-cosmic-700/60">
-        <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
               Onze Technologische Kern
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
               Wij geloven in het kiezen van het juiste gereedschap voor elke
               uitdaging. Onze expertise ligt in een moderne, performante en
               schaalbare technologiestack, ontworpen om u een
@@ -227,9 +227,9 @@ export default function Diensten() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 text-center">
-            <div className="glass p-6 rounded-lg">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">Frontend</h3>
-              <ul className="space-y-2 text-slate-200">
+            <div className="glass p-6 rounded-xl">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-cyan-300 mb-4">Frontend</h3>
+              <ul className="space-y-2 text-slate-200 text-sm sm:text-base">
                 <li>Next.js</li>
                 <li>React</li>
                 <li>TypeScript</li>
@@ -237,31 +237,31 @@ export default function Diensten() {
                 <li>GSAP</li>
               </ul>
             </div>
-            <div className="glass p-6 rounded-lg">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
+            <div className="glass p-6 rounded-xl">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-cyan-300 mb-4">
                 3D & Animatie
               </h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-200 text-sm sm:text-base">
                 <li>WebGL</li>
                 <li>Three.js</li>
                 <li>React Three Fiber</li>
               </ul>
             </div>
-            <div className="glass p-6 rounded-lg">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
+            <div className="glass p-6 rounded-xl">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-cyan-300 mb-4">
                 Backend & CMS
               </h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-200 text-sm sm:text-base">
                 <li>Headless CMS (o.a. Sanity, Contentful)</li>
                 <li>Node.js</li>
                 <li>Vercel Serverless Functions</li>
               </ul>
             </div>
-            <div className="glass p-6 rounded-lg">
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
+            <div className="glass p-6 rounded-xl">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-cyan-300 mb-4">
                 Deployment & Infrastructuur
               </h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-200 text-sm sm:text-base">
                 <li>Vercel</li>
                 <li>Netlify</li>
                 <li>AWS</li>
@@ -272,11 +272,13 @@ export default function Diensten() {
       </section>
 
       {/* Related Services & Internal Links Section */}
-      <section className="py-12 sm:py-section px-4 sm:px-6">
-        <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-12 text-center gradient-text">
-            Ontdek Meer van ProWeb Studio
-          </h2>
+      <section className="py-section px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
+              Ontdek Meer van ProWeb Studio
+            </h2>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12">
             <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
@@ -333,7 +335,7 @@ export default function Diensten() {
 
           {/* Conversion-focused CTA */}
           <div className="text-center">
-            <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300">
               Klaar voor een Website die Indruk Maakt?
             </h3>
             <p className="text-slate-200 mb-6 max-w-2xl mx-auto">
@@ -365,10 +367,10 @@ export default function Diensten() {
         <div className="absolute inset-0 pointer-events-none -z-10 bg-gradient-to-b from-transparent via-cosmic-900/15 to-transparent" />
         <div className="absolute inset-0 pointer-events-none -z-10 portal-gradient opacity-40" />
         <div className="max-w-4xl mx-auto text-center glass rounded-2xl p-6 sm:p-8 md:p-10">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 leading-tight">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
             Op maat gemaakte oplossingen
           </h2>
-          <p className="text-base sm:text-lg md:text-xl mb-12 text-slate-200 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Elk project is uniek. Laten we samen jouw perfecte oplossing bouwen
             die jouw verwachtingen overtreft.
           </p>
@@ -404,66 +406,70 @@ export default function Diensten() {
       </section>
 
       {/* SEO Content Section */}
-      <section
-        id="seo-content"
-        className="prose prose-invert max-w-none px-6 md:px-8 lg:px-12 py-12 md:py-16"
-      >
-        <h1>Diensten die groei versnellen</h1>
-        <h2>Webdesign &amp; Development</h2>
-        <p>
-          Een professionele website laten maken begint bij een ijzersterk
-          fundament. Wij bouwen maatwerk websites met een scherp oog voor
-          snelheid, gebruiksvriendelijkheid en een conversiegericht ontwerp dat
-          bezoekers omzet in klanten. Of u nu ZZP&apos;er bent of een groeiend
-          MKB-bedrijf runt, uw online groei is onze prioriteit.
-        </p>
-        <h2>3D Web Experiences (WebGL/Three.js)</h2>
-        <p>
-          Onderscheid uw merk met interactieve 3D-ervaringen die uw producten en
-          diensten tot leven brengen. Door WebGL en Three.js technologie slim in
-          te zetten, creëren we meeslepende gebruikerservaringen die langer op
-          uw website blijven hangen. Perfect voor bedrijven die hun merkverhaal
-          op een unieke manier willen vertellen en een blijvende indruk willen
-          maken.
-        </p>
-        <h2>Performance Optimalisatie</h2>
-        <p>
-          Een snelle website is essentieel voor een hogere ranking in Google en
-          betere gebruikerservaring. Wij optimaliseren uw Core Web Vitals,
-          implementeren geavanceerde caching strategieën en gebruiken moderne
-          beeldformaten zoals AVIF en WebP. Het resultaat: een bliksemsnelle
-          website die zowel gebruikers als zoekmachines tevreden houdt.
-        </p>
-        <h2>SEO &amp; Content Strategie</h2>
-        <p>
-          Zichtbaarheid in Google begint met een solide SEO-strategie. Wij
-          voeren diepgaand zoekwoordenonderzoek uit, optimaliseren technische
-          aspecten en ontwikkelen een contentplan dat uw doelgroep aanspreekt.
-          Van lokale SEO voor Nederlandse bedrijven tot internationale groei –
-          wij zorgen ervoor dat uw website gevonden wordt door de juiste
-          klanten.
-        </p>
-        <h2>Headless CMS &amp; Integraties</h2>
-        <p>
-          Flexibel contentbeheer is de sleutel tot efficiënte online
-          communicatie. Met headless CMS-oplossingen zoals Sanity of Contentful
-          krijgt u volledige controle over uw content, zonder technische
-          beperkingen. Wij integreren naadloos met uw bestaande systemen en
-          zorgen voor een workflow die aansluit bij uw bedrijfsprocessen.
-        </p>
-        <h2>CRO (Conversion Rate Optimization)</h2>
-        <p>
-          Meer bezoekers is mooi, maar meer klanten is beter. Door systematische
-          A/B-testing, gebruikersanalyse en UX-verbeteringen transformeren we uw
-          website van een digitale brochure naar een krachtige verkoopmotor.
-          Elke aanpassing is data-gedreven en gericht op het verhogen van uw
-          conversie en omzet.
-        </p>
-        <p>
-          <a href="/contact" className="inline-block mt-4">
-            Vraag een groeiscan aan
-          </a>
-        </p>
+      <section className="py-section px-4 sm:px-6 bg-cosmic-800/20 border-t border-cosmic-700/60">
+        <div className="max-w-7xl mx-auto">
+          <div
+            id="seo-content"
+            className="prose prose-sm sm:prose-base prose-invert max-w-4xl mx-auto leading-relaxed"
+          >
+            <h1>Diensten die groei versnellen</h1>
+            <h2>Webdesign &amp; Development</h2>
+            <p>
+              Een professionele website laten maken begint bij een ijzersterk
+              fundament. Wij bouwen maatwerk websites met een scherp oog voor
+              snelheid, gebruiksvriendelijkheid en een conversiegericht ontwerp dat
+              bezoekers omzet in klanten. Of u nu ZZP&apos;er bent of een groeiend
+              MKB-bedrijf runt, uw online groei is onze prioriteit.
+            </p>
+            <h2>3D Web Experiences (WebGL/Three.js)</h2>
+            <p>
+              Onderscheid uw merk met interactieve 3D-ervaringen die uw producten en
+              diensten tot leven brengen. Door WebGL en Three.js technologie slim in
+              te zetten, creëren we meeslepende gebruikerservaringen die langer op
+              uw website blijven hangen. Perfect voor bedrijven die hun merkverhaal
+              op een unieke manier willen vertellen en een blijvende indruk willen
+              maken.
+            </p>
+            <h2>Performance Optimalisatie</h2>
+            <p>
+              Een snelle website is essentieel voor een hogere ranking in Google en
+              betere gebruikerservaring. Wij optimaliseren uw Core Web Vitals,
+              implementeren geavanceerde caching strategieën en gebruiken moderne
+              beeldformaten zoals AVIF en WebP. Het resultaat: een bliksemsnelle
+              website die zowel gebruikers als zoekmachines tevreden houdt.
+            </p>
+            <h2>SEO &amp; Content Strategie</h2>
+            <p>
+              Zichtbaarheid in Google begint met een solide SEO-strategie. Wij
+              voeren diepgaand zoekwoordenonderzoek uit, optimaliseren technische
+              aspecten en ontwikkelen een contentplan dat uw doelgroep aanspreekt.
+              Van lokale SEO voor Nederlandse bedrijven tot internationale groei –
+              wij zorgen ervoor dat uw website gevonden wordt door de juiste
+              klanten.
+            </p>
+            <h2>Headless CMS &amp; Integraties</h2>
+            <p>
+              Flexibel contentbeheer is de sleutel tot efficiënte online
+              communicatie. Met headless CMS-oplossingen zoals Sanity of Contentful
+              krijgt u volledige controle over uw content, zonder technische
+              beperkingen. Wij integreren naadloos met uw bestaande systemen en
+              zorgen voor een workflow die aansluit bij uw bedrijfsprocessen.
+            </p>
+            <h2>CRO (Conversion Rate Optimization)</h2>
+            <p>
+              Meer bezoekers is mooi, maar meer klanten is beter. Door systematische
+              A/B-testing, gebruikersanalyse en UX-verbeteringen transformeren we uw
+              website van een digitale brochure naar een krachtige verkoopmotor.
+              Elke aanpassing is data-gedreven en gericht op het verhogen van uw
+              conversie en omzet.
+            </p>
+            <p>
+              <a href="/contact" className="inline-block mt-4">
+                Vraag een groeiscan aan
+              </a>
+            </p>
+          </div>
+        </div>
       </section>
 
       <FAQSection title="Vragen over onze Diensten">

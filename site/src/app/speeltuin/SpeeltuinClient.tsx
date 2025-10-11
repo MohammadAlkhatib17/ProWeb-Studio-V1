@@ -106,23 +106,25 @@ export default function SpeeltuinClient() {
   };
 
   return (
-    <main className="relative py-section px-4 sm:px-6 lg:px-8 overflow-x-hidden w-full max-w-full pt-safe pb-safe content-safe-top pt-20 md:pt-24">
-      <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto w-full overflow-x-hidden">
-        {/* Hero Section */}
-        <section className="text-center mb-12 md:mb-16 px-2 sm:px-0">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in break-words">
+    <main className="relative overflow-hidden content-safe-top pt-20 md:pt-24">
+      {/* Hero Section */}
+      <section className="relative min-h-[75svh] md:min-h-[70vh] overflow-hidden flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 glow-text leading-tight max-w-5xl mx-auto animate-fade-in">
             Onze Expertise in Actie
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-4xl mx-auto leading-relaxed animate-slide-up break-words">
+          <p className="text-base sm:text-lg md:text-xl text-cyan-300 mb-8 max-w-4xl mx-auto leading-relaxed animate-slide-up">
             Waarom u foto&apos;s laten zien als we de magie live kunnen
             demonstreren? Dit is geen portfolio; dit is onze interactieve
             tech-speeltuin. Hier heeft u de controle. Ervaar zelf de kracht van
             de technologie waarmee wij unieke digitale ervaringen bouwen.
           </p>
-        </section>
+        </div>
+      </section>
 
-        {/* Enhanced Interactive Controls */}
-        <section className="mb-8 px-2 sm:px-0">
+      {/* Interactive Controls */}
+      <section className="py-section px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 p-4 sm:p-6 glass rounded-xl max-w-3xl mx-auto relative overflow-hidden backdrop-blur-md">
             {/* Interaction heat visualization */}
             <div
@@ -210,10 +212,12 @@ export default function SpeeltuinClient() {
                       : '🎭 Scene ready for your interaction'}
             </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Enhanced Interactive Canvas */}
-        <section className="mb-12 md:mb-16 lg:mb-24 px-2 sm:px-0">
+      {/* Enhanced Interactive Canvas */}
+      <section className="py-section px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
           <div className="relative rounded-2xl bg-slate-900/60 ring-1 ring-white/10 overflow-hidden w-full
                           min-h-[50vh] h-[60vh] max-h-[500px] 
                           xs:min-h-[55vh] xs:h-[65vh] xs:max-h-[550px]
@@ -240,12 +244,14 @@ export default function SpeeltuinClient() {
               />
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Technology Section */}
-        <section className="mb-12 md:mb-16 lg:mb-24 px-2 sm:px-0">
+      {/* Technology Section */}
+      <section className="py-section px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight break-words px-2 sm:px-0">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
               De Technologie Achter de Magie
             </h2>
           </div>
@@ -281,15 +287,17 @@ export default function SpeeltuinClient() {
               </p>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Final CTA */}
-        <section className="py-8 sm:py-12 md:py-16 lg:py-24 px-4 md:px-6 lg:px-8">
+      {/* Final CTA */}
+      <section className="py-section px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
           <div className="max-w-4xl mx-auto text-center glass rounded-2xl p-6 sm:p-8 md:p-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight break-words">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
               Klaar om uw eigen ervaring te bouwen?
             </h2>
-            <p className="text-base sm:text-lg md:text-xl mb-8 sm:mb-12 text-slate-200 max-w-3xl mx-auto leading-relaxed break-words">
+            <p className="text-base sm:text-lg text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
               Wat u hier ziet is slechts een glimp van wat we kunnen realiseren.
               Laten we bespreken hoe we deze technologie kunnen inzetten om uw
               bedrijfsdoelen te bereiken.
@@ -302,13 +310,16 @@ export default function SpeeltuinClient() {
               Plan een strategiesessie
             </Button>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
-      <section
-        id="seo-content"
-        className="prose prose-sm sm:prose-base prose-invert max-w-5xl px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16 leading-relaxed overflow-x-hidden mx-auto md:mx-0"
-      >
+      {/* SEO Content Section */}
+      <section className="py-section px-4 sm:px-6 bg-cosmic-800/20 border-t border-cosmic-700/60">
+        <div className="max-w-7xl mx-auto">
+          <div
+            id="seo-content"
+            className="prose prose-sm sm:prose-base prose-invert max-w-4xl mx-auto leading-relaxed"
+          >
         <h1>Speeltuin: 3D Webtechnologie in de Praktijk</h1>
         <p>
           Deze interactieve speeltuin demonstreert onze praktijkervaring in het
@@ -364,6 +375,8 @@ export default function SpeeltuinClient() {
             Bespreek een 3D‑use‑case voor uw merk
           </a>
         </p>
+          </div>
+        </div>
       </section>
     </main>
   );

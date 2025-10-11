@@ -198,9 +198,9 @@ export const TrustIndicator = ({ indicator }: { indicator: TrustIndicator }) => 
 
 // Unified component for FAQ items
 export const FAQItem = ({ faq }: { faq: FAQItem }) => (
-  <div className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6 hover:border-primary-500/50 transition-all duration-300">
-    <h3 className="text-lg font-semibold text-white mb-3">{faq.question}</h3>
-    <p className="text-slate-200">{faq.answer}</p>
+  <div className="bg-white/5 border border-white/10 rounded-xl p-4 md:p-6 hover:border-cyan-400/30 transition-all duration-300 border-l-4 border-l-cyan-500/20 hover:border-l-cyan-400">
+    <h3 className="text-base md:text-lg font-semibold text-white mb-3 text-cyan-300">{faq.question}</h3>
+    <p className="text-base text-slate-200 leading-relaxed">{faq.answer}</p>
   </div>
 );
 

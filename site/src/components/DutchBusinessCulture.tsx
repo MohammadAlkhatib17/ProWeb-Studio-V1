@@ -156,7 +156,7 @@ export default function DutchBusinessCulture() {
             {culturalValues.map((value, index) => (
               <div 
                 key={index}
-                className="bg-neutral-800/40 border border-neutral-700 rounded-lg p-8 hover:border-cyan-400/30 transition-all duration-300"
+                className="bg-white/5 border border-white/10 rounded-xl p-6 md:p-8 hover:border-cyan-400/30 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10 border-l-4 border-l-cyan-500/20 hover:border-l-cyan-400"
               >
                 <div className="flex items-start mb-4">
                   <span className="text-3xl mr-4">{value.icon}</span>
@@ -206,7 +206,7 @@ export default function DutchBusinessCulture() {
                   {category.terms.map((termData, termIndex) => (
                     <div 
                       key={termIndex}
-                      className="bg-gradient-to-br from-neutral-800/30 to-neutral-900/30 border border-neutral-700 rounded-lg p-6 hover:border-cyan-400/30 transition-all duration-300"
+                      className="bg-white/5 border border-white/10 rounded-xl p-4 md:p-6 hover:border-cyan-400/30 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10"
                     >
                       <h5 className="text-lg font-semibold text-white mb-3">
                         &ldquo;{termData.term}&rdquo;
@@ -249,7 +249,7 @@ export default function DutchBusinessCulture() {
                   </div>
                 </div>
                 
-                <div className="bg-neutral-800/50 border border-neutral-600 rounded-lg p-4">
+                <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                   <h5 className="text-sm font-semibold text-cyan-300 mb-2">Onze aanpak:</h5>
                   <p className="text-sm text-slate-200">{insight.action}</p>
                 </div>

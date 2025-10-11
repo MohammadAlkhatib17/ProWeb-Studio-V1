@@ -136,7 +136,7 @@ export default function DutchRegionalTargeting() {
             {regions.map((region, index) => (
               <div 
                 key={index}
-                className="bg-neutral-800/40 border border-neutral-700 rounded-lg p-6 hover:border-cyan-400/30 transition-all duration-300 hover:transform hover:scale-105"
+                className="bg-white/5 border border-white/10 rounded-xl p-4 md:p-6 hover:border-cyan-400/30 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10 border-l-4 border-l-cyan-500/20 hover:border-l-cyan-400"
               >
                 <div className="mb-4">
                   <h4 className="text-xl font-bold text-white mb-1">{region.name}</h4>
