@@ -3,12 +3,12 @@
  * Real-time performance tracking with Dutch market optimizations
  */
 
-import { onCLS, onFCP, onLCP, onTTFB, onINP, type Metric } from 'web-vitals';
+import { onCLS, onFCP, onLCP, onTTFB, onINP, type Metric } from "web-vitals";
 
 interface VitalMetric {
   name: string;
   value: number;
-  rating: 'good' | 'needs-improvement' | 'poor';
+  rating: "good" | "needs-improvement" | "poor";
   delta: number;
   id: string;
   navigationType: string;
@@ -22,7 +22,7 @@ interface PerformanceReport {
   deviceMemory: number;
   hardwareConcurrency: number;
   metrics: VitalMetric[];
-  dutchOptimizationLevel: 'basic' | 'enhanced' | 'premium';
+  dutchOptimizationLevel: "basic" | "enhanced" | "premium";
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -34,22 +34,24 @@ export class CoreWebVitalsMonitor {
   private metrics: VitalMetric[] = [];
   private reportingEndpoint: string;
   private isReportingEnabled: boolean;
-  private dutchOptimizationLevel: 'basic' | 'enhanced' | 'premium';
+  private dutchOptimizationLevel: "basic" | "enhanced" | "premium";
 
-  constructor(config: {
-    reportingEndpoint?: string;
-    enableReporting?: boolean;
-    dutchOptimizationLevel?: 'basic' | 'enhanced' | 'premium';
-  } = {}) {
-    this.reportingEndpoint = config.reportingEndpoint || '/api/performance';
+  constructor(
+    config: {
+      reportingEndpoint?: string;
+      enableReporting?: boolean;
+      dutchOptimizationLevel?: "basic" | "enhanced" | "premium";
+    } = {},
+  ) {
+    this.reportingEndpoint = config.reportingEndpoint || "/api/performance";
     this.isReportingEnabled = config.enableReporting ?? true;
-    this.dutchOptimizationLevel = config.dutchOptimizationLevel || 'enhanced';
-    
+    this.dutchOptimizationLevel = config.dutchOptimizationLevel || "enhanced";
+
     this.initializeMonitoring();
   }
 
   private initializeMonitoring() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Monitor all Core Web Vitals with v5.x API
     onCLS(this.handleMetric.bind(this));
@@ -74,7 +76,7 @@ export class CoreWebVitalsMonitor {
       rating: metric.rating,
       delta: metric.delta,
       id: metric.id,
-      navigationType: metric.navigationType || 'unknown',
+      navigationType: metric.navigationType || "unknown",
     };
 
     this.metrics.push(vitalMetric);
@@ -88,9 +90,9 @@ export class CoreWebVitalsMonitor {
 
   private reportToAnalytics(metric: VitalMetric) {
     // Report to Google Analytics 4
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'web_vitals', {
-        event_category: 'Web Vitals',
+    if (typeof gtag !== "undefined") {
+      gtag("event", "web_vitals", {
+        event_category: "Web Vitals",
         event_label: metric.name,
         value: Math.round(metric.value),
         custom_parameter_1: metric.rating,
@@ -100,19 +102,19 @@ export class CoreWebVitalsMonitor {
     }
 
     // Report to Plausible Analytics (Dutch privacy-friendly)
-    if (typeof plausible !== 'undefined') {
-      plausible('Web Vitals', {
+    if (typeof plausible !== "undefined") {
+      plausible("Web Vitals", {
         props: {
           metric: metric.name,
           value: Math.round(metric.value),
           rating: metric.rating,
           dutch_optimization: this.dutchOptimizationLevel,
-        }
+        },
       });
     }
 
     // Console logging for development
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.log(`📊 Core Web Vitals: ${metric.name}`, {
         value: metric.value,
         rating: metric.rating,
@@ -123,17 +125,18 @@ export class CoreWebVitalsMonitor {
 
   private checkDutchPerformanceThresholds(metric: VitalMetric) {
     const dutchThresholds = this.getDutchPerformanceThresholds();
-    const threshold = dutchThresholds[metric.name as keyof typeof dutchThresholds];
+    const threshold =
+      dutchThresholds[metric.name as keyof typeof dutchThresholds];
 
     if (!threshold) return;
 
     // Alert if performance is poor for Dutch users
-    if (metric.rating === 'poor') {
+    if (metric.rating === "poor") {
       this.triggerPerformanceAlert(metric, threshold);
     }
 
     // Track improvement opportunities
-    if (metric.rating === 'needs-improvement') {
+    if (metric.rating === "needs-improvement") {
       this.logOptimizationOpportunity(metric, threshold);
     }
   }
@@ -149,26 +152,30 @@ export class CoreWebVitalsMonitor {
   }
 
   private triggerPerformanceAlert(metric: VitalMetric, threshold: any) {
-    console.warn(`🚨 Dutch Performance Alert: ${metric.name} is ${metric.value}ms (threshold: ${threshold.poor}ms)`);
-    
+    console.warn(
+      `🚨 Dutch Performance Alert: ${metric.name} is ${metric.value}ms (threshold: ${threshold.poor}ms)`,
+    );
+
     // Report critical performance issue
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'performance_alert', {
-        event_category: 'Dutch Performance',
+    if (typeof gtag !== "undefined") {
+      gtag("event", "performance_alert", {
+        event_category: "Dutch Performance",
         event_label: metric.name,
         value: Math.round(metric.value),
-        custom_parameter_1: 'critical',
+        custom_parameter_1: "critical",
       });
     }
   }
 
   private logOptimizationOpportunity(metric: VitalMetric, threshold: any) {
-    console.info(`💡 Dutch Optimization Opportunity: ${metric.name} could be improved from ${metric.value}ms to under ${threshold.good}ms`);
-    
+    console.info(
+      `💡 Dutch Optimization Opportunity: ${metric.name} could be improved from ${metric.value}ms to under ${threshold.good}ms`,
+    );
+
     // Track optimization opportunities
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'optimization_opportunity', {
-        event_category: 'Dutch Performance',
+    if (typeof gtag !== "undefined") {
+      gtag("event", "optimization_opportunity", {
+        event_category: "Dutch Performance",
         event_label: metric.name,
         value: Math.round(metric.value - threshold.good),
       });
@@ -176,17 +183,18 @@ export class CoreWebVitalsMonitor {
   }
 
   private monitorDutchSpecificMetrics() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Monitor Dutch language content rendering
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.type === 'childList') {
+        if (mutation.type === "childList") {
           const addedNodes = Array.from(mutation.addedNodes);
-          const dutchContent = addedNodes.filter(node => 
-            node.nodeType === Node.TEXT_NODE && 
-            node.textContent && 
-            this.isDutchContent(node.textContent)
+          const dutchContent = addedNodes.filter(
+            (node) =>
+              node.nodeType === Node.TEXT_NODE &&
+              node.textContent &&
+              this.isDutchContent(node.textContent),
           );
 
           if (dutchContent.length > 0) {
@@ -206,35 +214,52 @@ export class CoreWebVitalsMonitor {
   }
 
   private isDutchContent(text: string): boolean {
-    const dutchWords = ['de', 'het', 'en', 'van', 'een', 'dat', 'die', 'in', 'te', 'zijn', 'is', 'op', 'met', 'voor'];
+    const dutchWords = [
+      "de",
+      "het",
+      "en",
+      "van",
+      "een",
+      "dat",
+      "die",
+      "in",
+      "te",
+      "zijn",
+      "is",
+      "op",
+      "met",
+      "voor",
+    ];
     const words = text.toLowerCase().split(/\s+/);
-    const dutchWordCount = words.filter(word => dutchWords.includes(word)).length;
+    const dutchWordCount = words.filter((word) =>
+      dutchWords.includes(word),
+    ).length;
     return dutchWordCount / words.length > 0.1; // 10% Dutch words threshold
   }
 
   private measureDutchContentRenderTime() {
     const renderTime = performance.now();
-    
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'dutch_content_render', {
-        event_category: 'Dutch Performance',
+
+    if (typeof gtag !== "undefined") {
+      gtag("event", "dutch_content_render", {
+        event_category: "Dutch Performance",
         value: Math.round(renderTime),
-        custom_parameter_1: 'content_render_time',
+        custom_parameter_1: "content_render_time",
       });
     }
   }
 
   private monitorDutchTypographyPerformance() {
     // Monitor font loading for Dutch characters
-    if ('fonts' in document) {
+    if ("fonts" in document) {
       document.fonts.ready.then(() => {
         const fontLoadTime = performance.now();
-        
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'dutch_fonts_loaded', {
-            event_category: 'Dutch Performance',
+
+        if (typeof gtag !== "undefined") {
+          gtag("event", "dutch_fonts_loaded", {
+            event_category: "Dutch Performance",
             value: Math.round(fontLoadTime),
-            custom_parameter_1: 'font_load_time',
+            custom_parameter_1: "font_load_time",
           });
         }
       });
@@ -243,14 +268,14 @@ export class CoreWebVitalsMonitor {
 
   private setupAutomaticReporting() {
     // Report on page visibility change
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
         this.sendReport();
       }
     });
 
     // Report on page unload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener("beforeunload", () => {
       this.sendReport();
     });
 
@@ -267,7 +292,7 @@ export class CoreWebVitalsMonitor {
       timestamp: Date.now(),
       url: window.location.href,
       userAgent: navigator.userAgent,
-      connectionType: (navigator as any).connection?.effectiveType || 'unknown',
+      connectionType: (navigator as any).connection?.effectiveType || "unknown",
       deviceMemory: (navigator as any).deviceMemory || 0,
       hardwareConcurrency: navigator.hardwareConcurrency || 0,
       metrics: [...this.metrics],
@@ -277,15 +302,12 @@ export class CoreWebVitalsMonitor {
     try {
       // Use sendBeacon for reliability
       if (navigator.sendBeacon) {
-        navigator.sendBeacon(
-          this.reportingEndpoint,
-          JSON.stringify(report)
-        );
+        navigator.sendBeacon(this.reportingEndpoint, JSON.stringify(report));
       } else {
         // Fallback to fetch
         await fetch(this.reportingEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(report),
           keepalive: true,
         });
@@ -294,7 +316,7 @@ export class CoreWebVitalsMonitor {
       // Clear metrics after successful report
       this.metrics = [];
     } catch (error) {
-      console.warn('Failed to send performance report:', error);
+      console.warn("Failed to send performance report:", error);
     }
   }
 
@@ -308,7 +330,7 @@ export class CoreWebVitalsMonitor {
       timestamp: Date.now(),
       url: window.location.href,
       userAgent: navigator.userAgent,
-      connectionType: (navigator as any).connection?.effectiveType || 'unknown',
+      connectionType: (navigator as any).connection?.effectiveType || "unknown",
       deviceMemory: (navigator as any).deviceMemory || 0,
       hardwareConcurrency: navigator.hardwareConcurrency || 0,
       metrics: [...this.metrics],
@@ -327,7 +349,7 @@ export class CoreWebVitalsMonitor {
 export function initCoreWebVitalsMonitoring(config?: {
   reportingEndpoint?: string;
   enableReporting?: boolean;
-  dutchOptimizationLevel?: 'basic' | 'enhanced' | 'premium';
+  dutchOptimizationLevel?: "basic" | "enhanced" | "premium";
 }): CoreWebVitalsMonitor {
   return new CoreWebVitalsMonitor(config);
 }
@@ -336,8 +358,8 @@ export function initCoreWebVitalsMonitoring(config?: {
  * Performance dashboard configuration for real-time monitoring
  */
 export const PerformanceDashboardConfig = {
-  position: 'bottom-right',
-  metrics: ['LCP', 'FID', 'CLS', 'FCP', 'TTFB', 'INP'],
+  position: "bottom-right",
+  metrics: ["LCP", "FID", "CLS", "FCP", "TTFB", "INP"],
   updateInterval: 1000, // Update every second
   dutchOptimized: true,
 };
@@ -345,7 +367,10 @@ export const PerformanceDashboardConfig = {
 // Global type declarations
 declare global {
   function gtag(...args: any[]): void;
-  function plausible(event: string, options?: { props?: Record<string, any> }): void;
+  function plausible(
+    event: string,
+    options?: { props?: Record<string, any> },
+  ): void;
 }
 
 export default CoreWebVitalsMonitor;

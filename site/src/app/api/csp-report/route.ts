@@ -1,68 +1,93 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 // Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
-export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
+export const preferredRegion = ["cdg1", "lhr1", "fra1"];
 
-// CSP Report-Only 48h Window Started: 2025-09-18T00:00:00Z
-// Switch to enforcement after monitoring period ends: 2025-09-20T00:00:00Z
-const CSP_MONITORING_START = new Date('2025-09-18T00:00:00Z');
-const CSP_MONITORING_END = new Date('2025-09-20T00:00:00Z');
+// Environment-controlled CSP mode
+function getCSPMode(): "report-only" | "enforce" {
+  return process.env.CSP_REPORT_ONLY === "true" ? "report-only" : "enforce";
+}
 
 export async function POST(req: NextRequest) {
   try {
     const report = await req.json();
-    const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    const clientIP =
+      req.headers.get("x-forwarded-for") ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
     const now = new Date();
-    
-    // Enhanced CSP violation logging with 48h window tracking
+    const cspMode = getCSPMode();
+
+    // Enhanced CSP violation logging with environment-controlled mode
     const violationData = {
       timestamp: now.toISOString(),
-      monitoringWindow: {
-        inWindow: now >= CSP_MONITORING_START && now <= CSP_MONITORING_END,
-        windowStart: CSP_MONITORING_START.toISOString(),
-        windowEnd: CSP_MONITORING_END.toISOString(),
-        hoursRemaining: Math.max(0, Math.round((CSP_MONITORING_END.getTime() - now.getTime()) / (1000 * 60 * 60)))
-      },
+      cspMode,
+      environment: process.env.NODE_ENV || "development",
       clientIP,
-      userAgent: req.headers.get('user-agent')?.substring(0, 200),
+      userAgent: req.headers.get("user-agent")?.substring(0, 200),
       report: {
-        blockedURI: report['blocked-uri'],
-        documentURI: report['document-uri'],
-        violatedDirective: report['violated-directive'],
-        originalPolicy: report['original-policy']?.substring(0, 500),
-        sourceFile: report['source-file'],
-        lineNumber: report['line-number'],
-        columnNumber: report['column-number'],
-        disposition: report['disposition'] || 'report'
-      }
+        blockedURI: report["blocked-uri"],
+        documentURI: report["document-uri"],
+        violatedDirective: report["violated-directive"],
+        originalPolicy: report["original-policy"]?.substring(0, 500),
+        sourceFile: report["source-file"],
+        lineNumber: report["line-number"],
+        columnNumber: report["column-number"],
+        disposition:
+          report["disposition"] ||
+          (cspMode === "report-only" ? "report" : "enforce"),
+      },
     };
-    
-    // Log CSP violation with enhanced monitoring context
-    console.warn('CSP Violation Report [48h Window]:', violationData);
-    
-    // Track specific violation types that may indicate need for unsafe-eval
-    const violatedDirective = report['violated-directive'] || '';
-    if (violatedDirective.includes('script-src') && report['blocked-uri'] === 'eval') {
-      console.warn('⚠️  eval() usage detected - review if unsafe-eval removal is feasible');
+
+    // Log CSP violation with enhanced context
+    console.warn(
+      `CSP Violation Report [${cspMode.toUpperCase()}]:`,
+      violationData,
+    );
+
+    // Track specific violation types that may indicate security issues
+    const violatedDirective = report["violated-directive"] || "";
+    const blockedURI = report["blocked-uri"] || "";
+
+    if (violatedDirective.includes("script-src")) {
+      if (blockedURI === "eval") {
+        console.warn(
+          "⚠️  eval() usage detected - review security implications",
+        );
+      } else if (blockedURI.includes("inline")) {
+        console.warn(
+          "⚠️  inline script blocked - ensure nonce is properly set",
+        );
+      } else if (blockedURI.startsWith("http")) {
+        console.warn("⚠️  external script blocked:", blockedURI);
+      }
     }
-    
-    // In production during 48h window:
+
+    if (
+      violatedDirective.includes("style-src") &&
+      blockedURI.includes("inline")
+    ) {
+      console.info(
+        "ℹ️  inline style blocked - this may be expected with strict CSP",
+      );
+    }
+
+    // In production:
     // 1. Store reports in a database with timestamp
-    // 2. Send alerts for critical violations
+    // 2. Send alerts for critical violations in enforce mode
     // 3. Aggregate reports for analysis
-    // 4. Filter out known false positives
-    // 5. Generate daily violation summaries
-    
+    // 4. Generate violation summaries for debugging
+
     const res = NextResponse.json({ received: true }, { status: 204 });
-    res.headers.set('Cache-Control', 'no-store');
+    res.headers.set("Cache-Control", "no-store");
     return res;
   } catch (error) {
-    console.error('CSP Report parsing error:', error);
-    const res = NextResponse.json({ error: 'Invalid report' }, { status: 400 });
-    res.headers.set('Cache-Control', 'no-store');
+    console.error("CSP Report parsing error:", error);
+    const res = NextResponse.json({ error: "Invalid report" }, { status: 400 });
+    res.headers.set("Cache-Control", "no-store");
     return res;
   }
 }
@@ -72,9 +97,9 @@ export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
     },
   });
 }

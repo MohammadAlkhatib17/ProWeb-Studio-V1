@@ -3,41 +3,48 @@
  * Aggregates all monitoring data for the main dashboard
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-import { structuredDataAutomation } from '@/lib/monitoring/structured-data';
-import { AlertManager, PerformanceMonitor } from '@/lib/monitoring/utils';
-import type { MonitoringDashboard, MonitoringAPIResponse } from '@/lib/monitoring/types';
+import { structuredDataAutomation } from "@/lib/monitoring/structured-data";
+import { AlertManager, PerformanceMonitor } from "@/lib/monitoring/utils";
+import type {
+  MonitoringDashboard,
+  MonitoringAPIResponse,
+} from "@/lib/monitoring/types";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const siteUrl = searchParams.get('url') || process.env.NEXT_PUBLIC_SITE_URL || 'https://proweb-studio.com';
-    
+    const siteUrl =
+      searchParams.get("url") ||
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      "https://proweb-studio.com";
+
     // Get current timestamp
     const timestamp = Date.now();
-    
+
     // Gather data from all monitoring systems
-    const [
-      coreWebVitals,
-      seoHealth,
-      searchQueries,
-      alerts
-    ] = await Promise.allSettled([
-      getCoreWebVitals(siteUrl),
-      getSEOHealth(siteUrl),
-      getSearchQueries(),
-      getAlerts()
-    ]);
+    const [coreWebVitals, seoHealth, searchQueries, alerts] =
+      await Promise.allSettled([
+        getCoreWebVitals(siteUrl),
+        getSEOHealth(siteUrl),
+        getSearchQueries(),
+        getAlerts(),
+      ]);
 
     // Create dashboard data
     const dashboardData: MonitoringDashboard = {
       timestamp,
       overview: {
         seoScore: getResultValue(seoHealth)?.score || 0,
-        performanceScore: calculatePerformanceScore(getResultValue(coreWebVitals)),
+        performanceScore: calculatePerformanceScore(
+          getResultValue(coreWebVitals),
+        ),
         issuesCount: getResultValue(seoHealth)?.issues?.length || 0,
-        alertsCount: getResultValue(alerts)?.filter((a) => !('resolved' in a && a.resolved)).length || 0,
+        alertsCount:
+          getResultValue(alerts)?.filter(
+            (a) => !("resolved" in a && a.resolved),
+          ).length || 0,
       },
       recentAlerts: getResultValue(alerts) || [],
       coreWebVitals: getResultValue(coreWebVitals) || getDefaultWebVitals(),
@@ -54,13 +61,12 @@ export async function GET(request: NextRequest) {
     };
 
     return NextResponse.json(response);
-
   } catch (error) {
-    console.error('Dashboard API error:', error);
-    
+    console.error("Dashboard API error:", error);
+
     const errorResponse: MonitoringAPIResponse = {
       success: false,
-      error: error instanceof Error ? error.message : 'Internal server error',
+      error: error instanceof Error ? error.message : "Internal server error",
       timestamp: Date.now(),
     };
 
@@ -72,7 +78,7 @@ async function getCoreWebVitals(url: string) {
   try {
     const performanceMonitor = PerformanceMonitor.getInstance();
     const metrics = performanceMonitor.getMetrics(url, 1); // Last 24 hours
-    
+
     if (metrics.length === 0) {
       return getDefaultWebVitals();
     }
@@ -80,21 +86,24 @@ async function getCoreWebVitals(url: string) {
     // Return the most recent metrics
     return metrics[metrics.length - 1];
   } catch (error) {
-    console.error('Failed to get Core Web Vitals:', error);
+    console.error("Failed to get Core Web Vitals:", error);
     return getDefaultWebVitals();
   }
 }
 
 async function getSEOHealth(siteUrl: string) {
   try {
-    const structuredDataCheck = await structuredDataAutomation.runDailyCheck(siteUrl);
-    
+    const structuredDataCheck =
+      await structuredDataAutomation.runDailyCheck(siteUrl);
+
     // Create a mock SEO health check for demo purposes
     // In production, this would aggregate data from multiple sources
     return {
       url: siteUrl,
       timestamp: Date.now(),
-      status: structuredDataCheck.valid ? ('healthy' as const) : ('warning' as const),
+      status: structuredDataCheck.valid
+        ? ("healthy" as const)
+        : ("warning" as const),
       checks: {
         metaTags: {
           title: true,
@@ -109,9 +118,9 @@ async function getSEOHealth(siteUrl: string) {
         structuredData: structuredDataCheck,
         performance: {
           coreWebVitals: {
-            lcp: { value: 2200, status: 'good' as const },
-            fid: { value: 80, status: 'good' as const },
-            cls: { value: 0.08, status: 'good' as const },
+            lcp: { value: 2200, status: "good" as const },
+            fid: { value: 80, status: "good" as const },
+            cls: { value: 0.08, status: "good" as const },
           },
           lighthouse: {
             performance: 95,
@@ -165,11 +174,11 @@ async function getSEOHealth(siteUrl: string) {
             schemaTypeDistribution: {},
             missingSchemaPages: [],
           },
-        }
+        },
       ),
     };
   } catch (error) {
-    console.error('Failed to get SEO health:', error);
+    console.error("Failed to get SEO health:", error);
     return getDefaultSEOHealth();
   }
 }
@@ -180,41 +189,41 @@ async function getSearchQueries() {
     // For now, return mock data
     return [
       {
-        query: 'web development services',
+        query: "web development services",
         impressions: 1250,
         clicks: 95,
         ctr: 0.076,
         averagePosition: 4.2,
         timestamp: Date.now(),
-        device: 'desktop' as const,
-        country: 'NL',
-        page: '/',
+        device: "desktop" as const,
+        country: "NL",
+        page: "/",
       },
       {
-        query: 'custom website design',
+        query: "custom website design",
         impressions: 890,
         clicks: 67,
         ctr: 0.075,
         averagePosition: 5.8,
         timestamp: Date.now(),
-        device: 'mobile' as const,
-        country: 'NL',
-        page: '/services',
+        device: "mobile" as const,
+        country: "NL",
+        page: "/services",
       },
       {
-        query: 'react development company',
+        query: "react development company",
         impressions: 650,
         clicks: 42,
         ctr: 0.065,
         averagePosition: 6.1,
         timestamp: Date.now(),
-        device: 'desktop' as const,
-        country: 'NL',
-        page: '/services',
+        device: "desktop" as const,
+        country: "NL",
+        page: "/services",
       },
     ];
   } catch (error) {
-    console.error('Failed to get search queries:', error);
+    console.error("Failed to get search queries:", error);
     return [];
   }
 }
@@ -223,37 +232,45 @@ async function getAlerts() {
   try {
     return AlertManager.getAlerts({ resolved: false });
   } catch (error) {
-    console.error('Failed to get alerts:', error);
+    console.error("Failed to get alerts:", error);
     return [];
   }
 }
 
 function getResultValue<T>(result: PromiseSettledResult<T>): T | null {
-  return result.status === 'fulfilled' ? result.value : null;
+  return result.status === "fulfilled" ? result.value : null;
 }
 
-function calculatePerformanceScore(metrics: { lcp?: number; fid?: number; cls?: number; fcp?: number; ttfb?: number } | null): number {
+function calculatePerformanceScore(
+  metrics: {
+    lcp?: number;
+    fid?: number;
+    cls?: number;
+    fcp?: number;
+    ttfb?: number;
+  } | null,
+): number {
   if (!metrics) return 0;
-  
+
   // Simple scoring based on Core Web Vitals
   let score = 0;
-  
+
   // LCP scoring
   if (metrics.lcp && metrics.lcp <= 2500) score += 25;
   else if (metrics.lcp && metrics.lcp <= 4000) score += 15;
-  
+
   // FID scoring
   if (metrics.fid && metrics.fid <= 100) score += 25;
   else if (metrics.fid && metrics.fid <= 300) score += 15;
-  
+
   // CLS scoring
   if (metrics.cls && metrics.cls <= 0.1) score += 25;
   else if (metrics.cls && metrics.cls <= 0.25) score += 15;
-  
+
   // TTFB scoring
   if (metrics.ttfb && metrics.ttfb <= 800) score += 25;
   else if (metrics.ttfb && metrics.ttfb <= 1800) score += 15;
-  
+
   return score;
 }
 
@@ -265,16 +282,16 @@ function getDefaultWebVitals() {
     cls: 0.08,
     ttfb: 600,
     timestamp: Date.now(),
-    url: '/',
-    userAgent: 'Default',
+    url: "/",
+    userAgent: "Default",
   };
 }
 
 function getDefaultSEOHealth() {
   return {
-    url: '/',
+    url: "/",
     timestamp: Date.now(),
-    status: 'healthy' as const,
+    status: "healthy" as const,
     checks: {
       metaTags: {
         title: true,
@@ -289,16 +306,16 @@ function getDefaultSEOHealth() {
       structuredData: {
         present: true,
         valid: true,
-        types: ['Organization', 'WebSite'],
+        types: ["Organization", "WebSite"],
         errors: [],
         warnings: [],
         richSnippetsEligible: true,
       },
       performance: {
         coreWebVitals: {
-          lcp: { value: 2200, status: 'good' as const },
-          fid: { value: 80, status: 'good' as const },
-          cls: { value: 0.08, status: 'good' as const },
+          lcp: { value: 2200, status: "good" as const },
+          fid: { value: 80, status: "good" as const },
+          cls: { value: 0.08, status: "good" as const },
         },
         lighthouse: {
           performance: 95,
@@ -317,7 +334,7 @@ function getDefaultSEOHealth() {
       },
       canonicalization: {
         hasCanonical: true,
-        canonicalUrl: '/',
+        canonicalUrl: "/",
         isCanonicalCorrect: true,
         duplicateContent: false,
       },

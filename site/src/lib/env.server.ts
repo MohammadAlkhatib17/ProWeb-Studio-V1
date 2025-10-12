@@ -3,8 +3,13 @@
  * Validates critical environment variables and logs missing ones without breaking the app
  */
 
-// @ts-expect-error - importing from .mjs file
-import { CRITICAL_ENV_VARS, URL_VARS, RECOMMENDED_ENV_VARS } from './env.required.mjs';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import {
+  CRITICAL_ENV_VARS,
+  URL_VARS,
+  RECOMMENDED_ENV_VARS,
+} from "./env.required.mjs";
 
 interface EnvValidationResult {
   missing: string[];
@@ -21,14 +26,14 @@ export function validateProductionEnv(): EnvValidationResult {
   const warnings: string[] = [];
 
   // Only validate in production environment
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return { missing: [], warnings: [], isValid: true };
   }
 
   // Check critical environment variables
-  for (const envVar of (CRITICAL_ENV_VARS as readonly string[])) {
+  for (const envVar of CRITICAL_ENV_VARS as readonly string[]) {
     const value = process.env[envVar];
-    if (!value || value.trim() === '') {
+    if (!value || value.trim() === "") {
       missing.push(envVar);
     }
   }
@@ -36,17 +41,17 @@ export function validateProductionEnv(): EnvValidationResult {
   // Check URL variables - at least one must be present
   const hasUrl = (URL_VARS as readonly string[]).some((envVar: string) => {
     const value = process.env[envVar];
-    return value && value.trim() !== '';
+    return value && value.trim() !== "";
   });
-  
+
   if (!hasUrl) {
-    missing.push('SITE_URL or NEXT_PUBLIC_SITE_URL');
+    missing.push("SITE_URL or NEXT_PUBLIC_SITE_URL");
   }
 
   // Check recommended environment variables
-  for (const envVar of (RECOMMENDED_ENV_VARS as readonly string[])) {
+  for (const envVar of RECOMMENDED_ENV_VARS as readonly string[]) {
     const value = process.env[envVar];
-    if (!value || value.trim() === '') {
+    if (!value || value.trim() === "") {
       warnings.push(envVar);
     }
   }
@@ -55,24 +60,30 @@ export function validateProductionEnv(): EnvValidationResult {
 
   // Log results to console for observability
   if (!isValid) {
-    console.error('🚨 [ENV VALIDATION] Critical environment variables missing:');
-    missing.forEach(envVar => {
+    console.error(
+      "🚨 [ENV VALIDATION] Critical environment variables missing:",
+    );
+    missing.forEach((envVar) => {
       console.error(`   ❌ ${envVar}`);
     });
-    console.error('   Check your Vercel environment variables configuration.');
+    console.error("   Check your Vercel environment variables configuration.");
   }
 
   if (warnings.length > 0) {
-    console.warn('⚠️  [ENV VALIDATION] Recommended environment variables missing:');
-    warnings.forEach(envVar => {
+    console.warn(
+      "⚠️  [ENV VALIDATION] Recommended environment variables missing:",
+    );
+    warnings.forEach((envVar) => {
       console.warn(`   📝 ${envVar}`);
     });
-    console.warn('   Some features may not work as expected.');
+    console.warn("   Some features may not work as expected.");
   }
 
   if (isValid && warnings.length === 0) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('✅ [ENV VALIDATION] All environment variables configured correctly');
+    if (process.env.NODE_ENV !== "production") {
+      console.log(
+        "✅ [ENV VALIDATION] All environment variables configured correctly",
+      );
     }
   }
 
@@ -86,13 +97,20 @@ export function validateProductionEnv(): EnvValidationResult {
 let hasLogged = false;
 export function initProductionEnvValidation(): void {
   // Only validate in production runtime, not during build
-  if (process.env.NODE_ENV === 'production' && !hasLogged && typeof window === 'undefined') {
+  if (
+    process.env.NODE_ENV === "production" &&
+    !hasLogged &&
+    typeof window === "undefined"
+  ) {
     // Additional check to avoid logging during build
-    if (!process.env.NEXT_PHASE || process.env.NEXT_PHASE === 'phase-production-server') {
+    if (
+      !process.env.NEXT_PHASE ||
+      process.env.NEXT_PHASE === "phase-production-server"
+    ) {
       hasLogged = true;
       validateProductionEnv();
     }
-  } else if (process.env.NODE_ENV !== 'production') {
+  } else if (process.env.NODE_ENV !== "production") {
     validateProductionEnv();
   }
 }

@@ -3,7 +3,7 @@
  * Validates JSON-LD schema markup, rich snippets, and structured data compliance
  */
 
-import type { StructuredDataCheck, SEOIssue } from './types';
+import type { StructuredDataCheck, SEOIssue } from "./types";
 
 export interface SchemaValidationResult {
   valid: boolean;
@@ -15,15 +15,19 @@ export interface SchemaValidationResult {
 }
 
 export interface SchemaError {
-  type: 'missing-required' | 'invalid-value' | 'invalid-type' | 'invalid-format';
+  type:
+    | "missing-required"
+    | "invalid-value"
+    | "invalid-type"
+    | "invalid-format";
   property: string;
   message: string;
-  severity: 'high' | 'medium' | 'low';
+  severity: "high" | "medium" | "low";
   schemaType: string;
 }
 
 export interface SchemaWarning {
-  type: 'recommended' | 'best-practice' | 'enhancement';
+  type: "recommended" | "best-practice" | "enhancement";
   property: string;
   message: string;
   recommendation: string;
@@ -31,11 +35,18 @@ export interface SchemaWarning {
 }
 
 export interface RichSnippetOpportunity {
-  type: 'product' | 'article' | 'organization' | 'local-business' | 'event' | 'recipe' | 'review';
+  type:
+    | "product"
+    | "article"
+    | "organization"
+    | "local-business"
+    | "event"
+    | "recipe"
+    | "review";
   current: boolean;
   eligible: boolean;
   requirements: string[];
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
 }
 
 export interface SchemaCoverage {
@@ -48,37 +59,39 @@ export interface SchemaCoverage {
 
 export class StructuredDataTester {
   private readonly requiredSchemas = {
-    'Organization': {
-      required: ['@type', 'name', 'url'],
-      recommended: ['logo', 'description', 'contactPoint', 'address', 'sameAs'],
+    Organization: {
+      required: ["@type", "name", "url"],
+      recommended: ["logo", "description", "contactPoint", "address", "sameAs"],
     },
-    'WebSite': {
-      required: ['@type', 'name', 'url'],
-      recommended: ['description', 'potentialAction'],
+    WebSite: {
+      required: ["@type", "name", "url"],
+      recommended: ["description", "potentialAction"],
     },
-    'LocalBusiness': {
-      required: ['@type', 'name', 'address', 'telephone'],
-      recommended: ['openingHours', 'priceRange', 'image', 'review'],
+    LocalBusiness: {
+      required: ["@type", "name", "address", "telephone"],
+      recommended: ["openingHours", "priceRange", "image", "review"],
     },
-    'Article': {
-      required: ['@type', 'headline', 'author', 'datePublished'],
-      recommended: ['image', 'dateModified', 'publisher', 'mainEntityOfPage'],
+    Article: {
+      required: ["@type", "headline", "author", "datePublished"],
+      recommended: ["image", "dateModified", "publisher", "mainEntityOfPage"],
     },
-    'Product': {
-      required: ['@type', 'name', 'image', 'description'],
-      recommended: ['offers', 'review', 'aggregateRating', 'brand'],
+    Product: {
+      required: ["@type", "name", "image", "description"],
+      recommended: ["offers", "review", "aggregateRating", "brand"],
     },
-    'Service': {
-      required: ['@type', 'name', 'description', 'provider'],
-      recommended: ['areaServed', 'hasOfferCatalog', 'review'],
+    Service: {
+      required: ["@type", "name", "description", "provider"],
+      recommended: ["areaServed", "hasOfferCatalog", "review"],
     },
   };
 
-  async validatePageStructuredData(url: string): Promise<SchemaValidationResult> {
+  async validatePageStructuredData(
+    url: string,
+  ): Promise<SchemaValidationResult> {
     try {
       const html = await this.fetchPageHTML(url);
       const schemas = this.extractSchemas(html);
-      
+
       const errors: SchemaError[] = [];
       const warnings: SchemaWarning[] = [];
       const richSnippets: RichSnippetOpportunity[] = [];
@@ -88,7 +101,7 @@ export class StructuredDataTester {
         const validation = await this.validateSchema(schema);
         errors.push(...validation.errors);
         warnings.push(...validation.warnings);
-        schemaTypes.push(schema['@type'] || 'Unknown');
+        schemaTypes.push(schema["@type"] || "Unknown");
       }
 
       // Check for rich snippet opportunities
@@ -98,7 +111,7 @@ export class StructuredDataTester {
       const coverage = await this.calculateSchemaCoverage([url]);
 
       return {
-        valid: errors.filter(e => e.severity === 'high').length === 0,
+        valid: errors.filter((e) => e.severity === "high").length === 0,
         errors,
         warnings,
         richSnippets,
@@ -106,11 +119,15 @@ export class StructuredDataTester {
         coverage,
       };
     } catch (error) {
-      throw new Error(`Failed to validate structured data for ${url}: ${error}`);
+      throw new Error(
+        `Failed to validate structured data for ${url}: ${error}`,
+      );
     }
   }
 
-  async validateSiteStructuredData(siteUrl: string): Promise<SchemaValidationResult> {
+  async validateSiteStructuredData(
+    siteUrl: string,
+  ): Promise<SchemaValidationResult> {
     try {
       const urls = await this.discoverSitePages(siteUrl);
       const allErrors: SchemaError[] = [];
@@ -122,19 +139,23 @@ export class StructuredDataTester {
       const batchSize = 10;
       for (let i = 0; i < urls.length; i += batchSize) {
         const batch = urls.slice(i, i + batchSize);
-        const promises = batch.map(url => this.validatePageStructuredData(url));
-        
+        const promises = batch.map((url) =>
+          this.validatePageStructuredData(url),
+        );
+
         try {
           const results = await Promise.allSettled(promises);
-          
+
           results.forEach((result, index) => {
-            if (result.status === 'fulfilled') {
+            if (result.status === "fulfilled") {
               allErrors.push(...result.value.errors);
               allWarnings.push(...result.value.warnings);
               allRichSnippets.push(...result.value.richSnippets);
               allSchemaTypes.push(...result.value.schemaTypes);
             } else {
-              console.warn(`Failed to validate ${batch[index]}: ${result.reason}`);
+              console.warn(
+                `Failed to validate ${batch[index]}: ${result.reason}`,
+              );
             }
           });
         } catch (error) {
@@ -145,7 +166,7 @@ export class StructuredDataTester {
       const coverage = await this.calculateSchemaCoverage(urls);
 
       return {
-        valid: allErrors.filter(e => e.severity === 'high').length === 0,
+        valid: allErrors.filter((e) => e.severity === "high").length === 0,
         errors: this.deduplicateErrors(allErrors),
         warnings: this.deduplicateWarnings(allWarnings),
         richSnippets: this.consolidateRichSnippets(allRichSnippets),
@@ -160,15 +181,16 @@ export class StructuredDataTester {
   private async fetchPageHTML(url: string): Promise<string> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
-    
+
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'ProWeb Studio SEO Monitor/1.0',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        "User-Agent": "ProWeb Studio SEO Monitor/1.0",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       },
       signal: controller.signal,
     });
-    
+
     clearTimeout(timeoutId);
 
     if (!response.ok) {
@@ -180,22 +202,26 @@ export class StructuredDataTester {
 
   private extractSchemas(html: string): any[] {
     const schemas: any[] = [];
-    
+
     // Extract JSON-LD schemas
-    const jsonLdMatches = html.match(/<script[^>]*type=["\']application\/ld\+json["\'][^>]*>(.*?)<\/script>/gis);
+    const jsonLdMatches = html.match(
+      /<script[^>]*type=["\']application\/ld\+json["\'][^>]*>(.*?)<\/script>/gis,
+    );
     if (jsonLdMatches) {
       for (const match of jsonLdMatches) {
         try {
-          const jsonContent = match.replace(/<script[^>]*>/i, '').replace(/<\/script>/i, '');
+          const jsonContent = match
+            .replace(/<script[^>]*>/i, "")
+            .replace(/<\/script>/i, "");
           const parsed = JSON.parse(jsonContent);
-          
+
           if (Array.isArray(parsed)) {
             schemas.push(...parsed);
           } else {
             schemas.push(parsed);
           }
         } catch (error) {
-          console.warn('Failed to parse JSON-LD:', error);
+          console.warn("Failed to parse JSON-LD:", error);
         }
       }
     }
@@ -210,45 +236,49 @@ export class StructuredDataTester {
   private extractMicrodata(html: string): any[] {
     // Basic microdata extraction - can be enhanced
     const schemas: any[] = [];
-    
+
     // This is a simplified implementation
     // In production, you'd want a more robust microdata parser
-    const itemScopeRegex = /<[^>]*itemscope[^>]*itemtype=["\']([^"\']*)["\'][^>]*>/gi;
+    const itemScopeRegex =
+      /<[^>]*itemscope[^>]*itemtype=["\']([^"\']*)["\'][^>]*>/gi;
     let match;
-    
+
     while ((match = itemScopeRegex.exec(html)) !== null) {
       schemas.push({
-        '@type': match[1].split('/').pop(),
-        source: 'microdata',
+        "@type": match[1].split("/").pop(),
+        source: "microdata",
       });
     }
-    
+
     return schemas;
   }
 
-  private async validateSchema(schema: any): Promise<{errors: SchemaError[]; warnings: SchemaWarning[]}> {
+  private async validateSchema(
+    schema: any,
+  ): Promise<{ errors: SchemaError[]; warnings: SchemaWarning[] }> {
     const errors: SchemaError[] = [];
     const warnings: SchemaWarning[] = [];
-    
-    const schemaType = schema['@type'];
+
+    const schemaType = schema["@type"];
     if (!schemaType) {
       errors.push({
-        type: 'missing-required',
-        property: '@type',
-        message: 'Schema type is required',
-        severity: 'high',
-        schemaType: 'Unknown',
+        type: "missing-required",
+        property: "@type",
+        message: "Schema type is required",
+        severity: "high",
+        schemaType: "Unknown",
       });
       return { errors, warnings };
     }
 
-    const requirements = this.requiredSchemas[schemaType as keyof typeof this.requiredSchemas];
+    const requirements =
+      this.requiredSchemas[schemaType as keyof typeof this.requiredSchemas];
     if (!requirements) {
       warnings.push({
-        type: 'best-practice',
-        property: '@type',
+        type: "best-practice",
+        property: "@type",
         message: `Schema type '${schemaType}' is not in our validation rules`,
-        recommendation: 'Ensure this is a valid Schema.org type',
+        recommendation: "Ensure this is a valid Schema.org type",
         schemaType,
       });
       return { errors, warnings };
@@ -258,10 +288,10 @@ export class StructuredDataTester {
     for (const requiredProp of requirements.required) {
       if (!schema[requiredProp]) {
         errors.push({
-          type: 'missing-required',
+          type: "missing-required",
           property: requiredProp,
           message: `Required property '${requiredProp}' is missing`,
-          severity: 'high',
+          severity: "high",
           schemaType,
         });
       }
@@ -271,7 +301,7 @@ export class StructuredDataTester {
     for (const recommendedProp of requirements.recommended) {
       if (!schema[recommendedProp]) {
         warnings.push({
-          type: 'recommended',
+          type: "recommended",
           property: recommendedProp,
           message: `Recommended property '${recommendedProp}' is missing`,
           recommendation: `Adding '${recommendedProp}' can improve rich snippet eligibility`,
@@ -283,20 +313,20 @@ export class StructuredDataTester {
     // Validate specific property formats
     if (schema.url && !this.isValidUrl(schema.url)) {
       errors.push({
-        type: 'invalid-format',
-        property: 'url',
-        message: 'URL format is invalid',
-        severity: 'medium',
+        type: "invalid-format",
+        property: "url",
+        message: "URL format is invalid",
+        severity: "medium",
         schemaType,
       });
     }
 
     if (schema.datePublished && !this.isValidDate(schema.datePublished)) {
       errors.push({
-        type: 'invalid-format',
-        property: 'datePublished',
-        message: 'Date format is invalid (should be ISO 8601)',
-        severity: 'medium',
+        type: "invalid-format",
+        property: "datePublished",
+        message: "Date format is invalid (should be ISO 8601)",
+        severity: "medium",
         schemaType,
       });
     }
@@ -304,22 +334,32 @@ export class StructuredDataTester {
     return { errors, warnings };
   }
 
-  private analyzeRichSnippetOpportunities(schemas: any[]): RichSnippetOpportunity[] {
+  private analyzeRichSnippetOpportunities(
+    schemas: any[],
+  ): RichSnippetOpportunity[] {
     const opportunities: RichSnippetOpportunity[] = [];
 
     // Check for each rich snippet type
     const snippetTypes: Array<keyof typeof this.richSnippetRequirements> = [
-      'product', 'article', 'organization', 'local-business', 'event', 'recipe', 'review'
+      "product",
+      "article",
+      "organization",
+      "local-business",
+      "event",
+      "recipe",
+      "review",
     ];
 
     for (const type of snippetTypes) {
-      const hasSchema = schemas.some(s => 
-        s['@type']?.toLowerCase() === type.replace('-', '') ||
-        s['@type']?.toLowerCase() === type
+      const hasSchema = schemas.some(
+        (s) =>
+          s["@type"]?.toLowerCase() === type.replace("-", "") ||
+          s["@type"]?.toLowerCase() === type,
       );
 
       const requirements = this.richSnippetRequirements[type];
-      const eligible = hasSchema && this.checkRichSnippetEligibility(schemas, requirements);
+      const eligible =
+        hasSchema && this.checkRichSnippetEligibility(schemas, requirements);
 
       opportunities.push({
         type,
@@ -334,39 +374,42 @@ export class StructuredDataTester {
   }
 
   private readonly richSnippetRequirements = {
-    'product': {
-      required: ['name', 'image', 'description', 'offers'],
-      impact: 'high' as const,
+    product: {
+      required: ["name", "image", "description", "offers"],
+      impact: "high" as const,
     },
-    'article': {
-      required: ['headline', 'author', 'datePublished', 'image'],
-      impact: 'medium' as const,
+    article: {
+      required: ["headline", "author", "datePublished", "image"],
+      impact: "medium" as const,
     },
-    'organization': {
-      required: ['name', 'url', 'logo'],
-      impact: 'medium' as const,
+    organization: {
+      required: ["name", "url", "logo"],
+      impact: "medium" as const,
     },
-    'local-business': {
-      required: ['name', 'address', 'telephone', 'openingHours'],
-      impact: 'high' as const,
+    "local-business": {
+      required: ["name", "address", "telephone", "openingHours"],
+      impact: "high" as const,
     },
-    'event': {
-      required: ['name', 'startDate', 'location'],
-      impact: 'high' as const,
+    event: {
+      required: ["name", "startDate", "location"],
+      impact: "high" as const,
     },
-    'recipe': {
-      required: ['name', 'image', 'recipeIngredient', 'recipeInstructions'],
-      impact: 'high' as const,
+    recipe: {
+      required: ["name", "image", "recipeIngredient", "recipeInstructions"],
+      impact: "high" as const,
     },
-    'review': {
-      required: ['itemReviewed', 'reviewRating', 'author'],
-      impact: 'medium' as const,
+    review: {
+      required: ["itemReviewed", "reviewRating", "author"],
+      impact: "medium" as const,
     },
   };
 
-  private checkRichSnippetEligibility(schemas: any[], requirements: {required: string[]}): boolean {
-    return schemas.some(schema => 
-      requirements.required.every(req => schema[req])
+  private checkRichSnippetEligibility(
+    schemas: any[],
+    requirements: { required: string[] },
+  ): boolean {
+    return schemas.some((schema) =>
+      requirements.required.every((req) => schema[req]),
     );
   }
 
@@ -385,9 +428,9 @@ export class StructuredDataTester {
         `${siteUrl}/services`,
         `${siteUrl}/contact`,
         `${siteUrl}/blog`,
-      ].filter(url => url);
+      ].filter((url) => url);
     } catch (error) {
-      console.warn('Failed to discover site pages:', error);
+      console.warn("Failed to discover site pages:", error);
       return [siteUrl];
     }
   }
@@ -396,36 +439,38 @@ export class StructuredDataTester {
     try {
       const sitemapUrl = `${siteUrl}/sitemap.xml`;
       const response = await fetch(sitemapUrl);
-      
+
       if (!response.ok) return [];
-      
+
       const xmlContent = await response.text();
       const urlMatches = xmlContent.match(/<loc>(.*?)<\/loc>/g);
-      
+
       if (!urlMatches) return [];
-      
+
       return urlMatches
-        .map(match => match.replace(/<\/?loc>/g, ''))
-        .filter(url => url.startsWith('http'));
+        .map((match) => match.replace(/<\/?loc>/g, ""))
+        .filter((url) => url.startsWith("http"));
     } catch {
       return [];
     }
   }
 
-  private async calculateSchemaCoverage(urls: string[]): Promise<SchemaCoverage> {
+  private async calculateSchemaCoverage(
+    urls: string[],
+  ): Promise<SchemaCoverage> {
     // This would be implemented with actual page crawling
     // For now, return estimated values
     const estimatedCoverage = Math.min(urls.length * 0.8, urls.length);
-    
+
     return {
       totalPages: urls.length,
       pagesWithSchema: Math.floor(estimatedCoverage),
       coveragePercentage: Math.floor((estimatedCoverage / urls.length) * 100),
       schemaTypeDistribution: {
-        'Organization': 1,
-        'WebSite': 1,
-        'Article': Math.floor(urls.length * 0.3),
-        'LocalBusiness': 1,
+        Organization: 1,
+        WebSite: 1,
+        Article: Math.floor(urls.length * 0.3),
+        LocalBusiness: 1,
       },
       missingSchemaPages: urls.slice(Math.floor(estimatedCoverage)),
     };
@@ -433,7 +478,7 @@ export class StructuredDataTester {
 
   private deduplicateErrors(errors: SchemaError[]): SchemaError[] {
     const seen = new Set<string>();
-    return errors.filter(error => {
+    return errors.filter((error) => {
       const key = `${error.type}-${error.property}-${error.schemaType}`;
       if (seen.has(key)) return false;
       seen.add(key);
@@ -443,7 +488,7 @@ export class StructuredDataTester {
 
   private deduplicateWarnings(warnings: SchemaWarning[]): SchemaWarning[] {
     const seen = new Set<string>();
-    return warnings.filter(warning => {
+    return warnings.filter((warning) => {
       const key = `${warning.type}-${warning.property}-${warning.schemaType}`;
       if (seen.has(key)) return false;
       seen.add(key);
@@ -451,16 +496,18 @@ export class StructuredDataTester {
     });
   }
 
-  private consolidateRichSnippets(opportunities: RichSnippetOpportunity[]): RichSnippetOpportunity[] {
+  private consolidateRichSnippets(
+    opportunities: RichSnippetOpportunity[],
+  ): RichSnippetOpportunity[] {
     const consolidated = new Map<string, RichSnippetOpportunity>();
-    
+
     for (const opp of opportunities) {
       const existing = consolidated.get(opp.type);
       if (!existing || (opp.current && !existing.current)) {
         consolidated.set(opp.type, opp);
       }
     }
-    
+
     return Array.from(consolidated.values());
   }
 
@@ -475,7 +522,8 @@ export class StructuredDataTester {
 
   private isValidDate(date: string): boolean {
     // Check ISO 8601 format
-    const iso8601Regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?(?:Z|[+-]\d{2}:\d{2})$/;
+    const iso8601Regex =
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?(?:Z|[+-]\d{2}:\d{2})$/;
     return iso8601Regex.test(date) || !isNaN(Date.parse(date));
   }
 }
@@ -494,12 +542,12 @@ export class StructuredDataAutomation {
         present: result.schemaTypes.length > 0,
         valid: result.valid,
         types: result.schemaTypes,
-        errors: result.errors.map(e => e.message),
-        warnings: result.warnings.map(w => w.message),
-        richSnippetsEligible: result.richSnippets.some(rs => rs.eligible),
+        errors: result.errors.map((e) => e.message),
+        warnings: result.warnings.map((w) => w.message),
+        richSnippetsEligible: result.richSnippets.some((rs) => rs.eligible),
       };
     } catch (error) {
-      console.error('Structured data automation failed:', error);
+      console.error("Structured data automation failed:", error);
       return {
         present: false,
         valid: false,
@@ -521,10 +569,15 @@ export class StructuredDataAutomation {
     // Convert errors to SEO issues
     for (const error of result.errors) {
       issues.push({
-        type: 'error',
-        category: 'technical',
+        type: "error",
+        category: "technical",
         message: `Structured Data: ${error.message}`,
-        impact: error.severity === 'high' ? 'high' : error.severity === 'medium' ? 'medium' : 'low',
+        impact:
+          error.severity === "high"
+            ? "high"
+            : error.severity === "medium"
+              ? "medium"
+              : "low",
         recommendation: `Fix the ${error.property} property in the ${error.schemaType} schema`,
       });
     }
@@ -532,23 +585,25 @@ export class StructuredDataAutomation {
     // Convert warnings to SEO issues
     for (const warning of result.warnings) {
       issues.push({
-        type: 'warning',
-        category: 'content',
+        type: "warning",
+        category: "content",
         message: `Structured Data: ${warning.message}`,
-        impact: 'medium',
+        impact: "medium",
         recommendation: warning.recommendation,
       });
     }
 
     // Add rich snippet opportunities
-    const missedOpportunities = result.richSnippets.filter(rs => !rs.eligible && rs.impact === 'high');
+    const missedOpportunities = result.richSnippets.filter(
+      (rs) => !rs.eligible && rs.impact === "high",
+    );
     for (const opportunity of missedOpportunities) {
       issues.push({
-        type: 'info',
-        category: 'content',
+        type: "info",
+        category: "content",
         message: `Rich Snippet Opportunity: ${opportunity.type} markup can be enhanced`,
         impact: opportunity.impact,
-        recommendation: `Implement required properties: ${opportunity.requirements.join(', ')}`,
+        recommendation: `Implement required properties: ${opportunity.requirements.join(", ")}`,
       });
     }
 

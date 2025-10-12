@@ -4,11 +4,20 @@
     "resourceSizes": [
       { "resourceType": "total", "budget": 1500 },
       { "resourceType": "script", "budget": 900 },
-      { "resourceType": "image", "budget": 500 }
+      { "resourceType": "image", "budget": 500 },
+      { "resourceType": "stylesheet", "budget": 100 },
+      { "resourceType": "font", "budget": 200 },
+      { "resourceType": "document", "budget": 50 },
+      { "resourceType": "other", "budget": 100 }
     ],
     "timings": [
       { "metric": "interactive", "budget": 5000 },
-      { "metric": "first-contentful-paint", "budget": 2000 }
+      { "metric": "first-contentful-paint", "budget": 2000 },
+      { "metric": "largest-contentful-paint", "budget": 2500 },
+      { "metric": "cumulative-layout-shift", "budget": 100 },
+      { "metric": "max-potential-fid", "budget": 130 },
+      { "metric": "speed-index", "budget": 3000 },
+      { "metric": "first-meaningful-paint", "budget": 2200 }
     ]
   },
   {
@@ -16,11 +25,14 @@
     "resourceSizes": [
       { "resourceType": "total", "budget": 1500 },
       { "resourceType": "script", "budget": 900 },
-      { "resourceType": "image", "budget": 500 }
+      { "resourceType": "image", "budget": 500 },
+      { "resourceType": "stylesheet", "budget": 100 },
+      { "resourceType": "font", "budget": 200 }
     ],
     "timings": [
       { "metric": "interactive", "budget": 5000 },
-      { "metric": "first-contentful-paint", "budget": 2000 }
+      { "metric": "first-contentful-paint", "budget": 2000 },
+      { "metric": "largest-contentful-paint", "budget": 2500 }
     ]
   },
   {
@@ -28,11 +40,14 @@
     "resourceSizes": [
       { "resourceType": "total", "budget": 1500 },
       { "resourceType": "script", "budget": 900 },
-      { "resourceType": "image", "budget": 500 }
+      { "resourceType": "image", "budget": 500 },
+      { "resourceType": "stylesheet", "budget": 100 },
+      { "resourceType": "font", "budget": 200 }
     ],
     "timings": [
       { "metric": "interactive", "budget": 5000 },
-      { "metric": "first-contentful-paint", "budget": 2000 }
+      { "metric": "first-contentful-paint", "budget": 2000 },
+      { "metric": "largest-contentful-paint", "budget": 2500 }
     ]
   },
   {
@@ -40,11 +55,14 @@
     "resourceSizes": [
       { "resourceType": "total", "budget": 1500 },
       { "resourceType": "script", "budget": 900 },
-      { "resourceType": "image", "budget": 500 }
+      { "resourceType": "image", "budget": 500 },
+      { "resourceType": "stylesheet", "budget": 100 },
+      { "resourceType": "font", "budget": 200 }
     ],
     "timings": [
       { "metric": "interactive", "budget": 5000 },
-      { "metric": "first-contentful-paint", "budget": 2000 }
+      { "metric": "first-contentful-paint", "budget": 2000 },
+      { "metric": "largest-contentful-paint", "budget": 2500 }
     ]
   },
   {
@@ -52,35 +70,44 @@
     "resourceSizes": [
       { "resourceType": "total", "budget": 1500 },
       { "resourceType": "script", "budget": 900 },
-      { "resourceType": "image", "budget": 500 }
+      { "resourceType": "image", "budget": 500 },
+      { "resourceType": "stylesheet", "budget": 100 },
+      { "resourceType": "font", "budget": 200 }
     ],
     "timings": [
       { "metric": "interactive", "budget": 5000 },
-      { "metric": "first-contentful-paint", "budget": 2000 }
+      { "metric": "first-contentful-paint", "budget": 2000 },
+      { "metric": "largest-contentful-paint", "budget": 2500 }
     ]
   },
   {
     "path": "/privacy",
     "resourceSizes": [
-      { "resourceType": "total", "budget": 1500 },
+      { "resourceType": "total", "budget": 1200 },
       { "resourceType": "script", "budget": 800 },
-      { "resourceType": "image", "budget": 300 }
+      { "resourceType": "image", "budget": 300 },
+      { "resourceType": "stylesheet", "budget": 80 },
+      { "resourceType": "font", "budget": 200 }
     ],
     "timings": [
       { "metric": "interactive", "budget": 4000 },
-      { "metric": "first-contentful-paint", "budget": 1500 }
+      { "metric": "first-contentful-paint", "budget": 1500 },
+      { "metric": "largest-contentful-paint", "budget": 2000 }
     ]
   },
   {
     "path": "/voorwaarden",
     "resourceSizes": [
-      { "resourceType": "total", "budget": 1500 },
+      { "resourceType": "total", "budget": 1200 },
       { "resourceType": "script", "budget": 800 },
-      { "resourceType": "image", "budget": 300 }
+      { "resourceType": "image", "budget": 300 },
+      { "resourceType": "stylesheet", "budget": 80 },
+      { "resourceType": "font", "budget": 200 }
     ],
     "timings": [
       { "metric": "interactive", "budget": 4000 },
-      { "metric": "first-contentful-paint", "budget": 1500 }
+      { "metric": "first-contentful-paint", "budget": 1500 },
+      { "metric": "largest-contentful-paint", "budget": 2000 }
     ]
   }
 ]

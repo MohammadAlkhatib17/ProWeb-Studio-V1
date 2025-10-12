@@ -1,4 +1,4 @@
-name: CI
+name: Comprehensive CI Pipeline
 
 on:
   push:
@@ -7,89 +7,17 @@ on:
     branches: [main]
 
 env:
-  BUNDLE_SIZE_THRESHOLD: 5 # Percentage threshold for bundle size regression (tightened)
+  BUNDLE_SIZE_THRESHOLD: 5 # Percentage threshold for bundle size regression
+  NODE_VERSION: '20'
+  PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/pw-browsers
 
 jobs:
-  quality-checks:
+  # Step 1: Install and setup
+  install:
     runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Need full history for bundle comparison
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: 'site/package-lock.json'
-
-      - name: Install dependencies
-        run: npm install --prefix site
-
-      - name: TypeScript check
-        run: npm --prefix site run typecheck
-
-      - name: ESLint check
-        run: npm --prefix site run lint
-
-      - name: Prettier check
-        run: npm --prefix site run format:check
-
-      - name: Run tests
-        run: npm --prefix site test
-
-      - name: Build project with analysis
-        run: npm --prefix site run build:analyze
-
-      - name: Generate bundle analysis data
-        run: npm --prefix site run analyze:generate
-
-      - name: Run SEO preflight checks post-build
-        run: npm --prefix site run seo:preflight
-
-      - name: Security quality gates
-        run: |
-          echo "🔒 Running security quality gates..."
-          
-          # Check CSP unsafe-eval
-          echo "🛡️ Checking CSP for unsafe-eval directive..."
-          node scripts/check-csp-unsafe-eval.js
-          
-          # Check environment variable consistency
-          echo "🔧 Checking environment variable consistency..."
-          node scripts/check-env-vars-consistency.js
-
-      - name: Upload CI reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: ci-reports
-          path: |
-            site/reports/bundles/analysis-data.json
-            site/reports/bundles/summary.md
-          retention-days: 30
-
-  # Bundle Size Regression Protection
-  # 
-  # This job checks for bundle size regressions by comparing the current PR
-  # against the base branch. If bundle size increases beyond the threshold,
-  # the check fails unless overridden.
-  #
-  # Override Mechanism:
-  # - Add 'bundle-size-override' label to the PR
-  # - Document justification in PR comments
-  # - See reports/ci/quality-gates.md for acceptable rationale
-  #
-  # Acceptable Override Reasons:
-  # - New features requiring additional dependencies
-  # - Critical library updates for security/performance
-  # - Temporary increases with optimization plan
-  # - Business-critical functionality with approved trade-offs
-  bundle-size-check:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    defaults:
+      run:
+        working-directory: site
     
     steps:
       - uses: actions/checkout@v4
@@ -99,18 +27,370 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: 'site/package-lock.json'
 
       - name: Install dependencies
-        run: npm install --prefix site
+        run: npm ci
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: site/node_modules
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('site/package-lock.json') }}
+
+  # Step 2: TypeScript type checking
+  typecheck:
+    runs-on: ubuntu-latest
+    needs: install
+    defaults:
+      run:
+        working-directory: site
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: site/node_modules
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('site/package-lock.json') }}
+
+      - name: TypeScript type checking
+        run: npm run typecheck
+
+  # Step 3: ESLint and Prettier
+  lint:
+    runs-on: ubuntu-latest
+    needs: install
+    defaults:
+      run:
+        working-directory: site
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: site/node_modules
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('site/package-lock.json') }}
+
+      - name: ESLint check
+        run: npm run lint
+
+      - name: Prettier check
+        run: npm run format:check
+
+  # Step 4: Unit tests with Vitest
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: [typecheck, lint]
+    defaults:
+      run:
+        working-directory: site
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: site/node_modules
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('site/package-lock.json') }}
+
+      - name: Run unit tests
+        run: npm run test
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vitest-results
+          path: site/test-results/
+          retention-days: 30
+
+  # Step 5: Build and prepare for E2E
+  build:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    defaults:
+      run:
+        working-directory: site
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: site/node_modules
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('site/package-lock.json') }}
+
+      - name: Build project with analysis
+        run: npm run build:analyze
+
+      - name: Generate bundle analysis data
+        run: npm run analyze:generate
+
+      - name: Check bundle size budgets
+        run: |
+          echo "🔍 Checking bundle size budgets..."
+          # Check if total JS bundle exceeds budget
+          TOTAL_JS=$(node -e "
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('reports/bundles/analysis-data.json', 'utf8'));
+            const totalJS = data.bundles.reduce((sum, bundle) => sum + bundle.size, 0);
+            console.log(totalJS);
+          ")
+          MAX_JS_BUDGET=900000  # 900KB max total JS
+          if [ "$TOTAL_JS" -gt "$MAX_JS_BUDGET" ]; then
+            echo "❌ Total JS bundle size ($TOTAL_JS bytes) exceeds budget ($MAX_JS_BUDGET bytes)"
+            echo "::error::Bundle size budget exceeded. Total JS: $TOTAL_JS bytes, Budget: $MAX_JS_BUDGET bytes"
+            exit 1
+          else
+            echo "✅ Bundle size within budget: $TOTAL_JS bytes (limit: $MAX_JS_BUDGET bytes)"
+          fi
+
+      - name: Run SEO preflight checks
+        run: npm run seo:preflight
+
+      - name: Security quality gates
+        run: |
+          echo "🔒 Running security quality gates..."
+          
+          # Check CSP unsafe-eval
+          echo "🛡️ Checking CSP for unsafe-eval directive..."
+          node ../scripts/check-csp-unsafe-eval.js
+          
+          # Check environment variable consistency
+          echo "🔧 Checking environment variable consistency..."
+          node ../scripts/check-env-vars-consistency.js
+
+      - name: Cache build output
+        uses: actions/cache@v3
+        with:
+          path: |
+            site/.next
+            site/reports
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            site/.next
+            site/reports/bundles/
+          retention-days: 30
+
+  # Step 6: End-to-End tests with Playwright
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: site
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: site/node_modules
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('site/package-lock.json') }}
+
+      - name: Restore build cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            site/.next
+            site/reports
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Start application
+        run: |
+          npm run start &
+          echo $! > .server.pid
+          # Wait for server to be ready
+          timeout 30 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
+
+      - name: Run Playwright E2E tests
+        run: npm run test:e2e
+
+      - name: Stop application
+        if: always()
+        run: |
+          if [ -f .server.pid ]; then
+            kill $(cat .server.pid) || true
+            rm .server.pid
+          fi
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-results
+          path: |
+            site/test-results/
+            site/playwright-report/
+          retention-days: 30
+
+  # Step 7: Lighthouse CI - Desktop
+  lighthouse-desktop:
+    runs-on: ubuntu-latest
+    needs: e2e-tests
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: site
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: site/node_modules
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('site/package-lock.json') }}
+
+      - name: Restore build cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            site/.next
+            site/reports
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
+      - name: Clean up port 4020
+        run: kill -9 $(lsof -t -i:4020) 2>/dev/null || true
+
+      - name: Run Lighthouse CI (Desktop)
+        run: npm run ci:perf
+
+      - name: Upload Lighthouse Desktop artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-desktop-reports
+          path: |
+            site/.lighthouseci/
+            site/lhci_reports/
+          retention-days: 30
+
+  # Step 8: Lighthouse CI - Mobile
+  lighthouse-mobile:
+    runs-on: ubuntu-latest
+    needs: e2e-tests
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: site
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: site/node_modules
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('site/package-lock.json') }}
+
+      - name: Restore build cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            site/.next
+            site/reports
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
+      - name: Clean up port 4020
+        run: kill -9 $(lsof -t -i:4020) 2>/dev/null || true
+
+      - name: Run Lighthouse CI (Mobile)
+        run: npm run ci:perf:mobile
+
+      - name: Upload Lighthouse Mobile artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-mobile-reports
+          path: |
+            site/.lighthouseci/
+            site/lhci_reports/
+          retention-days: 30
+
+  # Bundle Size Regression Protection for PRs
+  bundle-size-check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: build
+    defaults:
+      run:
+        working-directory: site
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'site/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Build current branch
-        run: npm --prefix site run build:analyze
+        run: npm run build:analyze
 
       - name: Generate current bundle analysis
-        run: npm --prefix site run analyze:generate
+        run: npm run analyze:generate
 
       - name: Save current bundle data
         run: cp reports/bundles/analysis-data.json current-bundle.json
@@ -121,18 +401,18 @@ jobs:
           git checkout origin/${{ github.base_ref }}
 
       - name: Install dependencies (base)
-        run: npm install --prefix site
+        run: npm ci
 
       - name: Build base branch
-        run: npm --prefix site run build:analyze
+        run: npm run build:analyze
 
       - name: Generate base bundle analysis
-        run: npm --prefix site run analyze:generate
+        run: npm run analyze:generate
 
       - name: Compare bundle sizes
         id: bundle-check
         run: |
-          if npm --prefix site run bundle:compare current-bundle.json reports/bundles/analysis-data.json; then
+          if npm run bundle:compare ../current-bundle.json reports/bundles/analysis-data.json; then
             echo "bundle-check-passed=true" >> $GITHUB_OUTPUT
           else
             echo "bundle-check-passed=false" >> $GITHUB_OUTPUT
@@ -176,6 +456,42 @@ jobs:
           name: bundle-analysis-reports
           path: |
             current-bundle.json
-            reports/bundles/analysis-data.json
-            reports/bundles/summary.md
+            site/reports/bundles/analysis-data.json
+            site/reports/bundles/summary.md
           retention-days: 30
+
+  # Summary job for status checks
+  ci-summary:
+    runs-on: ubuntu-latest
+    needs: [lighthouse-desktop, lighthouse-mobile, bundle-size-check]
+    if: always()
+    
+    steps:
+      - name: Check job results
+        run: |
+          echo "🔍 CI Pipeline Summary"
+          echo "======================"
+          
+          if [[ "${{ needs.lighthouse-desktop.result }}" == "success" ]]; then
+            echo "✅ Lighthouse Desktop: PASSED"
+          else
+            echo "❌ Lighthouse Desktop: FAILED"
+          fi
+          
+          if [[ "${{ needs.lighthouse-mobile.result }}" == "success" ]]; then
+            echo "✅ Lighthouse Mobile: PASSED"
+          else
+            echo "❌ Lighthouse Mobile: FAILED"
+          fi
+          
+          if [[ "${{ needs.bundle-size-check.result }}" == "success" ]] || [[ "${{ needs.bundle-size-check.result }}" == "skipped" ]]; then
+            echo "✅ Bundle Size Check: PASSED"
+          else
+            echo "❌ Bundle Size Check: FAILED"
+          fi
+
+      - name: Fail pipeline if critical jobs failed
+        if: needs.lighthouse-desktop.result == 'failure' || needs.lighthouse-mobile.result == 'failure' || needs.bundle-size-check.result == 'failure'
+        run: |
+          echo "❌ CI Pipeline failed due to critical job failures"
+          exit 1

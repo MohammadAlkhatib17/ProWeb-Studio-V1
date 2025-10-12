@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect } from "react";
+import { ChevronDown } from "lucide-react";
 
 interface FAQItem {
   question: string;
@@ -16,19 +16,19 @@ interface MobileFAQItemProps {
   onToggle?: (index: number) => void;
 }
 
-export default function MobileFAQItem({ 
-  faq, 
-  index, 
-  isOpen = false, 
-  onToggle 
+export default function MobileFAQItem({
+  faq,
+  index,
+  isOpen = false,
+  onToggle,
 }: MobileFAQItemProps) {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [contentHeight, setContentHeight] = useState<number>(0);
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   // Use external state if provided, otherwise use internal state
   const actualIsOpen = onToggle ? isOpen : internalIsOpen;
-  
+
   // Handle toggle
   const handleToggle = () => {
     if (onToggle) {
@@ -60,13 +60,11 @@ export default function MobileFAQItem({
         aria-controls={answerId}
         id={questionId}
       >
-        <h3 className="faq-card-question">
-          {faq.question}
-        </h3>
-        
+        <h3 className="faq-card-question">{faq.question}</h3>
+
         <div className="faq-card-icon-container">
-          <ChevronDown 
-            className={`faq-card-icon ${actualIsOpen ? 'rotate-180' : ''}`}
+          <ChevronDown
+            className={`faq-card-icon ${actualIsOpen ? "rotate-180" : ""}`}
             aria-hidden="true"
           />
         </div>
@@ -74,8 +72,8 @@ export default function MobileFAQItem({
 
       <div
         className="faq-card-content-wrapper"
-        style={{ 
-          height: actualIsOpen ? `${contentHeight}px` : '0px'
+        style={{
+          height: actualIsOpen ? `${contentHeight}px` : "0px",
         }}
       >
         <div
@@ -85,17 +83,12 @@ export default function MobileFAQItem({
           role="region"
           aria-labelledby={questionId}
         >
-          <p className="faq-card-answer">
-            {faq.answer}
-          </p>
-          
+          <p className="faq-card-answer">{faq.answer}</p>
+
           {faq.keywords && faq.keywords.length > 0 && actualIsOpen && (
             <div className="faq-card-keywords">
               {faq.keywords.map((keyword, keywordIndex) => (
-                <span 
-                  key={keywordIndex}
-                  className="faq-card-keyword"
-                >
+                <span key={keywordIndex} className="faq-card-keyword">
                   {keyword}
                 </span>
               ))}

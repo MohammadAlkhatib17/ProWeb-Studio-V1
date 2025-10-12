@@ -3,9 +3,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-responsive-images",
@@ -18,9 +16,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -33,9 +29,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0,
-    "values": [
-      0
-    ],
+    "values": [0],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-responsive-images",
@@ -48,9 +42,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -63,9 +55,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0,
-    "values": [
-      0
-    ],
+    "values": [0],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-responsive-images",
@@ -78,9 +68,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -93,9 +81,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-responsive-images",
@@ -108,9 +94,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -123,9 +107,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-responsive-images",
@@ -138,9 +120,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -153,9 +133,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-responsive-images",
@@ -168,9 +146,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-text-compression",
@@ -183,9 +159,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-responsive-images",
@@ -198,9 +172,7 @@
     "name": "minScore",
     "expected": 0.9,
     "actual": 0.5,
-    "values": [
-      0.5
-    ],
+    "values": [0.5],
     "operator": ">=",
     "passed": false,
     "auditId": "uses-text-compression",

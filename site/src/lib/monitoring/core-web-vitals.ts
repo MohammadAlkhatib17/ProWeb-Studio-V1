@@ -3,9 +3,12 @@
  * Real-time tracking with Vercel Analytics integration and performance alerts
  */
 
-
-import { PerformanceMonitor, AlertManager } from './utils';
-import type { CoreWebVitalsMetrics, PerformanceAlert, MonitoringAlert } from './types';
+import { PerformanceMonitor, AlertManager } from "./utils";
+import type {
+  CoreWebVitalsMetrics,
+  PerformanceAlert,
+  MonitoringAlert,
+} from "./types";
 
 export interface WebVitalsConfig {
   enableRealTimeTracking: boolean;
@@ -25,9 +28,9 @@ export interface WebVitalsReport {
   metrics: CoreWebVitalsMetrics;
   userAgent: string;
   connectionType?: string;
-  deviceType: 'mobile' | 'desktop' | 'tablet';
+  deviceType: "mobile" | "desktop" | "tablet";
   performance: {
-    grade: 'good' | 'needs-improvement' | 'poor';
+    grade: "good" | "needs-improvement" | "poor";
     score: number;
     issues: string[];
   };
@@ -60,7 +63,7 @@ export class CoreWebVitalsMonitor {
     this.config = {
       enableRealTimeTracking: true,
       sampleRate: 1.0,
-      reportingEndpoint: '/api/monitoring/core-web-vitals',
+      reportingEndpoint: "/api/monitoring/core-web-vitals",
       thresholds: {
         lcp: { good: 2500, poor: 4000 },
         fid: { good: 100, poor: 300 },
@@ -69,7 +72,7 @@ export class CoreWebVitalsMonitor {
       },
       ...config,
     };
-    
+
     this.performanceMonitor = PerformanceMonitor.getInstance();
   }
 
@@ -77,7 +80,7 @@ export class CoreWebVitalsMonitor {
    * Initialize Web Vitals tracking on the client side
    */
   initializeTracking(): void {
-    if (typeof window === 'undefined' || this.isTracking) return;
+    if (typeof window === "undefined" || this.isTracking) return;
 
     // Check if we should track this user (sampling)
     if (Math.random() > this.config.sampleRate) return;
@@ -90,43 +93,49 @@ export class CoreWebVitalsMonitor {
 
   private setupWebVitalsListeners(): void {
     // Dynamic import to avoid server-side issues
-    import('web-vitals').then((webVitals) => {
-      if (webVitals.onLCP) webVitals.onLCP(this.handleMetric.bind(this, 'lcp'));
-      if (webVitals.onINP) webVitals.onINP(this.handleMetric.bind(this, 'fid')); // INP replaces FID
-      if (webVitals.onCLS) webVitals.onCLS(this.handleMetric.bind(this, 'cls'));
-      if (webVitals.onTTFB) webVitals.onTTFB(this.handleMetric.bind(this, 'ttfb'));
-    }).catch(error => {
-      console.warn('Failed to load web-vitals library:', error);
-      // Fallback to manual measurement
-      this.setupFallbackMeasurement();
-    });
+    import("web-vitals")
+      .then((webVitals) => {
+        if (webVitals.onLCP)
+          webVitals.onLCP(this.handleMetric.bind(this, "lcp"));
+        if (webVitals.onINP)
+          webVitals.onINP(this.handleMetric.bind(this, "fid")); // INP replaces FID
+        if (webVitals.onCLS)
+          webVitals.onCLS(this.handleMetric.bind(this, "cls"));
+        if (webVitals.onTTFB)
+          webVitals.onTTFB(this.handleMetric.bind(this, "ttfb"));
+      })
+      .catch((error) => {
+        console.warn("Failed to load web-vitals library:", error);
+        // Fallback to manual measurement
+        this.setupFallbackMeasurement();
+      });
   }
 
   private setupFallbackMeasurement(): void {
     // Fallback LCP measurement
     this.measureLCP();
-    
+
     // Fallback FID measurement
     this.measureFID();
-    
+
     // Fallback CLS measurement
     this.measureCLS();
-    
+
     // Fallback TTFB measurement
     this.measureTTFB();
   }
 
   private measureLCP(): void {
-    if (!('PerformanceObserver' in window)) return;
+    if (!("PerformanceObserver" in window)) return;
 
     try {
       const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1] as any;
-        
+
         if (lastEntry) {
-          this.handleMetric('lcp', {
-            name: 'LCP',
+          this.handleMetric("lcp", {
+            name: "LCP",
             value: lastEntry.startTime,
             id: `lcp-${Date.now()}`,
             delta: lastEntry.startTime,
@@ -134,24 +143,24 @@ export class CoreWebVitalsMonitor {
         }
       });
 
-      observer.observe({ type: 'largest-contentful-paint', buffered: true });
+      observer.observe({ type: "largest-contentful-paint", buffered: true });
     } catch (error) {
-      console.warn('LCP measurement failed:', error);
+      console.warn("LCP measurement failed:", error);
     }
   }
 
   private measureFID(): void {
-    if (!('PerformanceObserver' in window)) return;
+    if (!("PerformanceObserver" in window)) return;
 
     try {
       const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        
+
         for (const entry of entries) {
           const fidEntry = entry as any;
           if (fidEntry.processingStart && fidEntry.startTime) {
-            this.handleMetric('fid', {
-              name: 'FID',
+            this.handleMetric("fid", {
+              name: "FID",
               value: fidEntry.processingStart - fidEntry.startTime,
               id: `fid-${Date.now()}`,
               delta: fidEntry.processingStart - fidEntry.startTime,
@@ -161,14 +170,14 @@ export class CoreWebVitalsMonitor {
         }
       });
 
-      observer.observe({ type: 'first-input', buffered: true });
+      observer.observe({ type: "first-input", buffered: true });
     } catch (error) {
-      console.warn('FID measurement failed:', error);
+      console.warn("FID measurement failed:", error);
     }
   }
 
   private measureCLS(): void {
-    if (!('PerformanceObserver' in window)) return;
+    if (!("PerformanceObserver" in window)) return;
 
     let clsValue = 0;
     let sessionValue = 0;
@@ -177,17 +186,19 @@ export class CoreWebVitalsMonitor {
     try {
       const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        
+
         for (const entry of entries) {
           const layoutShift = entry as any;
-          
+
           if (!layoutShift.hadRecentInput) {
             const firstSessionEntry = sessionEntries[0];
             const lastSessionEntry = sessionEntries[sessionEntries.length - 1];
 
-            if (sessionValue && 
-                layoutShift.startTime - lastSessionEntry.startTime < 1000 &&
-                layoutShift.startTime - firstSessionEntry.startTime < 5000) {
+            if (
+              sessionValue &&
+              layoutShift.startTime - lastSessionEntry.startTime < 1000 &&
+              layoutShift.startTime - firstSessionEntry.startTime < 5000
+            ) {
               sessionValue += layoutShift.value;
               sessionEntries.push(layoutShift);
             } else {
@@ -197,8 +208,8 @@ export class CoreWebVitalsMonitor {
 
             if (sessionValue > clsValue) {
               clsValue = sessionValue;
-              this.handleMetric('cls', {
-                name: 'CLS',
+              this.handleMetric("cls", {
+                name: "CLS",
                 value: clsValue,
                 id: `cls-${Date.now()}`,
                 delta: layoutShift.value,
@@ -208,31 +219,31 @@ export class CoreWebVitalsMonitor {
         }
       });
 
-      observer.observe({ type: 'layout-shift', buffered: true });
+      observer.observe({ type: "layout-shift", buffered: true });
     } catch (error) {
-      console.warn('CLS measurement failed:', error);
+      console.warn("CLS measurement failed:", error);
     }
   }
 
   private measureTTFB(): void {
     try {
-      const navEntry = performance.getEntriesByType('navigation')[0] as any;
+      const navEntry = performance.getEntriesByType("navigation")[0] as any;
       if (navEntry) {
         const ttfb = navEntry.responseStart - navEntry.requestStart;
-        this.handleMetric('ttfb', {
-          name: 'TTFB',
+        this.handleMetric("ttfb", {
+          name: "TTFB",
           value: ttfb,
           id: `ttfb-${Date.now()}`,
           delta: ttfb,
         });
       }
     } catch (error) {
-      console.warn('TTFB measurement failed:', error);
+      console.warn("TTFB measurement failed:", error);
     }
   }
 
   private setupPerformanceObserver(): void {
-    if (!('PerformanceObserver' in window)) return;
+    if (!("PerformanceObserver" in window)) return;
 
     try {
       // Monitor resource loading performance
@@ -241,7 +252,7 @@ export class CoreWebVitalsMonitor {
         this.analyzeResourcePerformance(entries as PerformanceResourceTiming[]);
       });
 
-      resourceObserver.observe({ type: 'resource', buffered: true });
+      resourceObserver.observe({ type: "resource", buffered: true });
 
       // Monitor long tasks
       const longTaskObserver = new PerformanceObserver((list) => {
@@ -249,15 +260,15 @@ export class CoreWebVitalsMonitor {
         this.analyzeLongTasks(entries as PerformanceEventTiming[]);
       });
 
-      longTaskObserver.observe({ type: 'longtask', buffered: true });
+      longTaskObserver.observe({ type: "longtask", buffered: true });
     } catch (error) {
-      console.warn('Performance observer setup failed:', error);
+      console.warn("Performance observer setup failed:", error);
     }
   }
 
   private setupNavigationTracking(): void {
     // Track page navigation for SPA routing
-    if (typeof window !== 'undefined' && 'history' in window) {
+    if (typeof window !== "undefined" && "history" in window) {
       const originalPushState = history.pushState;
       const originalReplaceState = history.replaceState;
 
@@ -271,7 +282,7 @@ export class CoreWebVitalsMonitor {
         this.onNavigationChange();
       };
 
-      window.addEventListener('popstate', this.onNavigationChange.bind(this));
+      window.addEventListener("popstate", this.onNavigationChange.bind(this));
     }
   }
 
@@ -282,10 +293,13 @@ export class CoreWebVitalsMonitor {
     }, 100);
   }
 
-  private handleMetric(metricType: keyof CoreWebVitalsMetrics, metric: any): void {
+  private handleMetric(
+    metricType: keyof CoreWebVitalsMetrics,
+    metric: any,
+  ): void {
     const now = Date.now();
     const url = window.location.href;
-    
+
     const vitalsMetric: Partial<CoreWebVitalsMetrics> = {
       url,
       timestamp: now,
@@ -326,55 +340,74 @@ export class CoreWebVitalsMonitor {
     this.reportMetric(completeMetrics);
   }
 
-  private analyzeResourcePerformance(resources: PerformanceResourceTiming[]): void {
-    const slowResources = resources.filter(resource => resource.duration > 1000);
-    
+  private analyzeResourcePerformance(
+    resources: PerformanceResourceTiming[],
+  ): void {
+    const slowResources = resources.filter(
+      (resource) => resource.duration > 1000,
+    );
+
     if (slowResources.length > 0) {
       AlertManager.createAlert(
-        'performance',
-        'medium',
-        'Slow Resource Loading',
+        "performance",
+        "medium",
+        "Slow Resource Loading",
         `${slowResources.length} resources took longer than 1s to load`,
         window.location.href,
-        { slowResources: slowResources.map(r => ({ name: r.name, duration: r.duration })) }
+        {
+          slowResources: slowResources.map((r) => ({
+            name: r.name,
+            duration: r.duration,
+          })),
+        },
       );
     }
   }
 
   private analyzeLongTasks(longTasks: PerformanceEventTiming[]): void {
-    const criticalTasks = longTasks.filter(task => (task as any).duration > 100);
-    
+    const criticalTasks = longTasks.filter(
+      (task) => (task as any).duration > 100,
+    );
+
     if (criticalTasks.length > 0) {
       AlertManager.createAlert(
-        'performance',
-        'high',
-        'Long Tasks Detected',
+        "performance",
+        "high",
+        "Long Tasks Detected",
         `${criticalTasks.length} tasks blocked the main thread for >100ms`,
         window.location.href,
-        { longTasks: criticalTasks.map(t => ({ duration: (t as any).duration })) }
+        {
+          longTasks: criticalTasks.map((t) => ({
+            duration: (t as any).duration,
+          })),
+        },
       );
     }
   }
 
   private createPerformanceAlert(alert: PerformanceAlert): void {
-    const severity = alert.severity as MonitoringAlert['severity'];
-    
+    const severity = alert.severity as MonitoringAlert["severity"];
+
     AlertManager.createAlert(
-      'performance',
+      "performance",
       severity,
       `${alert.metric.toUpperCase()} Performance Issue`,
       `${alert.metric.toUpperCase()}: ${alert.currentValue}ms exceeds threshold of ${alert.threshold}ms`,
       alert.url,
-      { metric: alert.metric, value: alert.currentValue, threshold: alert.threshold }
+      {
+        metric: alert.metric,
+        value: alert.currentValue,
+        threshold: alert.threshold,
+      },
     );
   }
 
   private async reportMetric(metrics: CoreWebVitalsMetrics): Promise<void> {
     try {
       await fetch(this.config.reportingEndpoint, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           metrics,
@@ -383,15 +416,15 @@ export class CoreWebVitalsMonitor {
         }),
       });
     } catch (error) {
-      console.warn('Failed to report Web Vitals metric:', error);
+      console.warn("Failed to report Web Vitals metric:", error);
     }
   }
 
   private getSessionId(): string {
-    let sessionId = sessionStorage.getItem('proweb-session-id');
+    let sessionId = sessionStorage.getItem("proweb-session-id");
     if (!sessionId) {
       sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      sessionStorage.setItem('proweb-session-id', sessionId);
+      sessionStorage.setItem("proweb-session-id", sessionId);
     }
     return sessionId;
   }
@@ -399,15 +432,21 @@ export class CoreWebVitalsMonitor {
   /**
    * Get performance analytics for a specific time range
    */
-  async getAnalytics(timeRange: { start: number; end: number }): Promise<WebVitalsAnalytics> {
+  async getAnalytics(timeRange: {
+    start: number;
+    end: number;
+  }): Promise<WebVitalsAnalytics> {
     try {
-      const response = await fetch(`${this.config.reportingEndpoint}/analytics`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${this.config.reportingEndpoint}/analytics`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ timeRange }),
         },
-        body: JSON.stringify({ timeRange }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Analytics request failed: ${response.statusText}`);
@@ -415,7 +454,7 @@ export class CoreWebVitalsMonitor {
 
       return await response.json();
     } catch (error) {
-      console.error('Failed to get Web Vitals analytics:', error);
+      console.error("Failed to get Web Vitals analytics:", error);
       throw error;
     }
   }
@@ -427,19 +466,27 @@ export class CoreWebVitalsMonitor {
     const recommendations: string[] = [];
 
     if (metrics.lcp > this.config.thresholds.lcp.poor) {
-      recommendations.push('Optimize Largest Contentful Paint: Consider image optimization, server-side rendering, or CDN usage');
+      recommendations.push(
+        "Optimize Largest Contentful Paint: Consider image optimization, server-side rendering, or CDN usage",
+      );
     }
 
     if (metrics.fid > this.config.thresholds.fid.poor) {
-      recommendations.push('Reduce First Input Delay: Minimize JavaScript execution time and consider code splitting');
+      recommendations.push(
+        "Reduce First Input Delay: Minimize JavaScript execution time and consider code splitting",
+      );
     }
 
     if (metrics.cls > this.config.thresholds.cls.poor) {
-      recommendations.push('Fix Cumulative Layout Shift: Set dimensions for images and ads, avoid inserting content above existing content');
+      recommendations.push(
+        "Fix Cumulative Layout Shift: Set dimensions for images and ads, avoid inserting content above existing content",
+      );
     }
 
     if (metrics.ttfb > this.config.thresholds.ttfb.poor) {
-      recommendations.push('Improve Time to First Byte: Optimize server response time, use a CDN, or implement caching');
+      recommendations.push(
+        "Improve Time to First Byte: Optimize server response time, use a CDN, or implement caching",
+      );
     }
 
     return recommendations;
@@ -449,7 +496,7 @@ export class CoreWebVitalsMonitor {
    * Generate performance report
    */
   generateReport(metrics: CoreWebVitalsMetrics[]): WebVitalsReport[] {
-    return metrics.map(metric => {
+    return metrics.map((metric) => {
       const performance = this.calculatePerformanceGrade(metric);
       const recommendations = this.getPerformanceRecommendations(metric);
 
@@ -469,26 +516,34 @@ export class CoreWebVitalsMonitor {
     });
   }
 
-  private calculatePerformanceGrade(metrics: CoreWebVitalsMetrics): { grade: 'good' | 'needs-improvement' | 'poor'; score: number } {
+  private calculatePerformanceGrade(metrics: CoreWebVitalsMetrics): {
+    grade: "good" | "needs-improvement" | "poor";
+    score: number;
+  } {
     const scores = [
-      this.getMetricScore('lcp', metrics.lcp),
-      this.getMetricScore('fid', metrics.fid),
-      this.getMetricScore('cls', metrics.cls),
-      this.getMetricScore('ttfb', metrics.ttfb),
+      this.getMetricScore("lcp", metrics.lcp),
+      this.getMetricScore("fid", metrics.fid),
+      this.getMetricScore("cls", metrics.cls),
+      this.getMetricScore("ttfb", metrics.ttfb),
     ];
 
-    const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-    
-    let grade: 'good' | 'needs-improvement' | 'poor';
-    if (averageScore >= 75) grade = 'good';
-    else if (averageScore >= 50) grade = 'needs-improvement';
-    else grade = 'poor';
+    const averageScore =
+      scores.reduce((sum, score) => sum + score, 0) / scores.length;
+
+    let grade: "good" | "needs-improvement" | "poor";
+    if (averageScore >= 75) grade = "good";
+    else if (averageScore >= 50) grade = "needs-improvement";
+    else grade = "poor";
 
     return { grade, score: Math.round(averageScore) };
   }
 
-  private getMetricScore(metric: keyof CoreWebVitalsMetrics, value: number): number {
-    const thresholds = this.config.thresholds[metric as keyof typeof this.config.thresholds];
+  private getMetricScore(
+    metric: keyof CoreWebVitalsMetrics,
+    value: number,
+  ): number {
+    const thresholds =
+      this.config.thresholds[metric as keyof typeof this.config.thresholds];
     if (!thresholds) return 0;
 
     if (value <= thresholds.good) return 100;
@@ -496,12 +551,16 @@ export class CoreWebVitalsMonitor {
     return 0;
   }
 
-  private detectDeviceType(userAgent: string): 'mobile' | 'desktop' | 'tablet' {
-    if (/Mobile|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(userAgent)) {
-      if (/iPad|Tablet/i.test(userAgent)) return 'tablet';
-      return 'mobile';
+  private detectDeviceType(userAgent: string): "mobile" | "desktop" | "tablet" {
+    if (
+      /Mobile|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(
+        userAgent,
+      )
+    ) {
+      if (/iPad|Tablet/i.test(userAgent)) return "tablet";
+      return "mobile";
     }
-    return 'desktop';
+    return "desktop";
   }
 
   /**
@@ -515,13 +574,13 @@ export class CoreWebVitalsMonitor {
 
 // Client-side script for automatic initialization
 export const initWebVitalsTracking = (config?: Partial<WebVitalsConfig>) => {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     const monitor = new CoreWebVitalsMonitor(config);
     monitor.initializeTracking();
-    
+
     // Make available globally for debugging
     (window as any).webVitalsMonitor = monitor;
-    
+
     return monitor;
   }
   return null;

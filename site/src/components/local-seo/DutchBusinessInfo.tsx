@@ -1,5 +1,8 @@
-import React from 'react';
-import { dutchBusinessInfo, localBusinessData } from '@/config/local-seo.config';
+import React from "react";
+import {
+  dutchBusinessInfo,
+  localBusinessData,
+} from "@/config/local-seo.config";
 
 interface DutchBusinessHolidaysProps {
   year?: number;
@@ -7,73 +10,89 @@ interface DutchBusinessHolidaysProps {
   className?: string;
 }
 
-export function DutchBusinessHolidays({ 
-  year = new Date().getFullYear(), 
+export function DutchBusinessHolidays({
+  year = new Date().getFullYear(),
   showUpcoming = true,
-  className = '' 
+  className = "",
 }: DutchBusinessHolidaysProps) {
   const currentDate = new Date();
-  const holidays = dutchBusinessInfo.nationalHolidays.filter(holiday => {
+  const holidays = dutchBusinessInfo.nationalHolidays.filter((holiday) => {
     const holidayDate = new Date(holiday.date);
     return holidayDate.getFullYear() === year;
   });
 
-  const upcomingHolidays = showUpcoming 
-    ? holidays.filter(holiday => new Date(holiday.date) >= currentDate).slice(0, 3)
+  const upcomingHolidays = showUpcoming
+    ? holidays
+        .filter((holiday) => new Date(holiday.date) >= currentDate)
+        .slice(0, 3)
     : holidays;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('nl-NL', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long'
+    return date.toLocaleDateString("nl-NL", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
     });
   };
 
   return (
     <div className={`space-y-4 ${className}`}>
       <h4 className="font-semibold text-gray-900 dark:text-white">
-        {showUpcoming ? 'Komende Feestdagen' : `Nederlandse Feestdagen ${year}`}
+        {showUpcoming ? "Komende Feestdagen" : `Nederlandse Feestdagen ${year}`}
       </h4>
-      
+
       <div className="space-y-2">
         {upcomingHolidays.map((holiday, index) => {
-          const isToday = new Date(holiday.date).toDateString() === currentDate.toDateString();
+          const isToday =
+            new Date(holiday.date).toDateString() ===
+            currentDate.toDateString();
           const isPast = new Date(holiday.date) < currentDate;
-          
+
           return (
-            <div 
+            <div
               key={index}
               className={`flex justify-between items-center p-3 rounded-lg ${
-                isToday 
-                  ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
+                isToday
+                  ? "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"
                   : isPast
-                  ? 'bg-gray-50 dark:bg-gray-800 opacity-60'
-                  : 'bg-blue-50 dark:bg-blue-900/20'
+                    ? "bg-gray-50 dark:bg-gray-800 opacity-60"
+                    : "bg-blue-50 dark:bg-blue-900/20"
               }`}
             >
               <div>
-                <div className={`font-medium ${
-                  isToday 
-                    ? 'text-red-900 dark:text-red-100'
-                    : 'text-gray-900 dark:text-white'
-                }`}>
+                <div
+                  className={`font-medium ${
+                    isToday
+                      ? "text-red-900 dark:text-red-100"
+                      : "text-gray-900 dark:text-white"
+                  }`}
+                >
                   {holiday.name}
                 </div>
-                <div className={`text-sm ${
-                  isToday
-                    ? 'text-red-700 dark:text-red-300'
-                    : 'text-gray-600 dark:text-gray-400'
-                }`}>
+                <div
+                  className={`text-sm ${
+                    isToday
+                      ? "text-red-700 dark:text-red-300"
+                      : "text-gray-600 dark:text-gray-400"
+                  }`}
+                >
                   {formatDate(holiday.date)}
                 </div>
               </div>
-              
+
               {isToday && (
                 <div className="flex items-center gap-1 text-red-600 dark:text-red-400">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   <span className="text-xs font-medium">Vandaag</span>
                 </div>
@@ -100,60 +119,74 @@ interface ExtendedBusinessHoursProps {
   showSpecialHours?: boolean;
 }
 
-export function ExtendedBusinessHours({ 
-  className = '',
+export function ExtendedBusinessHours({
+  className = "",
   showHolidays = true,
-  showSpecialHours = true
+  showSpecialHours = true,
 }: ExtendedBusinessHoursProps) {
   const currentDate = new Date();
-  const currentDay = currentDate.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-  
-  const isHoliday = dutchBusinessInfo.nationalHolidays.some(holiday => {
+  const currentDay = currentDate
+    .toLocaleDateString("en-US", { weekday: "long" })
+    .toLowerCase();
+
+  const isHoliday = dutchBusinessInfo.nationalHolidays.some((holiday) => {
     const holidayDate = new Date(holiday.date);
     return holidayDate.toDateString() === currentDate.toDateString();
   });
 
   const businessHours = localBusinessData.businessHours;
-  const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const daysOrder = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
   const dayNames = {
-    monday: 'Maandag',
-    tuesday: 'Dinsdag',
-    wednesday: 'Woensdag', 
-    thursday: 'Donderdag',
-    friday: 'Vrijdag',
-    saturday: 'Zaterdag',
-    sunday: 'Zondag'
+    monday: "Maandag",
+    tuesday: "Dinsdag",
+    wednesday: "Woensdag",
+    thursday: "Donderdag",
+    friday: "Vrijdag",
+    saturday: "Zaterdag",
+    sunday: "Zondag",
   };
 
   const getCurrentStatus = () => {
     if (isHoliday) {
-      return { status: 'closed', message: 'Gesloten wegens feestdag' };
+      return { status: "closed", message: "Gesloten wegens feestdag" };
     }
 
-    const currentHours = businessHours[currentDay as keyof typeof businessHours];
+    const currentHours =
+      businessHours[currentDay as keyof typeof businessHours];
     if (!currentHours) {
-      return { status: 'closed', message: 'Vandaag gesloten' };
+      return { status: "closed", message: "Vandaag gesloten" };
     }
 
     // Parse current time and business hours
     const now = currentDate.getHours() * 60 + currentDate.getMinutes();
-    const [openTime, closeTime] = currentHours.split('-');
-    const [openHour, openMin] = openTime.split(':').map(Number);
-    const [closeHour, closeMin] = closeTime.split(':').map(Number);
-    
+    const [openTime, closeTime] = currentHours.split("-");
+    const [openHour, openMin] = openTime.split(":").map(Number);
+    const [closeHour, closeMin] = closeTime.split(":").map(Number);
+
     const openMinutes = openHour * 60 + openMin;
     const closeMinutes = closeHour * 60 + closeMin;
 
     if (now >= openMinutes && now < closeMinutes) {
       const minutesUntilClose = closeMinutes - now;
       if (minutesUntilClose <= 60) {
-        return { status: 'closing-soon', message: `Sluit over ${minutesUntilClose} minuten` };
+        return {
+          status: "closing-soon",
+          message: `Sluit over ${minutesUntilClose} minuten`,
+        };
       }
-      return { status: 'open', message: `Open tot ${closeTime}` };
+      return { status: "open", message: `Open tot ${closeTime}` };
     } else if (now < openMinutes) {
-      return { status: 'closed', message: `Opent om ${openTime}` };
+      return { status: "closed", message: `Opent om ${openTime}` };
     } else {
-      return { status: 'closed', message: 'Gesloten' };
+      return { status: "closed", message: "Gesloten" };
     }
   };
 
@@ -165,46 +198,57 @@ export function ExtendedBusinessHours({
         <h4 className="font-semibold text-gray-900 dark:text-white">
           Openingstijden
         </h4>
-        <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
-          currentStatus.status === 'open' 
-            ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200'
-            : currentStatus.status === 'closing-soon'
-            ? 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200'
-            : 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200'
-        }`}>
-          <div className={`w-2 h-2 rounded-full ${
-            currentStatus.status === 'open' 
-              ? 'bg-green-500'
-              : currentStatus.status === 'closing-soon'
-              ? 'bg-yellow-500'
-              : 'bg-red-500'
-          }`} />
+        <div
+          className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
+            currentStatus.status === "open"
+              ? "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200"
+              : currentStatus.status === "closing-soon"
+                ? "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200"
+                : "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200"
+          }`}
+        >
+          <div
+            className={`w-2 h-2 rounded-full ${
+              currentStatus.status === "open"
+                ? "bg-green-500"
+                : currentStatus.status === "closing-soon"
+                  ? "bg-yellow-500"
+                  : "bg-red-500"
+            }`}
+          />
           {currentStatus.message}
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-2">
-        {daysOrder.map(day => {
+        {daysOrder.map((day) => {
           const timeSlot = businessHours[day as keyof typeof businessHours];
           const isToday = day === currentDay;
-          
+
           return (
-            <div key={day} className={`flex justify-between items-center py-2 px-3 rounded ${
-              isToday ? 'bg-blue-50 dark:bg-blue-900/20 font-medium' : ''
-            }`}>
-              <span className={`${
-                isToday 
-                  ? 'text-blue-900 dark:text-blue-100' 
-                  : 'text-gray-600 dark:text-gray-400'
-              }`}>
+            <div
+              key={day}
+              className={`flex justify-between items-center py-2 px-3 rounded ${
+                isToday ? "bg-blue-50 dark:bg-blue-900/20 font-medium" : ""
+              }`}
+            >
+              <span
+                className={`${
+                  isToday
+                    ? "text-blue-900 dark:text-blue-100"
+                    : "text-gray-600 dark:text-gray-400"
+                }`}
+              >
                 {dayNames[day as keyof typeof dayNames]}
               </span>
-              <span className={`${
-                isToday 
-                  ? 'text-blue-900 dark:text-blue-100 font-semibold' 
-                  : 'text-gray-900 dark:text-white'
-              }`}>
-                {timeSlot || 'Gesloten'}
+              <span
+                className={`${
+                  isToday
+                    ? "text-blue-900 dark:text-blue-100 font-semibold"
+                    : "text-gray-900 dark:text-white"
+                }`}
+              >
+                {timeSlot || "Gesloten"}
               </span>
             </div>
           );
@@ -237,18 +281,20 @@ export function ExtendedBusinessHours({
 
 interface BusinessRegistrationInfoProps {
   className?: string;
-  variant?: 'full' | 'compact';
+  variant?: "full" | "compact";
 }
 
-export function BusinessRegistrationInfo({ 
-  className = '',
-  variant = 'full'
+export function BusinessRegistrationInfo({
+  className = "",
+  variant = "full",
 }: BusinessRegistrationInfoProps) {
   const businessCategories = dutchBusinessInfo.businessCategories;
-  
-  if (variant === 'compact') {
+
+  if (variant === "compact") {
     return (
-      <div className={`text-xs text-gray-500 dark:text-gray-400 space-y-1 ${className}`}>
+      <div
+        className={`text-xs text-gray-500 dark:text-gray-400 space-y-1 ${className}`}
+      >
         <div>KvK: {localBusinessData.kvkNumber}</div>
         <div>BTW: {localBusinessData.vatNumber}</div>
       </div>
@@ -260,7 +306,7 @@ export function BusinessRegistrationInfo({
       <h4 className="font-semibold text-gray-900 dark:text-white">
         Bedrijfsinformatie
       </h4>
-      
+
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-3">
           <div>
@@ -271,7 +317,7 @@ export function BusinessRegistrationInfo({
               {localBusinessData.name}
             </dd>
           </div>
-          
+
           <div>
             <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Rechtsvorm
@@ -280,7 +326,7 @@ export function BusinessRegistrationInfo({
               {localBusinessData.legalName}
             </dd>
           </div>
-          
+
           <div>
             <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">
               KvK-nummer
@@ -289,7 +335,7 @@ export function BusinessRegistrationInfo({
               {localBusinessData.kvkNumber}
             </dd>
           </div>
-          
+
           <div>
             <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">
               BTW-nummer
@@ -299,7 +345,7 @@ export function BusinessRegistrationInfo({
             </dd>
           </div>
         </div>
-        
+
         <div className="space-y-3">
           <div>
             <dt className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
@@ -320,11 +366,11 @@ export function BusinessRegistrationInfo({
           </div>
         </div>
       </div>
-      
+
       <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          Alle bedrijfsgegevens zijn geregistreerd bij de Nederlandse Kamer van Koophandel.
-          Wijzigingen voorbehouden.
+          Alle bedrijfsgegevens zijn geregistreerd bij de Nederlandse Kamer van
+          Koophandel. Wijzigingen voorbehouden.
         </p>
       </div>
     </div>

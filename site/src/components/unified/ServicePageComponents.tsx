@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import ServiceFAQItem from '@/components/ServiceFAQItem';
+import { ReactNode } from "react";
+import ServiceFAQItem from "@/components/ServiceFAQItem";
 
 // Unified interfaces for service page components
 export interface ServiceFeature {
@@ -57,41 +57,41 @@ export interface ServicePageProps {
   heroDescription: string;
   primaryCTA: string;
   secondaryCTA: string;
-  
+
   // Features Section
   featuresTitle: string;
   featuresSubtitle: string;
   features: ServiceFeature[];
-  
+
   // Service Types/Packages (optional)
   packagesTitle?: string;
   packagesSubtitle?: string;
   packages?: ServicePackage[];
   serviceTypes?: ServiceType[];
-  
+
   // Process Section
   processTitle: string;
   processSubtitle: string;
   processSteps: ProcessStep[];
-  
+
   // Statistics/Results Section (optional)
   statisticsTitle?: string;
   statistics?: StatisticItem[];
-  
+
   // Trust Indicators Section
   trustTitle: string;
   trustIndicators: TrustIndicator[];
-  
+
   // FAQ Section
   faqTitle: string;
   faqs: FAQItem[];
-  
+
   // Final CTA Section
   finalCTATitle: string;
   finalCTADescription: string;
   finalPrimaryCTA: string;
   finalSecondaryCTA: string;
-  
+
   // SEO & Meta
   pageSlug: string;
   ogImage?: {
@@ -105,12 +105,17 @@ export interface ServicePageProps {
 // Unified component for feature cards
 export const FeatureCard = ({ feature }: { feature: ServiceFeature }) => (
   <div className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300 group">
-    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">{feature.icon}</div>
+    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+      {feature.icon}
+    </div>
     <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
     <p className="text-slate-200 mb-6">{feature.description}</p>
     <ul className="space-y-2">
       {feature.details.map((detail, detailIndex) => (
-        <li key={detailIndex} className="text-sm text-slate-400 flex items-center">
+        <li
+          key={detailIndex}
+          className="text-sm text-slate-400 flex items-center"
+        >
           <span className="w-1.5 h-1.5 bg-primary-400 rounded-full mr-3 flex-shrink-0"></span>
           {detail}
         </li>
@@ -121,11 +126,13 @@ export const FeatureCard = ({ feature }: { feature: ServiceFeature }) => (
 
 // Unified component for package cards
 export const PackageCard = ({ pkg }: { pkg: ServicePackage }) => (
-  <div className={`relative bg-cosmic-800/40 backdrop-blur-sm border rounded-xl p-8 transition-all duration-300 hover:scale-105 ${
-    pkg.popular 
-      ? 'border-primary-500/50 ring-2 ring-primary-500/20 shadow-lg shadow-primary-500/10' 
-      : 'border-cosmic-700/30 hover:border-primary-500/50'
-  }`}>
+  <div
+    className={`relative bg-cosmic-800/40 backdrop-blur-sm border rounded-xl p-8 transition-all duration-300 hover:scale-105 ${
+      pkg.popular
+        ? "border-primary-500/50 ring-2 ring-primary-500/20 shadow-lg shadow-primary-500/10"
+        : "border-cosmic-700/30 hover:border-primary-500/50"
+    }`}
+  >
     {pkg.popular && (
       <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
         <span className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-4 py-1 rounded-full text-sm font-medium shadow-lg">
@@ -133,7 +140,7 @@ export const PackageCard = ({ pkg }: { pkg: ServicePackage }) => (
         </span>
       </div>
     )}
-    
+
     <div className="text-center mb-8">
       <h3 className="text-xl font-semibold text-white mb-2">{pkg.name}</h3>
       <p className="text-slate-200 text-sm mb-4">{pkg.description}</p>
@@ -151,18 +158,26 @@ export const PackageCard = ({ pkg }: { pkg: ServicePackage }) => (
       ))}
     </ul>
 
-    <button className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-300 ${
-      pkg.popular 
-        ? 'bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-500 hover:to-secondary-500 text-white shadow-lg hover:shadow-xl' 
-        : 'border border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white'
-    }`}>
-      {pkg.buttonText || 'Pakket Kiezen'}
+    <button
+      className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-300 ${
+        pkg.popular
+          ? "bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-500 hover:to-secondary-500 text-white shadow-lg hover:shadow-xl"
+          : "border border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white"
+      }`}
+    >
+      {pkg.buttonText || "Pakket Kiezen"}
     </button>
   </div>
 );
 
 // Unified component for process steps
-export const ProcessStep = ({ step, isLast }: { step: ProcessStep; isLast: boolean }) => (
+export const ProcessStep = ({
+  step,
+  isLast,
+}: {
+  step: ProcessStep;
+  isLast: boolean;
+}) => (
   <div className="flex items-start space-x-6">
     <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full flex items-center justify-center shadow-lg">
       <span className="text-white font-bold text-sm">{step.step}</span>
@@ -187,7 +202,11 @@ export const StatisticCard = ({ stat }: { stat: StatisticItem }) => (
 );
 
 // Unified component for trust indicators
-export const TrustIndicator = ({ indicator }: { indicator: TrustIndicator }) => (
+export const TrustIndicator = ({
+  indicator,
+}: {
+  indicator: TrustIndicator;
+}) => (
   <div className="text-center">
     <div className="w-16 h-16 bg-primary-500/20 rounded-full flex items-center justify-center mx-auto mb-6 hover:bg-primary-500/30 transition-colors duration-300">
       <span className="text-2xl">{indicator.icon}</span>
@@ -198,17 +217,21 @@ export const TrustIndicator = ({ indicator }: { indicator: TrustIndicator }) => 
 );
 
 // Unified component for FAQ items with accordion behavior
-export const FAQItem = ({ faq, index = 0 }: { faq: FAQItem; index?: number }) => (
-  <ServiceFAQItem faq={faq} index={index} />
-);
+export const FAQItem = ({
+  faq,
+  index = 0,
+}: {
+  faq: FAQItem;
+  index?: number;
+}) => <ServiceFAQItem faq={faq} index={index} />;
 
 // Professional section component
-export const ServiceSection = ({ 
-  title, 
-  subtitle, 
-  children, 
+export const ServiceSection = ({
+  title,
+  subtitle,
+  children,
   className = "",
-  background = false 
+  background = false,
 }: {
   title: string;
   subtitle?: string;
@@ -216,16 +239,19 @@ export const ServiceSection = ({
   className?: string;
   background?: boolean;
 }) => (
-  <section className={`relative z-10 px-4 sm:px-6 lg:px-8 py-section ${background ? 'bg-cosmic-900/20' : ''} ${className}`}>
+  <section
+    className={`relative z-10 px-4 sm:px-6 lg:px-8 py-section ${background ? "bg-cosmic-900/20" : ""} ${className}`}
+  >
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-          {title.split(' ').map((word, index, array) => {
+          {title.split(" ").map((word, index, array) => {
             // Make the last 1-2 words gradient
             const isGradient = index >= array.length - 2;
             return isGradient ? (
               <span key={index} className="gradient-text-primary">
-                {word}{index < array.length - 1 ? ' ' : ''}
+                {word}
+                {index < array.length - 1 ? " " : ""}
               </span>
             ) : (
               <span key={index}>{word} </span>
@@ -233,9 +259,7 @@ export const ServiceSection = ({
           })}
         </h2>
         {subtitle && (
-          <p className="text-lg text-slate-200 max-w-3xl mx-auto">
-            {subtitle}
-          </p>
+          <p className="text-lg text-slate-200 max-w-3xl mx-auto">{subtitle}</p>
         )}
       </div>
       {children}

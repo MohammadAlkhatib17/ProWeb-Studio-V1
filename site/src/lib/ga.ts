@@ -19,11 +19,13 @@ export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
  * Check if consent has been granted for analytics
  */
 export const hasAnalyticsConsent = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  
+  if (typeof window === "undefined") return false;
+
   // Check for consent flag - only proceed if explicitly granted
-  return '__CONSENT_ANALYTICS__' in window && 
-         (window as Record<string, unknown>).__CONSENT_ANALYTICS__ === true;
+  return (
+    "__CONSENT_ANALYTICS__" in window &&
+    (window as Record<string, unknown>).__CONSENT_ANALYTICS__ === true
+  );
 };
 
 /**
@@ -31,9 +33,7 @@ export const hasAnalyticsConsent = (): boolean => {
  */
 export const isGA4Enabled = (): boolean => {
   return Boolean(
-    GA_MEASUREMENT_ID && 
-    typeof window !== 'undefined' && 
-    hasAnalyticsConsent()
+    GA_MEASUREMENT_ID && typeof window !== "undefined" && hasAnalyticsConsent(),
   );
 };
 
@@ -44,32 +44,36 @@ export const isGA4Enabled = (): boolean => {
  */
 export const initGA4 = (): void => {
   if (!isGA4Enabled()) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('GA4: Measurement ID not provided or analytics consent not granted, analytics disabled');
+    if (process.env.NODE_ENV !== "production") {
+      console.log(
+        "GA4: Measurement ID not provided or analytics consent not granted, analytics disabled",
+      );
     }
     return;
   }
 
   // Load gtag script
-  const script = document.createElement('script');
+  const script = document.createElement("script");
   script.async = true;
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
   document.head.appendChild(script);
 
   // Initialize gtag
-  window.gtag = window.gtag || function(...args: unknown[]) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((window.gtag as any).q = (window.gtag as any).q || []).push(args);
-  };
+  window.gtag =
+    window.gtag ||
+    function (...args: unknown[]) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ((window.gtag as any).q = (window.gtag as any).q || []).push(args);
+    };
 
-  window.gtag('js', new Date());
-  window.gtag('config', GA_MEASUREMENT_ID, {
+  window.gtag("js", new Date());
+  window.gtag("config", GA_MEASUREMENT_ID, {
     page_title: document.title,
     page_location: window.location.href,
   });
 
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('GA4: Initialized with measurement ID:', GA_MEASUREMENT_ID);
+  if (process.env.NODE_ENV !== "production") {
+    console.log("GA4: Initialized with measurement ID:", GA_MEASUREMENT_ID);
   }
 };
 
@@ -80,7 +84,7 @@ export const initGA4 = (): void => {
 export const trackPageView = (url: string, title?: string): void => {
   if (!isGA4Enabled()) return;
 
-  window.gtag('config', GA_MEASUREMENT_ID!, {
+  window.gtag("config", GA_MEASUREMENT_ID!, {
     page_title: title || document.title,
     page_location: url,
   });
@@ -97,7 +101,7 @@ export const trackEvent = (
   action: string,
   category: string,
   label?: string,
-  value?: number
+  value?: number,
 ): void => {
   if (!isGA4Enabled()) return;
 
@@ -108,35 +112,45 @@ export const trackEvent = (
   if (label) eventData.event_label = label;
   if (value !== undefined) eventData.value = value;
 
-  window.gtag('event', action, eventData);
+  window.gtag("event", action, eventData);
 };
 
 /**
  * Track form submissions
  */
-export const trackFormSubmit = (formName: string, success: boolean = true): void => {
+export const trackFormSubmit = (
+  formName: string,
+  success: boolean = true,
+): void => {
   trackEvent(
-    success ? 'form_submit_success' : 'form_submit_error',
-    'engagement',
-    formName
+    success ? "form_submit_success" : "form_submit_error",
+    "engagement",
+    formName,
   );
 };
 
 /**
  * Track button clicks
  */
-export const trackButtonClick = (buttonName: string, location?: string): void => {
-  trackEvent('click', 'engagement', `${buttonName}${location ? ` - ${location}` : ''}`);
+export const trackButtonClick = (
+  buttonName: string,
+  location?: string,
+): void => {
+  trackEvent(
+    "click",
+    "engagement",
+    `${buttonName}${location ? ` - ${location}` : ""}`,
+  );
 };
 
 /**
  * Track downloads
  */
 export const trackDownload = (fileName: string, fileType?: string): void => {
-  trackEvent('download', 'engagement', fileName, undefined);
-  
+  trackEvent("download", "engagement", fileName, undefined);
+
   if (fileType) {
-    trackEvent('file_download', 'engagement', fileType);
+    trackEvent("file_download", "engagement", fileType);
   }
 };
 
@@ -144,33 +158,41 @@ export const trackDownload = (fileName: string, fileType?: string): void => {
  * Track external link clicks
  */
 export const trackExternalLink = (url: string, linkText?: string): void => {
-  trackEvent('click', 'outbound', linkText || url);
+  trackEvent("click", "outbound", linkText || url);
 };
 
 /**
  * Track video interactions
  */
 export const trackVideoPlay = (videoTitle: string, progress?: number): void => {
-  trackEvent('video_play', 'engagement', videoTitle, progress);
+  trackEvent("video_play", "engagement", videoTitle, progress);
 };
 
 export const trackVideoComplete = (videoTitle: string): void => {
-  trackEvent('video_complete', 'engagement', videoTitle);
+  trackEvent("video_complete", "engagement", videoTitle);
 };
 
 /**
  * Track search actions
  */
-export const trackSearch = (searchTerm: string, resultsCount?: number): void => {
-  trackEvent('search', 'engagement', searchTerm, resultsCount);
+export const trackSearch = (
+  searchTerm: string,
+  resultsCount?: number,
+): void => {
+  trackEvent("search", "engagement", searchTerm, resultsCount);
 };
 
 /**
  * Track scroll depth
  */
 export const trackScrollDepth = (percentage: number): void => {
-  if (percentage === 25 || percentage === 50 || percentage === 75 || percentage === 100) {
-    trackEvent('scroll', 'engagement', `${percentage}%`, percentage);
+  if (
+    percentage === 25 ||
+    percentage === 50 ||
+    percentage === 75 ||
+    percentage === 100
+  ) {
+    trackEvent("scroll", "engagement", `${percentage}%`, percentage);
   }
 };
 
@@ -178,18 +200,18 @@ export const trackScrollDepth = (percentage: number): void => {
  * Track contact form interactions
  */
 export const trackContactFormStart = (): void => {
-  trackEvent('form_start', 'engagement', 'contact_form');
+  trackEvent("form_start", "engagement", "contact_form");
 };
 
 export const trackContactFormSubmit = (success: boolean = true): void => {
-  trackFormSubmit('contact_form', success);
+  trackFormSubmit("contact_form", success);
 };
 
 /**
  * Track navigation interactions
  */
 export const trackNavigation = (section: string): void => {
-  trackEvent('navigation', 'engagement', section);
+  trackEvent("navigation", "engagement", section);
 };
 
 /**
@@ -202,8 +224,8 @@ export const safeGA4 = (fn: () => void): void => {
       fn();
     }
   } catch (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn('GA4: Error executing analytics function:', error);
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("GA4: Error executing analytics function:", error);
     }
   }
 };
@@ -214,7 +236,7 @@ export const safeGA4 = (fn: () => void): void => {
  */
 export const useGA4 = () => {
   const isEnabled = isGA4Enabled();
-  
+
   return {
     isEnabled,
     init: initGA4,

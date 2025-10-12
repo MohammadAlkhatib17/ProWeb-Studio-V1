@@ -1,5 +1,5 @@
 // src/components/OptimizedImage.tsx
-import { CSSProperties } from 'react';
+import { CSSProperties } from "react";
 
 interface OptimizedImageProps {
   /** Base path without extension (e.g., '/assets/hero_portal_background') */
@@ -13,9 +13,9 @@ interface OptimizedImageProps {
   /** Inline styles */
   style?: CSSProperties;
   /** Loading strategy */
-  loading?: 'lazy' | 'eager';
+  loading?: "lazy" | "eager";
   /** Fetch priority */
-  fetchPriority?: 'high' | 'low' | 'auto';
+  fetchPriority?: "high" | "low" | "auto";
   /** Sizes attribute for responsive images */
   sizes?: string;
   /** Image width */
@@ -32,10 +32,10 @@ export default function OptimizedImage({
   baseSrc,
   fallbackSrc,
   alt,
-  className = '',
+  className = "",
   style,
-  loading = 'lazy',
-  fetchPriority = 'auto',
+  loading = "lazy",
+  fetchPriority = "auto",
   sizes,
   width,
   height,
@@ -43,17 +43,9 @@ export default function OptimizedImage({
   return (
     <picture className={className} style={style}>
       {/* AVIF format - best compression */}
-      <source 
-        srcSet={`${baseSrc}.avif`} 
-        type="image/avif"
-        sizes={sizes}
-      />
+      <source srcSet={`${baseSrc}.avif`} type="image/avif" sizes={sizes} />
       {/* WebP format - good compression, wide support */}
-      <source 
-        srcSet={`${baseSrc}.webp`} 
-        type="image/webp"
-        sizes={sizes}
-      />
+      <source srcSet={`${baseSrc}.webp`} type="image/webp" sizes={sizes} />
       {/* PNG fallback - universal support */}
       <img
         src={fallbackSrc}

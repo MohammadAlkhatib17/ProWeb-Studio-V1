@@ -1,44 +1,47 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  AlertTriangle, 
-  CheckCircle, 
-  Clock, 
-  Eye, 
-  TrendingUp, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Eye,
+  TrendingUp,
   Search,
   BarChart3,
   Shield,
   Zap,
-  Globe
-} from 'lucide-react';
-import type { 
-  MonitoringDashboard, 
-  SEOHealthCheck, 
+  Globe,
+} from "lucide-react";
+import type {
+  MonitoringDashboard,
+  SEOHealthCheck,
   CoreWebVitalsMetrics,
   MonitoringAlert,
-  SearchQueryData 
-} from '@/lib/monitoring/types';
+  SearchQueryData,
+} from "@/lib/monitoring/types";
 
 interface SEOHealthDashboardProps {
   className?: string;
 }
 
-export default function SEOHealthDashboard({ className }: SEOHealthDashboardProps) {
-  const [dashboardData, setDashboardData] = useState<MonitoringDashboard | null>(null);
+export default function SEOHealthDashboard({
+  className,
+}: SEOHealthDashboardProps) {
+  const [dashboardData, setDashboardData] =
+    useState<MonitoringDashboard | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadDashboardData();
-    
+
     // Auto-refresh every 5 minutes
     const interval = setInterval(loadDashboardData, 5 * 60 * 1000);
     return () => clearInterval(interval);
@@ -46,14 +49,14 @@ export default function SEOHealthDashboard({ className }: SEOHealthDashboardProp
 
   const loadDashboardData = async () => {
     try {
-      const response = await fetch('/api/monitoring/dashboard');
-      if (!response.ok) throw new Error('Failed to load dashboard data');
-      
+      const response = await fetch("/api/monitoring/dashboard");
+      if (!response.ok) throw new Error("Failed to load dashboard data");
+
       const result = await response.json();
       setDashboardData(result.data);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -91,7 +94,7 @@ export default function SEOHealthDashboard({ className }: SEOHealthDashboardProp
         <AlertTriangle className="h-4 w-4" />
         <AlertDescription>
           Failed to load monitoring dashboard: {error}
-          <button 
+          <button
             onClick={handleRefresh}
             className="ml-2 underline hover:no-underline"
           >
@@ -118,7 +121,9 @@ export default function SEOHealthDashboard({ className }: SEOHealthDashboardProp
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">SEO Health Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            SEO Health Dashboard
+          </h1>
           <p className="text-muted-foreground">
             Monitor your website&apos;s SEO performance and health metrics
           </p>
@@ -209,27 +214,27 @@ export default function SEOHealthDashboard({ className }: SEOHealthDashboardProp
 }
 
 // Overview Card Component
-function OverviewCard({ 
-  title, 
-  value, 
-  type, 
-  icon 
-}: { 
-  title: string; 
-  value: number; 
-  type: 'score' | 'count'; 
-  icon: React.ReactNode; 
+function OverviewCard({
+  title,
+  value,
+  type,
+  icon,
+}: {
+  title: string;
+  value: number;
+  type: "score" | "count";
+  icon: React.ReactNode;
 }) {
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getCountColor = (count: number) => {
-    if (count === 0) return 'text-green-600';
-    if (count <= 3) return 'text-yellow-600';
-    return 'text-red-600';
+    if (count === 0) return "text-green-600";
+    if (count <= 3) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
@@ -239,12 +244,12 @@ function OverviewCard({
         {icon}
       </CardHeader>
       <CardContent>
-        <div className={`text-2xl font-bold ${type === 'score' ? getScoreColor(value) : getCountColor(value)}`}>
-          {type === 'score' ? `${value}%` : value}
+        <div
+          className={`text-2xl font-bold ${type === "score" ? getScoreColor(value) : getCountColor(value)}`}
+        >
+          {type === "score" ? `${value}%` : value}
         </div>
-        {type === 'score' && (
-          <Progress value={value} className="mt-2" />
-        )}
+        {type === "score" && <Progress value={value} className="mt-2" />}
       </CardContent>
     </Card>
   );
@@ -262,7 +267,9 @@ function RecentAlertsCard({ alerts }: { alerts: MonitoringAlert[] }) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">No recent alerts. Everything looks good!</p>
+          <p className="text-muted-foreground">
+            No recent alerts. Everything looks good!
+          </p>
         </CardContent>
       </Card>
     );
@@ -275,17 +282,29 @@ function RecentAlertsCard({ alerts }: { alerts: MonitoringAlert[] }) {
       </CardHeader>
       <CardContent className="space-y-3">
         {alerts.slice(0, 5).map((alert) => (
-          <div key={alert.id} className="flex items-start gap-3 p-3 rounded-lg border">
-            <AlertTriangle className={`h-4 w-4 mt-0.5 ${
-              alert.severity === 'critical' ? 'text-red-600' :
-              alert.severity === 'high' ? 'text-orange-600' :
-              alert.severity === 'medium' ? 'text-yellow-600' :
-              'text-blue-600'
-            }`} />
+          <div
+            key={alert.id}
+            className="flex items-start gap-3 p-3 rounded-lg border"
+          >
+            <AlertTriangle
+              className={`h-4 w-4 mt-0.5 ${
+                alert.severity === "critical"
+                  ? "text-red-600"
+                  : alert.severity === "high"
+                    ? "text-orange-600"
+                    : alert.severity === "medium"
+                      ? "text-yellow-600"
+                      : "text-blue-600"
+              }`}
+            />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <p className="font-medium text-sm">{alert.title}</p>
-                <Badge variant={alert.severity === 'critical' ? 'destructive' : 'secondary'}>
+                <Badge
+                  variant={
+                    alert.severity === "critical" ? "destructive" : "secondary"
+                  }
+                >
                   {alert.severity}
                 </Badge>
               </div>
@@ -302,9 +321,10 @@ function RecentAlertsCard({ alerts }: { alerts: MonitoringAlert[] }) {
 }
 
 // Top Issues Card
-function TopIssuesCard({ issues }: { issues: any[] }) { // eslint-disable-line @typescript-eslint/no-explicit-any
+function TopIssuesCard({ issues }: { issues: any[] }) {
+  // eslint-disable-line @typescript-eslint/no-explicit-any
   const priorityIssues = issues
-    .filter(issue => issue.impact === 'high')
+    .filter((issue) => issue.impact === "high")
     .slice(0, 5);
 
   return (
@@ -314,18 +334,29 @@ function TopIssuesCard({ issues }: { issues: any[] }) { // eslint-disable-line @
       </CardHeader>
       <CardContent className="space-y-3">
         {priorityIssues.length === 0 ? (
-          <p className="text-muted-foreground">No high-priority issues found.</p>
+          <p className="text-muted-foreground">
+            No high-priority issues found.
+          </p>
         ) : (
           priorityIssues.map((issue, index) => (
-            <div key={index} className="flex items-start gap-3 p-3 rounded-lg border">
-              <div className={`h-2 w-2 rounded-full mt-2 ${
-                issue.type === 'error' ? 'bg-red-600' :
-                issue.type === 'warning' ? 'bg-yellow-600' :
-                'bg-blue-600'
-              }`} />
+            <div
+              key={index}
+              className="flex items-start gap-3 p-3 rounded-lg border"
+            >
+              <div
+                className={`h-2 w-2 rounded-full mt-2 ${
+                  issue.type === "error"
+                    ? "bg-red-600"
+                    : issue.type === "warning"
+                      ? "bg-yellow-600"
+                      : "bg-blue-600"
+                }`}
+              />
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-sm">{issue.message}</p>
-                <p className="text-sm text-muted-foreground">{issue.recommendation}</p>
+                <p className="text-sm text-muted-foreground">
+                  {issue.recommendation}
+                </p>
                 <Badge variant="outline" className="mt-1">
                   {issue.category}
                 </Badge>
@@ -349,23 +380,27 @@ function CoreWebVitalsCard({ metrics }: { metrics: CoreWebVitalsMetrics }) {
     };
 
     const threshold = thresholds[metric as keyof typeof thresholds];
-    if (!threshold) return 'unknown';
+    if (!threshold) return "unknown";
 
-    if (value <= threshold.good) return 'good';
-    if (value <= threshold.poor) return 'needs-improvement';
-    return 'poor';
+    if (value <= threshold.good) return "good";
+    if (value <= threshold.poor) return "needs-improvement";
+    return "poor";
   };
 
   const formatValue = (metric: string, value: number) => {
-    if (metric === 'cls') return value.toFixed(3);
+    if (metric === "cls") return value.toFixed(3);
     return `${Math.round(value)}ms`;
   };
 
   const vitalsData = [
-    { name: 'LCP', value: metrics.lcp, description: 'Largest Contentful Paint' },
-    { name: 'FID', value: metrics.fid, description: 'First Input Delay' },
-    { name: 'CLS', value: metrics.cls, description: 'Cumulative Layout Shift' },
-    { name: 'TTFB', value: metrics.ttfb, description: 'Time to First Byte' },
+    {
+      name: "LCP",
+      value: metrics.lcp,
+      description: "Largest Contentful Paint",
+    },
+    { name: "FID", value: metrics.fid, description: "First Input Delay" },
+    { name: "CLS", value: metrics.cls, description: "Cumulative Layout Shift" },
+    { name: "TTFB", value: metrics.ttfb, description: "Time to First Byte" },
   ];
 
   return (
@@ -379,23 +414,41 @@ function CoreWebVitalsCard({ metrics }: { metrics: CoreWebVitalsMetrics }) {
       <CardContent>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {vitalsData.map((vital) => {
-            const status = getVitalsStatus(vital.name.toLowerCase(), vital.value);
+            const status = getVitalsStatus(
+              vital.name.toLowerCase(),
+              vital.value,
+            );
             return (
-              <div key={vital.name} className="text-center p-4 rounded-lg border">
-                <div className={`text-2xl font-bold ${
-                  status === 'good' ? 'text-green-600' :
-                  status === 'needs-improvement' ? 'text-yellow-600' :
-                  'text-red-600'
-                }`}>
+              <div
+                key={vital.name}
+                className="text-center p-4 rounded-lg border"
+              >
+                <div
+                  className={`text-2xl font-bold ${
+                    status === "good"
+                      ? "text-green-600"
+                      : status === "needs-improvement"
+                        ? "text-yellow-600"
+                        : "text-red-600"
+                  }`}
+                >
                   {formatValue(vital.name.toLowerCase(), vital.value)}
                 </div>
                 <div className="text-sm font-medium">{vital.name}</div>
-                <div className="text-xs text-muted-foreground">{vital.description}</div>
-                <Badge 
-                  variant={status === 'good' ? 'default' : status === 'needs-improvement' ? 'secondary' : 'destructive'}
+                <div className="text-xs text-muted-foreground">
+                  {vital.description}
+                </div>
+                <Badge
+                  variant={
+                    status === "good"
+                      ? "default"
+                      : status === "needs-improvement"
+                        ? "secondary"
+                        : "destructive"
+                  }
                   className="mt-2"
                 >
-                  {status.replace('-', ' ')}
+                  {status.replace("-", " ")}
                 </Badge>
               </div>
             );
@@ -409,10 +462,26 @@ function CoreWebVitalsCard({ metrics }: { metrics: CoreWebVitalsMetrics }) {
 // SEO Health Card
 function SEOHealthCard({ health }: { health: SEOHealthCheck }) {
   const checkCategories = [
-    { name: 'Meta Tags', data: health.checks.metaTags, icon: <Globe className="h-4 w-4" /> },
-    { name: 'Structured Data', data: health.checks.structuredData, icon: <Search className="h-4 w-4" /> },
-    { name: 'Performance', data: health.checks.performance, icon: <Zap className="h-4 w-4" /> },
-    { name: 'Indexability', data: health.checks.indexability, icon: <Eye className="h-4 w-4" /> },
+    {
+      name: "Meta Tags",
+      data: health.checks.metaTags,
+      icon: <Globe className="h-4 w-4" />,
+    },
+    {
+      name: "Structured Data",
+      data: health.checks.structuredData,
+      icon: <Search className="h-4 w-4" />,
+    },
+    {
+      name: "Performance",
+      data: health.checks.performance,
+      icon: <Zap className="h-4 w-4" />,
+    },
+    {
+      name: "Indexability",
+      data: health.checks.indexability,
+      icon: <Eye className="h-4 w-4" />,
+    },
   ];
 
   return (
@@ -423,14 +492,24 @@ function SEOHealthCard({ health }: { health: SEOHealthCheck }) {
             <Search className="h-5 w-5" />
             SEO Health Check
           </span>
-          <Badge variant={health.status === 'healthy' ? 'default' : health.status === 'warning' ? 'secondary' : 'destructive'}>
+          <Badge
+            variant={
+              health.status === "healthy"
+                ? "default"
+                : health.status === "warning"
+                  ? "secondary"
+                  : "destructive"
+            }
+          >
             {health.status}
           </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center">
-          <div className="text-4xl font-bold text-primary mb-2">{health.score}/100</div>
+          <div className="text-4xl font-bold text-primary mb-2">
+            {health.score}/100
+          </div>
           <Progress value={health.score} className="w-full" />
         </div>
 
@@ -469,15 +548,22 @@ function SearchQueriesCard({ queries }: { queries: SearchQueryData[] }) {
       </CardHeader>
       <CardContent>
         {topQueries.length === 0 ? (
-          <p className="text-muted-foreground">No search query data available.</p>
+          <p className="text-muted-foreground">
+            No search query data available.
+          </p>
         ) : (
           <div className="space-y-4">
             {topQueries.map((query, index) => (
-              <div key={index} className="flex items-center justify-between p-3 rounded-lg border">
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 rounded-lg border"
+              >
                 <div className="flex-1 min-w-0">
                   <p className="font-medium truncate">{query.query}</p>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>{query.impressions.toLocaleString()} impressions</span>
+                    <span>
+                      {query.impressions.toLocaleString()} impressions
+                    </span>
                     <span>{query.clicks} clicks</span>
                     <span>{(query.ctr * 100).toFixed(1)}% CTR</span>
                   </div>
@@ -495,7 +581,8 @@ function SearchQueriesCard({ queries }: { queries: SearchQueryData[] }) {
 }
 
 // Competitor Insights Card
-function CompetitorInsightsCard({ insights }: { insights: any[] }) { // eslint-disable-line @typescript-eslint/no-explicit-any
+function CompetitorInsightsCard({ insights }: { insights: any[] }) {
+  // eslint-disable-line @typescript-eslint/no-explicit-any
   return (
     <Card>
       <CardHeader>
@@ -506,14 +593,17 @@ function CompetitorInsightsCard({ insights }: { insights: any[] }) { // eslint-d
       </CardHeader>
       <CardContent>
         {insights.length === 0 ? (
-          <p className="text-muted-foreground">No competitor insights available.</p>
+          <p className="text-muted-foreground">
+            No competitor insights available.
+          </p>
         ) : (
           <div className="space-y-3">
             {insights.slice(0, 5).map((insight, index) => (
               <div key={index} className="p-3 rounded-lg border">
                 <p className="font-medium">{insight.keyword}</p>
                 <p className="text-sm text-muted-foreground">
-                  Opportunity: {insight.opportunity} • Volume: {insight.searchVolume?.toLocaleString()}
+                  Opportunity: {insight.opportunity} • Volume:{" "}
+                  {insight.searchVolume?.toLocaleString()}
                 </p>
               </div>
             ))}
@@ -537,17 +627,27 @@ function AlertsManagementCard({ alerts }: { alerts: MonitoringAlert[] }) {
         ) : (
           <div className="space-y-4">
             {alerts.map((alert) => (
-              <div key={alert.id} className="flex items-start justify-between p-4 rounded-lg border">
+              <div
+                key={alert.id}
+                className="flex items-start justify-between p-4 rounded-lg border"
+              >
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className={`h-4 w-4 mt-1 ${
-                    alert.severity === 'critical' ? 'text-red-600' :
-                    alert.severity === 'high' ? 'text-orange-600' :
-                    alert.severity === 'medium' ? 'text-yellow-600' :
-                    'text-blue-600'
-                  }`} />
+                  <AlertTriangle
+                    className={`h-4 w-4 mt-1 ${
+                      alert.severity === "critical"
+                        ? "text-red-600"
+                        : alert.severity === "high"
+                          ? "text-orange-600"
+                          : alert.severity === "medium"
+                            ? "text-yellow-600"
+                            : "text-blue-600"
+                    }`}
+                  />
                   <div>
                     <p className="font-medium">{alert.title}</p>
-                    <p className="text-sm text-muted-foreground">{alert.message}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {alert.message}
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">
                       {new Date(alert.timestamp).toLocaleString()}
                     </p>

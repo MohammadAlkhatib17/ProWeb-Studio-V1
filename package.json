@@ -1,4 +1,33 @@
 {
+  "name": "proweb-studio-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "site"
+  ],
+  "engines": {
+    "node": ">=18.17.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace=site",
+    "build": "npm run build --workspace=site",
+    "start": "npm run start --workspace=site",
+    "test": "npm run test --workspace=site",
+    "lint": "npm run lint --workspace=site",
+    "typecheck": "npm run typecheck --workspace=site",
+    "format": "npm run format --workspace=site",
+    "format:check": "npm run format:check --workspace=site",
+    "lint:fix": "npm run lint:fix --workspace=site",
+    "analyze": "npm run analyze --workspace=site",
+    "build:analyze": "npm run build:analyze --workspace=site",
+    "build:prod": "npm run build:prod --workspace=site",
+    "test:e2e": "npm run test:e2e --workspace=site",
+    "ci:quality-check": "npm run ci:quality-check --workspace=site",
+    "ci:build": "npm run ci:build --workspace=site",
+    "cleanup:inventory": "npm run cleanup:inventory --workspace=site",
+    "cleanup:check-unused": "npm run cleanup:check-unused --workspace=site"
+  },
   "dependencies": {
     "@upstash/ratelimit": "^2.0.6",
     "@upstash/redis": "^1.35.3",

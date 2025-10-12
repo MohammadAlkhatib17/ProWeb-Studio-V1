@@ -6,8 +6,13 @@
 export interface PreloadImageConfig {
   src: string;
   sizes?: string;
-  priority?: 'high' | 'low';
-  type?: 'image/avif' | 'image/webp' | 'image/jpeg' | 'image/png' | 'image/svg+xml';
+  priority?: "high" | "low";
+  type?:
+    | "image/avif"
+    | "image/webp"
+    | "image/jpeg"
+    | "image/png"
+    | "image/svg+xml";
 }
 
 /**
@@ -16,13 +21,13 @@ export interface PreloadImageConfig {
  */
 export function generateImagePreload({
   src,
-  sizes = '100vw',
-  priority = 'high',
-  type = 'image/avif'
+  sizes = "100vw",
+  priority = "high",
+  type = "image/avif",
 }: PreloadImageConfig) {
   return {
-    rel: 'preload',
-    as: 'image',
+    rel: "preload",
+    as: "image",
     href: src,
     ...(sizes && { imageSizes: sizes }),
     ...(priority && { fetchPriority: priority }),
@@ -37,14 +42,14 @@ export function generateImagePreload({
 export function generateResponsiveSrcSet(
   baseSrc: string,
   widths: number[] = [640, 750, 828, 1080, 1200, 1920],
-  format: 'avif' | 'webp' | 'jpg' = 'avif'
+  format: "avif" | "webp" | "jpg" = "avif",
 ): string {
   return widths
-    .map(width => {
+    .map((width) => {
       const src = baseSrc.replace(/\.(jpg|jpeg|png|webp|avif)$/i, `.${format}`);
       return `${src}?w=${width} ${width}w`;
     })
-    .join(', ');
+    .join(", ");
 }
 
 /**
@@ -53,15 +58,15 @@ export function generateResponsiveSrcSet(
  */
 export const CRITICAL_IMAGES = {
   // Hero backgrounds
-  heroPortal: '/assets/hero_portal_background.avif',
-  servicesNebula: '/assets/nebula_services_background.avif',
-  contactBeacon: '/assets/glowing_beacon_contact.avif',
-  
+  heroPortal: "/assets/hero_portal_background.avif",
+  servicesNebula: "/assets/nebula_services_background.avif",
+  contactBeacon: "/assets/glowing_beacon_contact.avif",
+
   // Logo and branding
-  logoIcon: '/assets/logo/logo-proweb-icon.svg',
-  
+  logoIcon: "/assets/logo/logo-proweb-icon.svg",
+
   // Team/About images
-  teamCoreStar: '/assets/team_core_star.webp',
+  teamCoreStar: "/assets/team_core_star.webp",
 } as const;
 
 /**
@@ -72,28 +77,28 @@ export function getCriticalImagePreloads(): PreloadImageConfig[] {
     // Hero images - highest priority
     {
       src: CRITICAL_IMAGES.heroPortal,
-      sizes: '100vw',
-      priority: 'high',
-      type: 'image/avif'
+      sizes: "100vw",
+      priority: "high",
+      type: "image/avif",
     },
     {
       src: CRITICAL_IMAGES.servicesNebula,
-      sizes: '100vw',
-      priority: 'high',
-      type: 'image/avif'
+      sizes: "100vw",
+      priority: "high",
+      type: "image/avif",
     },
     {
       src: CRITICAL_IMAGES.contactBeacon,
-      sizes: '100vw',
-      priority: 'high',
-      type: 'image/avif'
+      sizes: "100vw",
+      priority: "high",
+      type: "image/avif",
     },
     // Logo - medium priority
     {
       src: CRITICAL_IMAGES.logoIcon,
-      sizes: '48px',
-      priority: 'high',
-      type: 'image/svg+xml'
+      sizes: "48px",
+      priority: "high",
+      type: "image/svg+xml",
     },
   ];
 }
@@ -103,22 +108,25 @@ export function getCriticalImagePreloads(): PreloadImageConfig[] {
  * Useful for dynamic image loading
  */
 export function useImagePreloader() {
-  const preloadImage = (src: string, priority: 'high' | 'low' = 'low') => {
-    if (typeof window === 'undefined') return;
-    
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
+  const preloadImage = (src: string, priority: "high" | "low" = "low") => {
+    if (typeof window === "undefined") return;
+
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
     link.href = src;
-    if (priority === 'high') {
-      link.setAttribute('fetchpriority', 'high'); // Note: DOM attribute remains lowercase
+    if (priority === "high") {
+      link.setAttribute("fetchpriority", "high"); // Note: DOM attribute remains lowercase
     }
-    
+
     document.head.appendChild(link);
   };
 
-  const preloadImages = (images: string[], priority: 'high' | 'low' = 'low') => {
-    images.forEach(src => preloadImage(src, priority));
+  const preloadImages = (
+    images: string[],
+    priority: "high" | "low" = "low",
+  ) => {
+    images.forEach((src) => preloadImage(src, priority));
   };
 
   return { preloadImage, preloadImages };
@@ -127,37 +135,39 @@ export function useImagePreloader() {
 /**
  * Automatically preload critical images based on route
  */
-export function getRouteSpecificPreloads(pathname: string): PreloadImageConfig[] {
+export function getRouteSpecificPreloads(
+  pathname: string,
+): PreloadImageConfig[] {
   const preloads: PreloadImageConfig[] = [];
-  
+
   switch (pathname) {
-    case '/':
+    case "/":
       preloads.push({
         src: CRITICAL_IMAGES.heroPortal,
-        sizes: '100vw',
-        priority: 'high',
-        type: 'image/avif'
+        sizes: "100vw",
+        priority: "high",
+        type: "image/avif",
       });
       break;
-      
-    case '/diensten':
+
+    case "/diensten":
       preloads.push({
         src: CRITICAL_IMAGES.servicesNebula,
-        sizes: '100vw',
-        priority: 'high',
-        type: 'image/avif'
+        sizes: "100vw",
+        priority: "high",
+        type: "image/avif",
       });
       break;
-      
-    case '/contact':
+
+    case "/contact":
       preloads.push({
         src: CRITICAL_IMAGES.contactBeacon,
-        sizes: '100vw',
-        priority: 'high',
-        type: 'image/avif'
+        sizes: "100vw",
+        priority: "high",
+        type: "image/avif",
       });
       break;
   }
-  
+
   return preloads;
 }

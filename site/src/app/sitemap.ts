@@ -1,33 +1,43 @@
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
 
 interface SitemapEntry {
   url: string;
   lastModified: Date;
   changeFrequency:
-    | 'always'
-    | 'hourly'
-    | 'daily'
-    | 'weekly'
-    | 'monthly'
-    | 'yearly'
-    | 'never';
+    | "always"
+    | "hourly"
+    | "daily"
+    | "weekly"
+    | "monthly"
+    | "yearly"
+    | "never";
   priority: number;
 }
 
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+const SITE_URL = (
+  process.env.SITE_URL ??
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  "https://prowebstudio.nl"
+).replace(/\/+$/, "");
 
 /**
  * Maps route paths to their corresponding source files for git-based lastmod
  */
 const ROUTE_FILE_MAP: Record<string, string[]> = {
-  '/': ['src/app/page.tsx', 'src/components/Hero.tsx', 'src/components/HeroCanvas.tsx'],
-  '/contact': ['src/app/contact/page.tsx', 'src/components/contact/ContactForm.tsx'],
-  '/portfolio': ['src/app/portfolio/page.tsx', 'src/components/portfolio/PortfolioGrid.tsx'],
-  '/werkwijze': ['src/app/werkwijze/page.tsx'],
-  '/over-ons': ['src/app/over-ons/page.tsx'],
-  '/overzicht-site': ['src/app/overzicht-site/page.tsx'],
-  '/privacy': ['src/app/privacy/page.tsx'],
-  '/voorwaarden': ['src/app/voorwaarden/page.tsx'],
+  "/": ["src/app/page.tsx", "src/components/HeroCanvas.tsx"],
+  "/contact": [
+    "src/app/contact/page.tsx",
+    "src/components/contact/ContactForm.tsx",
+  ],
+  "/portfolio": [
+    "src/app/portfolio/page.tsx",
+    "src/components/portfolio/PortfolioGrid.tsx",
+  ],
+  "/werkwijze": ["src/app/werkwijze/page.tsx"],
+  "/over-ons": ["src/app/over-ons/page.tsx"],
+  "/overzicht-site": ["src/app/overzicht-site/page.tsx"],
+  "/privacy": ["src/app/privacy/page.tsx"],
+  "/voorwaarden": ["src/app/voorwaarden/page.tsx"],
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -39,58 +49,58 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes: Array<{
     path: string;
     priority: number;
-    changeFreq: SitemapEntry['changeFrequency'];
+    changeFreq: SitemapEntry["changeFrequency"];
     files: string[];
   }> = [
     {
-      path: '/',
+      path: "/",
       priority: 1.0, // Home: highest priority
-      changeFreq: 'daily', // Home page changes frequently with updates
-      files: ROUTE_FILE_MAP['/'],
+      changeFreq: "daily", // Home page changes frequently with updates
+      files: ROUTE_FILE_MAP["/"],
     },
     {
-      path: '/contact',
+      path: "/contact",
       priority: 0.9, // Contact: critical for conversions
-      changeFreq: 'monthly', // Contact info rarely changes
-      files: ROUTE_FILE_MAP['/contact'],
+      changeFreq: "monthly", // Contact info rarely changes
+      files: ROUTE_FILE_MAP["/contact"],
     },
     {
-      path: '/portfolio',
+      path: "/portfolio",
       priority: 0.9, // Portfolio: critical for showcasing work
-      changeFreq: 'weekly', // Portfolio gets updated with new projects
-      files: ROUTE_FILE_MAP['/portfolio'],
+      changeFreq: "weekly", // Portfolio gets updated with new projects
+      files: ROUTE_FILE_MAP["/portfolio"],
     },
     // Note: Service pages (/diensten/*) are now handled by sitemap-services.xml
     // Note: Location pages (/locaties/*) are now handled by sitemap-locations.xml
     {
-      path: '/werkwijze',
+      path: "/werkwijze",
       priority: 0.8, // Process: important for understanding value prop
-      changeFreq: 'monthly', // Process documentation updates monthly
-      files: ROUTE_FILE_MAP['/werkwijze'],
+      changeFreq: "monthly", // Process documentation updates monthly
+      files: ROUTE_FILE_MAP["/werkwijze"],
     },
     {
-      path: '/over-ons',
+      path: "/over-ons",
       priority: 0.8, // About: important for trust and credibility
-      changeFreq: 'monthly', // Team and company info updates monthly
-      files: ROUTE_FILE_MAP['/over-ons'],
+      changeFreq: "monthly", // Team and company info updates monthly
+      files: ROUTE_FILE_MAP["/over-ons"],
     },
     {
-      path: '/overzicht-site',
+      path: "/overzicht-site",
       priority: 0.5, // Site overview: informational
-      changeFreq: 'yearly', // Technical overview rarely changes
-      files: ROUTE_FILE_MAP['/overzicht-site'],
+      changeFreq: "yearly", // Technical overview rarely changes
+      files: ROUTE_FILE_MAP["/overzicht-site"],
     },
     {
-      path: '/privacy',
+      path: "/privacy",
       priority: 0.4, // Privacy: legal requirement but lower conversion priority
-      changeFreq: 'yearly', // Privacy policy updates annually or when regulations change
-      files: ROUTE_FILE_MAP['/privacy'],
+      changeFreq: "yearly", // Privacy policy updates annually or when regulations change
+      files: ROUTE_FILE_MAP["/privacy"],
     },
     {
-      path: '/voorwaarden',
+      path: "/voorwaarden",
       priority: 0.4, // Terms: legal requirement but lower conversion priority
-      changeFreq: 'yearly', // Terms update annually or when regulations change
-      files: ROUTE_FILE_MAP['/voorwaarden'],
+      changeFreq: "yearly", // Terms update annually or when regulations change
+      files: ROUTE_FILE_MAP["/voorwaarden"],
     },
     // Note: /speeltuin is excluded as it's marked noindex in middleware
   ];

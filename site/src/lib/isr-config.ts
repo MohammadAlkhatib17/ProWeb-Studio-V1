@@ -10,32 +10,32 @@ export const ISR_CONFIG = {
   // Static content that rarely changes (high performance)
   STATIC: {
     revalidate: 86400, // 24 hours
-    description: 'Static pages like About, Privacy, Terms'
+    description: "Static pages like About, Privacy, Terms",
   },
-  
+
   // Marketing content that changes occasionally (balanced)
   MARKETING: {
     revalidate: 3600, // 1 hour
-    description: 'Services, Portfolio, Landing pages'
+    description: "Services, Portfolio, Landing pages",
   },
-  
+
   // Dynamic content that changes frequently (fresh content)
   DYNAMIC: {
     revalidate: 900, // 15 minutes
-    description: 'Blog posts, News, Testimonials'
+    description: "Blog posts, News, Testimonials",
   },
-  
+
   // Location-based content (moderate freshness)
   LOCATION: {
     revalidate: 1800, // 30 minutes
-    description: 'Location-specific pages'
+    description: "Location-specific pages",
   },
-  
+
   // Contact and form pages (moderate freshness)
   CONTACT: {
     revalidate: 1800, // 30 minutes
-    description: 'Contact forms, business info'
-  }
+    description: "Contact forms, business info",
+  },
 } as const;
 
 /**
@@ -45,10 +45,10 @@ export function generateISRMetadata(
   title: string,
   description: string,
   route: string,
-  revalidateTime?: number
+  revalidateTime?: number,
 ) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prowebstudio.nl';
-  
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://prowebstudio.nl";
+
   return {
     title,
     description,
@@ -60,12 +60,12 @@ export function generateISRMetadata(
       title,
       description,
       url: `${siteUrl}${route}`,
-      siteName: 'ProWeb Studio',
-      type: 'website',
-      locale: 'nl_NL',
+      siteName: "ProWeb Studio",
+      type: "website",
+      locale: "nl_NL",
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title,
       description,
     },
@@ -76,13 +76,13 @@ export function generateISRMetadata(
       googleBot: {
         index: true,
         follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       },
     },
     other: {
-      'cache-control': revalidateTime 
+      "cache-control": revalidateTime
         ? `s-maxage=${revalidateTime}, stale-while-revalidate=${revalidateTime * 2}`
         : undefined,
     },
@@ -94,78 +94,78 @@ export function generateISRMetadata(
  */
 export const PAGE_CONFIGS = {
   // Homepage - high traffic, moderate updates
-  '/': {
+  "/": {
     revalidate: ISR_CONFIG.MARKETING.revalidate,
     metadata: generateISRMetadata(
-      'ProWeb Studio - Professionele Websites & 3D Web Ervaringen',
-      'Ontdek innovatieve webdesign en 3D web ervaringen bij ProWeb Studio. Wij maken professionele websites die opvallen en converteren.',
-      '/',
-      ISR_CONFIG.MARKETING.revalidate
+      "ProWeb Studio - Professionele Websites & 3D Web Ervaringen",
+      "Ontdek innovatieve webdesign en 3D web ervaringen bij ProWeb Studio. Wij maken professionele websites die opvallen en converteren.",
+      "/",
+      ISR_CONFIG.MARKETING.revalidate,
     ),
   },
-  
+
   // Services pages - marketing content
-  '/diensten': {
+  "/diensten": {
     revalidate: ISR_CONFIG.MARKETING.revalidate,
     metadata: generateISRMetadata(
-      'Onze Diensten - Webdesign & Ontwikkeling | ProWeb Studio',
-      'Professionele webdesign, 3D web ervaringen, SEO optimalisatie en meer. Ontdek onze volledige dienstverlening.',
-      '/diensten',
-      ISR_CONFIG.MARKETING.revalidate
+      "Onze Diensten - Webdesign & Ontwikkeling | ProWeb Studio",
+      "Professionele webdesign, 3D web ervaringen, SEO optimalisatie en meer. Ontdek onze volledige dienstverlening.",
+      "/diensten",
+      ISR_CONFIG.MARKETING.revalidate,
     ),
   },
-  
+
   // Process page - static content
-  '/werkwijze': {
+  "/werkwijze": {
     revalidate: ISR_CONFIG.STATIC.revalidate,
     metadata: generateISRMetadata(
-      'Onze Werkwijze - Transparant Proces | ProWeb Studio',
-      'Ontdek onze stap-voor-stap werkwijze voor het ontwikkelen van jouw perfecte website. Transparant, efficiënt en resultaatgericht.',
-      '/werkwijze',
-      ISR_CONFIG.STATIC.revalidate
+      "Onze Werkwijze - Transparant Proces | ProWeb Studio",
+      "Ontdek onze stap-voor-stap werkwijze voor het ontwikkelen van jouw perfecte website. Transparant, efficiënt en resultaatgericht.",
+      "/werkwijze",
+      ISR_CONFIG.STATIC.revalidate,
     ),
   },
-  
+
   // Contact page - moderate updates
-  '/contact': {
+  "/contact": {
     revalidate: ISR_CONFIG.CONTACT.revalidate,
     metadata: generateISRMetadata(
-      'Contact - Neem Contact Op | ProWeb Studio',
-      'Neem contact op met ProWeb Studio voor een vrijblijvend gesprek over jouw website project. Bel, mail of plan een afspraak.',
-      '/contact',
-      ISR_CONFIG.CONTACT.revalidate
+      "Contact - Neem Contact Op | ProWeb Studio",
+      "Neem contact op met ProWeb Studio voor een vrijblijvend gesprek over jouw website project. Bel, mail of plan een afspraak.",
+      "/contact",
+      ISR_CONFIG.CONTACT.revalidate,
     ),
   },
-  
+
   // Portfolio - marketing content
-  '/portfolio': {
+  "/portfolio": {
     revalidate: ISR_CONFIG.MARKETING.revalidate,
     metadata: generateISRMetadata(
-      'Portfolio - Onze Mooiste Projecten | ProWeb Studio',
-      'Bekijk onze portfolio met professionele websites en 3D web ervaringen. Laat je inspireren door onze gerealiseerde projecten.',
-      '/portfolio',
-      ISR_CONFIG.MARKETING.revalidate
+      "Portfolio - Onze Mooiste Projecten | ProWeb Studio",
+      "Bekijk onze portfolio met professionele websites en 3D web ervaringen. Laat je inspireren door onze gerealiseerde projecten.",
+      "/portfolio",
+      ISR_CONFIG.MARKETING.revalidate,
     ),
   },
-  
+
   // Static pages
-  '/privacy': {
+  "/privacy": {
     revalidate: ISR_CONFIG.STATIC.revalidate,
     metadata: generateISRMetadata(
-      'Privacybeleid | ProWeb Studio',
-      'Lees ons privacybeleid en ontdek hoe wij omgaan met jouw persoonlijke gegevens.',
-      '/privacy',
-      ISR_CONFIG.STATIC.revalidate
+      "Privacybeleid | ProWeb Studio",
+      "Lees ons privacybeleid en ontdek hoe wij omgaan met jouw persoonlijke gegevens.",
+      "/privacy",
+      ISR_CONFIG.STATIC.revalidate,
     ),
   },
-  
-  '/voorwaarden': {
+
+  "/voorwaarden": {
     revalidate: ISR_CONFIG.STATIC.revalidate,
     metadata: generateISRMetadata(
-      'Algemene Voorwaarden | ProWeb Studio',
-      'Lees onze algemene voorwaarden voor het gebruik van onze diensten.',
-      '/voorwaarden',
-      ISR_CONFIG.STATIC.revalidate
+      "Algemene Voorwaarden | ProWeb Studio",
+      "Lees onze algemene voorwaarden voor het gebruik van onze diensten.",
+      "/voorwaarden",
+      ISR_CONFIG.STATIC.revalidate,
     ),
   },
 } as const;
@@ -174,15 +174,17 @@ export const PAGE_CONFIGS = {
  * Get ISR config for a specific route
  */
 export function getISRConfig(route: string) {
-  return PAGE_CONFIGS[route as keyof typeof PAGE_CONFIGS] || {
-    revalidate: ISR_CONFIG.MARKETING.revalidate,
-    metadata: generateISRMetadata(
-      'ProWeb Studio',
-      'Professionele websites en 3D web ervaringen',
-      route,
-      ISR_CONFIG.MARKETING.revalidate
-    ),
-  };
+  return (
+    PAGE_CONFIGS[route as keyof typeof PAGE_CONFIGS] || {
+      revalidate: ISR_CONFIG.MARKETING.revalidate,
+      metadata: generateISRMetadata(
+        "ProWeb Studio",
+        "Professionele websites en 3D web ervaringen",
+        route,
+        ISR_CONFIG.MARKETING.revalidate,
+      ),
+    }
+  );
 }
 
 /**

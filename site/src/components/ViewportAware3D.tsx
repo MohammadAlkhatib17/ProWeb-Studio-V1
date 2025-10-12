@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 // Lightweight viewport detection hook
-function useInViewport(threshold = 0.1, rootMargin = '100px') {
+function useInViewport(threshold = 0.1, rootMargin = "100px") {
   const [isInView, setIsInView] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -13,7 +13,7 @@ function useInViewport(threshold = 0.1, rootMargin = '100px') {
     if (!element || hasLoaded) return;
 
     // Fallback for older browsers
-    if (!('IntersectionObserver' in window)) {
+    if (!("IntersectionObserver" in window)) {
       setIsInView(true);
       setHasLoaded(true);
       return;
@@ -27,7 +27,7 @@ function useInViewport(threshold = 0.1, rootMargin = '100px') {
           observer.disconnect();
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     observer.observe(element);
@@ -44,14 +44,15 @@ interface ViewportAware3DProps {
   componentProps?: Record<string, unknown>;
 }
 
-export default function ViewportAware3D({ 
-  importFn, 
-  fallback, 
+export default function ViewportAware3D({
+  importFn,
+  fallback,
   className,
-  componentProps = {}
+  componentProps = {},
 }: ViewportAware3DProps) {
-  const { ref, isInView } = useInViewport(0.1, '100px');
-  const [LazyComponent, setLazyComponent] = useState<React.ComponentType<unknown> | null>(null);
+  const { ref, isInView } = useInViewport(0.1, "100px");
+  const [LazyComponent, setLazyComponent] =
+    useState<React.ComponentType<unknown> | null>(null);
 
   useEffect(() => {
     if (isInView && !LazyComponent) {
@@ -61,8 +62,8 @@ export default function ViewportAware3D({
   }, [isInView, importFn, LazyComponent]);
 
   const defaultFallback = (
-    <div 
-      className={`bg-cosmic-900/50 animate-pulse rounded-lg ${className || 'h-[300px] sm:h-[350px] md:h-[400px] w-full'}`}
+    <div
+      className={`bg-cosmic-900/50 animate-pulse rounded-lg ${className || "h-[300px] sm:h-[350px] md:h-[400px] w-full"}`}
       aria-label="Loading 3D scene..."
     />
   );

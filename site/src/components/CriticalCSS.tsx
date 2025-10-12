@@ -173,11 +173,11 @@ export const CRITICAL_CSS = `
 /**
  * Generate critical CSS with dynamic content based on route
  */
-export function getCriticalCSS(route: string = '/') {
-  let routeSpecificCSS = '';
+export function getCriticalCSS(route: string = "/") {
+  let routeSpecificCSS = "";
 
   switch (route) {
-    case '/':
+    case "/":
       routeSpecificCSS = `
         /* Homepage specific critical CSS */
         .three-canvas {
@@ -190,7 +190,7 @@ export function getCriticalCSS(route: string = '/') {
         }
       `;
       break;
-    case '/diensten':
+    case "/diensten":
       routeSpecificCSS = `
         /* Services page critical CSS */
         .services-grid {
@@ -201,7 +201,7 @@ export function getCriticalCSS(route: string = '/') {
         }
       `;
       break;
-    case '/contact':
+    case "/contact":
       routeSpecificCSS = `
         /* Contact page critical CSS */
         .contact-form {
@@ -218,7 +218,7 @@ export function getCriticalCSS(route: string = '/') {
 /**
  * Critical CSS component to inline above-the-fold styles
  */
-export function CriticalCSS({ route = '/' }: { route?: string }) {
+export function CriticalCSS({ route = "/" }: { route?: string }) {
   const criticalStyles = getCriticalCSS(route);
 
   return (
@@ -247,7 +247,7 @@ export function DeferredCSS({ hrefs }: { hrefs: string[] }) {
           onLoad={(e) => {
             const target = e.target as HTMLLinkElement;
             target.onload = null;
-            target.rel = 'stylesheet';
+            target.rel = "stylesheet";
           }}
         />
       ))}

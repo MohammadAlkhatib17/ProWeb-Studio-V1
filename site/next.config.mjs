@@ -222,29 +222,68 @@ const nextConfig = {
   output: 'standalone',
 
   async headers() {
+    // Environment-controlled CSP toggle
+    const cspReportOnly = process.env.CSP_REPORT_ONLY === 'true';
+    const cspHeaderName = cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy';
+    
+    // Define CSP policy with minimal explicit allowlists
+    function buildCSP() {
+      return [
+        "default-src 'self'",
+        // Script sources - will be enhanced with nonce in middleware for inline scripts
+        "script-src 'self' https://plausible.io https://va.vercel-scripts.com https://www.google.com https://www.gstatic.com https://js.cal.com",
+        // Style sources - unsafe-inline needed for CSS-in-JS and Tailwind
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        // Font sources
+        "font-src 'self' https://fonts.gstatic.com",
+        // Image sources - data: for inline SVGs, blob: for canvas/WebGL
+        "img-src 'self' data: https: blob:",
+        // Media sources
+        "media-src 'self' https:",
+        // Frame sources for embeds
+        "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com",
+        // Connect sources for XHR/fetch
+        "connect-src 'self' https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://api.cal.com",
+        // Object sources
+        "object-src 'none'",
+        // Base URI
+        "base-uri 'self'",
+        // Frame ancestors (replaces X-Frame-Options)
+        "frame-ancestors 'none'",
+        // Form actions
+        "form-action 'self'",
+        // Upgrade insecure requests
+        "upgrade-insecure-requests",
+        // Report URI for violations
+        "report-uri /api/csp-report"
+      ].join('; ');
+    }
+
     return [
       {
         // Immutable caching for static assets by extension
         source: '/:all*(svg|jpg|jpeg|png|webp|avif|gif|ico|css|js|mjs|woff|woff2|ttf|eot)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
       {
+        // Main pages and routes - comprehensive security headers
         source: '/:path*',
         headers: [
-          // Enhanced HSTS with preload
+          // Content Security Policy - single source of truth
+          { key: cspHeaderName, value: buildCSP() },
+          // Strict Transport Security
           {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',
           },
-          // Frame protection
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           // Content type protection
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          // Enhanced referrer policy
+          // Referrer Policy
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          // Permissions policy
+          // Permissions Policy with minimal required permissions
           { 
             key: 'Permissions-Policy', 
             value: [
@@ -264,11 +303,11 @@ const nextConfig = {
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
           // Cross-domain policies
           { key: 'X-Permitted-Cross-Domain-Policies', value: 'none' },
-          // Cross-Origin policies
+          // Cross-Origin policies (avoid breaking R3F/Three.js assets)
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
           // Custom security headers
-          { key: 'X-Security-Version', value: '2.0' },
+          { key: 'X-Security-Version', value: '3.0' },
           { key: 'X-Download-Options', value: 'noopen' },
           // Cache control for general pages
           { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400' },
@@ -290,9 +329,12 @@ const nextConfig = {
           { key: 'Pragma', value: 'no-cache' },
           { key: 'Expires', value: '0' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-API-Version', value: '2.0' },
+          // Use frame-ancestors in CSP instead of X-Frame-Options for consistency
+          { key: cspHeaderName, value: "default-src 'none'; frame-ancestors 'none'" },
+          { key: 'X-API-Version', value: '3.0' },
           { key: 'Vary', value: 'Origin, Accept-Encoding' },
+          // Referrer policy for API endpoints
+          { key: 'Referrer-Policy', value: 'no-referrer' },
         ],
       },
       // Next.js static files - long cache
@@ -309,7 +351,7 @@ const nextConfig = {
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=86400' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: cspHeaderName, value: "default-src 'none'; frame-ancestors 'none'" },
         ],
       },
       // PWA files
@@ -325,15 +367,9 @@ const nextConfig = {
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
           { key: 'Service-Worker-Allowed', value: '/' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
-      // CSP FOR /CONTACT - NOW HANDLED IN MIDDLEWARE.TS WITH DYNAMIC NONCES
-      // The CSP headers for /contact are now set in middleware.ts to support
-      // dynamic nonce generation. This allows for secure inline scripts
-      // without using 'unsafe-inline' directive.
-      //
-      // Report-only and enforced CSP configurations have been moved to
-      // middleware.ts where nonces can be dynamically injected.
     ];
   },
 

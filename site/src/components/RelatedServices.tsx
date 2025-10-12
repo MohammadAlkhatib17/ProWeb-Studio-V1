@@ -1,7 +1,11 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { services, getRelatedServices, type ServiceLink } from '@/config/internal-linking.config';
+import Link from "next/link";
+import {
+  services,
+  getRelatedServices,
+  type ServiceLink,
+} from "@/config/internal-linking.config";
 
 interface RelatedServicesProps {
   currentService?: string;
@@ -10,14 +14,14 @@ interface RelatedServicesProps {
   maxItems?: number;
 }
 
-export default function RelatedServices({ 
-  currentService, 
-  className = '',
+export default function RelatedServices({
+  currentService,
+  className = "",
   showAll = false,
-  maxItems = 3 
+  maxItems = 3,
 }: RelatedServicesProps) {
   // Get related services based on current service, or show popular services
-  const relatedServices = currentService 
+  const relatedServices = currentService
     ? getRelatedServices(currentService)
     : services.slice(0, maxItems);
 
@@ -30,13 +34,14 @@ export default function RelatedServices({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-            {currentService ? 'Gerelateerde Diensten' : 'Onze Populaire Diensten'}
+            {currentService
+              ? "Gerelateerde Diensten"
+              : "Onze Populaire Diensten"}
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto">
-            {currentService 
-              ? 'Ontdek andere diensten die perfect aansluiten bij uw behoeften'
-              : 'Professionele webdiensten voor Nederlandse bedrijven'
-            }
+            {currentService
+              ? "Ontdek andere diensten die perfect aansluiten bij uw behoeften"
+              : "Professionele webdiensten voor Nederlandse bedrijven"}
           </p>
         </div>
 
@@ -82,30 +87,34 @@ export default function RelatedServices({
 }
 
 // Schema.org structured data for related services
-export function RelatedServicesSchema({ relatedServices }: { relatedServices: ServiceLink[] }) {
+export function RelatedServicesSchema({
+  relatedServices,
+}: {
+  relatedServices: ServiceLink[];
+}) {
   const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    '@id': '#related-services',
-    inLanguage: 'nl-NL',
-    name: 'Gerelateerde Diensten',
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": "#related-services",
+    inLanguage: "nl-NL",
+    name: "Gerelateerde Diensten",
     itemListElement: relatedServices.map((service, index) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: index + 1,
       item: {
-        '@type': 'Service',
-        '@id': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prowebstudio.nl'}${service.href}`,
+        "@type": "Service",
+        "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://prowebstudio.nl"}${service.href}`,
         name: service.title,
         description: service.description,
         provider: {
-          '@id': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://prowebstudio.nl'}#organization`,
+          "@id": `${process.env.NEXT_PUBLIC_SITE_URL || "https://prowebstudio.nl"}#organization`,
         },
         areaServed: {
-          '@type': 'Place',
-          name: 'Netherlands',
+          "@type": "Place",
+          name: "Netherlands",
           address: {
-            '@type': 'PostalAddress',
-            addressCountry: 'NL',
+            "@type": "PostalAddress",
+            addressCountry: "NL",
           },
         },
       },

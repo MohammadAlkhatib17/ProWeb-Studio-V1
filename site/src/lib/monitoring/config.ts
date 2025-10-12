@@ -39,11 +39,11 @@ export const MONITORING_CONFIG = {
       SOCIAL_SHARING: 10,
     },
     CRITICAL_ISSUES: [
-      'missing-title',
-      'missing-meta-description',
-      'noindex-detected',
-      'canonical-missing',
-      'robots-blocked',
+      "missing-title",
+      "missing-meta-description",
+      "noindex-detected",
+      "canonical-missing",
+      "robots-blocked",
     ],
   },
 
@@ -128,15 +128,15 @@ export const MONITORING_CONFIG = {
 
   // Data collection endpoints
   ENDPOINTS: {
-    GOOGLE_SEARCH_CONSOLE: 'https://www.googleapis.com/webmasters/v3',
-    GOOGLE_PAGESPEED: 'https://www.googleapis.com/pagespeedonline/v5',
-    STRUCTURED_DATA_TESTING: 'https://validator.schema.org',
+    GOOGLE_SEARCH_CONSOLE: "https://www.googleapis.com/webmasters/v3",
+    GOOGLE_PAGESPEED: "https://www.googleapis.com/pagespeedonline/v5",
+    STRUCTURED_DATA_TESTING: "https://validator.schema.org",
     LIGHTHOUSE_CI: process.env.LIGHTHOUSE_CI_SERVER_BASE_URL,
   },
 
   // Storage configuration
   STORAGE: {
-    REDIS_PREFIX: 'proweb_monitoring:',
+    REDIS_PREFIX: "proweb_monitoring:",
     CACHE_TTL: {
       SEO_HEALTH: 3600, // 1 hour
       SEARCH_CONSOLE: 1800, // 30 minutes
@@ -148,20 +148,20 @@ export const MONITORING_CONFIG = {
   // Notification channels
   NOTIFICATIONS: {
     EMAIL: {
-      ENABLED: process.env.EMAIL_NOTIFICATIONS_ENABLED === 'true',
-      FROM: process.env.EMAIL_FROM || 'monitoring@proweb-studio.com',
+      ENABLED: process.env.EMAIL_NOTIFICATIONS_ENABLED === "true",
+      FROM: process.env.EMAIL_FROM || "monitoring@proweb-studio.com",
       SMTP_HOST: process.env.SMTP_HOST,
-      SMTP_PORT: parseInt(process.env.SMTP_PORT || '587'),
+      SMTP_PORT: parseInt(process.env.SMTP_PORT || "587"),
     },
     WEBHOOK: {
-      ENABLED: process.env.WEBHOOK_NOTIFICATIONS_ENABLED === 'true',
+      ENABLED: process.env.WEBHOOK_NOTIFICATIONS_ENABLED === "true",
       URL: process.env.WEBHOOK_URL,
       SECRET: process.env.WEBHOOK_SECRET,
     },
     SLACK: {
-      ENABLED: process.env.SLACK_NOTIFICATIONS_ENABLED === 'true',
+      ENABLED: process.env.SLACK_NOTIFICATIONS_ENABLED === "true",
       WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
-      CHANNEL: process.env.SLACK_CHANNEL || '#monitoring',
+      CHANNEL: process.env.SLACK_CHANNEL || "#monitoring",
     },
   },
 
@@ -179,12 +179,14 @@ export const MONITORING_CONFIG = {
 
   // Security
   SECURITY: {
-    API_KEY_HEADER: 'X-Monitoring-API-Key',
-    REQUIRE_AUTH: process.env.NODE_ENV === 'production',
+    API_KEY_HEADER: "X-Monitoring-API-Key",
+    REQUIRE_AUTH: process.env.NODE_ENV === "production",
     ALLOWED_ORIGINS: [
-      'https://proweb-studio.com',
-      'https://www.proweb-studio.com',
-      ...(process.env.NODE_ENV === 'development' ? ['http://localhost:3000'] : []),
+      "https://proweb-studio.com",
+      "https://www.proweb-studio.com",
+      ...(process.env.NODE_ENV === "development"
+        ? ["http://localhost:3000"]
+        : []),
     ],
   },
 
@@ -199,12 +201,12 @@ export const MONITORING_CONFIG = {
 } as const;
 
 // Environment-specific overrides
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === "development") {
   // Reduce intervals for development
   Object.assign(MONITORING_CONFIG.CORE_WEB_VITALS, {
     COLLECTION_INTERVAL: 60000, // 1 minute
   });
-  
+
   Object.assign(MONITORING_CONFIG.SEO_HEALTH, {
     CHECK_INTERVAL: 300000, // 5 minutes
   });

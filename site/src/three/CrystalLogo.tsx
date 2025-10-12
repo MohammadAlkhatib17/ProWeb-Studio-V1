@@ -1,9 +1,9 @@
-'use client';
+"use client";
 // src/three/CrystalLogo.tsx
-import { MeshTransmissionMaterial } from '@react-three/drei';
-import * as THREE from 'three';
-import { useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { MeshTransmissionMaterial } from "@react-three/drei";
+import * as THREE from "three";
+import { useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 
 type CrystalProps = {
   tint?: string;
@@ -13,7 +13,7 @@ type CrystalProps = {
 };
 
 export function CrystalLogo({
-  tint = '#a78bfa',
+  tint = "#a78bfa",
   roughness = 0.2,
   thickness = 0.6,
   rotationSpeed = 0.25,

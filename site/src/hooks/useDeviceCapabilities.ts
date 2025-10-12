@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface DeviceCapabilities {
   isMobile: boolean;
@@ -29,7 +29,7 @@ interface OptimizedSettings {
   maxLights: number;
   shadowMapSize: number;
   antialias: boolean;
-  effectsQuality: 'low' | 'medium' | 'high';
+  effectsQuality: "low" | "medium" | "high";
 }
 
 /**
@@ -48,27 +48,29 @@ export function useDeviceCapabilities() {
     deviceMemory: 4,
     isLowEndDevice: false,
     isHighPerformanceDevice: true,
-    connectionType: '4g',
+    connectionType: "4g",
     supportsWebGL2: true,
     maxTextureSize: 4096,
     preferReducedMotion: false,
   });
 
-  const [optimizedSettings, setOptimizedSettings] = useState<OptimizedSettings>({
-    dpr: [1, 2],
-    cameraFov: 50,
-    enableShadows: true,
-    particleCount: 1000,
-    enablePostProcessing: true,
-    bloomIntensity: 1.0,
-    maxLights: 6,
-    shadowMapSize: 2048,
-    antialias: true,
-    effectsQuality: 'high',
-  });
+  const [optimizedSettings, setOptimizedSettings] = useState<OptimizedSettings>(
+    {
+      dpr: [1, 2],
+      cameraFov: 50,
+      enableShadows: true,
+      particleCount: 1000,
+      enablePostProcessing: true,
+      bloomIntensity: 1.0,
+      maxLights: 6,
+      shadowMapSize: 2048,
+      antialias: true,
+      effectsQuality: "high",
+    },
+  );
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const detectCapabilities = async () => {
       // Screen dimensions and basic device detection
@@ -86,33 +88,37 @@ export function useDeviceCapabilities() {
       const deviceMemory = navigator.deviceMemory || 4;
 
       // Connection detection
-      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-      const connectionType = connection?.effectiveType || '4g';
+      const connection =
+        navigator.connection ||
+        navigator.mozConnection ||
+        navigator.webkitConnection;
+      const connectionType = connection?.effectiveType || "4g";
 
       // WebGL capabilities
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-      const supportsWebGL2 = !!canvas.getContext('webgl2');
+      const canvas = document.createElement("canvas");
+      const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+      const supportsWebGL2 = !!canvas.getContext("webgl2");
       const maxTextureSize = gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 2048;
 
       // Performance heuristics
-      const isLowEndDevice = 
-        isMobile && (
-          deviceMemory < 4 || 
-          hardwareConcurrency < 4 || 
-          connectionType === '2g' || 
-          connectionType === 'slow-2g' ||
-          !supportsWebGL2
-        );
+      const isLowEndDevice =
+        isMobile &&
+        (deviceMemory < 4 ||
+          hardwareConcurrency < 4 ||
+          connectionType === "2g" ||
+          connectionType === "slow-2g" ||
+          !supportsWebGL2);
 
-      const isHighPerformanceDevice = 
-        isDesktop && 
-        deviceMemory >= 8 && 
-        hardwareConcurrency >= 8 && 
+      const isHighPerformanceDevice =
+        isDesktop &&
+        deviceMemory >= 8 &&
+        hardwareConcurrency >= 8 &&
         maxTextureSize >= 8192;
 
       // Motion preference
-      const preferReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const preferReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
       const detectedCapabilities: DeviceCapabilities = {
         isMobile,
@@ -146,10 +152,10 @@ export function useDeviceCapabilities() {
       detectCapabilities();
     };
 
-    window.addEventListener('resize', handleResize);
-    
+    window.addEventListener("resize", handleResize);
+
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -159,7 +165,9 @@ export function useDeviceCapabilities() {
 /**
  * Generate optimized Three.js settings based on device capabilities
  */
-function generateOptimizedSettings(capabilities: DeviceCapabilities): OptimizedSettings {
+function generateOptimizedSettings(
+  capabilities: DeviceCapabilities,
+): OptimizedSettings {
   const {
     isMobile,
     isTablet,
@@ -183,7 +191,7 @@ function generateOptimizedSettings(capabilities: DeviceCapabilities): OptimizedS
       maxLights: 2,
       shadowMapSize: 256,
       antialias: false,
-      effectsQuality: 'low',
+      effectsQuality: "low",
     };
   }
 
@@ -193,12 +201,12 @@ function generateOptimizedSettings(capabilities: DeviceCapabilities): OptimizedS
       cameraFov: 60,
       enableShadows: deviceMemory >= 4 && supportsWebGL2,
       particleCount: deviceMemory >= 6 ? 500 : 300,
-      enablePostProcessing: deviceMemory >= 4 && connectionType !== '2g',
+      enablePostProcessing: deviceMemory >= 4 && connectionType !== "2g",
       bloomIntensity: 0.6,
       maxLights: deviceMemory >= 6 ? 4 : 3,
       shadowMapSize: supportsWebGL2 ? 1024 : 512,
       antialias: deviceMemory >= 4,
-      effectsQuality: deviceMemory >= 6 ? 'medium' : 'low',
+      effectsQuality: deviceMemory >= 6 ? "medium" : "low",
     };
   }
 
@@ -213,7 +221,7 @@ function generateOptimizedSettings(capabilities: DeviceCapabilities): OptimizedS
       maxLights: 5,
       shadowMapSize: 1024,
       antialias: true,
-      effectsQuality: 'medium',
+      effectsQuality: "medium",
     };
   }
 
@@ -228,7 +236,7 @@ function generateOptimizedSettings(capabilities: DeviceCapabilities): OptimizedS
       maxLights: 8,
       shadowMapSize: 4096,
       antialias: true,
-      effectsQuality: 'high',
+      effectsQuality: "high",
     };
   }
 
@@ -243,7 +251,7 @@ function generateOptimizedSettings(capabilities: DeviceCapabilities): OptimizedS
     maxLights: 6,
     shadowMapSize: 2048,
     antialias: true,
-    effectsQuality: 'high',
+    effectsQuality: "high",
   };
 }
 
@@ -254,16 +262,16 @@ export function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   return isMobile;
@@ -272,9 +280,14 @@ export function useIsMobile() {
 /**
  * Utility function to get optimized particle count based on device
  */
-export function getOptimizedParticleCount(baseCount: number, capabilities?: DeviceCapabilities) {
+export function getOptimizedParticleCount(
+  baseCount: number,
+  capabilities?: DeviceCapabilities,
+) {
   if (!capabilities) {
-    return typeof window !== 'undefined' && window.innerWidth < 768 ? baseCount * 0.5 : baseCount;
+    return typeof window !== "undefined" && window.innerWidth < 768
+      ? baseCount * 0.5
+      : baseCount;
   }
 
   const { isMobile, isLowEndDevice, deviceMemory } = capabilities;
@@ -284,22 +297,27 @@ export function getOptimizedParticleCount(baseCount: number, capabilities?: Devi
     if (deviceMemory >= 6) return Math.round(baseCount * 0.6);
     return Math.round(baseCount * 0.4);
   }
-  
+
   return baseCount;
 }
 
 /**
  * Utility function to get optimized lighting count based on device
  */
-export function getOptimizedLightCount(maxLights: number, capabilities?: DeviceCapabilities) {
+export function getOptimizedLightCount(
+  maxLights: number,
+  capabilities?: DeviceCapabilities,
+) {
   if (!capabilities) {
-    return typeof window !== 'undefined' && window.innerWidth < 768 ? Math.min(maxLights, 3) : maxLights;
+    return typeof window !== "undefined" && window.innerWidth < 768
+      ? Math.min(maxLights, 3)
+      : maxLights;
   }
 
   const { isMobile, isLowEndDevice, deviceMemory } = capabilities;
 
   if (isLowEndDevice) return Math.min(maxLights, 2);
   if (isMobile) return Math.min(maxLights, deviceMemory >= 6 ? 4 : 3);
-  
+
   return maxLights;
 }

@@ -1,13 +1,17 @@
-import React from 'react';
-import Image, { ImageProps } from 'next/image';
-import { getOptimalImageStrategy, getResponsiveImageSizes } from '@/lib/web-vitals-optimization';
+import React from "react";
+import Image, { ImageProps } from "next/image";
+import {
+  getOptimalImageStrategy,
+  getResponsiveImageSizes,
+} from "@/lib/web-vitals-optimization";
 
 // Simple className utility function
 function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
-interface OptimizedResponsiveImageProps extends Omit<ImageProps, 'src' | 'alt'> {
+interface OptimizedResponsiveImageProps
+  extends Omit<ImageProps, "src" | "alt"> {
   src: string;
   alt: string;
   className?: string;
@@ -31,7 +35,7 @@ interface OptimizedResponsiveImageProps extends Omit<ImageProps, 'src' | 'alt'> 
   /**
    * Image type for size optimization
    */
-  imageType?: 'hero' | 'content' | 'thumbnail' | 'gallery';
+  imageType?: "hero" | "content" | "thumbnail" | "gallery";
   /**
    * Enable advanced Core Web Vitals optimizations
    */
@@ -51,7 +55,7 @@ export function OptimizedResponsiveImage({
   responsiveSizes,
   isLCP = false,
   aspectRatio,
-  imageType = 'content',
+  imageType = "content",
   optimizeForCWV = true,
   width,
   height,
@@ -59,22 +63,24 @@ export function OptimizedResponsiveImage({
 }: OptimizedResponsiveImageProps) {
   // Get optimal loading strategy based on device capabilities
   const loadingStrategy: {
-    loading?: 'lazy' | 'eager';
+    loading?: "lazy" | "eager";
     quality?: number;
-    placeholder?: 'blur' | 'empty';
+    placeholder?: "blur" | "empty";
   } = optimizeForCWV ? getOptimalImageStrategy(isLCP) : {};
-  
+
   // Use intelligent size calculation if not provided
   const sizes = responsiveSizes || getResponsiveImageSizes(imageType);
-  
+
   // Determine quality based on image type and user preferences
   const imageQuality = quality || loadingStrategy.quality || (isLCP ? 90 : 75);
-  
+
   // Ensure dimensions are provided to prevent layout shift
   const hasExplicitDimensions = (width && height) || props.fill;
-  
+
   if (!hasExplicitDimensions && !aspectRatio && optimizeForCWV) {
-    console.warn(`OptimizedResponsiveImage: ${src} should have explicit width/height or aspectRatio to prevent layout shift`);
+    console.warn(
+      `OptimizedResponsiveImage: ${src} should have explicit width/height or aspectRatio to prevent layout shift`,
+    );
   }
 
   const imageProps: ImageProps = {
@@ -83,52 +89,61 @@ export function OptimizedResponsiveImage({
     sizes,
     priority: priority || isLCP,
     quality: imageQuality,
-    loading: loadingStrategy.loading || (priority || isLCP ? 'eager' : 'lazy'),
+    loading: loadingStrategy.loading || (priority || isLCP ? "eager" : "lazy"),
     ...(width && { width }),
     ...(height && { height }),
     className: cn(
-      'transition-opacity duration-300',
+      "transition-opacity duration-300",
       aspectRatio && `aspect-[${aspectRatio}]`,
       // Ensure proper object-fit for responsive images
-      !props.fill && 'h-auto w-full max-w-full',
+      !props.fill && "h-auto w-full max-w-full",
       // Add subtle enhancement for better perceived performance
-      'will-change-transform',
-      className
+      "will-change-transform",
+      className,
     ),
     // Add fetchPriority for LCP elements in supporting browsers
-    ...(isLCP && { fetchPriority: 'high' as 'high' | 'low' | 'auto' }),
+    ...(isLCP && { fetchPriority: "high" as "high" | "low" | "auto" }),
     // Enhanced placeholder strategy
-    placeholder: loadingStrategy.placeholder || 'blur',
+    placeholder: loadingStrategy.placeholder || "blur",
     // Add optimized loading attributes
-    decoding: 'async',
+    decoding: "async",
     ...props,
   };
 
   return (
-    <div 
+    <div
       className={cn(
-        'relative overflow-hidden',
-        aspectRatio && 'w-full',
+        "relative overflow-hidden",
+        aspectRatio && "w-full",
         // Optimize for CLS prevention
-        optimizeForCWV && 'before:content-[\"\"] before:block before:pb-[var(--aspect-ratio)] before:w-full'
+        optimizeForCWV &&
+          'before:content-[\"\"] before:block before:pb-[var(--aspect-ratio)] before:w-full',
       )}
-      style={{
-        '--aspect-ratio': aspectRatio ? `${(parseInt(aspectRatio.split('/')[1]) / parseInt(aspectRatio.split('/')[0])) * 100}%` : undefined,
-      } as React.CSSProperties & { '--aspect-ratio'?: string }}
+      style={
+        {
+          "--aspect-ratio": aspectRatio
+            ? `${(parseInt(aspectRatio.split("/")[1]) / parseInt(aspectRatio.split("/")[0])) * 100}%`
+            : undefined,
+        } as React.CSSProperties & { "--aspect-ratio"?: string }
+      }
     >
-      <Image 
-        {...imageProps} 
+      <Image
+        {...imageProps}
         alt={alt}
         className={cn(
           imageProps.className,
-          aspectRatio && 'absolute inset-0 w-full h-full object-cover'
+          aspectRatio && "absolute inset-0 w-full h-full object-cover",
         )}
       />
     </div>
   );
 }
 
-interface OptimizedHeroImageProps extends Omit<OptimizedResponsiveImageProps, 'responsiveSizes' | 'isLCP' | 'imageType'> {
+interface OptimizedHeroImageProps
+  extends Omit<
+    OptimizedResponsiveImageProps,
+    "responsiveSizes" | "isLCP" | "imageType"
+  > {
   /**
    * Hero images are typically LCP elements and need specific sizing
    */
@@ -139,11 +154,11 @@ interface OptimizedHeroImageProps extends Omit<OptimizedResponsiveImageProps, 'r
  * Specialized component for hero/banner images
  * Optimized for above-the-fold content and LCP performance
  */
-export function OptimizedHeroImage({ 
-  priority = true, 
+export function OptimizedHeroImage({
+  priority = true,
   quality = 90,
   optimizeForCWV = true,
-  ...props 
+  ...props
 }: OptimizedHeroImageProps) {
   return (
     <OptimizedResponsiveImage
@@ -158,8 +173,9 @@ export function OptimizedHeroImage({
   );
 }
 
-interface OptimizedThumbnailImageProps extends Omit<OptimizedResponsiveImageProps, 'responsiveSizes' | 'imageType'> {
-  size?: 'sm' | 'md' | 'lg';
+interface OptimizedThumbnailImageProps
+  extends Omit<OptimizedResponsiveImageProps, "responsiveSizes" | "imageType"> {
+  size?: "sm" | "md" | "lg";
   width: number;
   height: number;
 }
@@ -168,18 +184,18 @@ interface OptimizedThumbnailImageProps extends Omit<OptimizedResponsiveImageProp
  * Optimized thumbnail component for cards, galleries, etc.
  * Requires explicit dimensions to prevent layout shift
  */
-export function OptimizedThumbnailImage({ 
-  size = 'md',
+export function OptimizedThumbnailImage({
+  size = "md",
   quality = 80,
   width,
   height,
   optimizeForCWV = true,
-  ...props 
+  ...props
 }: OptimizedThumbnailImageProps) {
   const sizeMap = {
-    sm: '(max-width: 640px) 150px, 200px',
-    md: '(max-width: 640px) 200px, 300px', 
-    lg: '(max-width: 640px) 300px, 400px',
+    sm: "(max-width: 640px) 150px, 200px",
+    md: "(max-width: 640px) 200px, 300px",
+    lg: "(max-width: 640px) 300px, 400px",
   };
 
   return (
@@ -196,7 +212,8 @@ export function OptimizedThumbnailImage({
   );
 }
 
-interface OptimizedBackgroundImageProps extends Omit<OptimizedResponsiveImageProps, 'fill' | 'sizes' | 'imageType'> {
+interface OptimizedBackgroundImageProps
+  extends Omit<OptimizedResponsiveImageProps, "fill" | "sizes" | "imageType"> {
   /**
    * Background images should fill their container
    */
@@ -207,12 +224,12 @@ interface OptimizedBackgroundImageProps extends Omit<OptimizedResponsiveImagePro
  * Optimized background image component
  * Uses fill prop for absolute positioning
  */
-export function OptimizedBackgroundImage({ 
+export function OptimizedBackgroundImage({
   priority = false,
   quality = 75,
   className,
   optimizeForCWV = true,
-  ...props 
+  ...props
 }: OptimizedBackgroundImageProps) {
   return (
     <OptimizedResponsiveImage
@@ -223,27 +240,25 @@ export function OptimizedBackgroundImage({
       responsiveSizes="100vw"
       imageType="content"
       optimizeForCWV={optimizeForCWV}
-      className={cn(
-        'object-cover object-center',
-        className
-      )}
+      className={cn("object-cover object-center", className)}
     />
   );
 }
 
-interface OptimizedAvatarImageProps extends Omit<OptimizedResponsiveImageProps, 'responsiveSizes' | 'imageType'> {
+interface OptimizedAvatarImageProps
+  extends Omit<OptimizedResponsiveImageProps, "responsiveSizes" | "imageType"> {
   size?: number;
 }
 
 /**
  * Optimized avatar/profile image component
  */
-export function OptimizedAvatarImage({ 
+export function OptimizedAvatarImage({
   size = 64,
   quality = 85,
-  aspectRatio = '1/1',
+  aspectRatio = "1/1",
   optimizeForCWV = true,
-  ...props 
+  ...props
 }: OptimizedAvatarImageProps) {
   return (
     <OptimizedResponsiveImage
@@ -255,10 +270,7 @@ export function OptimizedAvatarImage({
       responsiveSizes={`${size}px`}
       imageType="thumbnail"
       optimizeForCWV={optimizeForCWV}
-      className={cn(
-        'rounded-full',
-        props.className
-      )}
+      className={cn("rounded-full", props.className)}
     />
   );
 }

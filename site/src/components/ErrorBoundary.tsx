@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -26,10 +26,10 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn('3D Scene Error:', error, errorInfo);
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("3D Scene Error:", error, errorInfo);
     } else {
-      console.warn('3D Scene Error:', error.message);
+      console.warn("3D Scene Error:", error.message);
     }
   }
 

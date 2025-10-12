@@ -1,9 +1,9 @@
-import { Suspense } from 'react';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Button } from '@/components/Button';
-import SEOSchema from '@/components/SEOSchema';
-import Breadcrumbs from '@/components/Breadcrumbs';
-import FAQSection from '@/components/sections/FAQSection';
+import { Suspense } from "react";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Button } from "@/components/Button";
+import SEOSchema from "@/components/SEOSchema";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import FAQSection from "@/components/sections/FAQSection";
 import {
   ServicePageProps,
   FeatureCard,
@@ -12,12 +12,12 @@ import {
   StatisticCard,
   TrustIndicator,
   FAQItem,
-  ServiceSection
-} from './ServicePageComponents';
+  ServiceSection,
+} from "./ServicePageComponents";
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 export const revalidate = 7200; // 2 hours
-export const fetchCache = 'force-cache';
+export const fetchCache = "force-cache";
 
 interface UnifiedServicePageProps extends ServicePageProps {
   generatePageMetadata?: boolean;
@@ -30,68 +30,68 @@ export default function UnifiedServicePage({
   heroDescription,
   primaryCTA,
   secondaryCTA,
-  
+
   // Features Section
   featuresTitle,
   featuresSubtitle,
   features,
-  
+
   // Service Types/Packages
   packagesTitle,
   packagesSubtitle,
   packages,
   serviceTypes,
-  
+
   // Process Section
   processTitle,
   processSubtitle,
   processSteps,
-  
+
   // Statistics Section
   statisticsTitle,
   statistics,
-  
+
   // Trust Indicators
   trustTitle,
   trustIndicators,
-  
+
   // FAQ Section
   faqTitle,
   faqs,
-  
+
   // Final CTA
   finalCTATitle,
   finalCTADescription,
   finalPrimaryCTA,
   finalSecondaryCTA,
-  
+
   // SEO (for future use)
   // pageSlug,
   // ogImage
 }: UnifiedServicePageProps) {
-  
   return (
     <main className="pt-20 md:pt-24 relative overflow-hidden">
       {/* SEO Schema */}
-      <SEOSchema 
+      <SEOSchema
         pageType="services"
         pageTitle={title}
         pageDescription={heroDescription}
       />
-      
+
       {/* Breadcrumbs */}
       <Breadcrumbs />
-      
+
       {/* Hero Section */}
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            {title.split(' ').map((word, index, array) => {
+            {title.split(" ").map((word, index, array) => {
               // Make the last 1-2 words gradient for visual impact
               const isGradient = index >= array.length - 2;
               return isGradient ? (
                 <span key={index} className="gradient-text-primary">
-                  {word}{index < array.length - 1 ? ' ' : ''}
+                  {word}
+                  {index < array.length - 1 ? " " : ""}
                 </span>
               ) : (
                 <span key={index}>{word} </span>
@@ -128,10 +128,7 @@ export default function UnifiedServicePage({
       </section>
 
       {/* Features Section */}
-      <ServiceSection 
-        title={featuresTitle}
-        subtitle={featuresSubtitle}
-      >
+      <ServiceSection title={featuresTitle} subtitle={featuresSubtitle}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
           {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} />
@@ -141,8 +138,8 @@ export default function UnifiedServicePage({
 
       {/* Packages/Service Types Section */}
       {(packages || serviceTypes) && (
-        <ServiceSection 
-          title={packagesTitle || 'Service Opties'}
+        <ServiceSection
+          title={packagesTitle || "Service Opties"}
           subtitle={packagesSubtitle}
           background={true}
         >
@@ -153,7 +150,7 @@ export default function UnifiedServicePage({
               ))}
             </div>
           )}
-          
+
           {serviceTypes && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {serviceTypes.map((type, index) => (
@@ -167,14 +164,21 @@ export default function UnifiedServicePage({
                         {type.badge}
                       </span>
                     )}
-                    <h3 className="text-xl font-semibold text-white mb-2">{type.type}</h3>
+                    <h3 className="text-xl font-semibold text-white mb-2">
+                      {type.type}
+                    </h3>
                     <p className="text-slate-200 mb-4">{type.description}</p>
-                    <div className="text-2xl font-bold text-primary-400 mb-4">{type.startingPrice}</div>
+                    <div className="text-2xl font-bold text-primary-400 mb-4">
+                      {type.startingPrice}
+                    </div>
                   </div>
 
                   <ul className="space-y-2 mb-6">
                     {type.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="text-slate-200 flex items-center">
+                      <li
+                        key={featureIndex}
+                        className="text-slate-200 flex items-center"
+                      >
                         <span className="w-5 h-5 bg-primary-500/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
                           <span className="w-2 h-2 bg-primary-400 rounded-full"></span>
                         </span>
@@ -200,9 +204,7 @@ export default function UnifiedServicePage({
 
       {/* Statistics Section */}
       {statistics && (
-        <ServiceSection 
-          title={statisticsTitle || 'Bewezen Resultaten'}
-        >
+        <ServiceSection title={statisticsTitle || "Bewezen Resultaten"}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {statistics.map((stat, index) => (
               <StatisticCard key={index} stat={stat} />
@@ -212,15 +214,12 @@ export default function UnifiedServicePage({
       )}
 
       {/* Process Section */}
-      <ServiceSection 
-        title={processTitle}
-        subtitle={processSubtitle}
-      >
+      <ServiceSection title={processTitle} subtitle={processSubtitle}>
         <div className="max-w-4xl mx-auto space-y-8">
           {processSteps.map((step, index) => (
-            <ProcessStep 
-              key={index} 
-              step={step} 
+            <ProcessStep
+              key={index}
+              step={step}
               isLast={index === processSteps.length - 1}
             />
           ))}
@@ -228,10 +227,7 @@ export default function UnifiedServicePage({
       </ServiceSection>
 
       {/* Trust Indicators Section */}
-      <ServiceSection 
-        title={trustTitle}
-        background={true}
-      >
+      <ServiceSection title={trustTitle} background={true}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {trustIndicators.map((indicator, index) => (
             <TrustIndicator key={index} indicator={indicator} />
@@ -241,7 +237,11 @@ export default function UnifiedServicePage({
 
       {/* FAQ Section */}
       <ErrorBoundary>
-        <Suspense fallback={<div className="py-20 text-center text-white">Loading FAQ...</div>}>
+        <Suspense
+          fallback={
+            <div className="py-20 text-center text-white">Loading FAQ...</div>
+          }
+        >
           <FAQSection title={faqTitle}>
             <div className="space-y-3 md:space-y-4">
               {faqs.map((faq, index) => (
@@ -256,11 +256,12 @@ export default function UnifiedServicePage({
       <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            {finalCTATitle.split(' ').map((word, index, array) => {
+            {finalCTATitle.split(" ").map((word, index, array) => {
               const isGradient = index >= array.length - 2;
               return isGradient ? (
                 <span key={index} className="gradient-text-primary">
-                  {word}{index < array.length - 1 ? ' ' : ''}
+                  {word}
+                  {index < array.length - 1 ? " " : ""}
                 </span>
               ) : (
                 <span key={index}>{word} </span>

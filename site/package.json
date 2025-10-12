@@ -46,7 +46,14 @@
     "perf:test:dutch": "LIGHTHOUSE_CONFIG=dutch npm run lighthouse",
     "perf:monitor": "npm run dev:perf && npm run perf:validate",
     "core-web-vitals:validate": "./scripts/validate-core-web-vitals.sh",
-    "core-web-vitals:test": "npm run build:prod && npm start & sleep 5 && npm run core-web-vitals:validate && pkill -f 'next start'"
+    "core-web-vitals:test": "npm run build:prod && npm start & sleep 5 && npm run core-web-vitals:validate && pkill -f 'next start'",
+    "cleanup:inventory": "tsx scripts/cleanup-inventory.ts",
+    "cleanup:check-unused": "npm run lint -- --quiet 2>&1 | grep -E '(no-unused-vars|@typescript-eslint/no-unused-vars)' || echo 'No unused variables found'",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,md}": [
@@ -59,9 +66,6 @@
     "@react-three/fiber": "^8.18.0",
     "@react-three/postprocessing": "^2.19.1",
     "@tailwindcss/typography": "^0.5.16",
-    "@upstash/ratelimit": "^2.0.6",
-    "@upstash/redis": "^1.35.3",
-    "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -81,9 +85,11 @@
   "devDependencies": {
     "@lhci/cli": "^0.13.0",
     "@next/bundle-analyzer": "^15.5.2",
+    "@playwright/test": "^1.48.0",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^15.0.7",
     "@types/cheerio": "^0.22.35",
+    "@types/glob": "^8.1.0",
     "@types/node": "^20.12.12",
     "@types/nodemailer": "^7.0.1",
     "@types/react": "^18.2.66",
@@ -95,6 +101,7 @@
     "cheerio": "^1.1.2",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.5",
+    "glob": "^10.3.10",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.5",
     "postcss": "^8.5.6",

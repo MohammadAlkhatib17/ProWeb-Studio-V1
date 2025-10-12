@@ -1,9 +1,9 @@
 // /src/three/PortalScene.tsx
-'use client';
+"use client";
 
-import * as THREE from 'three';
-import React, { useMemo, useRef } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import * as THREE from "three";
+import React, { useMemo, useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 
 type Props = { scale?: number; effects?: boolean };
 
@@ -15,10 +15,10 @@ type Props = { scale?: number; effects?: boolean };
  */
 
 function useReducedMotion() {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === "undefined") return false;
   return (
     window.matchMedia &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
 }
 
@@ -159,8 +159,8 @@ function Aperture({
   });
 
   // إعدادات لونية
-  const c1 = useMemo(() => new THREE.Color('#0bdad6'), []);
-  const c2 = useMemo(() => new THREE.Color('#b14df0'), []);
+  const c1 = useMemo(() => new THREE.Color("#0bdad6"), []);
+  const c2 = useMemo(() => new THREE.Color("#b14df0"), []);
 
   const bladeNodes = useMemo(() => {
     const nodes: JSX.Element[] = [];
@@ -209,7 +209,7 @@ function StarSwarm({
     () =>
       new THREE.PointsMaterial({
         size: reduced ? 0.008 : 0.014,
-        color: '#a5f3fc',
+        color: "#a5f3fc",
         transparent: true,
         opacity: 0.75,
         depthWrite: false,
@@ -229,7 +229,7 @@ function StarSwarm({
     return arr;
   }, [count, radius]);
   React.useEffect(() => {
-    geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     return () => geom.dispose();
   }, [geom, positions]);
   const ref = useRef<THREE.Points>(null!);
@@ -340,7 +340,7 @@ export default function PortalScene({ scale = 0.58, effects = true }: Props) {
       camera={{ fov: 45, position: [0, 0, 3.4] }}
       gl={{ alpha: true, antialias: true }}
       onCreated={({ gl }) => gl.setClearAlpha(0)} // خلفية شفافة تمامًا
-      style={{ background: 'transparent' }}
+      style={{ background: "transparent" }}
     >
       <group scale={scale}>
         {enableFx && <StarSwarm />}
@@ -349,7 +349,7 @@ export default function PortalScene({ scale = 0.58, effects = true }: Props) {
         <EnergyCore />
         <Aperture blades={enableFx ? 12 : 6} reduced={!enableFx} />
         <ambientLight intensity={0.5} />
-        <pointLight position={[0, 0, 3]} intensity={0.9} color={'#a5f3fc'} />
+        <pointLight position={[0, 0, 3]} intensity={0.9} color={"#a5f3fc"} />
       </group>
     </Canvas>
   );

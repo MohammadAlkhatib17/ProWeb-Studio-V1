@@ -1,15 +1,44 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "next/typescript"
-  ],
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "destructuredArrayIgnorePattern": "^_"
+      }
+    ],
+    "no-unused-vars": "off",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "Literal[raw=/…/]",
+        "message": "Literal ellipsis character (…) is not allowed. Use '...' or proper implementation instead."
+      },
+      {
+        "selector": "TemplateElement[value.raw=/…/]",
+        "message": "Literal ellipsis character (…) is not allowed in template strings. Use '...' or proper implementation instead."
+      }
+    ],
+    "no-warning-comments": [
+      "warn",
+      {
+        "terms": ["TODO", "FIXME", "HACK", "XXX", "placeholder"],
+        "location": "start"
+      }
+    ]
+  },
   "overrides": [
     {
       "files": [
         "src/lib/monitoring/core-web-vitals.ts",
         "src/lib/monitoring/structured-data.ts",
         "src/lib/monitoring/utils.ts",
-        "src/lib/web-vitals-monitor.ts"
+        "src/lib/web-vitals-monitor.ts",
+        "src/components/monitoring/SEOHealthDashboard.tsx",
+        "src/lib/bundle-optimization.ts",
+        "src/lib/metadata/structured-data.ts"
       ],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off"

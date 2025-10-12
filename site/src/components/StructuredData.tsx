@@ -1,5 +1,5 @@
-import Script from 'next/script';
-import { 
+import Script from "next/script";
+import {
   generateFAQStructuredData,
   generateHowToStructuredData,
   generateProductStructuredData,
@@ -8,43 +8,133 @@ import {
   generateBreadcrumbStructuredData,
   generateServiceStructuredData,
   generateOrganizationStructuredData,
-  generateJsonLd
-} from '@/lib/metadata/structured-data';
-import { siteConfig } from '@/config/site.config';
+  generateJsonLd,
+} from "@/lib/metadata/structured-data";
+import { siteConfig } from "@/config/site.config";
 
 interface StructuredDataProps {
-  type: 'FAQ' | 'HowTo' | 'Product' | 'Service' | 'Organization' | 'LocalBusiness' | 'Article' | 'BreadcrumbList';
+  type:
+    | "FAQ"
+    | "HowTo"
+    | "Product"
+    | "Service"
+    | "Organization"
+    | "LocalBusiness"
+    | "Article"
+    | "BreadcrumbList";
   data: unknown;
   nonce?: string;
 }
 
-export default function StructuredData({ type, data, nonce }: StructuredDataProps) {
+export default function StructuredData({
+  type,
+  data,
+  nonce,
+}: StructuredDataProps) {
   let structuredData;
 
   switch (type) {
-    case 'FAQ':
-      structuredData = generateFAQStructuredData(data as { question: string; answer: string; }[]);
+    case "FAQ":
+      structuredData = generateFAQStructuredData(
+        data as { question: string; answer: string }[],
+      );
       break;
-    case 'HowTo':
-      structuredData = generateHowToStructuredData(data as { name: string; text: string; image?: string; }[]);
+    case "HowTo":
+      structuredData = generateHowToStructuredData(
+        data as { name: string; text: string; image?: string }[],
+      );
       break;
-    case 'Product':
-      structuredData = generateProductStructuredData(data as { name: string; description: string; image: string; brand: string; offers: { price: string; priceCurrency: string; availability: string; }; });
+    case "Product":
+      structuredData = generateProductStructuredData(
+        data as {
+          name: string;
+          description: string;
+          image: string;
+          brand: string;
+          offers: {
+            price: string;
+            priceCurrency: string;
+            availability: string;
+          };
+        },
+      );
       break;
-    case 'Service':
-      structuredData = generateServiceStructuredData(data as { name: string; description: string; provider: string; areaServed: string[]; serviceType: string; offers: { price: string; priceCurrency: string; description: string; }; });
+    case "Service":
+      structuredData = generateServiceStructuredData(
+        data as {
+          name: string;
+          description: string;
+          provider: string;
+          areaServed: string[];
+          serviceType: string;
+          offers: { price: string; priceCurrency: string; description: string };
+        },
+      );
       break;
-    case 'Organization':
-      structuredData = generateOrganizationStructuredData(data as { name: string; url: string; logo: string; description: string; address: { streetAddress: string; addressLocality: string; addressRegion: string; postalCode: string; addressCountry: string; }; contactPoint: { telephone: string; contactType: string; email: string; }; sameAs: string[]; });
+    case "Organization":
+      structuredData = generateOrganizationStructuredData(
+        data as {
+          name: string;
+          url: string;
+          logo: string;
+          description: string;
+          address: {
+            streetAddress: string;
+            addressLocality: string;
+            addressRegion: string;
+            postalCode: string;
+            addressCountry: string;
+          };
+          contactPoint: {
+            telephone: string;
+            contactType: string;
+            email: string;
+          };
+          sameAs: string[];
+        },
+      );
       break;
-    case 'LocalBusiness':
-      structuredData = generateLocalBusinessStructuredData(data as { name: string; description: string; address: { streetAddress: string; addressLocality: string; addressRegion: string; postalCode: string; addressCountry: string; }; geo: { latitude: string; longitude: string; }; contactPoint: { telephone: string; contactType: string; email: string; }; sameAs: string[]; openingHours: string[]; });
+    case "LocalBusiness":
+      structuredData = generateLocalBusinessStructuredData(
+        data as {
+          name: string;
+          description: string;
+          address: {
+            streetAddress: string;
+            addressLocality: string;
+            addressRegion: string;
+            postalCode: string;
+            addressCountry: string;
+          };
+          geo: { latitude: string; longitude: string };
+          contactPoint: {
+            telephone: string;
+            contactType: string;
+            email: string;
+          };
+          sameAs: string[];
+          openingHours: string[];
+        },
+      );
       break;
-    case 'Article':
-      structuredData = generateArticleStructuredData(data as { headline: string; description: string; author: string; publisher: string; datePublished: string; dateModified: string; image: string; mainEntityOfPage: string; });
+    case "Article":
+      structuredData = generateArticleStructuredData(
+        data as {
+          headline: string;
+          description: string;
+          author: string;
+          publisher: string;
+          datePublished: string;
+          dateModified: string;
+          image: string;
+          mainEntityOfPage: string;
+        },
+      );
       break;
-    case 'BreadcrumbList':
-      structuredData = generateBreadcrumbStructuredData(data as { name: string; url: string; }[]);
+    case "BreadcrumbList":
+      structuredData = generateBreadcrumbStructuredData(
+        data as { name: string; url: string }[],
+      );
       break;
     default:
       return null;
@@ -71,53 +161,64 @@ export function ProWebStudioOrganization({ nonce }: { nonce?: string }) {
     description: siteConfig.description,
     // Online-first business - no physical address
     areaServed: {
-      '@type': 'Country',
-      name: 'Netherlands'
+      "@type": "Country",
+      name: "Netherlands",
     },
     serviceArea: {
-      '@type': 'Country', 
-      name: 'Netherlands'
+      "@type": "Country",
+      name: "Netherlands",
     },
     contactPoint: {
       telephone: siteConfig.phone,
-      email: siteConfig.email
+      email: siteConfig.email,
     },
     sameAs: [
       siteConfig.social.linkedin,
       siteConfig.social.twitter,
-      siteConfig.social.github
-    ]
+      siteConfig.social.github,
+    ],
   };
 
-  return <StructuredData type="Organization" data={organizationData} nonce={nonce} />;
+  return (
+    <StructuredData type="Organization" data={organizationData} nonce={nonce} />
+  );
 }
 
 // Website service structured data
 export function WebsiteServiceStructuredData({ nonce }: { nonce?: string }) {
   const serviceData = {
-    name: 'Website Laten Maken',
-    description: 'Professionele website ontwikkeling en webdesign diensten',
+    name: "Website Laten Maken",
+    description: "Professionele website ontwikkeling en webdesign diensten",
     provider: siteConfig.name,
     areaServed: [
-      'Amsterdam', 'Rotterdam', 'Den Haag', 'Utrecht', 'Eindhoven', 
-      'Groningen', 'Tilburg', 'Almere', 'Breda', 'Nijmegen', 'Nederland'
+      "Amsterdam",
+      "Rotterdam",
+      "Den Haag",
+      "Utrecht",
+      "Eindhoven",
+      "Groningen",
+      "Tilburg",
+      "Almere",
+      "Breda",
+      "Nijmegen",
+      "Nederland",
     ],
-    serviceType: 'Website Development',
+    serviceType: "Website Development",
     offers: {
-      price: '2500',
-      priceCurrency: 'EUR',
-      description: 'Complete website ontwikkeling vanaf €2500'
-    }
+      price: "2500",
+      priceCurrency: "EUR",
+      description: "Complete website ontwikkeling vanaf €2500",
+    },
   };
 
   return <StructuredData type="Service" data={serviceData} nonce={nonce} />;
 }
 
 // Local business structured data for location pages
-export function LocationBusinessStructuredData({ 
-  location, 
-  nonce 
-}: { 
+export function LocationBusinessStructuredData({
+  location,
+  nonce,
+}: {
   location: {
     name: string;
     coordinates: { lat: string; lng: string };
@@ -135,33 +236,30 @@ export function LocationBusinessStructuredData({
     description: `Professionele website laten maken in ${location.name}`,
     address: {
       ...location.address,
-      addressCountry: 'NL'
+      addressCountry: "NL",
     },
     geo: {
       latitude: location.coordinates.lat,
-      longitude: location.coordinates.lng
+      longitude: location.coordinates.lng,
     },
     contactPoint: {
       telephone: siteConfig.phone,
-      email: siteConfig.email
+      email: siteConfig.email,
     },
-    sameAs: [
-      siteConfig.social.linkedin,
-      siteConfig.social.twitter
-    ],
-    openingHours: [
-      'Mo-Fr 09:00-17:00'
-    ]
+    sameAs: [siteConfig.social.linkedin, siteConfig.social.twitter],
+    openingHours: ["Mo-Fr 09:00-17:00"],
   };
 
-  return <StructuredData type="LocalBusiness" data={businessData} nonce={nonce} />;
+  return (
+    <StructuredData type="LocalBusiness" data={businessData} nonce={nonce} />
+  );
 }
 
 // FAQ structured data component
-export function FAQStructuredData({ 
-  faqs, 
-  nonce 
-}: { 
+export function FAQStructuredData({
+  faqs,
+  nonce,
+}: {
   faqs: Array<{ question: string; answer: string }>;
   nonce?: string;
 }) {
@@ -169,21 +267,23 @@ export function FAQStructuredData({
 }
 
 // Breadcrumb structured data component
-export function BreadcrumbStructuredData({ 
-  breadcrumbs, 
-  nonce 
-}: { 
+export function BreadcrumbStructuredData({
+  breadcrumbs,
+  nonce,
+}: {
   breadcrumbs: Array<{ name: string; url: string }>;
   nonce?: string;
 }) {
-  return <StructuredData type="BreadcrumbList" data={breadcrumbs} nonce={nonce} />;
+  return (
+    <StructuredData type="BreadcrumbList" data={breadcrumbs} nonce={nonce} />
+  );
 }
 
 // How-to structured data component
-export function HowToStructuredData({ 
-  steps, 
-  nonce 
-}: { 
+export function HowToStructuredData({
+  steps,
+  nonce,
+}: {
   steps: Array<{ name: string; text: string; image?: string }>;
   nonce?: string;
 }) {
@@ -191,10 +291,10 @@ export function HowToStructuredData({
 }
 
 // Article structured data component
-export function ArticleStructuredData({ 
-  article, 
-  nonce 
-}: { 
+export function ArticleStructuredData({
+  article,
+  nonce,
+}: {
   article: {
     headline: string;
     description: string;

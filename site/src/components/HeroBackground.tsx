@@ -1,5 +1,5 @@
 // src/components/HeroBackground.tsx
-import { HeroImage } from '@/components/ui/responsive-image';
+import { HeroImage } from "@/components/ui/responsive-image";
 
 export default function HeroBackground() {
   return (

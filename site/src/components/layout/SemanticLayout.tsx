@@ -1,28 +1,24 @@
-import React from 'react';
+import React from "react";
 
 export interface SemanticSectionProps {
   children: React.ReactNode;
-  as?: 'article' | 'section' | 'aside' | 'main' | 'header' | 'footer' | 'nav';
+  as?: "article" | "section" | "aside" | "main" | "header" | "footer" | "nav";
   className?: string;
   id?: string;
-  'aria-label'?: string;
-  'aria-labelledby'?: string;
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
   role?: string;
 }
 
-export function SemanticSection({ 
-  children, 
-  as: Component = 'section', 
-  className = '', 
+export function SemanticSection({
+  children,
+  as: Component = "section",
+  className = "",
   id,
-  ...ariaProps 
+  ...ariaProps
 }: SemanticSectionProps) {
   return (
-    <Component 
-      id={id}
-      className={className}
-      {...ariaProps}
-    >
+    <Component id={id} className={className} {...ariaProps}>
       {children}
     </Component>
   );
@@ -36,23 +32,26 @@ export interface HeadingProps {
   keywords?: string[];
 }
 
-export function SemanticHeading({ 
-  level, 
-  children, 
-  className = '', 
+export function SemanticHeading({
+  level,
+  children,
+  className = "",
   id,
-  keywords = [] 
+  keywords = [],
 }: HeadingProps) {
   // Add keyword-rich class names for SEO context
-  const keywordClasses = keywords.length > 0 
-    ? keywords.map(k => `keyword-${k.replace(/\s+/g, '-').toLowerCase()}`).join(' ')
-    : '';
-  
+  const keywordClasses =
+    keywords.length > 0
+      ? keywords
+          .map((k) => `keyword-${k.replace(/\s+/g, "-").toLowerCase()}`)
+          .join(" ")
+      : "";
+
   const props = {
     className: `${className} ${keywordClasses}`.trim(),
-    ...(id && { id })
+    ...(id && { id }),
   };
-  
+
   switch (level) {
     case 1:
       return <h1 {...props}>{children}</h1>;
@@ -79,18 +78,20 @@ export interface DutchContentWrapperProps {
   includeLocalSchema?: boolean;
 }
 
-export function DutchContentWrapper({ 
-  children, 
-  cityName, 
+export function DutchContentWrapper({
+  children,
+  cityName,
   serviceName,
-  className = '',
-  includeLocalSchema = false 
+  className = "",
+  includeLocalSchema = false,
 }: DutchContentWrapperProps) {
   const contextClasses = [
-    cityName && `location-${cityName.toLowerCase().replace(/\s+/g, '-')}`,
-    serviceName && `service-${serviceName.toLowerCase().replace(/\s+/g, '-')}`,
-    'dutch-content-context'
-  ].filter(Boolean).join(' ');
+    cityName && `location-${cityName.toLowerCase().replace(/\s+/g, "-")}`,
+    serviceName && `service-${serviceName.toLowerCase().replace(/\s+/g, "-")}`,
+    "dutch-content-context",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className={`${className} ${contextClasses}`.trim()}>
@@ -99,27 +100,27 @@ export function DutchContentWrapper({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'LocalBusiness',
-              name: `ProWeb Studio ${cityName ? `- ${cityName}` : ''}`,
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              name: `ProWeb Studio ${cityName ? `- ${cityName}` : ""}`,
               address: {
-                '@type': 'PostalAddress',
-                addressCountry: 'NL',
-                addressRegion: cityName
+                "@type": "PostalAddress",
+                addressCountry: "NL",
+                addressRegion: cityName,
               },
               areaServed: {
-                '@type': 'Country',
-                name: 'Netherlands'
+                "@type": "Country",
+                name: "Netherlands",
               },
               serviceArea: {
-                '@type': 'GeoCircle',
+                "@type": "GeoCircle",
                 geoMidpoint: {
-                  '@type': 'GeoCoordinates',
-                  latitude: '52.3676',
-                  longitude: '4.9041'
-                }
-              }
-            })
+                  "@type": "GeoCoordinates",
+                  latitude: "52.3676",
+                  longitude: "4.9041",
+                },
+              },
+            }),
           }}
         />
       )}
@@ -133,16 +134,19 @@ export interface DutchTerminologyProps {
   terms: Array<{
     term: string;
     context: string;
-    frequency?: 'high' | 'medium' | 'low';
+    frequency?: "high" | "medium" | "low";
   }>;
   children: React.ReactNode;
 }
 
-export function DutchTerminologyProvider({ terms, children }: DutchTerminologyProps) {
+export function DutchTerminologyProvider({
+  terms,
+  children,
+}: DutchTerminologyProps) {
   return (
-    <div 
+    <div
       className="dutch-terminology-context"
-      data-terms={terms.map(t => t.term).join(',')}
+      data-terms={terms.map((t) => t.term).join(",")}
     >
       {children}
     </div>

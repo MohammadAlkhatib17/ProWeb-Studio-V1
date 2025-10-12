@@ -3,46 +3,46 @@
  * Tracks LCP, FID, CLS, INP, and TTFB with detailed analytics
  */
 
-import { onCLS, onFCP, onLCP, onTTFB, onINP } from 'web-vitals';
+import { onCLS, onFCP, onLCP, onTTFB, onINP } from "web-vitals";
 
 // Web Vitals thresholds for perfect scores
 export const WEB_VITALS_THRESHOLDS = {
   LCP: {
-    GOOD: 2500,    // < 2.5s
+    GOOD: 2500, // < 2.5s
     NEEDS_IMPROVEMENT: 4000, // 2.5s - 4s
-    POOR: Infinity // > 4s
+    POOR: Infinity, // > 4s
   },
   FID: {
-    GOOD: 100,     // < 100ms
+    GOOD: 100, // < 100ms
     NEEDS_IMPROVEMENT: 300, // 100ms - 300ms
-    POOR: Infinity // > 300ms
+    POOR: Infinity, // > 300ms
   },
   CLS: {
-    GOOD: 0.1,     // < 0.1
+    GOOD: 0.1, // < 0.1
     NEEDS_IMPROVEMENT: 0.25, // 0.1 - 0.25
-    POOR: Infinity // > 0.25
+    POOR: Infinity, // > 0.25
   },
   INP: {
-    GOOD: 200,     // < 200ms
+    GOOD: 200, // < 200ms
     NEEDS_IMPROVEMENT: 500, // 200ms - 500ms
-    POOR: Infinity // > 500ms
+    POOR: Infinity, // > 500ms
   },
   FCP: {
-    GOOD: 1800,    // < 1.8s
+    GOOD: 1800, // < 1.8s
     NEEDS_IMPROVEMENT: 3000, // 1.8s - 3s
-    POOR: Infinity // > 3s
+    POOR: Infinity, // > 3s
   },
   TTFB: {
-    GOOD: 800,     // < 800ms
+    GOOD: 800, // < 800ms
     NEEDS_IMPROVEMENT: 1800, // 800ms - 1.8s
-    POOR: Infinity // > 1.8s
-  }
+    POOR: Infinity, // > 1.8s
+  },
 } as const;
 
 interface WebVitalMetric {
   name: string;
   value: number;
-  rating: 'good' | 'needs-improvement' | 'poor';
+  rating: "good" | "needs-improvement" | "poor";
   delta: number;
   id: string;
   navigationType?: string;
@@ -76,7 +76,7 @@ interface PageInfo {
  * Get device and environment information
  */
 function getDeviceInfo(): DeviceInfo {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return {} as DeviceInfo;
   }
 
@@ -92,7 +92,7 @@ function getDeviceInfo(): DeviceInfo {
 
   return {
     userAgent: nav.userAgent,
-    connectionType: nav.connection?.effectiveType || 'unknown',
+    connectionType: nav.connection?.effectiveType || "unknown",
     deviceMemory: nav.deviceMemory || 0,
     hardwareConcurrency: nav.hardwareConcurrency || 0,
     screenResolution: `${screen.width}x${screen.height}`,
@@ -108,15 +108,15 @@ function getDeviceInfo(): DeviceInfo {
  * Get current page information
  */
 function getPageInfo(): PageInfo {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return {} as PageInfo;
   }
 
   // Generate or retrieve session ID
-  let sessionId = sessionStorage.getItem('web-vitals-session');
+  let sessionId = sessionStorage.getItem("web-vitals-session");
   if (!sessionId) {
     sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    sessionStorage.setItem('web-vitals-session', sessionId);
+    sessionStorage.setItem("web-vitals-session", sessionId);
   }
 
   return {
@@ -126,26 +126,34 @@ function getPageInfo(): PageInfo {
     pathname: window.location.pathname,
     timestamp: Date.now(),
     sessionId,
-    userId: localStorage.getItem('user-id') || undefined,
+    userId: localStorage.getItem("user-id") || undefined,
   };
 }
 
 /**
  * Determine the rating based on thresholds
  */
-function getRating(metricName: string, value: number): 'good' | 'needs-improvement' | 'poor' {
-  const thresholds = WEB_VITALS_THRESHOLDS[metricName as keyof typeof WEB_VITALS_THRESHOLDS];
-  if (!thresholds) return 'good';
+function getRating(
+  metricName: string,
+  value: number,
+): "good" | "needs-improvement" | "poor" {
+  const thresholds =
+    WEB_VITALS_THRESHOLDS[metricName as keyof typeof WEB_VITALS_THRESHOLDS];
+  if (!thresholds) return "good";
 
-  if (value <= thresholds.GOOD) return 'good';
-  if (value <= thresholds.NEEDS_IMPROVEMENT) return 'needs-improvement';
-  return 'poor';
+  if (value <= thresholds.GOOD) return "good";
+  if (value <= thresholds.NEEDS_IMPROVEMENT) return "needs-improvement";
+  return "poor";
 }
 
 /**
  * Send metric data to analytics
  */
-async function sendToAnalytics(metric: WebVitalMetric, deviceInfo: DeviceInfo, pageInfo: PageInfo) {
+async function sendToAnalytics(
+  metric: WebVitalMetric,
+  deviceInfo: DeviceInfo,
+  pageInfo: PageInfo,
+) {
   const data = {
     metric,
     device: deviceInfo,
@@ -161,8 +169,8 @@ async function sendToAnalytics(metric: WebVitalMetric, deviceInfo: DeviceInfo, p
   }> = [
     // Plausible Analytics (if configured)
     {
-      url: 'https://plausible.io/api/event',
-      headers: { 'Content-Type': 'application/json' },
+      url: "https://plausible.io/api/event",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: `Web Vital: ${metric.name}`,
         url: pageInfo.url,
@@ -173,50 +181,62 @@ async function sendToAnalytics(metric: WebVitalMetric, deviceInfo: DeviceInfo, p
           rating: metric.rating,
           connection: deviceInfo.connectionType,
           device_memory: deviceInfo.deviceMemory,
-        }
-      })
+        },
+      }),
     },
-    
+
     // Custom analytics endpoint (if configured)
-    ...(process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT ? [{
-      url: process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT,
-      headers: { 
-        'Content-Type': 'application/json',
-        ...(process.env.NEXT_PUBLIC_ANALYTICS_TOKEN && {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_ANALYTICS_TOKEN}`
-        })
-      },
-      body: JSON.stringify(data)
-    }] : [])
+    ...(process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT
+      ? [
+          {
+            url: process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT,
+            headers: {
+              "Content-Type": "application/json",
+              ...(process.env.NEXT_PUBLIC_ANALYTICS_TOKEN && {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_ANALYTICS_TOKEN}`,
+              }),
+            },
+            body: JSON.stringify(data),
+          },
+        ]
+      : []),
   ];
 
   // Send to all configured endpoints
   for (const endpoint of endpoints) {
     try {
       await fetch(endpoint.url, {
-        method: 'POST',
+        method: "POST",
         headers: endpoint.headers,
         body: endpoint.body,
         keepalive: true,
       });
     } catch (error) {
-      console.warn('Failed to send Web Vitals data:', error);
+      console.warn("Failed to send Web Vitals data:", error);
     }
   }
 
   // Also log to console in development
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Web Vitals:', {
+  if (process.env.NODE_ENV === "development") {
+    console.log("Web Vitals:", {
       metric: metric.name,
       value: metric.value,
       rating: metric.rating,
-      target: metric.name === 'LCP' ? '< 2.5s' : 
-              metric.name === 'FID' ? '< 100ms' :
-              metric.name === 'CLS' ? '< 0.1' :
-              metric.name === 'INP' ? '< 200ms' :
-              metric.name === 'FCP' ? '< 1.8s' :
-              metric.name === 'TTFB' ? '< 800ms' : 'unknown',
-      passed: metric.rating === 'good',
+      target:
+        metric.name === "LCP"
+          ? "< 2.5s"
+          : metric.name === "FID"
+            ? "< 100ms"
+            : metric.name === "CLS"
+              ? "< 0.1"
+              : metric.name === "INP"
+                ? "< 200ms"
+                : metric.name === "FCP"
+                  ? "< 1.8s"
+                  : metric.name === "TTFB"
+                    ? "< 800ms"
+                    : "unknown",
+      passed: metric.rating === "good",
     });
   }
 }
@@ -237,67 +257,73 @@ function handleMetric(metric: any) {
   sendToAnalytics(enhancedMetric, deviceInfo, pageInfo);
 
   // Store for session analysis
-  const sessionMetrics = JSON.parse(sessionStorage.getItem('web-vitals-metrics') || '[]');
+  const sessionMetrics = JSON.parse(
+    sessionStorage.getItem("web-vitals-metrics") || "[]",
+  );
   sessionMetrics.push({
     ...enhancedMetric,
     timestamp: Date.now(),
   });
-  sessionStorage.setItem('web-vitals-metrics', JSON.stringify(sessionMetrics));
+  sessionStorage.setItem("web-vitals-metrics", JSON.stringify(sessionMetrics));
 
   // Trigger custom events for other parts of the app
-  window.dispatchEvent(new CustomEvent('web-vital', {
-    detail: enhancedMetric
-  }));
+  window.dispatchEvent(
+    new CustomEvent("web-vital", {
+      detail: enhancedMetric,
+    }),
+  );
 }
 
 /**
  * Initialize Web Vitals monitoring
  */
 export function initWebVitalsMonitoring() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   // Monitor all Core Web Vitals
   onCLS(handleMetric);
   onFCP(handleMetric);
   onLCP(handleMetric);
   onTTFB(handleMetric);
-  
+
   // Monitor INP (Interaction to Next Paint) - New Core Web Vital
   try {
     onINP(handleMetric);
   } catch (error) {
     // INP might not be available in all browsers yet
-    console.warn('INP monitoring not available:', error);
+    console.warn("INP monitoring not available:", error);
   }
 
   // Monitor page load performance
-  window.addEventListener('load', () => {
+  window.addEventListener("load", () => {
     // Track additional performance metrics
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    
+    const navigation = performance.getEntriesByType(
+      "navigation",
+    )[0] as PerformanceNavigationTiming;
+
     if (navigation) {
       const customMetrics = [
         {
-          name: 'DNS_TIME',
+          name: "DNS_TIME",
           value: navigation.domainLookupEnd - navigation.domainLookupStart,
-          rating: 'good' as const,
+          rating: "good" as const,
           delta: 0,
-          id: 'dns-' + Date.now(),
+          id: "dns-" + Date.now(),
         },
         {
-          name: 'CONNECT_TIME',
+          name: "CONNECT_TIME",
           value: navigation.connectEnd - navigation.connectStart,
-          rating: 'good' as const,
+          rating: "good" as const,
           delta: 0,
-          id: 'connect-' + Date.now(),
+          id: "connect-" + Date.now(),
         },
         {
-          name: 'DOM_READY',
+          name: "DOM_READY",
           value: navigation.domContentLoadedEventEnd - navigation.requestStart,
-          rating: 'good' as const,
+          rating: "good" as const,
           delta: 0,
-          id: 'dom-ready-' + Date.now(),
-        }
+          id: "dom-ready-" + Date.now(),
+        },
       ];
 
       customMetrics.forEach(handleMetric);
@@ -310,7 +336,7 @@ export function initWebVitalsMonitoring() {
     if (window.location.pathname !== currentPath) {
       currentPath = window.location.pathname;
       // Reset metrics for new page view
-      sessionStorage.removeItem('web-vitals-metrics');
+      sessionStorage.removeItem("web-vitals-metrics");
     }
   }).observe(document, { subtree: true, childList: true });
 }
@@ -319,8 +345,8 @@ export function initWebVitalsMonitoring() {
  * Get current session metrics
  */
 export function getSessionMetrics() {
-  if (typeof window === 'undefined') return [];
-  return JSON.parse(sessionStorage.getItem('web-vitals-metrics') || '[]');
+  if (typeof window === "undefined") return [];
+  return JSON.parse(sessionStorage.getItem("web-vitals-metrics") || "[]");
 }
 
 /**
@@ -336,14 +362,22 @@ export function checkWebVitalsTargets() {
   };
 
   metrics.forEach((metric: any) => {
-    if (metric.name in results && typeof results[metric.name as keyof typeof results] === 'object') {
-      const resultItem = results[metric.name as keyof typeof results] as { value: number; target: number; passed: boolean };
+    if (
+      metric.name in results &&
+      typeof results[metric.name as keyof typeof results] === "object"
+    ) {
+      const resultItem = results[metric.name as keyof typeof results] as {
+        value: number;
+        target: number;
+        passed: boolean;
+      };
       resultItem.value = metric.value;
-      resultItem.passed = metric.rating === 'good';
+      resultItem.passed = metric.rating === "good";
     }
   });
 
-  results.overall = results.LCP.passed && results.FID.passed && results.CLS.passed;
+  results.overall =
+    results.LCP.passed && results.FID.passed && results.CLS.passed;
   return results;
 }
 

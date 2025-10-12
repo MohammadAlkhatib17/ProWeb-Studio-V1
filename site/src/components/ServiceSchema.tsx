@@ -1,11 +1,11 @@
-import Script from 'next/script';
+import Script from "next/script";
 
 // Helper function to build absolute URLs safely
 const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ??
   process.env.SITE_URL ??
-  'https://prowebstudio.nl'
-).replace(/\/+$/, '');
+  "https://prowebstudio.nl"
+).replace(/\/+$/, "");
 
 interface Service {
   name: string;
@@ -38,57 +38,58 @@ export default function ServiceSchema({ services }: ServiceSchemaProps) {
   const serviceSchemas = services.map((service) => ({
     "@context": "https://schema.org",
     "@type": "Service",
-    "name": service.name,
-    "description": service.description,
-    ...(service.serviceType && { "serviceType": service.serviceType }),
-    "provider": {
-      "@id": `${SITE_URL.replace(/\/$/, '')}#organization`
+    name: service.name,
+    description: service.description,
+    ...(service.serviceType && { serviceType: service.serviceType }),
+    provider: {
+      "@id": `${SITE_URL.replace(/\/$/, "")}#organization`,
     },
-    "areaServed": {
+    areaServed: {
       "@type": "Place",
-      "name": "Netherlands",
-      "address": {
+      name: "Netherlands",
+      address: {
         "@type": "PostalAddress",
-        "addressCountry": "NL"
-      }
+        addressCountry: "NL",
+      },
     },
-    "inLanguage": "nl-NL",
-    "knowsAbout": service.knowsAbout || [
+    inLanguage: "nl-NL",
+    knowsAbout: service.knowsAbout || [
       "website laten maken",
-      "webdesign Nederland", 
+      "webdesign Nederland",
       "professionele websites",
       "maatwerk webdevelopment",
       "responsive design",
       "SEO optimalisatie",
       "zoekmachine optimalisatie",
-      "Nederlandse webdiensten"
+      "Nederlandse webdiensten",
     ],
     ...(service.aggregateRating && {
-      "aggregateRating": {
+      aggregateRating: {
         "@type": "AggregateRating",
-        "ratingValue": service.aggregateRating.ratingValue,
-        "reviewCount": service.aggregateRating.reviewCount,
-        "bestRating": service.aggregateRating.bestRating || "5",
-        "worstRating": service.aggregateRating.worstRating || "1"
-      }
+        ratingValue: service.aggregateRating.ratingValue,
+        reviewCount: service.aggregateRating.reviewCount,
+        bestRating: service.aggregateRating.bestRating || "5",
+        worstRating: service.aggregateRating.worstRating || "1",
+      },
     }),
-    ...(service.reviews && service.reviews.length > 0 && {
-      "review": service.reviews.map(review => ({
-        "@type": "Review",
-        "author": {
-          "@type": "Person",
-          "name": review.author
-        },
-        "datePublished": review.datePublished,
-        "reviewBody": review.reviewBody,
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": review.reviewRating.ratingValue,
-          "bestRating": review.reviewRating.bestRating || "5",
-          "worstRating": review.reviewRating.worstRating || "1"
-        }
-      }))
-    })
+    ...(service.reviews &&
+      service.reviews.length > 0 && {
+        review: service.reviews.map((review) => ({
+          "@type": "Review",
+          author: {
+            "@type": "Person",
+            name: review.author,
+          },
+          datePublished: review.datePublished,
+          reviewBody: review.reviewBody,
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: review.reviewRating.ratingValue,
+            bestRating: review.reviewRating.bestRating || "5",
+            worstRating: review.reviewRating.worstRating || "1",
+          },
+        })),
+      }),
   }));
 
   return (
@@ -99,7 +100,7 @@ export default function ServiceSchema({ services }: ServiceSchemaProps) {
           id={`service-schema-${index}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema, null, 0)
+            __html: JSON.stringify(schema, null, 0),
           }}
         />
       ))}

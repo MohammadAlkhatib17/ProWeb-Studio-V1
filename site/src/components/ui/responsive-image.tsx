@@ -1,11 +1,11 @@
-import Image, { ImageProps } from 'next/image';
+import Image, { ImageProps } from "next/image";
 
 // Simple className utility function
 function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
-interface ResponsiveImageProps extends Omit<ImageProps, 'src' | 'alt'> {
+interface ResponsiveImageProps extends Omit<ImageProps, "src" | "alt"> {
   src: string;
   alt: string;
   className?: string;
@@ -42,7 +42,7 @@ export function ResponsiveImage({
   className,
   priority = false,
   quality = 85,
-  responsiveSizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
+  responsiveSizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
   isLCP = false,
   aspectRatio,
   width,
@@ -51,9 +51,11 @@ export function ResponsiveImage({
 }: ResponsiveImageProps) {
   // Ensure dimensions are provided to prevent layout shift
   const hasExplicitDimensions = (width && height) || props.fill;
-  
+
   if (!hasExplicitDimensions && !aspectRatio) {
-    console.warn(`ResponsiveImage: ${src} should have explicit width/height or aspectRatio to prevent layout shift`);
+    console.warn(
+      `ResponsiveImage: ${src} should have explicit width/height or aspectRatio to prevent layout shift`,
+    );
   }
 
   const imageProps: ImageProps = {
@@ -65,27 +67,28 @@ export function ResponsiveImage({
     ...(width && { width }),
     ...(height && { height }),
     className: cn(
-      'transition-opacity duration-300',
+      "transition-opacity duration-300",
       aspectRatio && `aspect-[${aspectRatio}]`,
       // Ensure proper object-fit for responsive images
-      !props.fill && 'h-auto w-full max-w-full',
-      className
+      !props.fill && "h-auto w-full max-w-full",
+      className,
     ),
     // Add fetchPriority for LCP elements in supporting browsers
-    ...(isLCP && { fetchPriority: 'high' as const }),
+    ...(isLCP && { fetchPriority: "high" as const }),
     ...props,
   };
 
   // Ensure alt prop is always provided
   if (!imageProps.alt) {
-    imageProps.alt = '';
+    imageProps.alt = "";
   }
 
   // eslint-disable-next-line jsx-a11y/alt-text
   return <Image {...imageProps} />;
 }
 
-interface HeroImageProps extends Omit<ResponsiveImageProps, 'responsiveSizes' | 'isLCP'> {
+interface HeroImageProps
+  extends Omit<ResponsiveImageProps, "responsiveSizes" | "isLCP"> {
   /**
    * Hero images are typically LCP elements and need specific sizing
    */
@@ -96,10 +99,10 @@ interface HeroImageProps extends Omit<ResponsiveImageProps, 'responsiveSizes' | 
  * Specialized component for hero/banner images
  * Optimized for above-the-fold content and LCP performance
  */
-export function HeroImage({ 
-  priority = true, 
+export function HeroImage({
+  priority = true,
   quality = 90,
-  ...props 
+  ...props
 }: HeroImageProps) {
   return (
     <ResponsiveImage
@@ -112,8 +115,9 @@ export function HeroImage({
   );
 }
 
-interface ThumbnailImageProps extends Omit<ResponsiveImageProps, 'responsiveSizes'> {
-  size?: 'sm' | 'md' | 'lg';
+interface ThumbnailImageProps
+  extends Omit<ResponsiveImageProps, "responsiveSizes"> {
+  size?: "sm" | "md" | "lg";
   width: number;
   height: number;
 }
@@ -122,17 +126,17 @@ interface ThumbnailImageProps extends Omit<ResponsiveImageProps, 'responsiveSize
  * Optimized thumbnail component for cards, galleries, etc.
  * Requires explicit dimensions to prevent layout shift
  */
-export function ThumbnailImage({ 
-  size = 'md',
+export function ThumbnailImage({
+  size = "md",
   quality = 80,
   width,
   height,
-  ...props 
+  ...props
 }: ThumbnailImageProps) {
   const sizeMap = {
-    sm: '(max-width: 640px) 150px, 200px',
-    md: '(max-width: 640px) 200px, 300px', 
-    lg: '(max-width: 640px) 300px, 400px',
+    sm: "(max-width: 640px) 150px, 200px",
+    md: "(max-width: 640px) 200px, 300px",
+    lg: "(max-width: 640px) 300px, 400px",
   };
 
   return (
@@ -147,7 +151,8 @@ export function ThumbnailImage({
   );
 }
 
-interface BackgroundImageProps extends Omit<ResponsiveImageProps, 'fill' | 'sizes'> {
+interface BackgroundImageProps
+  extends Omit<ResponsiveImageProps, "fill" | "sizes"> {
   /**
    * Background images should fill their container
    */
@@ -158,12 +163,12 @@ interface BackgroundImageProps extends Omit<ResponsiveImageProps, 'fill' | 'size
  * Optimized background image component
  * Uses fill prop for absolute positioning
  */
-export function BackgroundImage({ 
+export function BackgroundImage({
   priority = false,
   quality = 75,
   className,
-  alt = '',
-  ...props 
+  alt = "",
+  ...props
 }: BackgroundImageProps) {
   return (
     <ResponsiveImage
@@ -173,26 +178,24 @@ export function BackgroundImage({
       priority={priority}
       quality={quality}
       responsiveSizes="100vw"
-      className={cn(
-        'object-cover object-center',
-        className
-      )}
+      className={cn("object-cover object-center", className)}
     />
   );
 }
 
-interface AvatarImageProps extends Omit<ResponsiveImageProps, 'responsiveSizes'> {
+interface AvatarImageProps
+  extends Omit<ResponsiveImageProps, "responsiveSizes"> {
   size?: number;
 }
 
 /**
  * Optimized avatar/profile image component
  */
-export function AvatarImage({ 
+export function AvatarImage({
   size = 64,
   quality = 85,
-  aspectRatio = '1/1',
-  ...props 
+  aspectRatio = "1/1",
+  ...props
 }: AvatarImageProps) {
   return (
     <ResponsiveImage
@@ -202,10 +205,7 @@ export function AvatarImage({
       quality={quality}
       aspectRatio={aspectRatio}
       responsiveSizes={`${size}px`}
-      className={cn(
-        'rounded-full',
-        props.className
-      )}
+      className={cn("rounded-full", props.className)}
     />
   );
 }

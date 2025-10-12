@@ -1,5 +1,9 @@
-import { ReactNode } from 'react';
-import { getOptimizedFontPreloads, getDutchOptimizedResourceHints, getCriticalCSS } from '@/lib/web-vitals-optimization';
+import { ReactNode } from "react";
+import {
+  getOptimizedFontPreloads,
+  getDutchOptimizedResourceHints,
+  getCriticalCSS,
+} from "@/lib/web-vitals-optimization";
 
 interface CoreWebVitalsLayoutProps {
   children: ReactNode;
@@ -11,52 +15,55 @@ interface CoreWebVitalsLayoutProps {
  * Enhanced layout component with Core Web Vitals optimizations
  * Implements advanced resource hints, font preloading, and critical CSS
  */
-export function CoreWebVitalsLayout({ 
-  children, 
+export function CoreWebVitalsLayout({
+  children,
   enableAdvancedOptimizations = true,
-  dutchOptimized = true 
+  dutchOptimized = true,
 }: CoreWebVitalsLayoutProps) {
   const fontPreloads = getOptimizedFontPreloads();
   const resourceHints = getDutchOptimizedResourceHints();
-  
+
   return (
     <>
       {/* Critical CSS for above-the-fold content */}
       {enableAdvancedOptimizations && (
-        <style 
-          dangerouslySetInnerHTML={{ 
-            __html: getCriticalCSS() 
-          }} 
+        <style
+          dangerouslySetInnerHTML={{
+            __html: getCriticalCSS(),
+          }}
         />
       )}
-      
+
       {/* Resource hints for optimal loading */}
-      {dutchOptimized && resourceHints.map((hint, index) => (
-        <link 
-          key={index}
-          rel={hint.rel}
-          href={hint.href}
-          {...(hint.crossOrigin && { crossOrigin: hint.crossOrigin as 'anonymous' | 'use-credentials' })}
-        />
-      ))}
-      
+      {dutchOptimized &&
+        resourceHints.map((hint, index) => (
+          <link
+            key={index}
+            rel={hint.rel}
+            href={hint.href}
+            {...(hint.crossOrigin && {
+              crossOrigin: hint.crossOrigin as "anonymous" | "use-credentials",
+            })}
+          />
+        ))}
+
       {/* Font preloads for faster text rendering */}
-      {enableAdvancedOptimizations && fontPreloads.length > 0 && fontPreloads.map((font, index) => (
-        <link
-          key={index}
-          rel={font.rel}
-          href={font.href}
-          as={font.as}
-          type={font.type}
-          crossOrigin={font.crossOrigin}
-          {...(font.fetchpriority && { fetchpriority: font.fetchpriority })}
-        />
-      ))}
-      
+      {enableAdvancedOptimizations &&
+        fontPreloads.length > 0 &&
+        fontPreloads.map((font, index) => (
+          <link
+            key={index}
+            rel={font.rel}
+            href={font.href}
+            as={font.as}
+            type={font.type}
+            crossOrigin={font.crossOrigin}
+            {...(font.fetchpriority && { fetchpriority: font.fetchpriority })}
+          />
+        ))}
+
       {/* Content with optimized layout */}
-      <div className="min-h-screen font-loading">
-        {children}
-      </div>
+      <div className="min-h-screen font-loading">{children}</div>
     </>
   );
 }

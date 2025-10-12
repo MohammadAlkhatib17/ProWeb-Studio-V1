@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Suspense, useEffect, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { Preload, AdaptiveDpr, PerformanceMonitor } from '@react-three/drei';
+import { Suspense, useEffect, useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { Preload, AdaptiveDpr, PerformanceMonitor } from "@react-three/drei";
 
 interface Scene3DProps {
   children: React.ReactNode;
@@ -10,7 +10,11 @@ interface Scene3DProps {
   adaptive?: boolean; // enable AdaptiveDpr & PerformanceMonitor (defaults to true)
 }
 
-export default function Scene3D({ children, className, adaptive = true }: Scene3DProps) {
+export default function Scene3D({
+  children,
+  className,
+  adaptive = true,
+}: Scene3DProps) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -23,20 +27,20 @@ export default function Scene3D({ children, className, adaptive = true }: Scene3
     <div className={className || "absolute inset-0"}>
       <Canvas
         dpr={[1, 1.8]}
-        gl={{ 
-          antialias: true, 
-          alpha: true, 
-          powerPreference: 'high-performance' 
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: "high-performance",
         }}
-        camera={{ 
-          position: [0, 0, 6], 
-          fov: 50, 
-          near: 0.1, 
-          far: 100 
+        camera={{
+          position: [0, 0, 6],
+          fov: 50,
+          near: 0.1,
+          far: 100,
         }}
         onCreated={(state) => {
           // Set transparent clear color
-          state.gl.setClearColor('#000000', 0);
+          state.gl.setClearColor("#000000", 0);
         }}
       >
         <Suspense fallback={null}>

@@ -7,11 +7,11 @@
 // Types for Web Vitals metrics
 interface WebVitalsMetric {
   id: string;
-  name: 'CLS' | 'FID' | 'FCP' | 'LCP' | 'TTFB' | 'INP';
+  name: "CLS" | "FID" | "FCP" | "LCP" | "TTFB" | "INP";
   value: number;
   delta: number;
   entries: PerformanceEntry[];
-  rating: 'good' | 'needs-improvement' | 'poor';
+  rating: "good" | "needs-improvement" | "poor";
 }
 
 interface ImagePerformanceMetric {
@@ -60,8 +60,8 @@ const WEB_VITALS_THRESHOLDS = {
 const IMAGE_OPTIMIZATION_RULES = {
   maxLCPLoadTime: 2500, // LCP should load within 2.5s
   maxImageSize: 1024 * 1024, // 1MB max for images
-  preferredFormats: ['avif', 'webp'],
-  requiredAttributes: ['width', 'height', 'alt'],
+  preferredFormats: ["avif", "webp"],
+  requiredAttributes: ["width", "height", "alt"],
   maxCLS: 0.1,
 } as const;
 
@@ -72,149 +72,161 @@ export class WebVitalsMonitor {
   private metrics: WebVitalsMetric[] = [];
   private imageMetrics: ImagePerformanceMetric[] = [];
   private observers: PerformanceObserver[] = [];
-  
+
   constructor() {
     this.initializeMonitoring();
   }
-  
+
   private initializeMonitoring() {
-    if (typeof window === 'undefined') return;
-    
+    if (typeof window === "undefined") return;
+
     // Monitor resource loading (images, fonts, etc.)
     this.monitorResourceLoading();
-    
+
     // Monitor layout shifts
     this.monitorLayoutShift();
-    
+
     // Monitor largest contentful paint
     this.monitorLCP();
-    
+
     // Monitor first input delay / interaction to next paint
     this.monitorInteraction();
-    
+
     // Monitor font loading
     this.monitorFontLoading();
   }
-  
+
   private monitorResourceLoading() {
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        if (entry.entryType === 'resource') {
+        if (entry.entryType === "resource") {
           const resourceEntry = entry as PerformanceResourceTiming;
           this.processResourceEntry(resourceEntry);
         }
       }
     });
-    
-    observer.observe({ entryTypes: ['resource'] });
+
+    observer.observe({ entryTypes: ["resource"] });
     this.observers.push(observer);
   }
-  
+
   private monitorLayoutShift() {
     const observer = new PerformanceObserver((list) => {
       let clsValue = 0;
-      
+
       for (const entry of list.getEntries()) {
-        if (entry.entryType === 'layout-shift' && !(entry as any).hadRecentInput) {
+        if (
+          entry.entryType === "layout-shift" &&
+          !(entry as any).hadRecentInput
+        ) {
           clsValue += (entry as any).value;
         }
       }
-      
+
       if (clsValue > 0) {
         this.recordMetric({
           id: `cls-${Date.now()}`,
-          name: 'CLS',
+          name: "CLS",
           value: clsValue,
           delta: clsValue,
           entries: Array.from(list.getEntries()),
-          rating: this.getRating('CLS', clsValue),
+          rating: this.getRating("CLS", clsValue),
         });
       }
     });
-    
-    observer.observe({ entryTypes: ['layout-shift'], buffered: true });
+
+    observer.observe({ entryTypes: ["layout-shift"], buffered: true });
     this.observers.push(observer);
   }
-  
+
   private monitorLCP() {
     const observer = new PerformanceObserver((list) => {
       const entries = list.getEntries();
       const lastEntry = entries[entries.length - 1] as PerformancePaintTiming;
-      
+
       this.recordMetric({
         id: `lcp-${Date.now()}`,
-        name: 'LCP',
+        name: "LCP",
         value: lastEntry.startTime,
         delta: lastEntry.startTime,
         entries: [lastEntry],
-        rating: this.getRating('LCP', lastEntry.startTime),
+        rating: this.getRating("LCP", lastEntry.startTime),
       });
-      
+
       // Check if LCP element is an image and validate optimization
       this.validateLCPImage(lastEntry);
     });
-    
-    observer.observe({ entryTypes: ['largest-contentful-paint'], buffered: true });
+
+    observer.observe({
+      entryTypes: ["largest-contentful-paint"],
+      buffered: true,
+    });
     this.observers.push(observer);
   }
-  
+
   private monitorInteraction() {
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
         const interactionEntry = entry as any;
-        
+
         this.recordMetric({
           id: `inp-${Date.now()}`,
-          name: 'INP',
+          name: "INP",
           value: interactionEntry.processingStart - interactionEntry.startTime,
           delta: interactionEntry.processingStart - interactionEntry.startTime,
           entries: [entry],
-          rating: this.getRating('INP', interactionEntry.processingStart - interactionEntry.startTime),
+          rating: this.getRating(
+            "INP",
+            interactionEntry.processingStart - interactionEntry.startTime,
+          ),
         });
       }
     });
-    
+
     try {
-      observer.observe({ entryTypes: ['event'], buffered: true });
+      observer.observe({ entryTypes: ["event"], buffered: true });
       this.observers.push(observer);
     } catch {
       // Fallback for browsers that don't support INP
       this.monitorFID();
     }
   }
-  
+
   private monitorFID() {
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
         const fidEntry = entry as any;
-        
+
         this.recordMetric({
           id: `fid-${Date.now()}`,
-          name: 'FID',
+          name: "FID",
           value: fidEntry.processingStart - fidEntry.startTime,
           delta: fidEntry.processingStart - fidEntry.startTime,
           entries: [entry],
-          rating: this.getRating('FID', fidEntry.processingStart - fidEntry.startTime),
+          rating: this.getRating(
+            "FID",
+            fidEntry.processingStart - fidEntry.startTime,
+          ),
         });
       }
     });
-    
-    observer.observe({ entryTypes: ['first-input'], buffered: true });
+
+    observer.observe({ entryTypes: ["first-input"], buffered: true });
     this.observers.push(observer);
   }
-  
+
   private monitorFontLoading() {
-    if ('fonts' in document) {
-      document.fonts.addEventListener('loadingdone', () => {
+    if ("fonts" in document) {
+      document.fonts.addEventListener("loadingdone", () => {
         this.recordFontMetrics();
       });
     }
   }
-  
+
   private processResourceEntry(entry: PerformanceResourceTiming) {
     const url = new URL(entry.name);
     const isImage = /\.(jpg|jpeg|png|webp|avif|gif|svg)$/i.test(url.pathname);
-    
+
     if (isImage) {
       const imageMetric: ImagePerformanceMetric = {
         src: entry.name,
@@ -223,115 +235,131 @@ export class WebVitalsMonitor {
         format: this.extractImageFormat(entry.name),
         isLCP: false, // Will be updated if this becomes LCP
         hasPriority: this.checkImagePriority(entry.name),
-        renderTime: (entry as any).loadEventEnd ? (entry as any).loadEventEnd - entry.responseEnd : undefined,
+        renderTime: (entry as any).loadEventEnd
+          ? (entry as any).loadEventEnd - entry.responseEnd
+          : undefined,
       };
-      
+
       this.imageMetrics.push(imageMetric);
       this.validateImageOptimization(imageMetric);
     }
   }
-  
+
   private validateLCPImage(lcpEntry: PerformancePaintTiming) {
     // Find the image that triggered LCP
     const lcpElement = (lcpEntry as any).element;
-    if (lcpElement && lcpElement.tagName === 'IMG') {
-      const imageMetric = this.imageMetrics.find(m => m.src === lcpElement.src);
+    if (lcpElement && lcpElement.tagName === "IMG") {
+      const imageMetric = this.imageMetrics.find(
+        (m) => m.src === lcpElement.src,
+      );
       if (imageMetric) {
         imageMetric.isLCP = true;
-        
+
         // Validate LCP image optimization
         if (imageMetric.loadTime > IMAGE_OPTIMIZATION_RULES.maxLCPLoadTime) {
-          this.reportOptimizationIssue('LCP image loads too slowly', {
+          this.reportOptimizationIssue("LCP image loads too slowly", {
             src: imageMetric.src,
             loadTime: imageMetric.loadTime,
             threshold: IMAGE_OPTIMIZATION_RULES.maxLCPLoadTime,
           });
         }
-        
+
         if (!imageMetric.hasPriority) {
-          this.reportOptimizationIssue('LCP image missing priority attribute', {
+          this.reportOptimizationIssue("LCP image missing priority attribute", {
             src: imageMetric.src,
           });
         }
       }
     }
   }
-  
+
   private validateImageOptimization(metric: ImagePerformanceMetric) {
     // Check file size
     if (metric.size > IMAGE_OPTIMIZATION_RULES.maxImageSize) {
-      this.reportOptimizationIssue('Large image detected', {
+      this.reportOptimizationIssue("Large image detected", {
         src: metric.src,
         size: metric.size,
         maxSize: IMAGE_OPTIMIZATION_RULES.maxImageSize,
       });
     }
-    
+
     // Check format optimization
-    if (!IMAGE_OPTIMIZATION_RULES.preferredFormats.includes(metric.format as any)) {
-      this.reportOptimizationIssue('Suboptimal image format', {
+    if (
+      !IMAGE_OPTIMIZATION_RULES.preferredFormats.includes(metric.format as any)
+    ) {
+      this.reportOptimizationIssue("Suboptimal image format", {
         src: metric.src,
         format: metric.format,
         preferredFormats: IMAGE_OPTIMIZATION_RULES.preferredFormats,
       });
     }
   }
-  
+
   private extractImageFormat(src: string): string {
     const match = src.match(/\.([^.?]+)(?:\?|$)/);
-    return match ? match[1].toLowerCase() : 'unknown';
+    return match ? match[1].toLowerCase() : "unknown";
   }
-  
+
   private checkImagePriority(src: string): boolean {
     // Check if image has priority attribute (simplified check)
-    const images = document.querySelectorAll('img[src*="' + src.split('/').pop() + '"]');
-    return Array.from(images).some(img => img.hasAttribute('fetchpriority') || (img as any).fetchPriority || (img as any).priority);
+    const images = document.querySelectorAll(
+      'img[src*="' + src.split("/").pop() + '"]',
+    );
+    return Array.from(images).some(
+      (img) =>
+        img.hasAttribute("fetchpriority") ||
+        (img as any).fetchPriority ||
+        (img as any).priority,
+    );
   }
-  
+
   private recordMetric(metric: WebVitalsMetric) {
     this.metrics.push(metric);
-    
+
     // Report poor metrics
-    if (metric.rating === 'poor') {
+    if (metric.rating === "poor") {
       this.reportOptimizationIssue(`Poor ${metric.name} detected`, {
         value: metric.value,
         threshold: WEB_VITALS_THRESHOLDS[metric.name],
       });
     }
   }
-  
+
   private recordFontMetrics() {
     // Simplified font metrics recording
     const fontLoadTime = performance.now();
-    console.log('Font loading completed at:', fontLoadTime);
+    console.log("Font loading completed at:", fontLoadTime);
   }
-  
-  private getRating(metricName: keyof typeof WEB_VITALS_THRESHOLDS, value: number): 'good' | 'needs-improvement' | 'poor' {
+
+  private getRating(
+    metricName: keyof typeof WEB_VITALS_THRESHOLDS,
+    value: number,
+  ): "good" | "needs-improvement" | "poor" {
     const thresholds = WEB_VITALS_THRESHOLDS[metricName];
-    if (value <= thresholds.good) return 'good';
-    if (value <= thresholds.needsImprovement) return 'needs-improvement';
-    return 'poor';
+    if (value <= thresholds.good) return "good";
+    if (value <= thresholds.needsImprovement) return "needs-improvement";
+    return "poor";
   }
-  
+
   private reportOptimizationIssue(message: string, details: any) {
     console.warn(`🚨 Performance Issue: ${message}`, details);
-    
+
     // In production, send to analytics
-    if (process.env.NODE_ENV === 'production') {
-      this.sendToAnalytics('performance_issue', { message, details });
+    if (process.env.NODE_ENV === "production") {
+      this.sendToAnalytics("performance_issue", { message, details });
     }
   }
-  
+
   private sendToAnalytics(event: string, data: any) {
     // Integration with analytics service
-    if ('gtag' in window) {
-      (window as any).gtag('event', event, data);
+    if ("gtag" in window) {
+      (window as any).gtag("event", event, data);
     }
   }
-  
+
   public generateReport(): PerformanceReport {
     const networkInfo = this.getNetworkInfo();
-    
+
     return {
       timestamp: Date.now(),
       url: window.location.href,
@@ -345,19 +373,19 @@ export class WebVitalsMonitor {
       networkInfo,
     };
   }
-  
+
   private getNetworkInfo() {
     const connection = (navigator as any).connection;
     return {
-      effectiveType: connection?.effectiveType || 'unknown',
+      effectiveType: connection?.effectiveType || "unknown",
       saveData: connection?.saveData || false,
       rtt: connection?.rtt || 0,
       downlink: connection?.downlink || 0,
     };
   }
-  
+
   public destroy() {
-    this.observers.forEach(observer => observer.disconnect());
+    this.observers.forEach((observer) => observer.disconnect());
     this.observers = [];
   }
 }
@@ -366,36 +394,37 @@ export class WebVitalsMonitor {
  * Image optimization validator for development
  */
 export function validateImageOptimizations() {
-  if (typeof window === 'undefined' || process.env.NODE_ENV !== 'development') return;
-  
-  const images = document.querySelectorAll('img');
+  if (typeof window === "undefined" || process.env.NODE_ENV !== "development")
+    return;
+
+  const images = document.querySelectorAll("img");
   const issues: string[] = [];
-  
+
   images.forEach((img, index) => {
     // Check for missing alt text
-    if (!img.alt && !img.hasAttribute('aria-hidden')) {
+    if (!img.alt && !img.hasAttribute("aria-hidden")) {
       issues.push(`Image ${index + 1}: Missing alt text`);
     }
-    
+
     // Check for missing dimensions
     if (!img.width || !img.height) {
       issues.push(`Image ${index + 1}: Missing width or height attributes`);
     }
-    
+
     // Check for loading attribute
     if (!img.loading) {
       issues.push(`Image ${index + 1}: Missing loading attribute`);
     }
-    
+
     // Check for modern formats
     if (img.src && !/(avif|webp)$/i.test(img.src)) {
       issues.push(`Image ${index + 1}: Not using modern format (AVIF/WebP)`);
     }
   });
-  
+
   if (issues.length > 0) {
-    console.group('🖼️ Image Optimization Issues');
-    issues.forEach(issue => console.warn(issue));
+    console.group("🖼️ Image Optimization Issues");
+    issues.forEach((issue) => console.warn(issue));
     console.groupEnd();
   }
 }
@@ -404,37 +433,37 @@ export function validateImageOptimizations() {
  * Initialize performance monitoring
  */
 export function initializePerformanceMonitoring() {
-  if (typeof window === 'undefined') return null;
-  
+  if (typeof window === "undefined") return null;
+
   const monitor = new WebVitalsMonitor();
-  
+
   // Run image validation in development
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     // Wait for images to load
     setTimeout(validateImageOptimizations, 2000);
   }
-  
+
   return monitor;
 }
 
 // Auto-initialize in browser
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   let monitor: WebVitalsMonitor | null = null;
-  
+
   // Initialize after page load
-  if (document.readyState === 'complete') {
+  if (document.readyState === "complete") {
     monitor = initializePerformanceMonitoring();
   } else {
-    window.addEventListener('load', () => {
+    window.addEventListener("load", () => {
       monitor = initializePerformanceMonitoring();
     });
   }
-  
+
   // Cleanup on page unload
-  window.addEventListener('beforeunload', () => {
+  window.addEventListener("beforeunload", () => {
     if (monitor) {
       const report = monitor.generateReport();
-      console.log('Performance Report:', report);
+      console.log("Performance Report:", report);
       monitor.destroy();
     }
   });

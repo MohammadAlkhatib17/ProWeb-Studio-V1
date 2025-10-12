@@ -2,6 +2,20 @@
 
 Complete deployment guide for ProWeb Studio to Vercel production environment in the Netherlands.
 
+## Workspace Architecture
+
+This project uses npm workspaces with the following structure:
+- **Root**: Monorepo configuration and proxy scripts  
+- **site**: Main Next.js application workspace
+
+### Vercel Workspace Configuration
+
+The root `vercel.json` is configured for workspace deployment:
+- **Build Command**: `npm run build:prod --workspace=site`
+- **Install Command**: `npm install` (workspace-aware)
+- **Output Directory**: `site/.next`
+- **Framework**: Next.js (auto-detected)
+
 ## Environment Variables
 
 ### Required Environment Variables
@@ -60,23 +74,20 @@ Ensure the following are enabled in Vercel Project Settings:
 
 ### 1. Pre-deployment Validation
 
-Run these commands locally to ensure build readiness:
+Run these commands from the **root directory** to ensure build readiness:
 
 ```bash
-# Navigate to site directory
-cd site/
-
-# Clean install dependencies
+# Clean install dependencies (workspace-aware)
 npm ci
 
 # TypeScript compilation check
 npm run typecheck
 
-# Linting check
+# Linting check  
 npm run lint
 
 # Production build test
-npm run build
+npm run build:prod
 ```
 
 **Quality Gates**: All commands must exit with code 0 (no errors).

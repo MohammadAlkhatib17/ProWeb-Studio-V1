@@ -9,6 +9,9 @@ on:
 jobs:
   lighthouse-ci:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
     
     steps:
       - uses: actions/checkout@v4
@@ -21,22 +24,22 @@ jobs:
           cache-dependency-path: 'site/package-lock.json'
 
       - name: Install dependencies
-        run: npm ci --prefix site
+        run: npm ci
 
       - name: Clean up port 4020
         run: kill -9 $(lsof -t -i:4020) 2>/dev/null || true
 
       - name: Build application
-        run: npm --prefix site run build
+        run: npm run build
 
       - name: Run SEO preflight checks
-        run: npm --prefix site run seo:preflight
+        run: npm run seo:preflight
 
       - name: Run Lighthouse CI (Desktop)
-        run: npm --prefix site run ci:perf
+        run: npm run ci:perf
 
       - name: Run Lighthouse CI (Mobile - Critical Routes)
-        run: npm --prefix site run ci:perf:mobile
+        run: npm run ci:perf:mobile
 
       - name: Generate Lighthouse Summary
         if: always()

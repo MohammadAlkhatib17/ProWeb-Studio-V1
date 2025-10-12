@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import * as THREE from 'three';
-import { useMemo, useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
+import * as THREE from "three";
+import { useMemo, useRef, useEffect, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 // Custom shader for the glowing ribbon effect
 const ribbonVertexShader = `
@@ -34,12 +34,16 @@ interface RibbonProps {
 }
 
 function Ribbon({ curve, color, scrollRatio }: RibbonProps) {
-  const geom = useMemo(() => new THREE.TubeGeometry(curve, 128, 0.01, 8, false), [curve]);
+  const geom = useMemo(
+    () => new THREE.TubeGeometry(curve, 128, 0.01, 8, false),
+    [curve],
+  );
   const matRef = useRef<THREE.ShaderMaterial>(null!);
 
   useFrame(({ clock }) => {
     if (matRef.current) {
-      matRef.current.uniforms.uTime.value = clock.elapsedTime + scrollRatio * 5.0;
+      matRef.current.uniforms.uTime.value =
+        clock.elapsedTime + scrollRatio * 5.0;
     }
   });
 
@@ -71,19 +75,37 @@ function Scene() {
     const points1 = [];
     for (let i = 0; i < 64; i++) {
       const angle = (i / 64) * Math.PI * 4;
-      points1.push(new THREE.Vector3(Math.sin(angle) * 1.5, Math.cos(angle * 1.5) * 0.8, Math.cos(angle) * 1.5));
+      points1.push(
+        new THREE.Vector3(
+          Math.sin(angle) * 1.5,
+          Math.cos(angle * 1.5) * 0.8,
+          Math.cos(angle) * 1.5,
+        ),
+      );
     }
 
     const points2 = [];
     for (let i = 0; i < 64; i++) {
       const angle = (i / 64) * Math.PI * 6;
-      points2.push(new THREE.Vector3(Math.cos(angle) * 1.2, Math.sin(angle * 0.8) * 1.0, Math.sin(angle) * 1.2));
+      points2.push(
+        new THREE.Vector3(
+          Math.cos(angle) * 1.2,
+          Math.sin(angle * 0.8) * 1.0,
+          Math.sin(angle) * 1.2,
+        ),
+      );
     }
-    
+
     const points3 = [];
     for (let i = 0; i < 64; i++) {
       const angle = (i / 64) * Math.PI * 8;
-      points3.push(new THREE.Vector3(Math.cos(angle * 0.5) * 1.8, Math.sin(angle) * 1.2, Math.cos(angle) * 1.0));
+      points3.push(
+        new THREE.Vector3(
+          Math.cos(angle * 0.5) * 1.8,
+          Math.sin(angle) * 1.2,
+          Math.cos(angle) * 1.0,
+        ),
+      );
     }
 
     return [
@@ -95,23 +117,24 @@ function Scene() {
 
   useEffect(() => {
     if (reduced) return;
-    
+
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       setScrollRatio(scrollTop / docHeight);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [reduced]);
-
 
   useFrame((_, delta) => {
     if (groupRef.current) {
       const baseRotationSpeed = reduced ? 0.05 : 0.1;
       const scrollRotationSpeed = reduced ? 0 : scrollRatio * 2.0;
-      groupRef.current.rotation.y += delta * (baseRotationSpeed + scrollRotationSpeed);
+      groupRef.current.rotation.y +=
+        delta * (baseRotationSpeed + scrollRotationSpeed);
       groupRef.current.rotation.x += delta * 0.08;
     }
   });
@@ -126,11 +149,11 @@ function Scene() {
 }
 
 export default function FlowingRibbons() {
-    return (
-        <Canvas camera={{ position: [0, 0, 3], fov: 75 }}>
-            <ambientLight intensity={0.2} />
-            <pointLight position={[10, 10, 10]} intensity={0.5} />
-            <Scene />
-        </Canvas>
-    )
+  return (
+    <Canvas camera={{ position: [0, 0, 3], fov: 75 }}>
+      <ambientLight intensity={0.2} />
+      <pointLight position={[10, 10, 10]} intensity={0.5} />
+      <Scene />
+    </Canvas>
+  );
 }

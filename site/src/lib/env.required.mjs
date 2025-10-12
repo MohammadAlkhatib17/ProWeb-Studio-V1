@@ -13,7 +13,9 @@ export const CRITICAL_ENV_VARS = [
   'NEXT_PUBLIC_PLAUSIBLE_DOMAIN', 
   'CONTACT_INBOX',
   'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
-  'RECAPTCHA_SECRET_KEY'
+  'RECAPTCHA_SECRET_KEY',
+  'UPSTASH_REDIS_REST_URL',
+  'UPSTASH_REDIS_REST_TOKEN'
 ];
 
 /**
@@ -43,6 +45,12 @@ export const ENV_VAR_GROUPS = {
     description: 'Primary site URL and domain settings',
     variables: ['SITE_URL'],
     guidance: 'Set your production domain. Example: https://yourdomain.com'
+  },
+  rateLimit: {
+    name: 'Rate Limiting',
+    description: 'Upstash Redis configuration for API rate limiting',
+    variables: ['UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_REST_TOKEN'],
+    guidance: 'Get credentials from Upstash Redis console: https://console.upstash.com/'
   }
 };
 
@@ -63,8 +71,6 @@ export const RECOMMENDED_ENV_VARS = [
   'NEXT_PUBLIC_PLAUSIBLE_DOMAIN',
   'SITE_NAME',
   'NEXT_PUBLIC_CALCOM_URL',
-  'UPSTASH_REDIS_REST_URL',
-  'UPSTASH_REDIS_REST_TOKEN',
   // Additional schema and SEO enhancement variables
   'NEXT_PUBLIC_GOOGLE_PLACE_ID',
   'NEXT_PUBLIC_GOOGLE_BUSINESS_URL',

@@ -1,114 +1,158 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import SEOSchema from '@/components/SEOSchema';
-import Breadcrumbs from '@/components/Breadcrumbs';
-import { Button } from '@/components/Button';
+import type { Metadata } from "next";
+import Link from "next/link";
+import SEOSchema from "@/components/SEOSchema";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { Button } from "@/components/Button";
 
 // Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+const SITE_URL = (
+  process.env.SITE_URL ??
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  "https://prowebstudio.nl"
+).replace(/\/+$/, "");
 
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 export const revalidate = 60 * 60 * 24;
 
 export const metadata: Metadata = {
-  title: 'Site Overzicht – Alle pagina&apos;s van ProWeb Studio | Website navigatie',
-  description: 'Volledig overzicht van ProWeb Studio. Vind gemakkelijk alle pagina&apos;s, diensten, portfolio en contactinformatie voor professionele webdevelopment in Nederland.',
+  title:
+    "Site Overzicht – Alle pagina&apos;s van ProWeb Studio | Website navigatie",
+  description:
+    "Volledig overzicht van ProWeb Studio. Vind gemakkelijk alle pagina&apos;s, diensten, portfolio en contactinformatie voor professionele webdevelopment in Nederland.",
   alternates: {
-    canonical: '/overzicht-site',
-    languages: { 
-      'nl-NL': '/overzicht-site',
-      'x-default': '/overzicht-site'
+    canonical: "/overzicht-site",
+    languages: {
+      "nl-NL": "/overzicht-site",
+      "x-default": "/overzicht-site",
     },
   },
   openGraph: {
-    title: 'Site Overzicht – ProWeb Studio',
-    description: 'Volledig overzicht van ProWeb Studio. Vind gemakkelijk alle pagina\'s, diensten, portfolio en contactinformatie.',
+    title: "Site Overzicht – ProWeb Studio",
+    description:
+      "Volledig overzicht van ProWeb Studio. Vind gemakkelijk alle pagina's, diensten, portfolio en contactinformatie.",
     url: `${SITE_URL}/overzicht-site`,
-    type: 'website',
-    locale: 'nl_NL',
+    type: "website",
+    locale: "nl_NL",
   },
 };
 
 const sitemapSections = [
   {
-    title: 'Hoofdpagina\'s',
-    description: 'De belangrijkste pagina\'s van ProWeb Studio',
-    icon: '🏠',
+    title: "Hoofdpagina's",
+    description: "De belangrijkste pagina's van ProWeb Studio",
+    icon: "🏠",
     links: [
-      { href: '/', title: 'Homepage', description: 'Welkom bij ProWeb Studio - Uw partner voor innovatieve weboplossingen' },
-      { href: '/over-ons', title: 'Over Ons', description: 'Leer ons team en onze missie kennen' },
-      { href: '/contact', title: 'Contact', description: 'Neem contact op voor uw webproject' },
-    ]
+      {
+        href: "/",
+        title: "Homepage",
+        description:
+          "Welkom bij ProWeb Studio - Uw partner voor innovatieve weboplossingen",
+      },
+      {
+        href: "/over-ons",
+        title: "Over Ons",
+        description: "Leer ons team en onze missie kennen",
+      },
+      {
+        href: "/contact",
+        title: "Contact",
+        description: "Neem contact op voor uw webproject",
+      },
+    ],
   },
   {
-    title: 'Diensten & Services',
-    description: 'Onze webdevelopment en design diensten',
-    icon: '🛠️',
+    title: "Diensten & Services",
+    description: "Onze webdevelopment en design diensten",
+    icon: "🛠️",
     links: [
-      { href: '/diensten', title: 'Alle Diensten', description: 'Volledig overzicht van onze webdevelopment services' },
-      { href: '/werkwijze', title: 'Werkwijze', description: 'Onze projectaanpak van concept tot oplevering' },
-    ]
+      {
+        href: "/diensten",
+        title: "Alle Diensten",
+        description: "Volledig overzicht van onze webdevelopment services",
+      },
+      {
+        href: "/werkwijze",
+        title: "Werkwijze",
+        description: "Onze projectaanpak van concept tot oplevering",
+      },
+    ],
   },
   {
-    title: 'Portfolio & Showcases',
-    description: 'Onze projecten en technische demonstraties',
-    icon: '🎨',
+    title: "Portfolio & Showcases",
+    description: "Onze projecten en technische demonstraties",
+    icon: "🎨",
     links: [
-      { href: '/portfolio', title: 'Portfolio', description: 'Bekijk onze gerealiseerde webprojecten en case studies' },
-      { href: '/speeltuin', title: '3D Technologie Speeltuin', description: 'Interactieve demonstraties van moderne webtechnologie' },
-    ]
+      {
+        href: "/portfolio",
+        title: "Portfolio",
+        description: "Bekijk onze gerealiseerde webprojecten en case studies",
+      },
+      {
+        href: "/speeltuin",
+        title: "3D Technologie Speeltuin",
+        description: "Interactieve demonstraties van moderne webtechnologie",
+      },
+    ],
   },
   {
-    title: 'Juridisch & Beleid',
-    description: 'Voorwaarden, privacy en juridische informatie',
-    icon: '📋',
+    title: "Juridisch & Beleid",
+    description: "Voorwaarden, privacy en juridische informatie",
+    icon: "📋",
     links: [
-      { href: '/privacy', title: 'Privacybeleid', description: 'Hoe wij omgaan met uw persoonlijke gegevens' },
-      { href: '/voorwaarden', title: 'Algemene Voorwaarden', description: 'Voorwaarden voor samenwerking met ProWeb Studio' },
-    ]
+      {
+        href: "/privacy",
+        title: "Privacybeleid",
+        description: "Hoe wij omgaan met uw persoonlijke gegevens",
+      },
+      {
+        href: "/voorwaarden",
+        title: "Algemene Voorwaarden",
+        description: "Voorwaarden voor samenwerking met ProWeb Studio",
+      },
+    ],
   },
 ];
 
 const keywordCategories = [
   {
-    title: 'Website Laten Maken',
+    title: "Website Laten Maken",
     keywords: [
-      'Website laten maken Nederland',
-      'Professionele website ontwikkeling',
-      'Maatwerk webdesign',
-      'Responsive website bouwen',
-      'WordPress alternatieven',
-    ]
+      "Website laten maken Nederland",
+      "Professionele website ontwikkeling",
+      "Maatwerk webdesign",
+      "Responsive website bouwen",
+      "WordPress alternatieven",
+    ],
   },
   {
-    title: '3D Web Technologie',
+    title: "3D Web Technologie",
     keywords: [
-      'WebGL ontwikkeling',
-      'Three.js websites',
-      'Interactieve 3D ervaringen',
-      'React Three Fiber',
-      '3D productconfigurators',
-    ]
+      "WebGL ontwikkeling",
+      "Three.js websites",
+      "Interactieve 3D ervaringen",
+      "React Three Fiber",
+      "3D productconfigurators",
+    ],
   },
   {
-    title: 'Performance & SEO',
+    title: "Performance & SEO",
     keywords: [
-      'Core Web Vitals optimalisatie',
-      'Technische SEO',
-      'Website snelheidsoptimalisatie',
-      'Google PageSpeed verbetering',
-      'Zoekmachine optimalisatie',
-    ]
+      "Core Web Vitals optimalisatie",
+      "Technische SEO",
+      "Website snelheidsoptimalisatie",
+      "Google PageSpeed verbetering",
+      "Zoekmachine optimalisatie",
+    ],
   },
   {
-    title: 'E-commerce & Webshops',
+    title: "E-commerce & Webshops",
     keywords: [
-      'Webshop laten maken',
-      'E-commerce ontwikkeling',
-      'Online verkoop platform',
-      'Betaalsysteem integratie',
-      'Headless commerce',
-    ]
+      "Webshop laten maken",
+      "E-commerce ontwikkeling",
+      "Online verkoop platform",
+      "Betaalsysteem integratie",
+      "Headless commerce",
+    ],
   },
 ];
 
@@ -116,7 +160,7 @@ export default function SitemapPage() {
   return (
     <main className="content-safe-top pt-20 md:pt-24">
       <Breadcrumbs />
-      
+
       <SEOSchema
         pageType="generic"
         pageTitle={metadata.title as string}
@@ -130,8 +174,9 @@ export default function SitemapPage() {
             Site Overzicht ProWeb Studio
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl mx-auto mb-8">
-            Navigeer gemakkelijk door alle pagina&apos;s van ProWeb Studio. Van diensten tot portfolio, 
-            van technische showcases tot contactinformatie - vind hier alles wat u zoekt.
+            Navigeer gemakkelijk door alle pagina&apos;s van ProWeb Studio. Van
+            diensten tot portfolio, van technische showcases tot
+            contactinformatie - vind hier alles wat u zoekt.
           </p>
         </div>
       </section>
@@ -143,7 +188,9 @@ export default function SitemapPage() {
             {sitemapSections.map((section, index) => (
               <div key={index} className="glass p-6 sm:p-8 rounded-xl">
                 <div className="flex items-center mb-6">
-                  <span className="text-3xl mr-3" aria-hidden="true">{section.icon}</span>
+                  <span className="text-3xl mr-3" aria-hidden="true">
+                    {section.icon}
+                  </span>
                   <div>
                     <h2 className="text-xl sm:text-2xl font-bold text-cyan-300">
                       {section.title}
@@ -153,11 +200,11 @@ export default function SitemapPage() {
                     </p>
                   </div>
                 </div>
-                
+
                 <ul className="space-y-4">
                   {section.links.map((link, linkIndex) => (
                     <li key={linkIndex}>
-                      <Link 
+                      <Link
                         href={link.href}
                         className="block p-4 rounded-lg bg-cosmic-800/40 border border-cosmic-700/60 hover:border-cyan-500/60 transition-all duration-300 group"
                       >
@@ -169,7 +216,9 @@ export default function SitemapPage() {
                         </p>
                         <div className="flex items-center mt-2 text-cyan-300 text-sm">
                           <span>Bezoek pagina</span>
-                          <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                          <span className="ml-1 group-hover:translate-x-1 transition-transform">
+                            →
+                          </span>
                         </div>
                       </Link>
                     </li>
@@ -188,10 +237,11 @@ export default function SitemapPage() {
             Onze Expertisegebieden
           </h2>
           <p className="text-slate-200 text-center mb-12 max-w-3xl mx-auto">
-            ProWeb Studio specialiseert zich in diverse aspecten van moderne webdevelopment. 
-            Ontdek onze kerncompetenties en hoe wij uw digitale ambities kunnen realiseren.
+            ProWeb Studio specialiseert zich in diverse aspecten van moderne
+            webdevelopment. Ontdek onze kerncompetenties en hoe wij uw digitale
+            ambities kunnen realiseren.
           </p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {keywordCategories.map((category, index) => (
               <div key={index} className="glass p-6 rounded-xl">
@@ -200,7 +250,10 @@ export default function SitemapPage() {
                 </h3>
                 <ul className="space-y-2">
                   {category.keywords.map((keyword, keywordIndex) => (
-                    <li key={keywordIndex} className="text-slate-200 text-sm flex items-center">
+                    <li
+                      key={keywordIndex}
+                      className="text-slate-200 text-sm flex items-center"
+                    >
                       <span className="text-cyan-300 mr-2 text-xs">▸</span>
                       {keyword}
                     </li>
@@ -219,36 +272,21 @@ export default function SitemapPage() {
             Snelle Acties
           </h2>
           <p className="text-slate-200 mb-8">
-            Weet u al wat u zoekt? Spring direct naar de meest populaire pagina&apos;s.
+            Weet u al wat u zoekt? Spring direct naar de meest populaire
+            pagina&apos;s.
           </p>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Button 
-              href="/contact"
-              variant="primary"
-              className="w-full"
-            >
+            <Button href="/contact" variant="primary" className="w-full">
               Contact Opnemen
             </Button>
-            <Button 
-              href="/diensten"
-              variant="secondary"
-              className="w-full"
-            >
+            <Button href="/diensten" variant="secondary" className="w-full">
               Bekijk Diensten
             </Button>
-            <Button 
-              href="/speeltuin"
-              variant="secondary"
-              className="w-full"
-            >
+            <Button href="/speeltuin" variant="secondary" className="w-full">
               3D Showcases
             </Button>
-            <Button 
-              href="/portfolio"
-              variant="secondary"
-              className="w-full"
-            >
+            <Button href="/portfolio" variant="secondary" className="w-full">
               Portfolio
             </Button>
           </div>
@@ -262,22 +300,14 @@ export default function SitemapPage() {
             Klaar om uw Website Project te Starten?
           </h2>
           <p className="text-slate-200 mb-6">
-            Van concept tot conversie - ProWeb Studio realiseert digitale oplossingen 
-            die uw bedrijf naar het volgende niveau tillen.
+            Van concept tot conversie - ProWeb Studio realiseert digitale
+            oplossingen die uw bedrijf naar het volgende niveau tillen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              href="/contact"
-              variant="primary"
-              size="large"
-            >
+            <Button href="/contact" variant="primary" size="large">
               Plan Gratis Strategiesessie
             </Button>
-            <Button
-              href="/werkwijze"
-              variant="secondary"
-              size="large"
-            >
+            <Button href="/werkwijze" variant="secondary" size="large">
               Ontdek Onze Werkwijze
             </Button>
           </div>

@@ -1,30 +1,32 @@
-'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { siteConfig } from '@/config/site.config';
-import { Button } from '@/components/Button';
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { siteConfig } from "@/config/site.config";
+import { Button } from "@/components/Button";
 
 // Check if the Cal.com URL is valid (not a placeholder)
 function isValidCalcomUrl(url: string): boolean {
   if (!url) return false;
-  
+
   // Check for common placeholder patterns
   const placeholderPatterns = [
-    'your-handle',
-    'your-username',
-    'placeholder',
-    'example',
-    'demo'
+    "your-handle",
+    "your-username",
+    "placeholder",
+    "example",
+    "demo",
   ];
-  
+
   // Check if URL contains any placeholder patterns
-  const hasPlaceholder = placeholderPatterns.some(pattern => 
-    url.toLowerCase().includes(pattern)
+  const hasPlaceholder = placeholderPatterns.some((pattern) =>
+    url.toLowerCase().includes(pattern),
   );
-  
+
   // Check if it's a proper cal.com URL format (basic validation)
-  const isProperFormat = url.startsWith('https://cal.com/') && url.length > 'https://cal.com/'.length;
-  
+  const isProperFormat =
+    url.startsWith("https://cal.com/") &&
+    url.length > "https://cal.com/".length;
+
   return !hasPlaceholder && isProperFormat;
 }
 
@@ -39,17 +41,12 @@ export default function CalEmbed() {
       setOpen(true);
     } else {
       // Route to contact page instead
-      router.push('/contact');
+      router.push("/contact");
     }
   };
   return (
     <>
-      <Button
-        as="button"
-        onClick={handleClick}
-        variant="primary"
-        size="large"
-      >
+      <Button as="button" onClick={handleClick} variant="primary" size="large">
         Plan een call
       </Button>
       {open && isValidUrl && (

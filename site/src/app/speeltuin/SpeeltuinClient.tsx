@@ -1,48 +1,59 @@
-'use client';
+"use client";
 
-import { useState, useCallback, useEffect } from 'react';
-import dynamic from 'next/dynamic';
-import SceneHUD from '@/components/overlay/SceneHUD';
-import { LiveBadge, FooterLeft, FooterRight } from '@/components/overlay/HUDCopy';
-import { Button } from '@/components/Button';
+import { useState, useCallback, useEffect } from "react";
+import dynamic from "next/dynamic";
+import SceneHUD from "@/components/overlay/SceneHUD";
+import {
+  LiveBadge,
+  FooterLeft,
+  FooterRight,
+} from "@/components/overlay/HUDCopy";
+import { Button } from "@/components/Button";
 
 // Dynamically import the 3D component with loading fallback
-const TechPlaygroundScene = dynamic(() => import('@/components/TechPlaygroundScene'), {
-  loading: () => (
-    <div className="absolute inset-0 flex items-center justify-center bg-slate-900/60">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
-        <p className="text-cyan-300 text-sm">Loading 3D Experience...</p>
-        <p className="text-gray-500 text-xs mt-2">Optimizing for your device</p>
+const TechPlaygroundScene = dynamic(
+  () => import("@/components/TechPlaygroundScene"),
+  {
+    loading: () => (
+      <div className="absolute inset-0 flex items-center justify-center bg-slate-900/60">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+          <p className="text-cyan-300 text-sm">Loading 3D Experience...</p>
+          <p className="text-gray-500 text-xs mt-2">
+            Optimizing for your device
+          </p>
+        </div>
       </div>
-    </div>
-  ),
-  ssr: false
-});
+    ),
+    ssr: false,
+  },
+);
 
 export default function SpeeltuinClient() {
   // Enhanced state management for the 3D scene
-  const [material, setMaterial] = useState<'crystal' | 'energy'>('crystal');
-  const [palette, setPalette] = useState<'anwar' | 'sunfire'>('anwar');
+  const [material, setMaterial] = useState<"crystal" | "energy">("crystal");
+  const [palette, setPalette] = useState<"anwar" | "sunfire">("anwar");
   const [animationState, setAnimationState] = useState<
-    'idle' | 'active' | 'perpetual'
-  >('idle');
+    "idle" | "active" | "perpetual"
+  >("idle");
   const [interactionHeat, setInteractionHeat] = useState(0);
   const [isLowPerformanceMode, setIsLowPerformanceMode] = useState(false);
 
   // Performance detection
   useEffect(() => {
     // Detect slow connections or low-end devices
-    const connection = (navigator as { connection?: { effectiveType?: string } }).connection;
-    const isSlowConnection = connection && (
-      connection.effectiveType === 'slow-2g' || 
-      connection.effectiveType === '2g' || 
-      connection.effectiveType === '3g'
-    );
-    
+    const connection = (
+      navigator as { connection?: { effectiveType?: string } }
+    ).connection;
+    const isSlowConnection =
+      connection &&
+      (connection.effectiveType === "slow-2g" ||
+        connection.effectiveType === "2g" ||
+        connection.effectiveType === "3g");
+
     // Simple performance heuristic
     const isLowEndDevice = navigator.hardwareConcurrency <= 2;
-    
+
     if (isSlowConnection || isLowEndDevice) {
       setIsLowPerformanceMode(true);
     }
@@ -57,24 +68,24 @@ export default function SpeeltuinClient() {
   }, []);
 
   const handleMaterialToggle = useCallback(() => {
-    setMaterial((prev) => (prev === 'crystal' ? 'energy' : 'crystal'));
+    setMaterial((prev) => (prev === "crystal" ? "energy" : "crystal"));
     setInteractionHeat((prev) => Math.min(1, prev + 0.3));
   }, []);
 
   const handlePaletteToggle = useCallback(() => {
-    setPalette((prev) => (prev === 'anwar' ? 'sunfire' : 'anwar'));
+    setPalette((prev) => (prev === "anwar" ? "sunfire" : "anwar"));
     setInteractionHeat((prev) => Math.min(1, prev + 0.3));
   }, []);
 
   const handleAnimationToggle = useCallback(() => {
     setAnimationState((prev) => {
-      if (prev === 'idle') {
+      if (prev === "idle") {
         setInteractionHeat(1);
-        return 'active';
-      } else if (prev === 'active') {
-        return 'perpetual';
+        return "active";
+      } else if (prev === "active") {
+        return "perpetual";
       } else {
-        return 'idle';
+        return "idle";
       }
     });
   }, []);
@@ -82,14 +93,14 @@ export default function SpeeltuinClient() {
   // Dynamic button text based on animation state
   const getAnimationButtonText = () => {
     switch (animationState) {
-      case 'idle':
-        return 'Start Animatie';
-      case 'active':
-        return 'Eeuwige Modus';
-      case 'perpetual':
-        return 'Stop Animatie';
+      case "idle":
+        return "Start Animatie";
+      case "active":
+        return "Eeuwige Modus";
+      case "perpetual":
+        return "Stop Animatie";
       default:
-        return 'Start Animatie';
+        return "Start Animatie";
     }
   };
 
@@ -97,10 +108,10 @@ export default function SpeeltuinClient() {
   const getInteractionStyling = (baseClasses: string) => {
     const heatLevel = Math.floor(interactionHeat * 3);
     const heatStyles = [
-      '',
-      'ring-2 ring-cyan-400/30',
-      'ring-2 ring-cyan-400/60 shadow-cyan-400/20',
-      'ring-4 ring-cyan-400 shadow-lg shadow-cyan-400/40 scale-105',
+      "",
+      "ring-2 ring-cyan-400/30",
+      "ring-2 ring-cyan-400/60 shadow-cyan-400/20",
+      "ring-4 ring-cyan-400 shadow-lg shadow-cyan-400/40 scale-105",
     ];
     return `${baseClasses} ${heatStyles[heatLevel]} transition-all duration-500`;
   };
@@ -135,11 +146,11 @@ export default function SpeeltuinClient() {
             <button
               onClick={handleMaterialToggle}
               className={getInteractionStyling(
-                'touch-target min-h-[48px] px-4 sm:px-6 py-3 sm:py-3 text-sm sm:text-sm font-medium border-2 border-cyan-400/40 bg-cosmic-800/60 backdrop-blur-sm rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/25 hover:scale-105 relative group w-full sm:w-auto active:scale-95',
+                "touch-target min-h-[48px] px-4 sm:px-6 py-3 sm:py-3 text-sm sm:text-sm font-medium border-2 border-cyan-400/40 bg-cosmic-800/60 backdrop-blur-sm rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/25 hover:scale-105 relative group w-full sm:w-auto active:scale-95",
               )}
             >
               <span className="relative z-10">
-                {material === 'crystal' ? '🔮 Crystal Mode' : '⚡ Energy Mode'}
+                {material === "crystal" ? "🔮 Crystal Mode" : "⚡ Energy Mode"}
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
             </button>
@@ -147,13 +158,13 @@ export default function SpeeltuinClient() {
             <button
               onClick={handlePaletteToggle}
               className={getInteractionStyling(
-                'touch-target min-h-[48px] px-4 sm:px-6 py-3 sm:py-3 text-sm sm:text-sm font-medium border-2 border-cyan-400/40 bg-cosmic-800/60 backdrop-blur-sm rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/25 hover:scale-105 relative group w-full sm:w-auto active:scale-95',
+                "touch-target min-h-[48px] px-4 sm:px-6 py-3 sm:py-3 text-sm sm:text-sm font-medium border-2 border-cyan-400/40 bg-cosmic-800/60 backdrop-blur-sm rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/25 hover:scale-105 relative group w-full sm:w-auto active:scale-95",
               )}
             >
               <span className="relative z-10">
-                {palette === 'anwar'
-                  ? '🌊 Anwar Palette'
-                  : '🌅 Sunfire Palette'}
+                {palette === "anwar"
+                  ? "🌊 Anwar Palette"
+                  : "🌅 Sunfire Palette"}
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-orange-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
             </button>
@@ -161,16 +172,16 @@ export default function SpeeltuinClient() {
             <button
               onClick={handleAnimationToggle}
               className={`touch-target min-h-[48px] px-4 sm:px-6 py-3 sm:py-3 text-sm sm:text-sm font-semibold rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 relative overflow-hidden group w-full sm:w-auto ${
-                animationState === 'idle'
-                  ? 'bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black shadow-lg hover:shadow-2xl hover:shadow-cyan-500/25'
-                  : animationState === 'active'
-                    ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-black shadow-lg hover:shadow-2xl hover:shadow-green-500/25'
-                    : 'bg-gradient-to-r from-red-400 to-pink-500 text-white shadow-lg hover:shadow-2xl hover:shadow-red-500/25'
+                animationState === "idle"
+                  ? "bg-gradient-to-r from-cyan-400 to-fuchsia-500 text-black shadow-lg hover:shadow-2xl hover:shadow-cyan-500/25"
+                  : animationState === "active"
+                    ? "bg-gradient-to-r from-green-400 to-emerald-500 text-black shadow-lg hover:shadow-2xl hover:shadow-green-500/25"
+                    : "bg-gradient-to-r from-red-400 to-pink-500 text-white shadow-lg hover:shadow-2xl hover:shadow-red-500/25"
               }`}
             >
               <span className="relative z-10">{getAnimationButtonText()}</span>
               <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              {animationState === 'perpetual' && (
+              {animationState === "perpetual" && (
                 <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               )}
             </button>
@@ -182,8 +193,8 @@ export default function SpeeltuinClient() {
                   key={i}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     i < Math.floor(interactionHeat * 3) + 1
-                      ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
-                      : 'bg-gray-600/30'
+                      ? "bg-cyan-400 shadow-lg shadow-cyan-400/50"
+                      : "bg-gray-600/30"
                   }`}
                 />
               ))}
@@ -195,21 +206,21 @@ export default function SpeeltuinClient() {
             <p
               className={`text-sm transition-all duration-500 ${
                 interactionHeat > 0.7
-                  ? 'text-cyan-300 glow-text'
+                  ? "text-cyan-300 glow-text"
                   : interactionHeat > 0.3
-                    ? 'text-cyan-300'
-                    : 'text-slate-400'
+                    ? "text-cyan-300"
+                    : "text-slate-400"
               }`}
             >
-              {animationState === 'perpetual'
-                ? '🌟 Scene eternally alive with endless motion'
-                : animationState === 'active'
-                  ? '✨ Animation sequence active'
+              {animationState === "perpetual"
+                ? "🌟 Scene eternally alive with endless motion"
+                : animationState === "active"
+                  ? "✨ Animation sequence active"
                   : interactionHeat > 0.5
-                    ? '🔥 High interaction energy detected'
+                    ? "🔥 High interaction energy detected"
                     : interactionHeat > 0.2
-                      ? '⚡ Scene responding to your touch'
-                      : '🎭 Scene ready for your interaction'}
+                      ? "⚡ Scene responding to your touch"
+                      : "🎭 Scene ready for your interaction"}
             </p>
           </div>
         </div>
@@ -218,12 +229,14 @@ export default function SpeeltuinClient() {
       {/* Enhanced Interactive Canvas */}
       <section className="py-section px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="relative rounded-2xl bg-slate-900/60 ring-1 ring-white/10 overflow-hidden w-full
+          <div
+            className="relative rounded-2xl bg-slate-900/60 ring-1 ring-white/10 overflow-hidden w-full
                           min-h-[50vh] h-[60vh] max-h-[500px] 
                           xs:min-h-[55vh] xs:h-[65vh] xs:max-h-[550px]
                           sm:min-h-[60vh] sm:h-[70vh] sm:max-h-[600px] 
                           md:aspect-[16/9] md:h-auto md:max-h-none
-                          landscape:h-[85vh] landscape:max-h-[85vh]">
+                          landscape:h-[85vh] landscape:max-h-[85vh]"
+          >
             {/* 3D Canvas - Base layer */}
             <div className="absolute inset-0 z-0">
               <TechPlaygroundScene
@@ -234,7 +247,7 @@ export default function SpeeltuinClient() {
                 autoRotate={!isLowPerformanceMode}
               />
             </div>
-            
+
             {/* UI Overlay - Above canvas */}
             <div className="absolute inset-0 z-10 pointer-events-none">
               <SceneHUD
@@ -302,11 +315,7 @@ export default function SpeeltuinClient() {
               Laten we bespreken hoe we deze technologie kunnen inzetten om uw
               bedrijfsdoelen te bereiken.
             </p>
-            <Button
-              href="/contact"
-              variant="primary"
-              size="large"
-            >
+            <Button href="/contact" variant="primary" size="large">
               Plan een strategiesessie
             </Button>
           </div>
@@ -320,61 +329,63 @@ export default function SpeeltuinClient() {
             id="seo-content"
             className="prose prose-sm sm:prose-base prose-invert max-w-4xl mx-auto leading-relaxed"
           >
-        <h1>Speeltuin: 3D Webtechnologie in de Praktijk</h1>
-        <p>
-          Deze interactieve speeltuin demonstreert onze praktijkervaring in het
-          creëren van hoogperformante, meeslepende 3D-webervaringen. Als React
-          Three Fiber bureau Nederland specialiseren wij ons in WebGL
-          ontwikkeling die niet alleen visueel indrukwekkend is, maar ook
-          technisch geoptimaliseerd voor alle apparaten. Hier kunt u ervaren hoe
-          geavanceerde webtechnologie uw digitale aanwezigheid kan
-          transformeren.
-        </p>
+            <h1>Speeltuin: 3D Webtechnologie in de Praktijk</h1>
+            <p>
+              Deze interactieve speeltuin demonstreert onze praktijkervaring in
+              het creëren van hoogperformante, meeslepende 3D-webervaringen. Als
+              React Three Fiber bureau Nederland specialiseren wij ons in WebGL
+              ontwikkeling die niet alleen visueel indrukwekkend is, maar ook
+              technisch geoptimaliseerd voor alle apparaten. Hier kunt u ervaren
+              hoe geavanceerde webtechnologie uw digitale aanwezigheid kan
+              transformeren.
+            </p>
 
-        <h2>Wat Kunt U Hier Ervaren?</h2>
-        <ul>
-          <li>
-            <strong>Interactieve Productconfiguratoren:</strong> Perfect voor
-            e-commerce en verkoop, waarbij klanten producten in real-time kunnen
-            aanpassen en visualiseren. Deze technologie verhoogt betrokkenheid
-            en converteert bezoekers effectiever naar kopers.
-          </li>
-          <li>
-            <strong>Real-time 3D-visualisaties:</strong> Ideaal voor
-            datavisualisatie, architecturale presentaties, of het toegankelijk
-            maken van complexe concepten. Wij maken abstract concreet door
-            middel van interactieve 3D website ervaringen.
-          </li>
-          <li>
-            <strong>Scroll-gebaseerde Animaties:</strong> Voor boeiende
-            storytelling en merkbeleving die gebruikers meeneemt op een visuele
-            reis. Deze animaties verbeteren de gebruikerservaring en zorgen voor
-            langere sessietijden.
-          </li>
-          <li>
-            <strong>Parallax &amp; Diepte-effecten:</strong> Creëer dimensie en
-            beweging die uw content tot leven brengt, met subtiele effecten die
-            professioneel ogen en technisch geoptimaliseerd zijn.
-          </li>
-        </ul>
+            <h2>Wat Kunt U Hier Ervaren?</h2>
+            <ul>
+              <li>
+                <strong>Interactieve Productconfiguratoren:</strong> Perfect
+                voor e-commerce en verkoop, waarbij klanten producten in
+                real-time kunnen aanpassen en visualiseren. Deze technologie
+                verhoogt betrokkenheid en converteert bezoekers effectiever naar
+                kopers.
+              </li>
+              <li>
+                <strong>Real-time 3D-visualisaties:</strong> Ideaal voor
+                datavisualisatie, architecturale presentaties, of het
+                toegankelijk maken van complexe concepten. Wij maken abstract
+                concreet door middel van interactieve 3D website ervaringen.
+              </li>
+              <li>
+                <strong>Scroll-gebaseerde Animaties:</strong> Voor boeiende
+                storytelling en merkbeleving die gebruikers meeneemt op een
+                visuele reis. Deze animaties verbeteren de gebruikerservaring en
+                zorgen voor langere sessietijden.
+              </li>
+              <li>
+                <strong>Parallax &amp; Diepte-effecten:</strong> Creëer dimensie
+                en beweging die uw content tot leven brengt, met subtiele
+                effecten die professioneel ogen en technisch geoptimaliseerd
+                zijn.
+              </li>
+            </ul>
 
-        <h2>Onze Aanpak: Performance First</h2>
-        <p>
-          Performance optimalisatie staat centraal in onze
-          ontwikkelingsfilosofie. Wij gebruiken lichtgewicht 3D-modellen,
-          geavanceerde instancing technieken, slimme lazy loading strategieën en
-          robuuste fallbacks voor verschillende hardwareconfiguraties. Deze
-          aanpak garandeert dat uw interactieve 3D website soepel draait op alle
-          apparaten – van high-end desktops tot mobiele telefoons. Dit is
-          cruciaal voor SEO, gebruikersbehoud en conversie, omdat snelheid en
-          toegankelijkheid direct bijdragen aan uw ranking in Google en de
-          algehele gebruikerservaring.
-        </p>
-        <p>
-          <a href="/contact" className="inline-block mt-4">
-            Bespreek een 3D‑use‑case voor uw merk
-          </a>
-        </p>
+            <h2>Onze Aanpak: Performance First</h2>
+            <p>
+              Performance optimalisatie staat centraal in onze
+              ontwikkelingsfilosofie. Wij gebruiken lichtgewicht 3D-modellen,
+              geavanceerde instancing technieken, slimme lazy loading
+              strategieën en robuuste fallbacks voor verschillende
+              hardwareconfiguraties. Deze aanpak garandeert dat uw interactieve
+              3D website soepel draait op alle apparaten – van high-end desktops
+              tot mobiele telefoons. Dit is cruciaal voor SEO, gebruikersbehoud
+              en conversie, omdat snelheid en toegankelijkheid direct bijdragen
+              aan uw ranking in Google en de algehele gebruikerservaring.
+            </p>
+            <p>
+              <a href="/contact" className="inline-block mt-4">
+                Bespreek een 3D‑use‑case voor uw merk
+              </a>
+            </p>
           </div>
         </div>
       </section>

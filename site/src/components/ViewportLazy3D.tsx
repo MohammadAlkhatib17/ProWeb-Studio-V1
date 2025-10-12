@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Suspense, ComponentType, lazy } from 'react';
-import { useInView } from '@/hooks/useInView';
+import { Suspense, ComponentType, lazy } from "react";
+import { useInView } from "@/hooks/useInView";
 
 interface ViewportLazy3DProps {
   className?: string;
@@ -11,22 +11,22 @@ interface ViewportLazy3DProps {
   rootMargin?: string;
 }
 
-function ViewportLazy3D({ 
-  className, 
-  fallback, 
-  children, 
-  threshold = 0.1, 
-  rootMargin = '100px' 
+function ViewportLazy3D({
+  className,
+  fallback,
+  children,
+  threshold = 0.1,
+  rootMargin = "100px",
 }: ViewportLazy3DProps) {
-  const { ref, isInView } = useInView({ 
-    threshold, 
+  const { ref, isInView } = useInView({
+    threshold,
     rootMargin,
-    triggerOnce: true 
+    triggerOnce: true,
   });
 
   const defaultFallback = (
-    <div 
-      className={`bg-cosmic-900/50 animate-pulse rounded-lg ${className || 'h-[300px] sm:h-[350px] md:h-[400px] w-full'}`}
+    <div
+      className={`bg-cosmic-900/50 animate-pulse rounded-lg ${className || "h-[300px] sm:h-[350px] md:h-[400px] w-full"}`}
       aria-label="Loading 3D scene..."
     />
   );
@@ -34,9 +34,7 @@ function ViewportLazy3D({
   return (
     <div ref={ref} className={className}>
       {isInView ? (
-        <Suspense fallback={fallback || defaultFallback}>
-          {children}
-        </Suspense>
+        <Suspense fallback={fallback || defaultFallback}>{children}</Suspense>
       ) : (
         fallback || defaultFallback
       )}
@@ -52,10 +50,10 @@ export function createViewportLazy3D<T = object>(
     fallback?: React.ReactNode;
     threshold?: number;
     rootMargin?: string;
-  } = {}
+  } = {},
 ) {
   const LazyComponent = lazy(importFn);
-  
+
   return function ViewportLazy3DComponent(props: T) {
     return (
       <ViewportLazy3D {...options}>

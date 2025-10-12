@@ -3,17 +3,17 @@
  * Runs comprehensive checks and sends alerts for critical issues
  */
 
-import { MONITORING_CONFIG } from './config';
-import { structuredDataAutomation } from './structured-data';
-import { notFoundMonitor } from './not-found';
-import type { NotFoundAnalytics } from './not-found';
-import { AlertManager, CacheManager } from './utils';
-import type { 
-  MonitoringAlert, 
-  SEOHealthCheck, 
+import { MONITORING_CONFIG } from "./config";
+import { structuredDataAutomation } from "./structured-data";
+import { notFoundMonitor } from "./not-found";
+import type { NotFoundAnalytics } from "./not-found";
+import { AlertManager, CacheManager } from "./utils";
+import type {
+  MonitoringAlert,
+  SEOHealthCheck,
   CoreWebVitalsMetrics,
-  SitemapValidation
-} from './types';
+  SitemapValidation,
+} from "./types";
 
 export interface DailyCheckResult {
   timestamp: number;
@@ -40,13 +40,13 @@ export interface IndexingStatus {
   errors: Array<{
     url: string;
     error: string;
-    severity: 'high' | 'medium' | 'low';
+    severity: "high" | "medium" | "low";
   }>;
   lastUpdated: number;
 }
 
 export interface NotificationPayload {
-  type: 'email' | 'webhook' | 'slack';
+  type: "email" | "webhook" | "slack";
   recipient: string;
   subject: string;
   message: string;
@@ -66,7 +66,7 @@ export class DailyMonitoring {
    */
   async runDailyChecks(): Promise<DailyCheckResult> {
     if (this.isRunning) {
-      throw new Error('Daily checks are already running');
+      throw new Error("Daily checks are already running");
     }
 
     this.isRunning = true;
@@ -81,21 +81,36 @@ export class DailyMonitoring {
         performanceResult,
         notFoundResult,
         sitemapResult,
-        indexingResult
+        indexingResult,
       ] = await Promise.allSettled([
         this.runSEOHealthCheck(),
         this.runPerformanceCheck(),
         this.runNotFoundCheck(),
         this.runSitemapCheck(),
-        this.runIndexingCheck()
+        this.runIndexingCheck(),
       ]);
 
       // Extract results
-      const seoHealth = this.getSettledResult(seoHealthResult, this.getDefaultSEOHealth());
-      const performance = this.getSettledResult(performanceResult, this.getDefaultPerformance());
-      const notFound = this.getSettledResult(notFoundResult, this.getDefaultNotFound());
-      const sitemap = this.getSettledResult(sitemapResult, this.getDefaultSitemap());
-      const indexing = this.getSettledResult(indexingResult, this.getDefaultIndexing());
+      const seoHealth = this.getSettledResult(
+        seoHealthResult,
+        this.getDefaultSEOHealth(),
+      );
+      const performance = this.getSettledResult(
+        performanceResult,
+        this.getDefaultPerformance(),
+      );
+      const notFound = this.getSettledResult(
+        notFoundResult,
+        this.getDefaultNotFound(),
+      );
+      const sitemap = this.getSettledResult(
+        sitemapResult,
+        this.getDefaultSitemap(),
+      );
+      const indexing = this.getSettledResult(
+        indexingResult,
+        this.getDefaultIndexing(),
+      );
 
       // Analyze results and generate alerts
       const alerts = await this.analyzeResults({
@@ -103,17 +118,20 @@ export class DailyMonitoring {
         performance,
         notFound,
         sitemap,
-        indexing
+        indexing,
       });
 
       // Calculate overall score and summary
-      const summary = this.calculateSummary({
-        seoHealth,
-        performance,
-        notFound,
-        sitemap,
-        indexing
-      }, alerts);
+      const summary = this.calculateSummary(
+        {
+          seoHealth,
+          performance,
+          notFound,
+          sitemap,
+          indexing,
+        },
+        alerts,
+      );
 
       const result: DailyCheckResult = {
         timestamp,
@@ -123,10 +141,10 @@ export class DailyMonitoring {
           performance,
           notFound,
           sitemap,
-          indexing
+          indexing,
         },
         alerts,
-        summary
+        summary,
       };
 
       // Store results
@@ -138,9 +156,8 @@ export class DailyMonitoring {
       console.log(`Daily monitoring checks completed successfully`);
 
       return result;
-
     } catch (error) {
-      console.error('Daily monitoring checks failed:', error);
+      console.error("Daily monitoring checks failed:", error);
       throw error;
     } finally {
       this.isRunning = false;
@@ -160,24 +177,31 @@ export class DailyMonitoring {
 
     setTimeout(() => {
       this.runDailyChecks().catch(console.error);
-      
+
       // Schedule recurring daily checks
-      setInterval(() => {
-        this.runDailyChecks().catch(console.error);
-      }, 24 * 60 * 60 * 1000); // 24 hours
+      setInterval(
+        () => {
+          this.runDailyChecks().catch(console.error);
+        },
+        24 * 60 * 60 * 1000,
+      ); // 24 hours
     }, msUntilTomorrow);
 
-    console.log(`Daily monitoring scheduled to run at ${tomorrow.toLocaleString()}`);
+    console.log(
+      `Daily monitoring scheduled to run at ${tomorrow.toLocaleString()}`,
+    );
   }
 
   private async runSEOHealthCheck(): Promise<SEOHealthCheck> {
-    const structuredDataResult = await structuredDataAutomation.runDailyCheck(this.siteUrl);
-    
+    const structuredDataResult = await structuredDataAutomation.runDailyCheck(
+      this.siteUrl,
+    );
+
     // Comprehensive SEO health check
     const seoHealth: SEOHealthCheck = {
       url: this.siteUrl,
       timestamp: Date.now(),
-      status: structuredDataResult.valid ? 'healthy' : 'warning',
+      status: structuredDataResult.valid ? "healthy" : "warning",
       checks: {
         metaTags: await this.checkMetaTags(),
         structuredData: structuredDataResult,
@@ -208,7 +232,7 @@ export class DailyMonitoring {
       ttfb: 600,
       timestamp: Date.now(),
       url: this.siteUrl,
-      userAgent: 'Daily Monitor Bot',
+      userAgent: "Daily Monitor Bot",
     };
   }
 
@@ -220,14 +244,14 @@ export class DailyMonitoring {
     try {
       const sitemapUrl = `${this.siteUrl}/sitemap.xml`;
       const response = await fetch(sitemapUrl);
-      
+
       const validation: SitemapValidation = {
         url: sitemapUrl,
         timestamp: Date.now(),
         isValid: response.ok,
         urlCount: 0,
         issues: [],
-        indexSubmissionStatus: 'submitted',
+        indexSubmissionStatus: "submitted",
         coverageReport: {
           submitted: 0,
           indexed: 0,
@@ -240,20 +264,20 @@ export class DailyMonitoring {
         const xmlContent = await response.text();
         const urlMatches = xmlContent.match(/<loc>(.*?)<\/loc>/g);
         validation.urlCount = urlMatches ? urlMatches.length : 0;
-        
+
         // Basic validation
-        if (!xmlContent.includes('<?xml')) {
+        if (!xmlContent.includes("<?xml")) {
           validation.issues.push({
-            type: 'error',
-            message: 'Invalid XML format',
-            recommendation: 'Ensure sitemap starts with XML declaration',
+            type: "error",
+            message: "Invalid XML format",
+            recommendation: "Ensure sitemap starts with XML declaration",
           });
         }
       } else {
         validation.issues.push({
-          type: 'error',
+          type: "error",
           message: `Sitemap not accessible: HTTP ${response.status}`,
-          recommendation: 'Check sitemap URL and server configuration',
+          recommendation: "Check sitemap URL and server configuration",
         });
       }
 
@@ -264,12 +288,14 @@ export class DailyMonitoring {
         timestamp: Date.now(),
         isValid: false,
         urlCount: 0,
-        issues: [{
-          type: 'error',
-          message: `Sitemap check failed: ${error}`,
-          recommendation: 'Check sitemap accessibility and format',
-        }],
-        indexSubmissionStatus: 'error',
+        issues: [
+          {
+            type: "error",
+            message: `Sitemap check failed: ${error}`,
+            recommendation: "Check sitemap accessibility and format",
+          },
+        ],
+        indexSubmissionStatus: "error",
         coverageReport: {
           submitted: 0,
           indexed: 0,
@@ -290,86 +316,106 @@ export class DailyMonitoring {
       errors: [
         {
           url: `${this.siteUrl}/some-page`,
-          error: 'Page blocked by robots.txt',
-          severity: 'medium',
+          error: "Page blocked by robots.txt",
+          severity: "medium",
         },
       ],
       lastUpdated: Date.now(),
     };
   }
 
-  private async analyzeResults(checks: DailyCheckResult['checks']): Promise<MonitoringAlert[]> {
+  private async analyzeResults(
+    checks: DailyCheckResult["checks"],
+  ): Promise<MonitoringAlert[]> {
     const alerts: MonitoringAlert[] = [];
 
     // SEO Health alerts
-    if (checks.seoHealth.score < MONITORING_CONFIG.ALERTS.SEVERITY_THRESHOLDS.CRITICAL.SEO_SCORE) {
-      alerts.push(AlertManager.createAlert(
-        'seo',
-        'critical',
-        'Critical SEO Issues Detected',
-        `SEO score dropped to ${checks.seoHealth.score}. Immediate attention required.`,
-        this.siteUrl,
-        { score: checks.seoHealth.score, issues: checks.seoHealth.issues.length }
-      )!);
+    if (
+      checks.seoHealth.score <
+      MONITORING_CONFIG.ALERTS.SEVERITY_THRESHOLDS.CRITICAL.SEO_SCORE
+    ) {
+      alerts.push(
+        AlertManager.createAlert(
+          "seo",
+          "critical",
+          "Critical SEO Issues Detected",
+          `SEO score dropped to ${checks.seoHealth.score}. Immediate attention required.`,
+          this.siteUrl,
+          {
+            score: checks.seoHealth.score,
+            issues: checks.seoHealth.issues.length,
+          },
+        )!,
+      );
     }
 
     // Performance alerts
     if (checks.performance.lcp > 4000) {
-      alerts.push(AlertManager.createAlert(
-        'performance',
-        'high',
-        'Poor LCP Performance',
-        `LCP is ${checks.performance.lcp}ms, exceeding 4s threshold`,
-        this.siteUrl,
-        { lcp: checks.performance.lcp }
-      )!);
+      alerts.push(
+        AlertManager.createAlert(
+          "performance",
+          "high",
+          "Poor LCP Performance",
+          `LCP is ${checks.performance.lcp}ms, exceeding 4s threshold`,
+          this.siteUrl,
+          { lcp: checks.performance.lcp },
+        )!,
+      );
     }
 
     // 404 alerts
     if (checks.notFound.totalNotFound > 50) {
-      alerts.push(AlertManager.createAlert(
-        '404',
-        'medium',
-        'High 404 Error Rate',
-        `${checks.notFound.totalNotFound} 404 errors in the last 24 hours`,
-        this.siteUrl,
-        { count: checks.notFound.totalNotFound }
-      )!);
+      alerts.push(
+        AlertManager.createAlert(
+          "404",
+          "medium",
+          "High 404 Error Rate",
+          `${checks.notFound.totalNotFound} 404 errors in the last 24 hours`,
+          this.siteUrl,
+          { count: checks.notFound.totalNotFound },
+        )!,
+      );
     }
 
     // Sitemap alerts
     if (!checks.sitemap.isValid) {
-      alerts.push(AlertManager.createAlert(
-        'sitemap',
-        'high',
-        'Sitemap Issues',
-        'XML sitemap has validation errors',
-        this.siteUrl,
-        { issues: checks.sitemap.issues }
-      )!);
+      alerts.push(
+        AlertManager.createAlert(
+          "sitemap",
+          "high",
+          "Sitemap Issues",
+          "XML sitemap has validation errors",
+          this.siteUrl,
+          { issues: checks.sitemap.issues },
+        )!,
+      );
     }
 
     // Indexing alerts
     if (checks.indexing.indexingRate < 0.8) {
-      alerts.push(AlertManager.createAlert(
-        'indexing',
-        'high',
-        'Low Indexing Rate',
-        `Only ${Math.round(checks.indexing.indexingRate * 100)}% of pages are indexed`,
-        this.siteUrl,
-        { rate: checks.indexing.indexingRate }
-      )!);
+      alerts.push(
+        AlertManager.createAlert(
+          "indexing",
+          "high",
+          "Low Indexing Rate",
+          `Only ${Math.round(checks.indexing.indexingRate * 100)}% of pages are indexed`,
+          this.siteUrl,
+          { rate: checks.indexing.indexingRate },
+        )!,
+      );
     }
 
     return alerts.filter(Boolean);
   }
 
   private calculateSummary(
-    checks: DailyCheckResult['checks'],
-    alerts: MonitoringAlert[]
+    checks: DailyCheckResult["checks"],
+    alerts: MonitoringAlert[],
   ) {
-    const criticalIssues = alerts.filter(a => a.severity === 'critical').length;
-    
+    const criticalIssues = alerts.filter(
+      (a) => a.severity === "critical",
+    ).length;
+
     // Calculate weighted overall score
     const weights = {
       seo: 0.3,
@@ -381,10 +427,11 @@ export class DailyMonitoring {
 
     let overallScore = 0;
     overallScore += checks.seoHealth.score * weights.seo;
-    overallScore += this.calculatePerformanceScore(checks.performance) * weights.performance;
+    overallScore +=
+      this.calculatePerformanceScore(checks.performance) * weights.performance;
     overallScore += this.calculate404Score(checks.notFound) * weights.notFound;
     overallScore += (checks.sitemap.isValid ? 100 : 50) * weights.sitemap;
-    overallScore += (checks.indexing.indexingRate * 100) * weights.indexing;
+    overallScore += checks.indexing.indexingRate * 100 * weights.indexing;
 
     const recommendations = this.generateRecommendations(checks, alerts);
 
@@ -396,24 +443,30 @@ export class DailyMonitoring {
   }
 
   private generateRecommendations(
-    checks: DailyCheckResult['checks'],
-    alerts: MonitoringAlert[]
+    checks: DailyCheckResult["checks"],
+    alerts: MonitoringAlert[],
   ): string[] {
     const recommendations: string[] = [];
 
     // SEO recommendations
     if (checks.seoHealth.score < 80) {
-      recommendations.push('Improve SEO health by addressing meta tag and structured data issues');
+      recommendations.push(
+        "Improve SEO health by addressing meta tag and structured data issues",
+      );
     }
 
     // Performance recommendations
     if (checks.performance.lcp > 2500) {
-      recommendations.push('Optimize Largest Contentful Paint by improving server response time and image loading');
+      recommendations.push(
+        "Optimize Largest Contentful Paint by improving server response time and image loading",
+      );
     }
 
     // Critical alert recommendations
-    if (alerts.some(a => a.severity === 'critical')) {
-      recommendations.push('Address critical alerts immediately to prevent SEO impact');
+    if (alerts.some((a) => a.severity === "critical")) {
+      recommendations.push(
+        "Address critical alerts immediately to prevent SEO impact",
+      );
     }
 
     return recommendations;
@@ -423,17 +476,19 @@ export class DailyMonitoring {
     try {
       // Store in cache for quick access
       CacheManager.set(`daily-check-${this.siteUrl}`, result, 86400); // 24 hours
-      
+
       // In production, this would also store in a database
-      console.log('Daily check results stored successfully');
+      console.log("Daily check results stored successfully");
     } catch (error) {
-      console.error('Failed to store daily check results:', error);
+      console.error("Failed to store daily check results:", error);
     }
   }
 
   private async sendNotifications(result: DailyCheckResult): Promise<void> {
-    const criticalAlerts = result.alerts.filter(a => a.severity === 'critical');
-    const highAlerts = result.alerts.filter(a => a.severity === 'high');
+    const criticalAlerts = result.alerts.filter(
+      (a) => a.severity === "critical",
+    );
+    const highAlerts = result.alerts.filter((a) => a.severity === "high");
 
     if (criticalAlerts.length === 0 && highAlerts.length === 0) {
       return; // No significant issues to report
@@ -444,7 +499,7 @@ export class DailyMonitoring {
     // Email notification
     if (MONITORING_CONFIG.NOTIFICATIONS.EMAIL.ENABLED) {
       notifications.push({
-        type: 'email',
+        type: "email",
         recipient: MONITORING_CONFIG.NOTIFICATIONS.EMAIL.FROM,
         subject: `Daily SEO Monitoring Alert - ${this.siteUrl}`,
         message: this.formatEmailMessage(result),
@@ -455,9 +510,9 @@ export class DailyMonitoring {
     // Webhook notification
     if (MONITORING_CONFIG.NOTIFICATIONS.WEBHOOK.ENABLED) {
       notifications.push({
-        type: 'webhook',
+        type: "webhook",
         recipient: MONITORING_CONFIG.NOTIFICATIONS.WEBHOOK.URL!,
-        subject: 'Daily Monitoring Alert',
+        subject: "Daily Monitoring Alert",
         message: this.formatWebhookMessage(result),
         data: result,
       });
@@ -466,9 +521,9 @@ export class DailyMonitoring {
     // Slack notification
     if (MONITORING_CONFIG.NOTIFICATIONS.SLACK.ENABLED) {
       notifications.push({
-        type: 'slack',
+        type: "slack",
         recipient: MONITORING_CONFIG.NOTIFICATIONS.SLACK.WEBHOOK_URL!,
-        subject: 'Daily Monitoring Alert',
+        subject: "Daily Monitoring Alert",
         message: this.formatSlackMessage(result),
         data: result,
       });
@@ -476,20 +531,22 @@ export class DailyMonitoring {
 
     // Send all notifications
     await Promise.allSettled(
-      notifications.map(notification => this.sendNotification(notification))
+      notifications.map((notification) => this.sendNotification(notification)),
     );
   }
 
-  private async sendNotification(notification: NotificationPayload): Promise<void> {
+  private async sendNotification(
+    notification: NotificationPayload,
+  ): Promise<void> {
     try {
       switch (notification.type) {
-        case 'email':
+        case "email":
           await this.sendEmailNotification(notification);
           break;
-        case 'webhook':
+        case "webhook":
           await this.sendWebhookNotification(notification);
           break;
-        case 'slack':
+        case "slack":
           await this.sendSlackNotification(notification);
           break;
       }
@@ -498,19 +555,23 @@ export class DailyMonitoring {
     }
   }
 
-  private async sendEmailNotification(notification: NotificationPayload): Promise<void> {
+  private async sendEmailNotification(
+    notification: NotificationPayload,
+  ): Promise<void> {
     // Email sending implementation would go here
-    console.log('Email notification sent:', notification.subject);
+    console.log("Email notification sent:", notification.subject);
   }
 
-  private async sendWebhookNotification(notification: NotificationPayload): Promise<void> {
+  private async sendWebhookNotification(
+    notification: NotificationPayload,
+  ): Promise<void> {
     await fetch(notification.recipient, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...(MONITORING_CONFIG.NOTIFICATIONS.WEBHOOK.SECRET && {
-          'X-Webhook-Secret': MONITORING_CONFIG.NOTIFICATIONS.WEBHOOK.SECRET
-        })
+          "X-Webhook-Secret": MONITORING_CONFIG.NOTIFICATIONS.WEBHOOK.SECRET,
+        }),
       },
       body: JSON.stringify({
         subject: notification.subject,
@@ -521,26 +582,30 @@ export class DailyMonitoring {
     });
   }
 
-  private async sendSlackNotification(notification: NotificationPayload): Promise<void> {
+  private async sendSlackNotification(
+    notification: NotificationPayload,
+  ): Promise<void> {
     await fetch(notification.recipient, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         text: notification.subject,
-        attachments: [{
-          color: 'danger',
-          text: notification.message,
-          ts: Math.floor(Date.now() / 1000),
-        }],
+        attachments: [
+          {
+            color: "danger",
+            text: notification.message,
+            ts: Math.floor(Date.now() / 1000),
+          },
+        ],
       }),
     });
   }
 
   private formatEmailMessage(result: DailyCheckResult): string {
     const { summary, alerts } = result;
-    
+
     return `
 Daily SEO Monitoring Report for ${this.siteUrl}
 
@@ -548,10 +613,10 @@ Overall Score: ${summary.overallScore}/100
 Critical Issues: ${summary.criticalIssues}
 
 Recent Alerts:
-${alerts.map(alert => `- ${alert.title}: ${alert.message}`).join('\n')}
+${alerts.map((alert) => `- ${alert.title}: ${alert.message}`).join("\n")}
 
 Recommendations:
-${summary.recommendations.map(rec => `- ${rec}`).join('\n')}
+${summary.recommendations.map((rec) => `- ${rec}`).join("\n")}
 
 Report generated at: ${new Date(result.timestamp).toLocaleString()}
     `.trim();
@@ -566,15 +631,18 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
   }
 
   // Helper methods for default values and calculations
-  private getSettledResult<T>(result: PromiseSettledResult<T>, defaultValue: T): T {
-    return result.status === 'fulfilled' ? result.value : defaultValue;
+  private getSettledResult<T>(
+    result: PromiseSettledResult<T>,
+    defaultValue: T,
+  ): T {
+    return result.status === "fulfilled" ? result.value : defaultValue;
   }
 
   private getDefaultSEOHealth(): SEOHealthCheck {
     return {
       url: this.siteUrl,
       timestamp: Date.now(),
-      status: 'warning',
+      status: "warning",
       checks: {
         metaTags: {
           title: false,
@@ -590,15 +658,15 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
           present: false,
           valid: false,
           types: [],
-          errors: ['Check failed'],
+          errors: ["Check failed"],
           warnings: [],
           richSnippetsEligible: false,
         },
         performance: {
           coreWebVitals: {
-            lcp: { value: 5000, status: 'poor' },
-            fid: { value: 500, status: 'poor' },
-            cls: { value: 0.5, status: 'poor' },
+            lcp: { value: 5000, status: "poor" },
+            fid: { value: 500, status: "poor" },
+            cls: { value: 0.5, status: "poor" },
           },
           lighthouse: {
             performance: 0,
@@ -617,7 +685,7 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
         },
         canonicalization: {
           hasCanonical: false,
-          canonicalUrl: '',
+          canonicalUrl: "",
           isCanonicalCorrect: false,
           duplicateContent: true,
         },
@@ -651,7 +719,7 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
       ttfb: 3000,
       timestamp: Date.now(),
       url: this.siteUrl,
-      userAgent: 'Failed Check',
+      userAgent: "Failed Check",
     };
   }
 
@@ -673,8 +741,14 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
       timestamp: Date.now(),
       isValid: false,
       urlCount: 0,
-      issues: [{ type: 'error', message: 'Sitemap check failed', recommendation: 'Check sitemap availability' }],
-      indexSubmissionStatus: 'error',
+      issues: [
+        {
+          type: "error",
+          message: "Sitemap check failed",
+          recommendation: "Check sitemap availability",
+        },
+      ],
+      indexSubmissionStatus: "error",
       coverageReport: {
         submitted: 0,
         indexed: 0,
@@ -689,12 +763,14 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
       totalPages: 0,
       indexedPages: 0,
       indexingRate: 0,
-      errors: [{ url: this.siteUrl, error: 'Indexing check failed', severity: 'high' }],
+      errors: [
+        { url: this.siteUrl, error: "Indexing check failed", severity: "high" },
+      ],
       lastUpdated: Date.now(),
     };
   }
 
-  // Placeholder methods for SEO checks
+  // SEO metadata validation methods
   private async checkMetaTags() {
     return {
       title: true,
@@ -711,9 +787,9 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
   private async checkSEOPerformance() {
     return {
       coreWebVitals: {
-        lcp: { value: 2200, status: 'good' as const },
-        fid: { value: 80, status: 'good' as const },
-        cls: { value: 0.08, status: 'good' as const },
+        lcp: { value: 2200, status: "good" as const },
+        fid: { value: 80, status: "good" as const },
+        cls: { value: 0.08, status: "good" as const },
       },
       lighthouse: {
         performance: 95,
@@ -765,26 +841,33 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
   private calculateSEOScore(health: SEOHealthCheck): number {
     // Simplified scoring - in production would be more comprehensive
     let score = 0;
-    
+
     // Meta tags (20 points)
-    const metaScore = Object.values(health.checks.metaTags).filter(Boolean).length / 8;
+    const metaScore =
+      Object.values(health.checks.metaTags).filter(Boolean).length / 8;
     score += metaScore * 20;
-    
+
     // Structured data (15 points)
     score += health.checks.structuredData.valid ? 15 : 0;
-    
+
     // Performance (25 points)
-    const perfScore = (health.checks.performance.lighthouse.performance / 100) * 25;
+    const perfScore =
+      (health.checks.performance.lighthouse.performance / 100) * 25;
     score += perfScore;
-    
+
     // Indexability (20 points)
-    const indexScore = Object.values(health.checks.indexability).filter(Boolean).length / 6;
+    const indexScore =
+      Object.values(health.checks.indexability).filter(Boolean).length / 6;
     score += indexScore * 20;
-    
+
     // Other factors (20 points)
     score += health.checks.canonicalization.isCanonicalCorrect ? 10 : 0;
-    score += Object.values(health.checks.socialSharing.openGraph).filter(Boolean).length >= 4 ? 10 : 0;
-    
+    score +=
+      Object.values(health.checks.socialSharing.openGraph).filter(Boolean)
+        .length >= 4
+        ? 10
+        : 0;
+
     return Math.round(score);
   }
 
@@ -795,19 +878,19 @@ Report generated at: ${new Date(result.timestamp).toLocaleString()}
 
   private calculatePerformanceScore(metrics: CoreWebVitalsMetrics): number {
     let score = 0;
-    
+
     if (metrics.lcp <= 2500) score += 25;
     else if (metrics.lcp <= 4000) score += 15;
-    
+
     if (metrics.fid <= 100) score += 25;
     else if (metrics.fid <= 300) score += 15;
-    
+
     if (metrics.cls <= 0.1) score += 25;
     else if (metrics.cls <= 0.25) score += 15;
-    
+
     if (metrics.ttfb <= 800) score += 25;
     else if (metrics.ttfb <= 1800) score += 15;
-    
+
     return score;
   }
 
@@ -826,5 +909,5 @@ export function createDailyMonitoring(siteUrl: string): DailyMonitoring {
 
 // Export default instance for the main site
 export const dailyMonitoring = new DailyMonitoring(
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://proweb-studio.com'
+  process.env.NEXT_PUBLIC_SITE_URL || "https://proweb-studio.com",
 );

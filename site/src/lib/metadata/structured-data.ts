@@ -1,37 +1,49 @@
 // Structured snippet optimization for SERP features
 export interface StructuredSnippetOptions {
-  type: 'FAQ' | 'HowTo' | 'Product' | 'Service' | 'Organization' | 'LocalBusiness' | 'Article' | 'BreadcrumbList';
+  type:
+    | "FAQ"
+    | "HowTo"
+    | "Product"
+    | "Service"
+    | "Organization"
+    | "LocalBusiness"
+    | "Article"
+    | "BreadcrumbList";
   data: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 // FAQ structured data for SERP snippets
-export function generateFAQStructuredData(faqs: Array<{ question: string; answer: string }>) {
+export function generateFAQStructuredData(
+  faqs: Array<{ question: string; answer: string }>,
+) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map(faq => ({
-      '@type': 'Question',
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
       name: faq.question,
       acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer
-      }
-    }))
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
   };
 }
 
 // HowTo structured data for step-by-step guides
-export function generateHowToStructuredData(steps: Array<{ name: string; text: string; image?: string }>) {
+export function generateHowToStructuredData(
+  steps: Array<{ name: string; text: string; image?: string }>,
+) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
+    "@context": "https://schema.org",
+    "@type": "HowTo",
     step: steps.map((step, index) => ({
-      '@type': 'HowToStep',
+      "@type": "HowToStep",
       position: index + 1,
       name: step.name,
       text: step.text,
-      ...(step.image && { image: step.image })
-    }))
+      ...(step.image && { image: step.image }),
+    })),
   };
 }
 
@@ -48,21 +60,21 @@ export function generateProductStructuredData(product: {
   };
 }) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
+    "@context": "https://schema.org",
+    "@type": "Product",
     name: product.name,
     description: product.description,
     image: product.image,
     brand: {
-      '@type': 'Brand',
-      name: product.brand
+      "@type": "Brand",
+      name: product.brand,
     },
     offers: {
-      '@type': 'Offer',
+      "@type": "Offer",
       price: product.offers.price,
       priceCurrency: product.offers.priceCurrency,
-      availability: `https://schema.org/${product.offers.availability}`
-    }
+      availability: `https://schema.org/${product.offers.availability}`,
+    },
   };
 }
 
@@ -89,27 +101,27 @@ export function generateLocalBusinessStructuredData(business: {
   openingHours: string[];
 }) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
     name: business.name,
     description: business.description,
     address: {
-      '@type': 'PostalAddress',
-      ...business.address
+      "@type": "PostalAddress",
+      ...business.address,
     },
     geo: {
-      '@type': 'GeoCoordinates',
+      "@type": "GeoCoordinates",
       latitude: business.geo.latitude,
-      longitude: business.geo.longitude
+      longitude: business.geo.longitude,
     },
     contactPoint: {
-      '@type': 'ContactPoint',
+      "@type": "ContactPoint",
       telephone: business.contactPoint.telephone,
       email: business.contactPoint.email,
-      contactType: 'Customer Service'
+      contactType: "Customer Service",
     },
     sameAs: business.sameAs,
-    openingHours: business.openingHours
+    openingHours: business.openingHours,
   };
 }
 
@@ -120,44 +132,46 @@ export function generateArticleStructuredData(article: {
   author: string;
   publisher: string;
   datePublished: string;
-  dateModified: string;  
+  dateModified: string;
   image: string;
   mainEntityOfPage: string;
 }) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+    "@context": "https://schema.org",
+    "@type": "Article",
     headline: article.headline,
     description: article.description,
     author: {
-      '@type': 'Person',
-      name: article.author
+      "@type": "Person",
+      name: article.author,
     },
     publisher: {
-      '@type': 'Organization',
-      name: article.publisher
+      "@type": "Organization",
+      name: article.publisher,
     },
     datePublished: article.datePublished,
     dateModified: article.dateModified,
     image: article.image,
     mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': article.mainEntityOfPage
-    }
+      "@type": "WebPage",
+      "@id": article.mainEntityOfPage,
+    },
   };
 }
 
 // Breadcrumb structured data
-export function generateBreadcrumbStructuredData(breadcrumbs: Array<{ name: string; url: string }>) {
+export function generateBreadcrumbStructuredData(
+  breadcrumbs: Array<{ name: string; url: string }>,
+) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     itemListElement: breadcrumbs.map((crumb, index) => ({
-      '@type': 'ListItem',
+      "@type": "ListItem",
       position: index + 1,
       name: crumb.name,
-      item: crumb.url
-    }))
+      item: crumb.url,
+    })),
   };
 }
 
@@ -175,25 +189,25 @@ export function generateServiceStructuredData(service: {
   };
 }) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
+    "@context": "https://schema.org",
+    "@type": "Service",
     name: service.name,
     description: service.description,
     provider: {
-      '@type': 'Organization',
-      name: service.provider
+      "@type": "Organization",
+      name: service.provider,
     },
-    areaServed: service.areaServed.map(area => ({
-      '@type': 'Place',
-      name: area
+    areaServed: service.areaServed.map((area) => ({
+      "@type": "Place",
+      name: area,
     })),
     serviceType: service.serviceType,
     offers: {
-      '@type': 'Offer',
+      "@type": "Offer",
       price: service.offers.price,
       priceCurrency: service.offers.priceCurrency,
-      description: service.offers.description
-    }
+      description: service.offers.description,
+    },
   };
 }
 
@@ -217,23 +231,23 @@ export function generateOrganizationStructuredData(org: {
   sameAs: string[];
 }) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
+    "@context": "https://schema.org",
+    "@type": "Organization",
     name: org.name,
     url: org.url,
     logo: org.logo,
     description: org.description,
     address: {
-      '@type': 'PostalAddress',
-      ...org.address
+      "@type": "PostalAddress",
+      ...org.address,
     },
     contactPoint: {
-      '@type': 'ContactPoint',
+      "@type": "ContactPoint",
       telephone: org.contactPoint.telephone,
       email: org.contactPoint.email,
-      contactType: 'Customer Service'
+      contactType: "Customer Service",
     },
-    sameAs: org.sameAs
+    sameAs: org.sameAs,
   };
 }
 
@@ -243,86 +257,97 @@ export function generateRichSnippetMeta(options: {
   data: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 }): Record<string, string> {
   const meta: Record<string, string> = {};
-  
+
   switch (options.type) {
-    case 'article':
-      if (options.data.author) meta['article:author'] = options.data.author;
-      if (options.data.publishedTime) meta['article:published_time'] = options.data.publishedTime;
-      if (options.data.modifiedTime) meta['article:modified_time'] = options.data.modifiedTime;
-      if (options.data.section) meta['article:section'] = options.data.section;
-      if (options.data.tags) meta['article:tag'] = options.data.tags.join(',');
+    case "article":
+      if (options.data.author) meta["article:author"] = options.data.author;
+      if (options.data.publishedTime)
+        meta["article:published_time"] = options.data.publishedTime;
+      if (options.data.modifiedTime)
+        meta["article:modified_time"] = options.data.modifiedTime;
+      if (options.data.section) meta["article:section"] = options.data.section;
+      if (options.data.tags) meta["article:tag"] = options.data.tags.join(",");
       break;
-      
-    case 'product':
-      if (options.data.price) meta['product:price:amount'] = options.data.price;
-      if (options.data.currency) meta['product:price:currency'] = options.data.currency;
-      if (options.data.availability) meta['product:availability'] = options.data.availability;
-      if (options.data.brand) meta['product:brand'] = options.data.brand;
+
+    case "product":
+      if (options.data.price) meta["product:price:amount"] = options.data.price;
+      if (options.data.currency)
+        meta["product:price:currency"] = options.data.currency;
+      if (options.data.availability)
+        meta["product:availability"] = options.data.availability;
+      if (options.data.brand) meta["product:brand"] = options.data.brand;
       break;
-      
-    case 'business':
-      if (options.data.phone) meta['business:contact_data:phone_number'] = options.data.phone;
-      if (options.data.email) meta['business:contact_data:email'] = options.data.email;
-      if (options.data.address) meta['business:contact_data:street_address'] = options.data.address;
-      if (options.data.locality) meta['business:contact_data:locality'] = options.data.locality;
-      if (options.data.region) meta['business:contact_data:region'] = options.data.region;
-      if (options.data.postalCode) meta['business:contact_data:postal_code'] = options.data.postalCode;
+
+    case "business":
+      if (options.data.phone)
+        meta["business:contact_data:phone_number"] = options.data.phone;
+      if (options.data.email)
+        meta["business:contact_data:email"] = options.data.email;
+      if (options.data.address)
+        meta["business:contact_data:street_address"] = options.data.address;
+      if (options.data.locality)
+        meta["business:contact_data:locality"] = options.data.locality;
+      if (options.data.region)
+        meta["business:contact_data:region"] = options.data.region;
+      if (options.data.postalCode)
+        meta["business:contact_data:postal_code"] = options.data.postalCode;
       break;
   }
-  
+
   return meta;
 }
 
 // Generate JSON-LD script tag content
-export function generateJsonLd(data: Record<string, any>): string { // eslint-disable-line @typescript-eslint/no-explicit-any
+export function generateJsonLd(data: Record<string, any>): string {
+  // eslint-disable-line @typescript-eslint/no-explicit-any
   return JSON.stringify(data, null, 0);
 }
 
 // Common Dutch service areas for local SEO
 export const dutchServiceAreas = [
-  'Amsterdam',
-  'Rotterdam', 
-  'Den Haag',
-  'Utrecht',
-  'Eindhoven',
-  'Groningen',
-  'Tilburg',
-  'Almere',
-  'Breda',
-  'Nijmegen',
-  'Enschede',
-  'Haarlem',
-  'Arnhem',
-  'Zaanstad',
-  'Apeldoorn',
-  'Nederland'
+  "Amsterdam",
+  "Rotterdam",
+  "Den Haag",
+  "Utrecht",
+  "Eindhoven",
+  "Groningen",
+  "Tilburg",
+  "Almere",
+  "Breda",
+  "Nijmegen",
+  "Enschede",
+  "Haarlem",
+  "Arnhem",
+  "Zaanstad",
+  "Apeldoorn",
+  "Nederland",
 ];
 
 // Common Dutch service keywords for SEO
 export const dutchServiceKeywords = {
   website: [
-    'website laten maken',
-    'website bouwen',
-    'webdesign',
-    'responsive website',
-    'professionele website',
-    'bedrijfswebsite',
-    'website ontwikkeling'
+    "website laten maken",
+    "website bouwen",
+    "webdesign",
+    "responsive website",
+    "professionele website",
+    "bedrijfswebsite",
+    "website ontwikkeling",
   ],
   webshop: [
-    'webshop laten maken',
-    'webwinkel ontwikkeling',
-    'e-commerce website',
-    'online verkopen',
-    'webshop bouwen',
-    'ideal integratie'
+    "webshop laten maken",
+    "webwinkel ontwikkeling",
+    "e-commerce website",
+    "online verkopen",
+    "webshop bouwen",
+    "ideal integratie",
   ],
   seo: [
-    'seo optimalisatie',
-    'hoger in google',
-    'zoekmachine optimalisatie',
-    'google ranking',
-    'seo specialist',
-    'online vindbaar'
-  ]
+    "seo optimalisatie",
+    "hoger in google",
+    "zoekmachine optimalisatie",
+    "google ranking",
+    "seo specialist",
+    "online vindbaar",
+  ],
 };

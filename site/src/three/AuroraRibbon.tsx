@@ -1,8 +1,8 @@
-'use client';
+"use client";
 // src/three/AuroraRibbon.tsx
-import * as THREE from 'three';
-import { useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import * as THREE from "three";
+import { useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 
 type AuroraProps = {
   colorA?: string;
@@ -66,9 +66,9 @@ const frag = /* glsl */ `
 `;
 
 export function AuroraRibbon({
-  colorA = '#5ef0ff',
-  colorB = '#a855f7',
-  colorC = '#ff2da1',
+  colorA = "#5ef0ff",
+  colorB = "#a855f7",
+  colorC = "#ff2da1",
   speed = 1.0,
   amplitude = 1.0,
   opacity = 0.9,

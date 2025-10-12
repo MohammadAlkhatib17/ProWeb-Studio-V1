@@ -1,7 +1,7 @@
-'use client';
-import * as THREE from 'three';
-import { useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+"use client";
+import * as THREE from "three";
+import { useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 
 type Props = {
   count?: number;
@@ -25,10 +25,10 @@ export default function StarsShell({
 
     // Color palette for stars
     const starColors = [
-      new THREE.Color('#ffffff'), // White
-      new THREE.Color('#a5f3fc'), // Cyan
-      new THREE.Color('#c4b5fd'), // Purple
-      new THREE.Color('#fbbf24'), // Yellow
+      new THREE.Color("#ffffff"), // White
+      new THREE.Color("#a5f3fc"), // Cyan
+      new THREE.Color("#c4b5fd"), // Purple
+      new THREE.Color("#fbbf24"), // Yellow
     ];
 
     for (let i = 0; i < count; i++) {
@@ -65,9 +65,9 @@ export default function StarsShell({
 
   const geo = useMemo(() => {
     const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    g.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    g.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    g.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    g.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    g.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
     return g;
   }, [positions, colors, sizes]);
 

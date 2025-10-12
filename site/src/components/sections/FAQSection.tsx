@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface FAQSectionProps {
   title: string;
@@ -12,9 +12,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ title, children }) => {
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white mb-8 md:mb-12">
           {title}
         </h2>
-        <div className="w-full">
-          {children}
-        </div>
+        <div className="w-full">{children}</div>
       </div>
     </section>
   );

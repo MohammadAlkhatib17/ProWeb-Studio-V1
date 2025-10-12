@@ -3,8 +3,8 @@
 // Where light becomes meaning, and meaning becomes art
 // ------------------------------------------------------------
 
-import * as React from 'react';
-import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
+import * as React from "react";
+import { Canvas, useFrame, useThree, extend } from "@react-three/fiber";
 import {
   OrbitControls,
   Float,
@@ -16,93 +16,150 @@ import {
   Preload,
   AdaptiveDpr,
   Line as DreiLine,
-} from '@react-three/drei';
+} from "@react-three/drei";
 import {
   EffectComposer,
   Bloom,
   Vignette,
   ChromaticAberration,
   DepthOfField,
-} from '@react-three/postprocessing';
-import { BlendFunction, KernelSize } from 'postprocessing';
-import * as THREE from 'three';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
+} from "@react-three/postprocessing";
+import { BlendFunction, KernelSize } from "postprocessing";
+import * as THREE from "three";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
+import { useDeviceCapabilities } from "@/hooks/useDeviceCapabilities";
 
 // Extend THREE to include TextGeometry
 extend({ TextGeometry });
 
 // ---------- Enhanced Mobile Detection & Performance Utilities ----------
 const getDeviceInfo = () => {
-  if (typeof window === 'undefined') return { 
-    isMobile: false, 
-    isIOS: false, 
-    isAndroid: false, 
-    performanceTier: 'high' as const,
-    screenSize: 'desktop' as const 
-  };
-  
+  if (typeof window === "undefined")
+    return {
+      isMobile: false,
+      isIOS: false,
+      isAndroid: false,
+      performanceTier: "high" as const,
+      screenSize: "desktop" as const,
+    };
+
   const userAgent = navigator.userAgent;
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) ||
-                   window.innerWidth <= 768;
+  const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      userAgent,
+    ) || window.innerWidth <= 768;
   const isIOS = /iPad|iPhone|iPod/.test(userAgent);
   const isAndroid = /Android/.test(userAgent);
-  
+
   // Enhanced performance tier detection
   const hardwareConcurrency = navigator.hardwareConcurrency || 4;
   const deviceMemory = navigator.deviceMemory || 4;
-  
-  let performanceTier: 'low' | 'medium' | 'high' = 'medium';
-  
+
+  let performanceTier: "low" | "medium" | "high" = "medium";
+
   if (isMobile) {
-    if (hardwareConcurrency < 4 || deviceMemory < 4) performanceTier = 'low';
-    else if (hardwareConcurrency >= 6 && deviceMemory >= 6) performanceTier = 'high';
+    if (hardwareConcurrency < 4 || deviceMemory < 4) performanceTier = "low";
+    else if (hardwareConcurrency >= 6 && deviceMemory >= 6)
+      performanceTier = "high";
   } else {
-    if (hardwareConcurrency < 4 || deviceMemory < 8) performanceTier = 'low';
-    else if (hardwareConcurrency >= 8 && deviceMemory >= 16) performanceTier = 'high';
+    if (hardwareConcurrency < 4 || deviceMemory < 8) performanceTier = "low";
+    else if (hardwareConcurrency >= 8 && deviceMemory >= 16)
+      performanceTier = "high";
   }
-  
-  const screenSize = window.innerWidth <= 480 ? 'mobile' : 
-                    window.innerWidth <= 768 ? 'tablet' : 'desktop';
-  
+
+  const screenSize =
+    window.innerWidth <= 480
+      ? "mobile"
+      : window.innerWidth <= 768
+        ? "tablet"
+        : "desktop";
+
   return { isMobile, isIOS, isAndroid, performanceTier, screenSize };
 };
 
 // Performance-aware configuration
 const getOptimizedConfig = () => {
   const { isMobile, performanceTier } = getDeviceInfo();
-  
+
   return {
     // Particle counts based on device capability
-    dustParticles: isMobile ? 
-      (performanceTier === 'low' ? 200 : performanceTier === 'medium' ? 500 : 800) : 
-      (performanceTier === 'low' ? 800 : performanceTier === 'medium' ? 1500 : 2000),
-    
-    sparkleCount: isMobile ?
-      (performanceTier === 'low' ? 10 : performanceTier === 'medium' ? 20 : 30) :
-      (performanceTier === 'low' ? 20 : performanceTier === 'medium' ? 30 : 50),
-      
+    dustParticles: isMobile
+      ? performanceTier === "low"
+        ? 200
+        : performanceTier === "medium"
+          ? 500
+          : 800
+      : performanceTier === "low"
+        ? 800
+        : performanceTier === "medium"
+          ? 1500
+          : 2000,
+
+    sparkleCount: isMobile
+      ? performanceTier === "low"
+        ? 10
+        : performanceTier === "medium"
+          ? 20
+          : 30
+      : performanceTier === "low"
+        ? 20
+        : performanceTier === "medium"
+          ? 30
+          : 50,
+
     // Shadow resolution
-    shadowMapSize: isMobile ?
-      (performanceTier === 'low' ? 256 : performanceTier === 'medium' ? 512 : 1024) :
-      (performanceTier === 'low' ? 512 : performanceTier === 'medium' ? 1024 : 2048),
-      
+    shadowMapSize: isMobile
+      ? performanceTier === "low"
+        ? 256
+        : performanceTier === "medium"
+          ? 512
+          : 1024
+      : performanceTier === "low"
+        ? 512
+        : performanceTier === "medium"
+          ? 1024
+          : 2048,
+
     // DPR settings
-    dpr: isMobile ?
-      (performanceTier === 'low' ? [0.8, 1] : performanceTier === 'medium' ? [1, 1.2] : [1, 1.5]) :
-      (performanceTier === 'low' ? [1, 1.5] : performanceTier === 'medium' ? [1, 1.8] : [1, 2]),
-      
+    dpr: isMobile
+      ? performanceTier === "low"
+        ? [0.8, 1]
+        : performanceTier === "medium"
+          ? [1, 1.2]
+          : [1, 1.5]
+      : performanceTier === "low"
+        ? [1, 1.5]
+        : performanceTier === "medium"
+          ? [1, 1.8]
+          : [1, 2],
+
     // Post-processing
-    enablePostProcessing: performanceTier !== 'low',
-    bloomIntensity: performanceTier === 'low' ? 0.8 : performanceTier === 'medium' ? 1.2 : 1.5,
-    
+    enablePostProcessing: performanceTier !== "low",
+    bloomIntensity:
+      performanceTier === "low"
+        ? 0.8
+        : performanceTier === "medium"
+          ? 1.2
+          : 1.5,
+
     // Lighting
-    maxLights: isMobile ? 
-      (performanceTier === 'low' ? 2 : 3) :
-      (performanceTier === 'low' ? 3 : performanceTier === 'medium' ? 4 : 6),
-      
+    maxLights: isMobile
+      ? performanceTier === "low"
+        ? 2
+        : 3
+      : performanceTier === "low"
+        ? 3
+        : performanceTier === "medium"
+          ? 4
+          : 6,
+
     // Geometry detail
-    geometryDetail: performanceTier === 'low' ? 0.5 : performanceTier === 'medium' ? 0.8 : 1.0,
+    geometryDetail:
+      performanceTier === "low"
+        ? 0.5
+        : performanceTier === "medium"
+          ? 0.8
+          : 1.0,
   };
 };
 
@@ -115,30 +172,30 @@ const getCameraPosition = (): [number, number, number] => {
 // ---------- Sacred Geometry & Brand Colors ----------
 const PALETTES = {
   anwar: {
-    bg: '#030015',
-    primary: '#00D9FF',
-    secondary: '#7A5CFF',
-    accent: '#FF2BD6',
-    glow: '#FFFFFF',
-    crystal: '#E0F7FF',
-    dust: '#4A90E2',
+    bg: "#030015",
+    primary: "#00D9FF",
+    secondary: "#7A5CFF",
+    accent: "#FF2BD6",
+    glow: "#FFFFFF",
+    crystal: "#E0F7FF",
+    dust: "#4A90E2",
   },
   sunfire: {
-    bg: '#0A0502',
-    primary: '#FFB200',
-    secondary: '#FF6A00',
-    accent: '#FFE5B4',
-    glow: '#FFF5E6',
-    crystal: '#FFD700',
-    dust: '#FF8C42',
+    bg: "#0A0502",
+    primary: "#FFB200",
+    secondary: "#FF6A00",
+    accent: "#FFE5B4",
+    glow: "#FFF5E6",
+    crystal: "#FFD700",
+    dust: "#FF8C42",
   },
 } as const;
 
 // ---------- Types ----------
 export type StudioAnwarSceneProps = {
-  materialMode?: 'crystal' | 'energy';
+  materialMode?: "crystal" | "energy";
   palette?: keyof typeof PALETTES;
-  animationState?: 'idle' | 'active' | 'perpetual';
+  animationState?: "idle" | "active" | "perpetual";
   interactionHeat?: number;
   autoRotate?: boolean;
 };
@@ -190,7 +247,7 @@ const createCalligraphicPaths = () => {
   };
 
   return Object.values(letterPaths).map(
-    (points) => new THREE.CatmullRomCurve3(points, false, 'catmullrom', 0.5),
+    (points) => new THREE.CatmullRomCurve3(points, false, "catmullrom", 0.5),
   );
 };
 
@@ -198,45 +255,45 @@ const createCalligraphicPaths = () => {
 function MobileControlsHelper() {
   const { gl, camera } = useThree();
   const { isMobile } = getDeviceInfo();
-  
+
   React.useEffect(() => {
     if (!isMobile) return;
-    
+
     const canvas = gl.domElement;
     let isTouch = false;
-    
+
     const handleTouchStart = (event: TouchEvent) => {
       isTouch = true;
       // Prevent context menu on long press
       event.preventDefault();
     };
-    
+
     const handleTouchEnd = () => {
       isTouch = false;
     };
-    
+
     const handleTouchMove = (event: TouchEvent) => {
       if (isTouch && event.touches.length === 2) {
         // Prevent default zoom behavior to let OrbitControls handle it
         event.preventDefault();
       }
     };
-    
+
     // Add passive listeners for better performance
-    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-    canvas.addEventListener('touchend', handleTouchEnd, { passive: true });
-    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-    
+    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+    canvas.addEventListener("touchend", handleTouchEnd, { passive: true });
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+
     // Set initial mobile camera position
     camera.position.set(...getCameraPosition());
-    
+
     return () => {
-      canvas.removeEventListener('touchstart', handleTouchStart);
-      canvas.removeEventListener('touchend', handleTouchEnd);
-      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener("touchstart", handleTouchStart);
+      canvas.removeEventListener("touchend", handleTouchEnd);
+      canvas.removeEventListener("touchmove", handleTouchMove);
     };
   }, [gl, camera, isMobile]);
-  
+
   // Handle responsive camera adjustments
   React.useEffect(() => {
     const handleResize = () => {
@@ -247,11 +304,11 @@ function MobileControlsHelper() {
         camera.updateProjectionMatrix();
       }
     };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [camera]);
-  
+
   return null;
 }
 
@@ -262,7 +319,7 @@ function CrystalPrism({
   pulseRef,
   transitionRef,
 }: {
-  mode: 'crystal' | 'energy';
+  mode: "crystal" | "energy";
   colors: (typeof PALETTES)[keyof typeof PALETTES];
   pulseRef: React.MutableRefObject<number>;
   transitionRef: React.MutableRefObject<number>;
@@ -270,7 +327,7 @@ function CrystalPrism({
   const meshRef = React.useRef<THREE.Mesh>(null!);
   const innerRef = React.useRef<THREE.Mesh>(null!);
   const energyLinesRef = React.useRef<THREE.Group>(null!);
-  
+
   const config = getOptimizedConfig();
 
   // LOD-based geometry - reduce detail on lower performance tiers
@@ -278,10 +335,13 @@ function CrystalPrism({
     const detail = config.geometryDetail;
     return new THREE.DodecahedronGeometry(1, Math.floor(detail * 2));
   }, [config.geometryDetail]);
-  
+
   const innerGeo = React.useMemo(() => {
     const detail = config.geometryDetail;
-    return new THREE.IcosahedronGeometry(0.6, Math.max(1, Math.floor(detail * 2)));
+    return new THREE.IcosahedronGeometry(
+      0.6,
+      Math.max(1, Math.floor(detail * 2)),
+    );
   }, [config.geometryDetail]);
 
   // Cleanup geometries on unmount or config changes
@@ -321,7 +381,7 @@ function CrystalPrism({
   return (
     <group>
       <mesh ref={meshRef} geometry={outerGeo}>
-        {mode === 'crystal' ? (
+        {mode === "crystal" ? (
           <MeshTransmissionMaterial
             color={colors.crystal}
             transmission={1}
@@ -362,8 +422,17 @@ function CrystalPrism({
       {/* Energy transition effect - reduced on low performance */}
       <group ref={energyLinesRef}>
         {[...Array(config.geometryDetail >= 0.8 ? 8 : 4)].map((_, i) => (
-          <mesh key={i} rotation={[0, (i * Math.PI) / (config.geometryDetail >= 0.8 ? 4 : 2), 0]}>
-            <torusGeometry args={[1.2, 0.01, config.geometryDetail >= 0.8 ? 8 : 4, 32]} />
+          <mesh
+            key={i}
+            rotation={[
+              0,
+              (i * Math.PI) / (config.geometryDetail >= 0.8 ? 4 : 2),
+              0,
+            ]}
+          >
+            <torusGeometry
+              args={[1.2, 0.01, config.geometryDetail >= 0.8 ? 8 : 4, 32]}
+            />
             <meshBasicMaterial
               color={colors.accent}
               transparent
@@ -537,7 +606,7 @@ function ConstellationNodes({
 }) {
   const nodes = React.useRef<THREE.Group>(null!);
   const trailRefs = React.useRef<THREE.Mesh[]>([]);
-  
+
   const config = getOptimizedConfig();
 
   // Sacred geometry positions - golden ratio based (reduced count on low performance)
@@ -551,10 +620,10 @@ function ConstellationNodes({
       { pos: [0, phi, 1], size: 0.07 },
       { pos: [0, -phi, -1], size: 0.07 },
     ];
-    
+
     // Reduce nodes on low performance
     const nodeCount = config.geometryDetail < 0.8 ? 4 : 6;
-    
+
     return baseNodes.slice(0, nodeCount).map((n) => ({
       ...n,
       pos: new THREE.Vector3(...n.pos).normalize().multiplyScalar(3),
@@ -601,9 +670,9 @@ function ConstellationNodes({
             >
               <sphereGeometry
                 args={[
-                  node.size * (revealActive ? 1.5 : 1), 
-                  Math.max(8, Math.floor(16 * config.geometryDetail)), 
-                  Math.max(8, Math.floor(16 * config.geometryDetail))
+                  node.size * (revealActive ? 1.5 : 1),
+                  Math.max(8, Math.floor(16 * config.geometryDetail)),
+                  Math.max(8, Math.floor(16 * config.geometryDetail)),
                 ]}
               />
               <meshPhysicalMaterial
@@ -653,16 +722,16 @@ function CosmicDust({
   crystalEmission: boolean;
 }) {
   const points = React.useRef<THREE.Points>(null!);
-  
+
   // Preallocate to maximum possible particle count to avoid buffer attribute length changes
   const MAX_PARTICLES = 2000; // High-end desktop max from getOptimizedConfig
   const actualCount = getOptimizedConfig().dustParticles;
-  
+
   // Fixed-length positions array - allocated once, never recreated
   const positions = React.useMemo(() => {
     const pos = new Float32Array(MAX_PARTICLES * 3);
     const currentCount = actualCount; // Capture actualCount at memo creation time
-    
+
     // Initialize all particles, even those beyond actualCount (they'll be culled via drawRange)
     for (let i = 0; i < MAX_PARTICLES; i++) {
       if (i < currentCount) {
@@ -792,7 +861,7 @@ function LightingRig({
   const light1 = React.useRef<THREE.PointLight>(null!);
   const light2 = React.useRef<THREE.PointLight>(null!);
   const light3 = React.useRef<THREE.SpotLight>(null!);
-  
+
   const config = getOptimizedConfig();
 
   useFrame((state) => {
@@ -914,9 +983,9 @@ function SceneContent({
 
   // Enhanced animation state handling
   React.useEffect(() => {
-    if (animationState === 'active' || animationState === 'perpetual') {
+    if (animationState === "active" || animationState === "perpetual") {
       setShowReveal(true);
-    } else if (animationState === 'idle') {
+    } else if (animationState === "idle") {
       setShowReveal(false);
     }
   }, [animationState]);
@@ -941,7 +1010,7 @@ function SceneContent({
 
   const handleRevealComplete = React.useCallback(() => {
     // Only hide if not in perpetual mode
-    if (animationState !== 'perpetual') {
+    if (animationState !== "perpetual") {
       setShowReveal(false);
     }
   }, [animationState]);
@@ -1009,7 +1078,7 @@ function SceneContent({
         <CalligraphicReveal
           colors={colors}
           onComplete={handleRevealComplete}
-          perpetual={animationState === 'perpetual'}
+          perpetual={animationState === "perpetual"}
         />
       )}
 
@@ -1046,35 +1115,39 @@ function SceneContent({
 
 // ---------- Main Component Export ----------
 export default function StudioAnwarScene({
-  materialMode = 'crystal',
-  palette = 'anwar',
-  animationState = 'idle',
+  materialMode = "crystal",
+  palette = "anwar",
+  animationState = "idle",
   interactionHeat = 0,
   autoRotate = false,
 }: StudioAnwarSceneProps) {
   const config = getOptimizedConfig();
   const { isMobile } = getDeviceInfo();
-  
+
   // Enhance with our new device capabilities hook
   const { capabilities, optimizedSettings } = useDeviceCapabilities();
-  
+
   // Use the more sophisticated settings when available
   const finalConfig = {
     ...config,
     // Override with more accurate settings from our enhanced hook
     dpr: optimizedSettings.dpr,
-    enablePostProcessing: optimizedSettings.enablePostProcessing && config.enablePostProcessing,
+    enablePostProcessing:
+      optimizedSettings.enablePostProcessing && config.enablePostProcessing,
     shadowMapSize: optimizedSettings.shadowMapSize,
     maxLights: Math.min(config.maxLights, optimizedSettings.maxLights),
-    bloomIntensity: Math.min(config.bloomIntensity, optimizedSettings.bloomIntensity),
+    bloomIntensity: Math.min(
+      config.bloomIntensity,
+      optimizedSettings.bloomIntensity,
+    ),
   };
-  
+
   return (
     <div
       style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%',
+        position: "relative",
+        width: "100%",
+        height: "100%",
         minHeight: 600,
         background: `radial-gradient(ellipse at center, ${PALETTES[palette].bg}00 0%, ${PALETTES[palette].bg} 100%)`,
       }}
@@ -1084,42 +1157,45 @@ export default function StudioAnwarScene({
           antialias: optimizedSettings.antialias && !isMobile, // Enhanced logic
           toneMapping: THREE.ACESFilmicToneMapping,
           outputColorSpace: THREE.SRGBColorSpace,
-          powerPreference: 'high-performance',
+          powerPreference: "high-performance",
           alpha: false, // Disable alpha for better performance
           preserveDrawingBuffer: false, // Disable for better performance
           failIfMajorPerformanceCaveat: false, // Allow fallback on low-end devices
           stencil: false, // Disable stencil buffer for performance
         }}
         dpr={finalConfig.dpr as [number, number]}
-        camera={{ 
-          position: getCameraPosition(), 
+        camera={{
+          position: getCameraPosition(),
           fov: optimizedSettings.cameraFov, // Use enhanced FOV calculation
-          near: 0.1, 
-          far: 100 
+          near: 0.1,
+          far: 100,
         }}
         shadows={optimizedSettings.enableShadows && finalConfig.maxLights > 2}
         onCreated={(state) => {
           // WebGL context loss prevention and recovery
           const canvas = state.gl.domElement;
-          
+
           // Prevent context loss by preventing default behavior
-          canvas.addEventListener('webglcontextlost', (event) => {
-            console.warn('WebGL context lost, attempting recovery...');
+          canvas.addEventListener("webglcontextlost", (event) => {
+            console.warn("WebGL context lost, attempting recovery...");
             event.preventDefault(); // Allow context restoration
           });
-          
-          canvas.addEventListener('webglcontextrestored', () => {
-            console.log('WebGL context restored successfully');
+
+          canvas.addEventListener("webglcontextrestored", () => {
+            console.log("WebGL context restored successfully");
           });
 
           // Enhanced mobile optimization
           if (capabilities.isMobile || capabilities.isLowEndDevice) {
-            state.gl.setPixelRatio(Math.min(window.devicePixelRatio, finalConfig.dpr[1]));
-            
+            state.gl.setPixelRatio(
+              Math.min(window.devicePixelRatio, finalConfig.dpr[1]),
+            );
+
             // Configure shadows for mobile
             if (state.gl.shadowMap && optimizedSettings.enableShadows) {
-              state.gl.shadowMap.type = capabilities.isLowEndDevice ? 
-                THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
+              state.gl.shadowMap.type = capabilities.isLowEndDevice
+                ? THREE.BasicShadowMap
+                : THREE.PCFSoftShadowMap;
             }
           }
         }}

@@ -1,4 +1,4 @@
-import SEOHealthDashboard from '@/components/monitoring/SEOHealthDashboard';
+import SEOHealthDashboard from "@/components/monitoring/SEOHealthDashboard";
 
 export default function MonitoringPage() {
   return (
