@@ -101,10 +101,16 @@ function getClientIP(req: NextRequest): string {
   return req.ip || "unknown";
 }
 
-async function isRateLimitedEdge(ip: string, path: string) {
-  const key = `${ip}:${path.startsWith("/api/") ? "api" : "html"}`;
-  const { success } = await rateLimiter.limit(key);
-  return !success;
+async function isRateLimitedEdge(ip: string, path: string): Promise<boolean> {
+  try {
+    const key = `${ip}:${path.startsWith("/api/") ? "api" : "html"}`;
+    const { success } = await rateLimiter.limit(key);
+    return !success;
+  } catch (error) {
+    // If rate limiting fails, allow the request to proceed
+    console.warn("Rate limiting error:", error);
+    return false;
+  }
 }
 
 function detectBot(userAgent: string): boolean {

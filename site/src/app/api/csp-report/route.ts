@@ -81,7 +81,8 @@ export async function POST(req: NextRequest) {
     // 3. Aggregate reports for analysis
     // 4. Generate violation summaries for debugging
 
-    const res = NextResponse.json({ received: true }, { status: 204 });
+    // 204 No Content responses cannot have a body
+    const res = new NextResponse(null, { status: 204 });
     res.headers.set("Cache-Control", "no-store");
     return res;
   } catch (error) {

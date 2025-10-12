@@ -207,10 +207,7 @@ const nextConfig = {
       config.optimization.concatenateModules = true;
     }
 
-    // Optimize for development
-    if (dev) {
-      config.devtool = 'eval-cheap-module-source-map';
-    }
+    // Use default Next.js devtool settings in development
 
     return config;
   },

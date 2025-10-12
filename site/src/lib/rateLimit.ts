@@ -21,17 +21,26 @@ interface MockRateLimiter {
 
 let rateLimiter: Ratelimit | MockRateLimiter;
 
-if (hasRedisConfig) {
-  const redis = Redis.fromEnv();
-  rateLimiter = new Ratelimit({
-    redis,
-    limiter: Ratelimit.slidingWindow(100, "10 s"),
-    analytics: true,
-    prefix: "rl:",
-  });
+if (hasRedisConfig && process.env.NODE_ENV === "production") {
+  try {
+    const redis = Redis.fromEnv();
+    rateLimiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(100, "10 s"),
+      analytics: true,
+      prefix: "rl:",
+    });
+  } catch (error) {
+    console.warn("Failed to initialize Redis rate limiter:", error);
+    rateLimiter = createMockRateLimiter();
+  }
 } else {
-  // Create a mock rate limiter for development
-  rateLimiter = {
+  // Create a mock rate limiter for development or when Redis is not configured
+  rateLimiter = createMockRateLimiter();
+}
+
+function createMockRateLimiter(): MockRateLimiter {
+  return {
     limit: async () => ({
       success: true,
       limit: 100,
