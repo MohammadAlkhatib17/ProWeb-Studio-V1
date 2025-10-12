@@ -48,6 +48,8 @@
     "core-web-vitals:validate": "./scripts/validate-core-web-vitals.sh",
     "core-web-vitals:test": "npm run build:prod && npm start & sleep 5 && npm run core-web-vitals:validate && pkill -f 'next start'",
     "cleanup:inventory": "tsx scripts/cleanup-inventory.ts",
+    "cleanup:check": "./scripts/pre-commit-cleanup-check.sh",
+    "cleanup:validate": "npm run cleanup:inventory && ./scripts/pre-commit-cleanup-check.sh",
     "cleanup:check-unused": "npm run lint -- --quiet 2>&1 | grep -E '(no-unused-vars|@typescript-eslint/no-unused-vars)' || echo 'No unused variables found'",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
