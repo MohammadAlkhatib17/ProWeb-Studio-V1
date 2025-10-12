@@ -1,6 +1,6 @@
 # Cleanup Inventory Report
 
-Generated: 2025-10-12T09:58:32.231Z
+Generated: 2025-10-12T10:01:09.624Z
 
 ## Summary
 
@@ -119,18 +119,6 @@ Found 23 items:
   - Contains placeholder or TODO content
   - Confidence: high
 
-- **src/app/layout.test.ts** at line 93
-  - Contains placeholder or TODO content
-  - Confidence: high
-
-- **src/app/layout.test.ts** at line 94
-  - Contains placeholder or TODO content
-  - Confidence: high
-
-- **src/app/layout.test.ts** at line 112
-  - Contains placeholder or TODO content
-  - Confidence: high
-
 - **src/components/SecureContactForm.tsx** at line 422
   - Contains placeholder or TODO content
   - Confidence: high
@@ -152,6 +140,18 @@ Found 23 items:
   - Confidence: high
 
 - **src/components/SecureContactForm.tsx** at line 484
+  - Contains placeholder or TODO content
+  - Confidence: high
+
+- **src/components/SecureContactForm.tsx** at line 567
+  - Contains placeholder or TODO content
+  - Confidence: high
+
+- **src/components/SecureContactForm.tsx** at line 568
+  - Contains placeholder or TODO content
+  - Confidence: high
+
+- **src/components/Footer.tsx** at line 95
   - Contains placeholder or TODO content
   - Confidence: high
 
