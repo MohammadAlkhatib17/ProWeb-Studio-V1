@@ -214,12 +214,15 @@ export default function Footer() {
             Algemene Voorwaarden
           </Link>
           <span aria-hidden>•</span>
-          <button
+          <Button
+            as="button"
+            variant="secondary"
+            size="normal"
             onClick={() => setIsConsentModalOpen(true)}
-            className="text-cyan-300 hover:text-cyan-200 underline transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+            className="!text-cyan-300 hover:!text-cyan-200 !underline transition-colors duration-200 !border-transparent !bg-transparent !p-0 !min-h-auto hover:!bg-transparent"
           >
             Cookie Voorkeuren
-          </button>
+          </Button>
         </div>
       </div>
       

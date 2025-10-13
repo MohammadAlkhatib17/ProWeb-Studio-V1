@@ -944,4 +944,79 @@
       line-height: 1.7;
     }
   }
+
+  /* Hero Vignette & Contrast Enhancement Utilities */
+  
+  /* Enhanced text shadows for hero sections - ensures WCAG AA contrast */
+  .hero-text-shadow {
+    text-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.8),
+      0 4px 8px rgba(0, 0, 0, 0.6),
+      0 0 20px rgba(var(--cosmic-accent), 0.3);
+  }
+  
+  /* Strong text shadow for bright backgrounds */
+  .hero-text-shadow-strong {
+    text-shadow:
+      0 2px 6px rgba(0, 0, 0, 0.9),
+      0 4px 12px rgba(0, 0, 0, 0.8),
+      0 8px 24px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(var(--cosmic-accent), 0.4);
+  }
+  
+  /* Subtle text shadow for darker backgrounds */
+  .hero-text-shadow-subtle {
+    text-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.6),
+      0 2px 6px rgba(0, 0, 0, 0.4),
+      0 0 15px rgba(var(--cosmic-accent), 0.2);
+  }
+  
+  /* Text stroke for extreme contrast needs */
+  .hero-text-stroke {
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.8);
+    text-stroke: 1px rgba(0, 0, 0, 0.8);
+  }
+  
+  /* Background text scrim - semi-transparent backdrop for text content */
+  .hero-text-scrim {
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.2) 50%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* High contrast text utilities */
+  .text-high-contrast {
+    color: rgb(255, 255, 255);
+    /* Ensures maximum contrast on dark backgrounds */
+  }
+  
+  .text-medium-contrast {
+    color: rgb(241, 245, 249); /* slate-50 - 4.8:1 contrast on dark */
+  }
+  
+  .text-safe-contrast {
+    color: rgb(226, 232, 240); /* slate-200 - 4.5:1 contrast minimum */
+  }
+  
+  /* Performance-optimized vignette blend modes */
+  .vignette-multiply {
+    mix-blend-mode: multiply;
+  }
+  
+  .vignette-overlay {
+    mix-blend-mode: overlay;
+  }
+  
+  .vignette-soft-light {
+    mix-blend-mode: soft-light;
+  }
 }

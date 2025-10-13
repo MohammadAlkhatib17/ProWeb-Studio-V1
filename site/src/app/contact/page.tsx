@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BackgroundImage } from "@/components/ui/responsive-image";
+import { LCPOptimizedImage } from "@/components/ui/LCPOptimizedImage";
 import SecureContactForm from "@/components/SecureContactForm";
 import SEOSchema from "@/components/SEOSchema";
 import {
@@ -8,6 +8,7 @@ import {
   SectionTitle,
   BodyText,
 } from "@/components/unified/LayoutComponents";
+import { HeroVignetteOverlay } from "@/components/ui/HeroVignetteOverlay";
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (
@@ -48,13 +49,24 @@ export default function ContactPage() {
         pageTitle={metadata.title as string}
         pageDescription={metadata.description as string}
       />
-      {/* Full-bleed background to avoid top seam */}
-      <BackgroundImage
-        src="/assets/glowing_beacon_contact-optimized.avif"
-        alt=""
-        priority={true}
-        quality={85}
-        className="opacity-30 pointer-events-none -z-10"
+      {/* Full-bleed background to avoid top seam - Optimized for LCP */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <LCPOptimizedImage
+          baseSrc="/assets/glowing_beacon_contact-optimized"
+          fallbackSrc="/assets/glowing_beacon_contact.avif"
+          alt=""
+          width={1920}
+          height={1080}
+          fill={true}
+          imageType="hero"
+          className="opacity-30"
+        />
+      </div>
+      {/* Enhanced vignette for better text contrast on bright beacon background */}
+      <HeroVignetteOverlay 
+        intensity="moderate"
+        enableBlur={true}
+        enableEdgeVignette={true}
       />
       <SecureContactForm />
 

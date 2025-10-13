@@ -1,17 +1,18 @@
 // src/components/HeroBackground.tsx
-import { HeroImage } from "@/components/ui/responsive-image";
+import { LCPOptimizedImage } from "@/components/ui/LCPOptimizedImage";
 
 export default function HeroBackground() {
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none">
-      <HeroImage
-        src="/assets/hero/nebula_helix.avif"
+      <LCPOptimizedImage
+        baseSrc="/assets/hero/nebula_helix"
+        fallbackSrc="/assets/hero/nebula_helix.jpg"
         alt=""
-        fill
-        priority={true}
-        quality={90}
-        className="object-cover"
-        sizes="100vw"
+        width={1920}
+        height={1080}
+        fill={true}
+        imageType="hero"
+        generateSrcSet={false}
       />
     </div>
   );

@@ -1,5 +1,6 @@
 import React from "react";
 import { designSystem, designClasses } from "@/lib/design-system";
+import { Button } from "@/components/Button";
 
 // Page Layout Component for consistent page structure
 interface PageLayoutProps {
@@ -272,17 +273,13 @@ export function CTASection({
     >
       <SectionTitle className="mb-6">{title}</SectionTitle>
       <BodyText className="mb-8 max-w-3xl mx-auto">{description}</BodyText>
-      <a
+      <Button
         href={buttonHref}
-        className={designClasses(
-          "inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 min-h-[44px] px-8 py-3.5 text-base",
-          variant === "primary"
-            ? "bg-gradient-to-r from-cyan-500 to-magenta-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/40 text-black"
-            : "border border-cyan-500/60 hover:bg-cyan-500/10 hover:border-cyan-400 text-cyan-100 hover:shadow-lg hover:shadow-cyan-500/30",
-        )}
+        variant={variant}
+        size="large"
       >
         {buttonText}
-      </a>
+      </Button>
     </SectionLayout>
   );
 }

@@ -6,6 +6,7 @@ import { Float, OrbitControls, Environment } from "@react-three/drei";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 import { Button } from "@/components/Button";
+import { ContentCard } from "@/components/ui/content-card";
 
 function MobileDevices() {
   const phoneRef = useRef<THREE.Group>(null);
@@ -333,11 +334,11 @@ export default function MobileShowcase() {
               </div>
             </div>
 
-            <div className="bg-cosmic-800/50 rounded-lg p-6 mb-8">
+            <ContentCard variant="subtle" className="mb-8">
               <h3 className="text-xl font-semibold text-white mb-4">
                 Mobile Performance Stats
               </h3>
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-3 gap-6 text-center">
                 <div>
                   <div className="text-2xl font-bold text-stellar-400">95%</div>
                   <div className="text-sm text-cosmic-300">Mobile Users NL</div>
@@ -359,7 +360,7 @@ export default function MobileShowcase() {
                   </div>
                 </div>
               </div>
-            </div>
+            </ContentCard>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Button href="/contact" variant="primary">

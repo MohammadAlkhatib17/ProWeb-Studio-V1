@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 import { siteConfig } from "@/config/site.config";
 import Logo from "@/components/Logo";
+import { Button } from "@/components/Button";
 
 const MobileMenu = dynamic(() => import("@/components/navigation/MobileMenu"), {
   ssr: false,
@@ -85,15 +86,16 @@ export default function Header() {
 
             if (isContactLink) {
               return (
-                <Link
+                <Button
                   key={item.href}
                   href={item.href}
-                  className="font-medium transition-all duration-300 relative group py-2 px-4 rounded-lg border border-cyan-500/60 hover:border-cyan-400 hover:bg-cyan-500/10 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900 min-h-[44px] inline-flex items-center text-cyan-100 hover:text-white hover:shadow-lg hover:shadow-cyan-500/30"
+                  variant="secondary"
+                  size="normal"
+                  className="font-medium"
                   aria-current={isActive ? "page" : undefined}
                 >
-                  <span className="relative z-10">{item.name}</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-magenta-500/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </Link>
+                  {item.name}
+                </Button>
               );
             }
 
@@ -131,9 +133,12 @@ export default function Header() {
           className="absolute right-0 h-full flex items-center md:pr-6 md:hidden"
           style={{ paddingInlineEnd: "env(safe-area-inset-right)" }}
         >
-          <button
+          <Button
+            as="button"
+            variant="secondary"
+            size="normal"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="flex flex-col gap-2 p-4 -mr-4 md:mr-0 hover:bg-cosmic-800/50 rounded-lg transition-colors duration-300 min-h-[56px] min-w-[56px] items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900"
+            className="flex flex-col gap-2 p-4 -mr-4 md:mr-0 min-h-[56px] min-w-[56px] items-center justify-center !bg-transparent hover:!bg-cosmic-800/50 !border-transparent"
             aria-label="Toggle menu"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
@@ -147,7 +152,7 @@ export default function Header() {
             <div
               className={`w-8 h-0.5 bg-white transition-transform duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-2.5" : ""}`}
             />
-          </button>
+          </Button>
         </div>
       </div>
 

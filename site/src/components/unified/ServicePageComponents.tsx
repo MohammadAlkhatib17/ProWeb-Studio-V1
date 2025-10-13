@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import ServiceFAQItem from "@/components/ServiceFAQItem";
+import { ContentCard } from "@/components/ui/content-card";
 
 // Unified interfaces for service page components
 export interface ServiceFeature {
@@ -104,7 +105,7 @@ export interface ServicePageProps {
 
 // Unified component for feature cards
 export const FeatureCard = ({ feature }: { feature: ServiceFeature }) => (
-  <div className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300 group">
+  <ContentCard variant="default" as="article">
     <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
       {feature.icon}
     </div>
@@ -121,17 +122,15 @@ export const FeatureCard = ({ feature }: { feature: ServiceFeature }) => (
         </li>
       ))}
     </ul>
-  </div>
+  </ContentCard>
 );
 
 // Unified component for package cards
 export const PackageCard = ({ pkg }: { pkg: ServicePackage }) => (
-  <div
-    className={`relative bg-cosmic-800/40 backdrop-blur-sm border rounded-xl p-8 transition-all duration-300 hover:scale-105 ${
-      pkg.popular
-        ? "border-primary-500/50 ring-2 ring-primary-500/20 shadow-lg shadow-primary-500/10"
-        : "border-cosmic-700/30 hover:border-primary-500/50"
-    }`}
+  <ContentCard
+    variant={pkg.popular ? "highlight" : "default"}
+    as="article"
+    className={`text-center ${pkg.popular ? "ring-2 ring-primary-500/20 shadow-lg shadow-primary-500/10" : ""} hover:scale-105`}
   >
     {pkg.popular && (
       <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -141,7 +140,7 @@ export const PackageCard = ({ pkg }: { pkg: ServicePackage }) => (
       </div>
     )}
 
-    <div className="text-center mb-8">
+    <div className="mb-8">
       <h3 className="text-xl font-semibold text-white mb-2">{pkg.name}</h3>
       <p className="text-slate-200 text-sm mb-4">{pkg.description}</p>
       <div className="text-3xl font-bold text-white mb-2">{pkg.price}</div>
@@ -167,7 +166,7 @@ export const PackageCard = ({ pkg }: { pkg: ServicePackage }) => (
     >
       {pkg.buttonText || "Pakket Kiezen"}
     </button>
-  </div>
+  </ContentCard>
 );
 
 // Unified component for process steps
@@ -178,7 +177,7 @@ export const ProcessStep = ({
   step: ProcessStep;
   isLast: boolean;
 }) => (
-  <div className="flex items-start space-x-6">
+  <ContentCard variant="subtle" interactive={false} className="flex items-start space-x-6">
     <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full flex items-center justify-center shadow-lg">
       <span className="text-white font-bold text-sm">{step.step}</span>
     </div>
@@ -189,16 +188,16 @@ export const ProcessStep = ({
         <div className="w-px h-8 bg-gradient-to-b from-primary-500/50 to-transparent mt-6 ml-6"></div>
       )}
     </div>
-  </div>
+  </ContentCard>
 );
 
 // Unified component for statistics
 export const StatisticCard = ({ stat }: { stat: StatisticItem }) => (
-  <div className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 text-center hover:border-primary-500/50 transition-all duration-300">
+  <ContentCard variant="subtle" as="article" className="text-center">
     <div className="text-4xl font-bold text-primary-400 mb-2">{stat.value}</div>
     <div className="text-lg text-white mb-2">{stat.label}</div>
     <div className="text-sm text-slate-400">{stat.description}</div>
-  </div>
+  </ContentCard>
 );
 
 // Unified component for trust indicators
@@ -207,13 +206,13 @@ export const TrustIndicator = ({
 }: {
   indicator: TrustIndicator;
 }) => (
-  <div className="text-center">
+  <ContentCard variant="default" as="article" className="text-center">
     <div className="w-16 h-16 bg-primary-500/20 rounded-full flex items-center justify-center mx-auto mb-6 hover:bg-primary-500/30 transition-colors duration-300">
       <span className="text-2xl">{indicator.icon}</span>
     </div>
     <h3 className="text-xl font-semibold text-white mb-4">{indicator.title}</h3>
     <p className="text-slate-200">{indicator.description}</p>
-  </div>
+  </ContentCard>
 );
 
 // Unified component for FAQ items with accordion behavior

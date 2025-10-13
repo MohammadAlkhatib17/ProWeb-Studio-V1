@@ -12,6 +12,7 @@ import { Button } from "@/components/Button";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import RelatedServices from "@/components/RelatedServices";
 import ContentSuggestions from "@/components/ContentSuggestions";
+import { CustomContentHero } from "@/components/unified/HeroSection";
 import {
   generateMetadata as generateEnhancedMetadata,
   type LocationKey,
@@ -151,122 +152,112 @@ export default function LocationPage({ params }: LocationPageProps) {
       />
 
       {/* HERO SECTION - Matches homepage design */}
-      <section
-        aria-label="Hero"
-        className="homepage-hero relative min-h-[92vh] grid place-items-center overflow-hidden"
-      >
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/20 to-transparent z-0" />
-
-        {/* 3D Portal Scene - Same as homepage */}
-        <div className="absolute inset-0">
+      <CustomContentHero
+        title={`Website Laten Maken ${location.name}`}
+        backgroundContent={
           <HeroCanvas>
             <HeroScene />
           </HeroCanvas>
+        }
+        className="homepage-hero motion-safe:animate-fade-in"
+      >
+        {/* Location badge */}
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <span className="text-2xl">🏛️</span>
+          <span className="text-cyan-300 font-medium">{location.region}</span>
         </div>
 
-        {/* Hero content with enhanced typography */}
-        <div className="text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-section">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <span className="text-2xl">🏛️</span>
-            <span className="text-cyan-300 font-medium">{location.region}</span>
-          </div>
+        {/* Location-specific description */}
+        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-cyan-100 max-w-prose mx-auto text-center leading-relaxed motion-safe:animate-slide-up">
+          {location.description} Wij transformeren uw digitale visie tot
+          werkelijkheid met razendsnelle, interactieve websites die uw merk in{" "}
+          {location.name} tot leven brengen.
+        </p>
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-extrabold text-shadow-sharp tracking-tight leading-tight mb-8 motion-safe:animate-fade-in">
-            Website Laten Maken{" "}
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              {location.name}
+        {/* Location stats */}
+        {location.population && (
+          <div className="flex items-center justify-center gap-6 text-slate-300 flex-wrap">
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
+              {location.population.toLocaleString("nl-NL")} inwoners
             </span>
-          </h1>
-
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-cyan-100 mb-8 max-w-4xl mx-auto motion-safe:animate-slide-up leading-relaxed">
-            {location.description} Wij transformeren uw digitale visie tot
-            werkelijkheid met razendsnelle, interactieve websites die uw merk in{" "}
-            {location.name} tot leven brengen.
-          </p>
-
-          {location.population && (
-            <div className="flex items-center justify-center gap-6 mb-8 text-slate-300 flex-wrap">
-              <span className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
-                {location.population.toLocaleString("nl-NL")} inwoners
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
-                {locationServices.length} beschikbare diensten
-              </span>
-            </div>
-          )}
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <Button href="/contact" variant="primary" size="large">
-              Start Uw Project in {location.name}
-            </Button>
-            <Button href="/portfolio" variant="secondary" size="large">
-              Bekijk Portfolio →
-            </Button>
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
+              {locationServices.length} beschikbare diensten
+            </span>
           </div>
+        )}
 
-          {/* Promotional Banner - Same style as homepage */}
-          <div className="motion-safe:animate-fade-in-delayed">
-            <div className="relative mx-auto max-w-md">
-              {/* Animated glow effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-magenta-500 to-cyan-500 rounded-lg blur opacity-75 animate-pulse"></div>
+        {/* CTA buttons with unified gap */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <Button href="/contact" variant="primary" size="large">
+            Start Uw Project in {location.name}
+          </Button>
+          <Button href="/portfolio" variant="secondary" size="large">
+            Bekijk Portfolio →
+          </Button>
+        </div>
 
-              {/* Main promotional banner */}
-              <div className="relative bg-gradient-to-r from-cyan-500/20 to-magenta-500/20 backdrop-blur-sm border border-cyan-300/30 rounded-lg px-6 py-4 text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <span className="text-yellow-400 text-sm font-bold">
-                    🎉 LOKALE ACTIE {location.name.toUpperCase()}
-                  </span>
-                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-bounce">
-                    HOT
-                  </span>
-                </div>
+        {/* Promotional Banner - Same style as homepage */}
+        <div className="motion-safe:animate-fade-in-delayed">
+          <div className="relative mx-auto max-w-md">
+            {/* Animated glow effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-magenta-500 to-cyan-500 rounded-lg blur opacity-75 animate-pulse"></div>
 
-                <div className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-magenta-300 mb-1">
-                  30% KORTING
-                </div>
+            {/* Main promotional banner */}
+            <div className="relative bg-gradient-to-r from-cyan-500/20 to-magenta-500/20 backdrop-blur-sm border border-cyan-300/30 rounded-lg px-6 py-4 text-center">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-yellow-400 text-sm font-bold">
+                  🎉 LOKALE ACTIE {location.name.toUpperCase()}
+                </span>
+                <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-bounce">
+                  HOT
+                </span>
+              </div>
 
-                <p className="text-sm text-cyan-200 font-medium mb-2">
-                  Op alle website projecten in {location.name}
-                </p>
+              <div className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-magenta-300 mb-1">
+                30% KORTING
+              </div>
 
-                <div className="flex items-center justify-center gap-2 text-xs text-slate-300">
-                  <span className="flex items-center gap-1">
-                    <svg
-                      className="w-3 h-3 text-green-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Lokale service
-                  </span>
-                  <span className="text-slate-400">•</span>
-                  <span className="flex items-center gap-1">
-                    <svg
-                      className="w-3 h-3 text-cyan-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Transparante prijzen
-                  </span>
-                </div>
+              <p className="text-sm text-cyan-200 font-medium mb-2">
+                Op alle website projecten in {location.name}
+              </p>
+
+              <div className="flex items-center justify-center gap-2 text-xs text-slate-300">
+                <span className="flex items-center gap-1">
+                  <svg
+                    className="w-3 h-3 text-green-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Lokale service
+                </span>
+                <span className="text-slate-400">•</span>
+                <span className="flex items-center gap-1">
+                  <svg
+                    className="w-3 h-3 text-cyan-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Transparante prijzen
+                </span>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </CustomContentHero>
 
       {/* Online-First Approach Section */}
       <section

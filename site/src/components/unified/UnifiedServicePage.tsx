@@ -4,6 +4,8 @@ import { Button } from "@/components/Button";
 import SEOSchema from "@/components/SEOSchema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import FAQSection from "@/components/sections/FAQSection";
+import { SimpleHero } from "./HeroSection";
+import { ContentCard } from "@/components/ui/content-card";
 import {
   ServicePageProps,
   FeatureCard,
@@ -82,54 +84,22 @@ export default function UnifiedServicePage({
       <Breadcrumbs />
 
       {/* Hero Section */}
-      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            {title.split(" ").map((word, index, array) => {
-              // Make the last 1-2 words gradient for visual impact
-              const isGradient = index >= array.length - 2;
-              return isGradient ? (
-                <span key={index} className="gradient-text-primary">
-                  {word}
-                  {index < array.length - 1 ? " " : ""}
-                </span>
-              ) : (
-                <span key={index}>{word} </span>
-              );
-            })}
-          </h1>
-          {subtitle && (
-            <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed font-medium">
-              {subtitle}
-            </p>
-          )}
-          <p className="text-lg text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-            {heroDescription}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              href="/contact"
-              variant="primary"
-              size="large"
-              className="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-500 hover:to-secondary-500 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300"
-            >
-              {primaryCTA}
-            </Button>
-            <Button
-              href="/portfolio"
-              variant="secondary"
-              size="large"
-              className="border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white transform hover:-translate-y-0.5 transition-all duration-300"
-            >
-              {secondaryCTA}
-            </Button>
-          </div>
-        </div>
-      </section>
+      <SimpleHero
+        title={title}
+        description={`${subtitle ? subtitle + ' ' : ''}${heroDescription}`}
+        primaryCTA={{
+          text: primaryCTA,
+          href: "/contact"
+        }}
+        secondaryCTA={{
+          text: secondaryCTA,
+          href: "/portfolio"
+        }}
+      />
 
       {/* Features Section */}
       <ServiceSection title={featuresTitle} subtitle={featuresSubtitle}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-20">
           {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} />
           ))}
@@ -144,7 +114,7 @@ export default function UnifiedServicePage({
           background={true}
         >
           {packages && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {packages.map((pkg, index) => (
                 <PackageCard key={index} pkg={pkg} />
               ))}
@@ -152,11 +122,12 @@ export default function UnifiedServicePage({
           )}
 
           {serviceTypes && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {serviceTypes.map((type, index) => (
-                <div
+                <ContentCard
                   key={index}
-                  className="bg-cosmic-800/40 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300"
+                  variant="default"
+                  as="article"
                 >
                   <div className="mb-6">
                     {type.badge && (
@@ -195,7 +166,7 @@ export default function UnifiedServicePage({
                   >
                     Meer Informatie
                   </Button>
-                </div>
+                </ContentCard>
               ))}
             </div>
           )}
@@ -205,7 +176,7 @@ export default function UnifiedServicePage({
       {/* Statistics Section */}
       {statistics && (
         <ServiceSection title={statisticsTitle || "Bewezen Resultaten"}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {statistics.map((stat, index) => (
               <StatisticCard key={index} stat={stat} />
             ))}
@@ -228,7 +199,7 @@ export default function UnifiedServicePage({
 
       {/* Trust Indicators Section */}
       <ServiceSection title={trustTitle} background={true}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {trustIndicators.map((indicator, index) => (
             <TrustIndicator key={index} indicator={indicator} />
           ))}
