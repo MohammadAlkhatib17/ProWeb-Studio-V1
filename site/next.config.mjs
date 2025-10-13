@@ -1,92 +1,31 @@
 // @ts-check
 
 import nextBundleAnalyzer from '@next/bundle-analyzer';
-import { CRITICAL_ENV_VARS, PLACEHOLDER_VALUES, ENV_VAR_GROUPS } from './src/lib/env.required.mjs';
+import { 
+  CRITICAL_ENV_VARS, 
+  ENV_VAR_GROUPS, 
+  isProductionBuild, 
+  isPlaceholderValue,
+  validateProductionEnvironment 
+} from './src/lib/env.required.mjs';
 
 const withBundleAnalyzer = nextBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
-// Build-time environment validation for production
-function validateProductionEnv() {
-  // Only validate in production builds
-  if (process.env.NODE_ENV !== 'production') {
-    return;
+// Build-time environment validation for production builds  
+// This runs during Next.js build phase to fail fast if environment is not configured
+try {
+  if (isProductionBuild()) {
+    console.log('🔧 Next.js Build: Running environment validation quality gate...');
+    validateProductionEnvironment();
+    console.log('✅ Next.js Build: Environment validation passed\n');
   }
-
-  /**
-   * @param {string} value
-   * @returns {boolean}
-   */
-  function isPlaceholderValue(value) {
-    if (!value || typeof value !== 'string') return true;
-    
-    const normalizedValue = value.toLowerCase().trim();
-    
-    return PLACEHOLDER_VALUES.some(placeholder => 
-      normalizedValue === placeholder.toLowerCase() ||
-      normalizedValue.includes('placeholder') ||
-      normalizedValue.includes('example') ||
-      normalizedValue.includes('your_') ||
-      normalizedValue.includes('changeme') ||
-      normalizedValue === 'localhost:3000' ||
-      normalizedValue === 'http://localhost:3000'
-    );
-  }
-
-  // Group errors by category
-  /** @type {Record<string, {name: string, description: string, variables: string[], guidance: string, errors: string[]}>} */
-  const errorsByGroup = {};
-  let hasErrors = false;
-  
-  // Check each environment variable and group by category
-  for (const envVar of CRITICAL_ENV_VARS) {
-    const value = process.env[envVar];
-    let error = null;
-    
-    if (!value) {
-      error = `${envVar} is not set`;
-    } else if (isPlaceholderValue(value)) {
-      error = `${envVar} contains placeholder value: "${value}"`;
-    }
-
-    if (error) {
-      hasErrors = true;
-      // Find which group this variable belongs to
-      for (const [groupKey, groupConfig] of Object.entries(ENV_VAR_GROUPS)) {
-        if (groupConfig.variables.includes(envVar)) {
-          if (!errorsByGroup[groupKey]) {
-            errorsByGroup[groupKey] = {
-              ...groupConfig,
-              errors: []
-            };
-          }
-          errorsByGroup[groupKey].errors.push(error);
-          break;
-        }
-      }
-    }
-  }
-
-  if (hasErrors) {
-    console.error('\n🚨 Build failed! Critical environment variables are missing or invalid:\n');
-    
-    // Display errors grouped by category
-    for (const [groupKey, groupData] of Object.entries(errorsByGroup)) {
-      console.error(`📁 ${groupData.name} (${groupData.description})`);
-      groupData.errors.forEach(/** @param {string} error */ error => console.error(`   ❌ ${error}`));
-      console.error(`   💡 ${groupData.guidance}`);
-      console.error(''); // Empty line for spacing
-    }
-    
-    console.error('📚 For complete setup instructions, see docs/DEPLOY_CHECKLIST.md');
-    console.error('🔧 Set these variables in your deployment platform (Vercel, Netlify, etc.)\n');
-    throw new Error('Environment validation failed - missing or invalid critical environment variables');
-  }
+} catch (error) {
+  console.error('🚨 Next.js Build: Environment validation failed!');
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exit(1);
 }
-
-// Run validation during build
-validateProductionEnv();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

@@ -1,19 +1,72 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rateLimiter } from "@/lib/rateLimit";
 
-// Bot detection patterns
-const BOT_USER_AGENTS = [
-  "bot",
-  "crawler",
-  "spider",
-  "scraper",
-  "scanner",
-  "curl",
-  "wget",
-  "python-requests",
-  "go-http-client",
-  "libwww-perl",
-  "postmanruntime",
+/**
+ * Note: Analytics consent is handled client-side via cookie consent system.
+ * All analytics utilities in ga.ts check for user consent before making calls.
+ * Middleware only handles CSP headers to allow analytics domains but doesn't
+ * inject analytics scripts - those are conditionally loaded based on consent.
+ */
+
+// Logging counters for monitoring
+let blockedUACount = 0;
+let rateLimitCount = 0;
+
+// Major search engine crawlers - NEVER block these
+const ALLOWED_CRAWLERS = [
+  /googlebot/i,
+  /bingbot/i,
+  /duckduckbot/i,
+  /yandexbot/i,
+  /applebot/i,
+  /facebookexternalhit/i,
+  /twitterbot/i,
+  /linkedinbot/i,
+  /slackbot/i,
+  /whatsapp/i,
+  /telegrambot/i,
+  // Vercel bot for deployments
+  /vercel-bot/i,
+  // Lighthouse and other testing tools
+  /lighthouse/i,
+  /chrome-lighthouse/i,
+  /pagespeed/i,
+  // SEO tools that should be allowed
+  /screaming\s?frog/i,
+  /semrushbot/i,
+  /ahrefsbot/i,
+];
+
+// Curated malicious bot patterns - more specific than broad substrings
+const MALICIOUS_BOT_PATTERNS = [
+  // Generic bot indicators (but exclude legitimate crawlers)
+  /^(?!.*(googlebot|bingbot|duckduckbot|yandexbot|applebot|facebookexternalhit|twitterbot|linkedinbot|slackbot|whatsapp|telegrambot|vercel-bot|lighthouse|pagespeed|screaming\s?frog|semrushbot|ahrefsbot)).*bot\b/i,
+  /^(?!.*(googlebot|bingbot|duckduckbot|yandexbot|applebot)).*crawler\b/i,
+  /^(?!.*(googlebot|bingbot|duckduckbot|yandexbot|applebot)).*spider\b/i,
+  
+  // Scraping tools and automation
+  /\b(scraper|scanner|harvester)\b/i,
+  /\b(curl|wget|libcurl)\/[\d.]/i, // Block curl/wget with version numbers
+  /python-requests(?!\/[\d.]+\s)/i,
+  /go-http-client/i,
+  /libwww-perl/i,
+  /postmanruntime/i,
+  /http_request2/i,
+  /mechanize/i,
+  /scrapy/i,
+  
+  // Suspicious automation tools
+  /\b(selenium|phantomjs|headlesschrome|chromeheadless)\b/i,
+  /\b(puppeteer|playwright)\b/i,
+  /\b(webdriver|automation)\b/i,
+  
+  // Known malicious patterns
+  /\b(nikto|sqlmap|nmap|masscan|zmap)\b/i,
+  /\b(acunetix|nessus|openvas|w3af)\b/i,
+  
+  // Empty or minimal user agents
+  /^[\s\-_.]*$/,
+  /^[a-z]{1,3}$/i,
 ];
 
 const SUSPICIOUS_PATTERNS = [
@@ -113,11 +166,38 @@ async function isRateLimitedEdge(ip: string, path: string): Promise<boolean> {
   }
 }
 
-function detectBot(userAgent: string): boolean {
-  if (!userAgent) return true; // No user agent is suspicious
+function isAllowedCrawler(userAgent: string): boolean {
+  if (!userAgent) return false;
+  return ALLOWED_CRAWLERS.some((pattern) => pattern.test(userAgent));
+}
 
-  const ua = userAgent.toLowerCase();
-  return BOT_USER_AGENTS.some((bot) => ua.includes(bot));
+function isMaliciousBot(userAgent: string): boolean {
+  if (!userAgent) return true; // No user agent is suspicious
+  
+  // First check if it's an allowed crawler
+  if (isAllowedCrawler(userAgent)) {
+    return false;
+  }
+  
+  // Then check against malicious patterns
+  return MALICIOUS_BOT_PATTERNS.some((pattern) => pattern.test(userAgent));
+}
+
+function detectBot(userAgent: string): boolean {
+  const isMalicious = isMaliciousBot(userAgent);
+  
+  if (isMalicious) {
+    blockedUACount++;
+    
+    // Log blocked UA (anonymized in production)
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(`Bot detected and blocked: ${userAgent}`);
+    } else {
+      console.warn(`Bot blocked. Total blocked UAs: ${blockedUACount}`);
+    }
+  }
+  
+  return isMalicious;
 }
 
 function detectSuspiciousContent(req: NextRequest): boolean {
@@ -187,9 +267,13 @@ function validateRequest(req: NextRequest): {
   }
 
   // Check User-Agent length (too short or too long is suspicious)
-  if (userAgent.length < 10 || userAgent.length > 500) {
+  // Allow legitimate crawlers through even with short UAs
+  if (!isAllowedCrawler(userAgent) && (userAgent.length < 10 || userAgent.length > 1000)) {
     return { valid: false, reason: "Suspicious user agent length" };
   }
+  
+  // Remove legacy browser version checks - modern browsers handle this automatically
+  // Focus on detecting actual malicious patterns rather than old browser versions
 
   return { valid: true };
 }
@@ -210,6 +294,18 @@ function createMiddlewareHeaders(
       geoHint === "nl" ? "lhr1" : geoHint === "eu" ? "fra1" : "cdg1",
     // Client IP for logging (already anonymized by proxy)
     "X-Client-IP": ip,
+    // Monitoring metrics
+    "X-Blocked-UA-Count": blockedUACount.toString(),
+    "X-Rate-Limit-Count": rateLimitCount.toString(),
+  };
+}
+
+// Export metrics for monitoring (optional endpoint)
+export function getMiddlewareMetrics() {
+  return {
+    blockedUserAgents: blockedUACount,
+    rateLimitHits: rateLimitCount,
+    timestamp: new Date().toISOString(),
   };
 }
 
@@ -239,9 +335,10 @@ export async function middleware(req: NextRequest) {
   // Geographic optimization hints
   const geoHint = getGeographicHint(ip, country || undefined);
 
-  // 1. Bot Detection
-  if (detectBot(userAgent) && !path.startsWith("/api/")) {
-    // Allow bots for SEO but block from sensitive areas
+  // 1. Bot Detection - Only block malicious bots, allow legitimate crawlers
+  const isMaliciousBotDetected = detectBot(userAgent);
+  if (isMaliciousBotDetected && !path.startsWith("/api/")) {
+    // Block malicious bots from sensitive areas
     if (path.includes("admin") || path.includes("dashboard")) {
       if (path.startsWith("/api/")) {
         return NextResponse.json(
@@ -251,6 +348,15 @@ export async function middleware(req: NextRequest) {
       }
       return new NextResponse("Access Denied", { status: 403 });
     }
+    
+    // Block malicious bots from all pages to prevent scraping abuse
+    if (path.startsWith("/api/")) {
+      return NextResponse.json(
+        { ok: false, error: "Bot Access Denied" },
+        { status: 403 },
+      );
+    }
+    return new NextResponse("Bot Access Denied", { status: 403 });
   }
 
   // 2. Suspicious Content Detection
@@ -292,10 +398,12 @@ export async function middleware(req: NextRequest) {
 
   // 4. Rate Limiting
   if (await isRateLimitedEdge(ip, path)) {
+    rateLimitCount++;
+    
     if (process.env.NODE_ENV !== "production") {
       console.warn(`Rate limit exceeded: ${ip} ${path}`);
     } else {
-      console.warn("Rate limit exceeded");
+      console.warn(`Rate limit exceeded. Total 429s: ${rateLimitCount}`);
     }
 
     const headers = {

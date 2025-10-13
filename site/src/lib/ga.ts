@@ -17,6 +17,7 @@ export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 /**
  * Check if consent has been granted for analytics
+ * Updated to work with new consent system
  */
 export const hasAnalyticsConsent = (): boolean => {
   if (typeof window === "undefined") return false;

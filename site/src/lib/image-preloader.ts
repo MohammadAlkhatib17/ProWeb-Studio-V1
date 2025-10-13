@@ -57,16 +57,16 @@ export function generateResponsiveSrcSet(
  * Add your LCP images here
  */
 export const CRITICAL_IMAGES = {
-  // Hero backgrounds
-  heroPortal: "/assets/hero_portal_background.avif",
-  servicesNebula: "/assets/nebula_services_background.avif",
-  contactBeacon: "/assets/glowing_beacon_contact.avif",
+  // Hero backgrounds (optimized for LCP)
+  heroPortal: "/assets/hero_portal_background-optimized.avif",
+  servicesNebula: "/assets/nebula_services_background-optimized.avif",
+  contactBeacon: "/assets/glowing_beacon_contact-optimized.avif",
 
   // Logo and branding
   logoIcon: "/assets/logo/logo-proweb-icon.svg",
 
   // Team/About images
-  teamCoreStar: "/assets/team_core_star.webp",
+  teamCoreStar: "/assets/team_core_star.avif",
 } as const;
 
 /**

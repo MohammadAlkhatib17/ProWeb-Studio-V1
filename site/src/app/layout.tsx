@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Script from "next/script";
 import { headers } from "next/headers";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteConfig } from "@/config/site.config";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -22,6 +19,8 @@ import {
   WebVitalsReporter,
   WebVitalsDisplay,
 } from "@/components/WebVitalsDisplay";
+import ClientSideConsent from "@/components/cookies/ClientSideConsent";
+import ConditionalAnalytics from "@/components/cookies/ConditionalAnalytics";
 // Enhanced metadata utilities available but not used in root layout
 
 // Initialize environment validation for production deployments
@@ -363,19 +362,15 @@ export default function RootLayout({
         <Footer />
         <CursorTrail />
 
+        {/* Cookie Consent Banner - Client-side only */}
+        <ClientSideConsent />
+
         <SEOSchema nonce={nonce} pageType="generic" />
         <PWAServiceWorker />
         <DutchPerformanceMonitor />
 
-        <Script
-          defer
-          data-domain={siteConfig.analytics.plausibleDomain}
-          src="https://plausible.io/js/script.js"
-          strategy="afterInteractive"
-          nonce={nonce}
-        />
-        <Analytics />
-        <SpeedInsights />
+        {/* Conditionally load analytics based on user consent */}
+        <ConditionalAnalytics nonce={nonce} />
 
         {/* Enhanced Web Vitals Monitoring */}
         <WebVitalsReporter />

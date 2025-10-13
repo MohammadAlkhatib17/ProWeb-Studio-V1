@@ -138,3 +138,85 @@ export const PLACEHOLDER_VALUES = [
   'changeme',
   ''
 ];
+
+/**
+ * Check if the current environment is a production build
+ */
+export const isProductionBuild = () => {
+  return process.env.NODE_ENV === 'production' || 
+         process.env.NEXT_PHASE === 'phase-production-build' ||
+         process.env.CI === 'true';
+};
+
+/**
+ * Check if a value is a placeholder or invalid for production
+ */
+export const isPlaceholderValue = (value) => {
+  if (!value || typeof value !== 'string') return true;
+  
+  const normalizedValue = value.toLowerCase().trim();
+  
+  return PLACEHOLDER_VALUES.some(placeholder => 
+    normalizedValue === placeholder.toLowerCase() ||
+    normalizedValue.includes('placeholder') ||
+    normalizedValue.includes('example') ||
+    normalizedValue.includes('your_') ||
+    normalizedValue.includes('changeme') ||
+    normalizedValue === 'localhost:3000' ||
+    normalizedValue === 'http://localhost:3000'
+  );
+};
+
+/**
+ * Production build validation - throws error if validation fails
+ * This ensures production builds fail fast when environment is not properly configured
+ */
+export const validateProductionEnvironment = () => {
+  if (!isProductionBuild()) {
+    return; // Skip validation for non-production builds
+  }
+
+  const errors = [];
+  const missingVars = [];
+  const placeholderVars = [];
+
+  // Check all critical environment variables
+  for (const envVar of CRITICAL_ENV_VARS) {
+    const value = process.env[envVar];
+    
+    if (!value) {
+      missingVars.push(envVar);
+    } else if (isPlaceholderValue(value)) {
+      placeholderVars.push({ var: envVar, value });
+    }
+  }
+
+  // Build error messages by category
+  if (missingVars.length > 0) {
+    errors.push(`Missing required environment variables: ${missingVars.join(', ')}`);
+  }
+
+  if (placeholderVars.length > 0) {
+    const placeholderDetails = placeholderVars
+      .map(({ var: envVar, value }) => `${envVar}="${value}"`)
+      .join(', ');
+    errors.push(`Placeholder values detected: ${placeholderDetails}`);
+  }
+
+  if (errors.length > 0) {
+    const errorMessage = [
+      '🚨 PRODUCTION BUILD FAILED: Environment validation errors detected!',
+      '',
+      ...errors.map(error => `❌ ${error}`),
+      '',
+      '💡 Required actions:',
+      '   1. Set all required environment variables in your deployment platform',
+      '   2. Replace all placeholder values with real configuration',
+      '   3. Verify values are properly configured before deployment',
+      '',
+      '📚 See docs/DEPLOY_CHECKLIST.md for detailed setup instructions'
+    ].join('\n');
+
+    throw new Error(errorMessage);
+  }
+};

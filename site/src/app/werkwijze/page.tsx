@@ -141,12 +141,12 @@ export default function Werkwijze() {
             className="absolute inset-0 pointer-events-none -z-10 portal-gradient opacity-60 blur-3xl"
           />
           <ResponsiveImage
-            src="/assets/team_core_star.png"
+            src="/assets/team_core_star.avif"
             alt="Centrale ster die ons proces symboliseert"
             fill
             priority
-            quality={90}
-            responsiveSizes="(max-width: 1024px) 100vw, 50vw"
+            quality={85}
+            responsiveSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             aspectRatio="1/1"
             className="object-contain object-center mix-screen image-soft-glow mask-soft-edges no-pointer z-10 translate-y-[2%] md:translate-y-[1.5%]"
           />

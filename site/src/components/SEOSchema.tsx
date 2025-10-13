@@ -353,7 +353,7 @@ export default function SEOSchema({
         };
       case "services":
         return {
-          url: abs("/assets/nebula_services_background.webp"),
+          url: abs("/assets/nebula_services_background-optimized.avif"),
           width: 1920,
           height: 1080,
           caption: `${siteConfig.name} Diensten - Webdesign en 3D websites`,
@@ -361,9 +361,9 @@ export default function SEOSchema({
       case "werkwijze":
         // Only include if hero image exists for werkwijze
         return {
-          url: abs("/assets/team_core_star.webp"),
-          width: 1920,
-          height: 1080,
+          url: abs("/assets/team_core_star.avif"),
+          width: 800,
+          height: 800,
           caption: `${siteConfig.name} Werkwijze - Van intake tot launch`,
         };
       default:

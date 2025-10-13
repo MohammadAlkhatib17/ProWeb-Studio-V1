@@ -50,7 +50,7 @@ export default function ContactPage() {
       />
       {/* Full-bleed background to avoid top seam */}
       <BackgroundImage
-        src="/assets/glowing_beacon_contact.avif"
+        src="/assets/glowing_beacon_contact-optimized.avif"
         alt=""
         priority={true}
         quality={85}

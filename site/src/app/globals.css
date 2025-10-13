@@ -151,11 +151,22 @@
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-cyan-500 ring-offset-2 ring-offset-cosmic-900;
+    @apply outline-none ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900;
   }
 
   .skip-to-content {
-    @apply absolute -top-full left-4 z-50 bg-cosmic-800 px-4 py-2 text-white focus:top-4;
+    @apply absolute -top-full left-4 z-[9999] bg-slate-900 px-6 py-3 text-white font-semibold rounded-md border-2 border-cyan-400 shadow-lg transition-all duration-200 ease-in-out focus:top-4 focus:outline-none focus:ring-4 focus:ring-cyan-400/50;
+    /* Ensure minimum 44px height for touch targets */
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .skip-to-content:hover {
+    @apply bg-slate-800 border-cyan-300;
+    transform: translateY(-1px);
   }
 
 @layer utilities {
@@ -166,6 +177,82 @@
   .glass {
     @apply backdrop-blur-md bg-white/5 border border-white/10;
     backdrop-filter: blur(16px) saturate(180%);
+  }
+
+  /* Enhanced focus-visible styles for all interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible,
+  [role="button"]:focus-visible,
+  [role="link"]:focus-visible,
+  [role="tab"]:focus-visible,
+  [role="menuitem"]:focus-visible {
+    @apply outline-none ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900;
+    /* Ensure 3:1 color contrast minimum for focus indicators */
+    box-shadow: 0 0 0 2px rgb(34 211 238 / 0.8), 0 0 0 4px rgb(15 23 42);
+  }
+
+  /* Enhanced focus for form inputs */
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply ring-2 ring-cyan-400 border-cyan-400;
+    box-shadow: 0 0 0 2px rgb(34 211 238 / 0.8), 0 0 0 4px rgb(15 23 42), inset 0 0 0 1px rgb(34 211 238 / 0.5);
+  }
+
+  /* Focus styles for navigation and menu items */
+  nav a:focus-visible,
+  [role="navigation"] a:focus-visible {
+    @apply ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900 rounded-md;
+  }
+
+  /* Focus styles for cards and interactive components */
+  .faq-card-header:focus-visible,
+  .card:focus-visible,
+  .interactive-card:focus-visible {
+    @apply ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900 rounded-lg;
+  }
+
+  /* Enhanced keyboard navigation styles */
+  .keyboard-nav-active a:focus,
+  .keyboard-nav-active button:focus,
+  .keyboard-nav-active input:focus,
+  .keyboard-nav-active textarea:focus,
+  .keyboard-nav-active select:focus {
+    outline: 2px solid rgb(34 211 238);
+    outline-offset: 2px;
+  }
+
+  /* Ensure text has sufficient contrast - WCAG AA compliance */
+  .text-low-contrast {
+    color: rgb(203 213 225); /* slate-300 - ensures 4.5:1 contrast on dark backgrounds */
+  }
+
+  /* Skip links for screen readers */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
   }
 
   .gradient-text-primary {
@@ -537,8 +624,9 @@
   visibility: hidden !important;
 }
 
-/* Respect reduced motion preferences */
+/* Enhanced reduced motion preferences support - WCAG 2.1 AA compliance */
 @media (prefers-reduced-motion: reduce) {
+  /* Global animation and transition reset */
   *,
   *::before,
   *::after {
@@ -546,10 +634,71 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+    transform: none !important;
   }
   
-  .twinkle {
+  /* Specific animation classes */
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-pulse,
+  .animate-spin,
+  .animate-bounce,
+  .animate-ping {
     animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  /* Background and decorative animations */
+  .twinkle,
+  .floating,
+  .glow-effect,
+  .gradient-shift {
+    animation: none !important;
+  }
+  
+  /* Logo and brand animations */
+  .logo-glow::after,
+  .logo-wrapper,
+  .homepage-hero header .logo-wrapper {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  /* Cursor trail and particle effects */
+  .cursor-trail,
+  .particle-effect {
+    display: none !important;
+  }
+  
+  /* Hover effects - maintain instant feedback but no motion */
+  .magnetic-hover,
+  .btn-hover-effect {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  /* Focus effects - keep them for accessibility but remove motion */
+  :focus-visible {
+    transition: none !important;
+  }
+  
+  /* Scroll-based animations */
+  .parallax,
+  .scroll-animation {
+    transform: none !important;
+  }
+
+  /* FAQ animations */
+  .faq-card-content-wrapper,
+  .faq-card-icon {
+    transition: none !important;
+  }
+  
+  /* 3D scenes and canvas animations should be disabled */
+  canvas {
+    filter: contrast(1.1) brightness(0.9) !important;
   }
 }
 

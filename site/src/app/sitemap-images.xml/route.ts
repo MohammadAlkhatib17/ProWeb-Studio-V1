@@ -115,9 +115,14 @@ export async function GET() {
       lastModified: new Date("2025-09-05"),
       images: [
         {
-          loc: `${baseUrl}/assets/team_core_star.webp`,
+          loc: `${baseUrl}/assets/team_core_star.avif`,
           caption: "Over ProWeb Studio - Ons expertteam en visie",
-          title: "Team Core Star achtergrond",
+          title: "Team Core Star achtergrond - AVIF optimized",
+        },
+        {
+          loc: `${baseUrl}/assets/team_core_star.webp`,
+          caption: "Over ProWeb Studio - Fallback WebP format",
+          title: "Team Core Star achtergrond - WebP",
         },
         {
           loc: `${baseUrl}/assets/team_core_star.png`,

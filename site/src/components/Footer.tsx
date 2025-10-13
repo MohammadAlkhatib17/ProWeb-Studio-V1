@@ -6,6 +6,7 @@ import { siteConfig } from "@/config/site.config";
 import { footerLinkGroups } from "@/config/internal-linking.config";
 import Logo from "@/components/Logo";
 import { Button } from "@/components/Button";
+import { ConsentModal } from "@/components/cookies";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ export default function Footer() {
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -190,8 +192,41 @@ export default function Footer() {
           </span>
           <span aria-hidden>•</span>
           <span>Gebouwd met passie voor de digitale toekomst ❤️</span>
+          <span aria-hidden>•</span>
+          <Link
+            href="/privacybeleid"
+            className="text-cyan-300 hover:text-cyan-200 underline transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+          >
+            Privacybeleid
+          </Link>
+          <span aria-hidden>•</span>
+          <Link
+            href="/cookiebeleid"
+            className="text-cyan-300 hover:text-cyan-200 underline transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+          >
+            Cookiebeleid
+          </Link>
+          <span aria-hidden>•</span>
+          <Link
+            href="/algemene-voorwaarden"
+            className="text-cyan-300 hover:text-cyan-200 underline transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+          >
+            Algemene Voorwaarden
+          </Link>
+          <span aria-hidden>•</span>
+          <button
+            onClick={() => setIsConsentModalOpen(true)}
+            className="text-cyan-300 hover:text-cyan-200 underline transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
+          >
+            Cookie Voorkeuren
+          </button>
         </div>
       </div>
+      
+      <ConsentModal
+        isOpen={isConsentModalOpen}
+        onClose={() => setIsConsentModalOpen(false)}
+      />
     </footer>
   );
 }

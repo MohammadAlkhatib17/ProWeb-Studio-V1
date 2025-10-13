@@ -267,6 +267,12 @@ jobs:
       - name: Run SEO preflight checks
         run: npm run seo:preflight
 
+      - name: Environment validation quality gate
+        run: |
+          echo "🔧 Environment Validation Quality Gate..."
+          # Force validation in CI even for non-production NODE_ENV
+          FORCE_ENV_VALIDATION=true npm run validate-env
+
       - name: Security quality gates
         run: |
           echo "🔒 Running security quality gates..."
