@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { z } from "zod";
 import { siteConfig } from "@/config/site.config";
 import CalEmbed from "@/components/CalEmbed";
-import { Button } from "./Button";
 
 // Enhanced validation schema matching the API
 const contactSchema = z.object({
@@ -527,21 +526,18 @@ export default function SecureContactForm() {
                     { id: "maintenance", label: "🔧 Onderhoud" },
                     { id: "consulting", label: "💡 Consulting" },
                   ].map((type) => (
-                    <Button
+                    <button
                       key={type.id}
-                      as="button"
                       type="button"
-                      variant="secondary"
-                      size="normal"
                       onClick={() => onToggleType(type.id)}
-                      className={`text-left transition-all min-h-[44px] flex items-center ${
+                      className={`p-3 rounded-lg border text-left transition-all min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-cosmic-900 ${
                         form.projectTypes.includes(type.id)
-                          ? "!bg-blue-500/30 !border-blue-400 !text-white"
-                          : "!bg-white/5 !border-white/20 !text-slate-200 hover:!bg-white/10"
+                          ? "bg-blue-500/30 border-blue-400 text-white"
+                          : "bg-white/5 border-white/20 text-slate-200 hover:bg-white/10"
                       }`}
                     >
                       <span className="text-sm font-medium">{type.label}</span>
-                    </Button>
+                    </button>
                   ))}
                 </div>
                 {errors.projectTypes && (
@@ -619,15 +615,12 @@ export default function SecureContactForm() {
                   </div>
                 )}
 
-                <Button
-                  as="button"
+                <button
                   type="submit"
-                  variant="primary"
-                  size="large"
                   disabled={
                     status === "sending" || (!isTest && !recaptchaLoaded)
                   }
-                  className="w-full"
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium px-6 py-3 sm:px-8 sm:py-3.5 md:px-10 md:py-4 rounded-lg transition-all duration-300 hover:from-blue-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 min-h-[44px] touch-target focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-cosmic-900"
                 >
                   {status === "sending" ? (
                     <span className="flex items-center justify-center gap-2">
@@ -652,7 +645,7 @@ export default function SecureContactForm() {
                   ) : (
                     "Verstuur bericht"
                   )}
-                </Button>
+                </button>
 
                 <p className="text-xs text-slate-400 text-center">
                   Dit formulier is beveiligd met reCAPTCHA v3. Door te versturen

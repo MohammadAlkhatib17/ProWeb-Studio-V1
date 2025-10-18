@@ -9,7 +9,6 @@ import {
   FooterRight,
 } from "@/components/overlay/HUDCopy";
 import { Button } from "@/components/Button";
-import { designSystem } from "@/lib/design-system";
 
 // Dynamically import the 3D component with loading fallback
 const TechPlaygroundScene = dynamic(
@@ -122,10 +121,10 @@ export default function SpeeltuinClient() {
       {/* Hero Section */}
       <section className="relative min-h-[75svh] md:min-h-[70vh] overflow-hidden flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full">
-          <h1 className={`${designSystem.typography.pageTitle} max-w-5xl mx-auto animate-fade-in`}>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 glow-text leading-tight max-w-5xl mx-auto animate-fade-in">
             Onze Expertise in Actie
           </h1>
-          <p className={`${designSystem.typography.subtitle} text-cyan-300 mb-8 max-w-4xl mx-auto animate-slide-up`}>
+          <p className="text-base sm:text-lg md:text-xl text-cyan-300 mb-8 max-w-4xl mx-auto leading-relaxed animate-slide-up">
             Waarom u foto&apos;s laten zien als we de magie live kunnen
             demonstreren? Dit is geen portfolio; dit is onze interactieve
             tech-speeltuin. Hier heeft u de controle. Ervaar zelf de kracht van
@@ -265,36 +264,36 @@ export default function SpeeltuinClient() {
       <section className="py-section px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
-            <h2 className={designSystem.typography.sectionTitle}>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
               De Technologie Achter de Magie
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             <div className="glass p-4 sm:p-6 md:p-8 rounded-xl">
-              <h3 className={`${designSystem.typography.subsectionTitle} break-words`}>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 WebGL/Three.js
               </h3>
-              <p className={`${designSystem.typography.bodyPrimary} text-slate-200`}>
+              <p className="text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed">
                 De basis voor hardware-versnelde 3D-graphics in de browser,
                 waardoor complexe en vloeiende visuele ervaringen mogelijk zijn
                 zonder plugins.
               </p>
             </div>
             <div className="glass p-4 sm:p-6 md:p-8 rounded-xl">
-              <h3 className={`${designSystem.typography.subsectionTitle} break-words`}>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 React Three Fiber
               </h3>
-              <p className={`${designSystem.typography.bodyPrimary} text-slate-200`}>
+              <p className="text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed">
                 Een krachtige React-renderer voor Three.js. Het stelt ons in
                 staat om declaratieve, herbruikbare 3D-componenten te bouwen die
                 naadloos integreren in onze webapplicaties.
               </p>
             </div>
             <div className="glass p-4 sm:p-6 md:p-8 rounded-xl">
-              <h3 className={`${designSystem.typography.subsectionTitle} break-words`}>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 Real-time Lighting
               </h3>
-              <p className={`${designSystem.typography.bodyPrimary} text-slate-200`}>
+              <p className="text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed">
                 Dynamische belichting en schaduwen die in real-time reageren op
                 uw interactie, wat zorgt voor een diepere en meer meeslepende
                 visuele ervaring.
@@ -308,10 +307,10 @@ export default function SpeeltuinClient() {
       <section className="py-section px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="max-w-4xl mx-auto text-center glass rounded-2xl p-6 sm:p-8 md:p-10">
-            <h2 className={designSystem.typography.sectionTitle}>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
               Klaar om uw eigen ervaring te bouwen?
             </h2>
-            <p className={`${designSystem.typography.bodyPrimary} text-slate-200 mb-8 max-w-3xl mx-auto`}>
+            <p className="text-base sm:text-lg text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
               Wat u hier ziet is slechts een glimp van wat we kunnen realiseren.
               Laten we bespreken hoe we deze technologie kunnen inzetten om uw
               bedrijfsdoelen te bereiken.
@@ -382,11 +381,11 @@ export default function SpeeltuinClient() {
               en conversie, omdat snelheid en toegankelijkheid direct bijdragen
               aan uw ranking in Google en de algehele gebruikerservaring.
             </p>
-            <div className="mt-4">
-              <Button href="/contact" variant="secondary" size="normal">
+            <p>
+              <a href="/contact" className="inline-block mt-4">
                 Bespreek een 3D‑use‑case voor uw merk
-              </Button>
-            </div>
+              </a>
+            </p>
           </div>
         </div>
       </section>

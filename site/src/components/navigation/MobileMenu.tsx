@@ -7,7 +7,6 @@ import Portal from "@/components/ui/Portal";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 import Magnetic from "@/components/ui/Magnetic";
 import AuroraBG from "@/components/decoration/AuroraBG";
-import { Button } from "@/components/Button";
 
 type Item = { href: string; label: string };
 
@@ -60,16 +59,11 @@ export default function MobileMenu({
             className="fixed inset-0 z-[220] h-[100svh]"
           >
             {/* backdrop */}
-            <Button
-              as="button"
-              variant="secondary"
-              size="normal"
+            <button
               aria-label="Close menu"
               onClick={onClose}
-              className="absolute inset-0 !bg-slate-950/70 backdrop-blur-sm !border-transparent !p-0 !rounded-none"
-            >
-              <span className="sr-only">Close menu</span>
-            </Button>
+              className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm focus:outline-none"
+            />
 
             {/* panel */}
             <motion.div

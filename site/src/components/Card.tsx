@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { designSystem } from "@/lib/design-system";
 
 interface CardProps {
   title: string;
@@ -66,13 +65,13 @@ export default function Card({
       />
 
       <div className="relative z-10">
-        <span className={`${designSystem.typography.bodySecondary} text-cyan-300 font-medium tracking-wide uppercase mb-3 block group-hover:text-cyan-300 transition-colors duration-300`}>
+        <span className="text-sm text-cyan-300 font-medium tracking-wide uppercase mb-3 block group-hover:text-cyan-300 transition-colors duration-300">
           {category}
         </span>
-        <h3 className={`${designSystem.typography.subsectionTitle} group-hover:text-cyan-300 transition-colors duration-300`}>
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 group-hover:text-cyan-300 transition-colors duration-300 leading-tight">
           {title}
         </h3>
-        <p className={`${designSystem.typography.bodySecondary} text-slate-200 mb-6`}>
+        <p className="text-slate-200 text-sm mb-6 leading-relaxed">
           {description}
         </p>
         <div className="flex items-center justify-between">

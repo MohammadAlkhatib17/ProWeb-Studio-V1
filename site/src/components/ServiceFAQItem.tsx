@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/Button";
 
 interface FAQItem {
   question: string;
@@ -39,15 +38,13 @@ export default function ServiceFAQItem({
 
   return (
     <div className="faq-card">
-      <Button
-        as="button"
-        variant="secondary"
-        size="normal"
+      <button
         type="button"
-        className="faq-card-header !border-transparent !bg-transparent hover:!bg-white/5 !text-inherit !p-0 w-full justify-start"
+        className="faq-card-header"
         onClick={handleToggle}
         aria-expanded={isOpen}
         aria-controls={answerId}
+        id={questionId}
       >
         <h3 className="faq-card-question">{faq.question}</h3>
 
@@ -63,7 +60,7 @@ export default function ServiceFAQItem({
             <path d="M6 9l6 6 6-6" />
           </svg>
         </div>
-      </Button>
+      </button>
 
       <div
         className="faq-card-content-wrapper"

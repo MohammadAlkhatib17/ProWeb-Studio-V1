@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/Button";
 
 interface PWAInstallProps {
   onInstallPrompt?: () => void;
@@ -163,24 +162,18 @@ export default function PWAInstaller({ onInstallPrompt }: PWAInstallProps) {
           </div>
         </div>
         <div className="mt-4 flex space-x-2">
-          <Button
-            as="button"
-            variant="primary"
-            size="normal"
+          <button
             onClick={handleInstallClick}
-            className="flex-1 text-sm font-medium"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-3 px-4 rounded-md transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
           >
             Installeren
-          </Button>
-          <Button
-            as="button"
-            variant="secondary"
-            size="normal"
+          </button>
+          <button
             onClick={() => setIsInstallable(false)}
-            className="flex-1 text-sm font-medium !bg-gray-100 hover:!bg-gray-200 dark:!bg-gray-700 dark:hover:!bg-gray-600 !text-gray-900 dark:!text-white !border-gray-300 dark:!border-gray-600"
+            className="flex-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white text-sm font-medium py-3 px-4 rounded-md transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
           >
             Later
-          </Button>
+          </button>
         </div>
       </div>
     </div>

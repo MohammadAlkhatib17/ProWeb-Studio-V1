@@ -11,11 +11,11 @@ import { Button } from "@/components/Button";
 import {
   PageLayout,
   SectionLayout,
+  PageTitle,
   SectionTitle,
   BodyText,
   GridLayout,
 } from "@/components/unified/LayoutComponents";
-import { SimpleHero } from "@/components/unified/HeroSection";
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (
@@ -57,19 +57,14 @@ export default function OverOnsPage() {
         pageDescription={metadata.description as string}
       />
 
-      <SimpleHero
-        title="Architecten van de Digitale Toekomst"
-        description="Wij zijn ProWeb Studio. We zijn een team van strategen, ontwerpers en ontwikkelaars met een gedeelde passie: het bouwen van buitengewone digitale ervaringen."
-        primaryCTA={{
-          text: "Neem contact op",
-          href: "/contact"
-        }}
-        secondaryCTA={{
-          text: "Bekijk ons werk",
-          href: "/portfolio"
-        }}
-        vignette={{ preset: "standard" }} // Standard vignette for good text contrast
-      />
+      <SectionLayout variant="hero">
+        <PageTitle>Architecten van de Digitale Toekomst</PageTitle>
+        <BodyText className="max-w-3xl mx-auto text-center text-cyan-300">
+          Wij zijn ProWeb Studio. We zijn een team van strategen, ontwerpers en
+          ontwikkelaars met een gedeelde passie: het bouwen van buitengewone
+          digitale ervaringen.
+        </BodyText>
+      </SectionLayout>
 
       <SectionLayout variant="content">
         <GridLayout variant="twoColumn">

@@ -7,7 +7,6 @@ import { CompactNearMeSearch } from "@/components/local-seo/NearMeSearch";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ContentSuggestions from "@/components/ContentSuggestions";
 import { Button } from "@/components/Button";
-import { SimpleHero } from "@/components/unified/HeroSection";
 
 export const dynamic = "force-static";
 export const revalidate = 60 * 60 * 24;
@@ -94,19 +93,27 @@ export default function LocatiesPage() {
       />
 
       {/* Hero Section */}
-      <SimpleHero
-        title="Webdesign Nederland"
-        description="Lokale expertise, nationale kwaliteit. ProWeb Studio biedt professionele webdesign diensten in alle grote Nederlandse steden."
-        primaryCTA={{
-          text: "Start Uw Project →",
-          href: "/contact"
-        }}
-        secondaryCTA={{
-          text: "Bekijk Portfolio",
-          href: "/portfolio"
-        }}
-        vignette={{ preset: "standard" }} // Standard vignette for good text contrast
-      />
+      <section className="relative py-section-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Webdesign Nederland
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Lokale expertise, nationale kwaliteit. ProWeb Studio biedt
+            professionele webdesign diensten in alle grote Nederlandse steden.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button href="/contact" variant="primary" size="large">
+              Start Uw Project →
+            </Button>
+            <Button href="/portfolio" variant="secondary" size="large">
+              Bekijk Portfolio
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {/* Locations Grid */}
       <section className="py-section">

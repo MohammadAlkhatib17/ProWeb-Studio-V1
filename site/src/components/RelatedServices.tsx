@@ -6,7 +6,6 @@ import {
   getRelatedServices,
   type ServiceLink,
 } from "@/config/internal-linking.config";
-import { ContentCard } from "@/components/ui/content-card";
 
 interface RelatedServicesProps {
   currentService?: string;
@@ -46,29 +45,27 @@ export default function RelatedServices({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {relatedServices.map((service) => (
             <Link
               key={service.href}
               href={service.href}
-              className="group"
+              className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:bg-cosmic-800/50"
             >
-              <ContentCard variant="default" as="article" className="h-full">
-                <div className="flex flex-col h-full">
-                  <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed flex-grow">
-                    {service.description}
-                  </p>
-                  <div className="mt-4 flex items-center text-cyan-300 text-sm font-medium">
-                    Meer informatie
-                    <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
-                      →
-                    </span>
-                  </div>
+              <div className="flex flex-col h-full">
+                <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-slate-400 text-sm leading-relaxed flex-grow">
+                  {service.description}
+                </p>
+                <div className="mt-4 flex items-center text-cyan-300 text-sm font-medium">
+                  Meer informatie
+                  <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
+                    →
+                  </span>
                 </div>
-              </ContentCard>
+              </div>
             </Link>
           ))}
         </div>

@@ -1,7 +1,6 @@
 /**
  * Image preloader utility for critical images that impact LCP
  * Generates preload link tags for the most optimal image formats
- * Enforces format ordering: AVIF > WebP > PNG for performance
  */
 
 export interface PreloadImageConfig {
@@ -14,33 +13,6 @@ export interface PreloadImageConfig {
     | "image/jpeg"
     | "image/png"
     | "image/svg+xml";
-}
-
-/**
- * Generates multiple preload link elements for critical images with format fallbacks
- * Enforces AVIF > WebP > PNG format ordering for modern browser optimization
- */
-export function generateOptimizedImagePreloads(
-  baseSrc: string,
-  sizes = "100vw",
-  priority: "high" | "low" = "high"
-): PreloadImageConfig[] {
-  return [
-    // AVIF format - highest priority for modern browsers
-    {
-      src: `${baseSrc}.avif`,
-      sizes,
-      priority,
-      type: "image/avif",
-    },
-    // WebP format - fallback for wider compatibility
-    {
-      src: `${baseSrc}.webp`,
-      sizes,
-      priority: priority === "high" ? "low" : "low", // Lower priority than AVIF
-      type: "image/webp",
-    },
-  ];
 }
 
 /**

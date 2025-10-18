@@ -3,7 +3,6 @@ import Link from "next/link";
 import SEOSchema from "@/components/SEOSchema";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { Button } from "@/components/Button";
-import { designSystem } from "@/lib/design-system";
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (
@@ -171,7 +170,7 @@ export default function SitemapPage() {
       {/* Hero Section */}
       <section className="py-12 sm:py-section px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className={designSystem.typography.pageTitle}>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 glow-text">
             Site Overzicht ProWeb Studio
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl mx-auto mb-8">

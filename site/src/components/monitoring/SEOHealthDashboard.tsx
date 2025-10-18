@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/Button";
 import {
   AlertTriangle,
   CheckCircle,
@@ -655,22 +654,12 @@ function AlertsManagementCard({ alerts }: { alerts: MonitoringAlert[] }) {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button
-                    as="button"
-                    variant="secondary"
-                    size="normal"
-                    className="text-sm !bg-muted hover:!bg-muted/80"
-                  >
+                  <button className="text-sm px-3 py-1 rounded bg-muted hover:bg-muted/80">
                     Acknowledge
-                  </Button>
-                  <Button
-                    as="button"
-                    variant="primary"
-                    size="normal"
-                    className="text-sm"
-                  >
+                  </button>
+                  <button className="text-sm px-3 py-1 rounded bg-primary text-primary-foreground hover:bg-primary/90">
                     Resolve
-                  </Button>
+                  </button>
                 </div>
               </div>
             ))}

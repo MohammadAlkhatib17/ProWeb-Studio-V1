@@ -103,7 +103,7 @@ export function getOptimalImageStrategy(isAboveFold: boolean = false) {
       ...baseStrategy,
       // Use lower quality for data saver mode
       quality: 60,
-      placeholder: "empty",
+      placeholder: "blur",
     };
   }
 

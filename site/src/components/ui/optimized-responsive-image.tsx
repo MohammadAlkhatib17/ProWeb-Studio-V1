@@ -103,8 +103,8 @@ export function OptimizedResponsiveImage({
     ),
     // Add fetchPriority for LCP elements in supporting browsers
     ...(isLCP && { fetchPriority: "high" as "high" | "low" | "auto" }),
-    // Enhanced placeholder strategy - use empty for external images without blurDataURL
-    placeholder: "empty",
+    // Enhanced placeholder strategy
+    placeholder: loadingStrategy.placeholder || "blur",
     // Add optimized loading attributes
     decoding: "async",
     ...props,
@@ -153,7 +153,6 @@ interface OptimizedHeroImageProps
 /**
  * Specialized component for hero/banner images
  * Optimized for above-the-fold content and LCP performance
- * Enforces AVIF > WebP > PNG format ordering with priority loading
  */
 export function OptimizedHeroImage({
   priority = true,

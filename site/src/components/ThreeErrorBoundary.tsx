@@ -1,7 +1,6 @@
 "use client";
 
 import { Component, ErrorInfo, ReactNode } from "react";
-import { Button } from "@/components/Button";
 
 interface Props {
   children: ReactNode;
@@ -83,15 +82,12 @@ export default class ThreeErrorBoundary extends Component<Props, State> {
             </div>
 
             <div className="space-y-3">
-              <Button
-                as="button"
-                variant="primary"
-                size="normal"
+              <button
                 onClick={this.handleRetry}
-                className="w-full"
+                className="w-full px-4 py-3 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-cosmic-900"
               >
                 Try Again
-              </Button>
+              </button>
             </div>
 
             <details className="mt-4 text-left">

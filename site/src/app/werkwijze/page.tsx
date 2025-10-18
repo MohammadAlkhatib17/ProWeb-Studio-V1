@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-static";
 export const revalidate = 60 * 60 * 24;
 
-import { LCPOptimizedImage } from "@/components/ui/LCPOptimizedImage";
+import { ResponsiveImage } from "@/components/ui/responsive-image";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import SEOSchema from "@/components/SEOSchema";
 import DynamicOrbitSystem from "@/components/dynamic/DynamicOrbitSystem";
@@ -12,10 +12,10 @@ import { Button } from "@/components/Button";
 import {
   PageLayout,
   SectionLayout,
+  PageTitle,
   SectionTitle,
   BodyText,
 } from "@/components/unified/LayoutComponents";
-import { designSystem } from "@/lib/design-system";
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (
@@ -125,14 +125,13 @@ export default function Werkwijze() {
       {/* Hero Section with Enhanced Visual Design */}
       <SectionLayout variant="hero">
         <div className="text-center mb-16">
-          <h1 className={designSystem.typography.pageTitle}>
+          <PageTitle className="mb-8">
             Werkwijze — website laten maken: van intake tot launch
-          </h1>
-          <div className="h-6"></div> {/* 24px gap */}
-          <p className={`${designSystem.typography.subtitle} max-w-prose mx-auto text-center`}>
+          </PageTitle>
+          <BodyText className="max-w-3xl mx-auto text-center text-xl text-cyan-300 mb-12">
             Een bewezen proces dat resultaat garandeert. Transparante
             communicatie, vaste prijzen en Nederlandse kwaliteit in elke fase.
-          </p>
+          </BodyText>
         </div>
 
         <div className="relative h-96 mb-12 mt-12">
@@ -141,15 +140,15 @@ export default function Werkwijze() {
             aria-hidden
             className="absolute inset-0 pointer-events-none -z-10 portal-gradient opacity-60 blur-3xl"
           />
-          <LCPOptimizedImage
-            baseSrc="/assets/team_core_star"
-            fallbackSrc="/assets/team_core_star.png"
+          <ResponsiveImage
+            src="/assets/team_core_star.avif"
             alt="Centrale ster die ons proces symboliseert"
-            width={400}
-            height={400}
-            imageType="content"
-            generateSrcSet={false}
-            className="absolute inset-0 w-full h-full object-contain object-center mix-screen image-soft-glow mask-soft-edges no-pointer z-10 translate-y-[2%] md:translate-y-[1.5%]"
+            fill
+            priority
+            quality={85}
+            responsiveSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            aspectRatio="1/1"
+            className="object-contain object-center mix-screen image-soft-glow mask-soft-edges no-pointer z-10 translate-y-[2%] md:translate-y-[1.5%]"
           />
           <div className="absolute inset-0 z-0 pointer-events-none">
             <ErrorBoundary>

@@ -2,7 +2,6 @@ import { siteConfig } from "@/config/site.config";
 import { motion } from "framer-motion";
 import { Button } from "@/components/Button";
 import { fadeInUp, staggerContainer, defaultViewport } from "@/lib/motion";
-import { designSystem } from "@/lib/design-system";
 
 // Component that showcases Dutch business culture integration and terminology
 export default function DutchBusinessCulture() {
@@ -162,10 +161,10 @@ export default function DutchBusinessCulture() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div className="text-center mb-16" variants={fadeInUp}>
-          <h2 className={designSystem.typography.sectionTitle}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 glow-text">
             Nederlandse bedrijfscultuur in webdesign
           </h2>
-          <p className={`${designSystem.typography.bodyPrimary} text-slate-200 max-w-4xl mx-auto mb-8`}>
+          <p className="text-lg sm:text-xl text-slate-200 max-w-4xl mx-auto mb-8">
             Websites die perfect aansluiten bij de Nederlandse manier van
             ondernemen. Met respect voor onze zakelijke cultuur en begrip van
             wat Nederlandse ondernemers echt nodig hebben.

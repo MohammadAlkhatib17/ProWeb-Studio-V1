@@ -16,14 +16,7 @@ import FAQSection from "@/components/sections/FAQSection";
 import DutchMarketFAQ from "@/components/DutchMarketFAQ";
 import RelatedServices from "@/components/RelatedServices";
 import ContentSuggestions from "@/components/ContentSuggestions";
-import {
-  PageLayout,
-  SectionLayout,
-  SectionTitle,
-  BodyText,
-} from "@/components/unified/LayoutComponents";
-import { SimpleHero } from "@/components/unified/HeroSection";
-import { ContentCard } from "@/components/ui/content-card";
+import { PageTitle, BodyText } from "@/components/unified/LayoutComponents";
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (
@@ -140,7 +133,7 @@ export default function Diensten() {
   };
 
   return (
-    <PageLayout>
+    <main className="pt-20 md:pt-24 relative overflow-hidden">
       {/* Breadcrumbs */}
       <Breadcrumbs />
 
@@ -152,86 +145,92 @@ export default function Diensten() {
       />
 
       {/* Hero section with 3D elements */}
-      <SimpleHero
-        title="Meer dan Code. Oplossingen die Groeien."
-        description="Ontdek onze complete oplossingen voor professionele websites, van moderne webdesign tot geavanceerde functionaliteiten."
-        primaryCTA={{
-          text: "Bekijk onze diensten",
-          href: "#website"
-        }}
-        secondaryCTA={{
-          text: "Neem contact op",
-          href: "/contact"
-        }}
-        backgroundContent={
-          <Suspense
-            fallback={<div className="absolute inset-0 bg-cosmic-900/50" />}
-          >
-            <ErrorBoundary>
-              <ServicesPolyhedra />
-            </ErrorBoundary>
-          </Suspense>
-        }
-        className="animate-fade-in"
-        vignette={{ preset: "standard" }} // Standard vignette for text readability
-      />
+      <section className="relative min-h-[75svh] md:min-h-[70vh] overflow-hidden flex items-center content-safe-top">
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-cosmic-900/20 to-cosmic-900/40" />
+
+        <Suspense
+          fallback={<div className="absolute inset-0 bg-cosmic-900/50" />}
+        >
+          <ErrorBoundary>
+            <ServicesPolyhedra />
+          </ErrorBoundary>
+        </Suspense>
+
+        <div className="relative z-10 w-full">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <PageTitle className="max-w-5xl mx-auto animate-fade-in">
+              Meer dan Code. Oplossingen die Groeien.
+            </PageTitle>
+            <BodyText className="max-w-4xl mx-auto text-cyan-300 animate-slide-up">
+              Ontdek onze complete oplossingen voor professionele websites, van
+              moderne webdesign tot geavanceerde functionaliteiten.
+            </BodyText>
+          </div>
+        </div>
+      </section>
 
       {/* Services grid */}
-      <SectionLayout variant="content">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <section className="py-section px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {services.map((service, i) => {
               // Map service indices to semantic IDs
               const serviceIds = ["website", "webshop", "seo"];
               const serviceId = serviceIds[i] || `service-${i + 1}`;
 
               return (
-                <ContentCard
+                <div
                   key={i}
                   id={serviceId}
-                  variant="highlight"
-                  as="article"
-                  className="animate-fade-in"
+                  className="glass p-6 sm:p-7 md:p-8 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden animate-fade-in"
                   style={{ animationDelay: `${i * 0.2}s` }}
                 >
-                  <div className="text-4xl mb-4">{service.icon}</div>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 group-hover:text-cyan-300 transition-colors duration-300">
-                    {service.title}
-                  </h3>
-                  <p className="text-slate-200 mb-8 leading-relaxed">
-                    {service.description}
-                  </p>
-                  <h4 className="font-semibold text-cyan-300 mb-4">
-                    Inclusief:
-                  </h4>
-                  <ul className="space-y-3">
-                    {service.features.map((feature, j) => (
-                      <li key={j} className="flex items-center text-sm">
-                        <span className="text-cyan-300 mr-3 font-bold text-lg">
-                          ✓
-                        </span>
-                        <span className="text-gray-200">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </ContentCard>
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+
+                  <div className="relative z-10">
+                    <div className="text-4xl mb-4">{service.icon}</div>
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 group-hover:text-cyan-300 transition-colors duration-300">
+                      {service.title}
+                    </h3>
+                    <p className="text-slate-200 mb-8 leading-relaxed">
+                      {service.description}
+                    </p>
+                    <h4 className="font-semibold text-cyan-300 mb-4">
+                      Inclusief:
+                    </h4>
+                    <ul className="space-y-3">
+                      {service.features.map((feature, j) => (
+                        <li key={j} className="flex items-center text-sm">
+                          <span className="text-cyan-300 mr-3 font-bold text-lg">
+                            ✓
+                          </span>
+                          <span className="text-gray-200">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               );
             })}
+          </div>
         </div>
-      </SectionLayout>
+      </section>
 
       {/* Tech Stack Section */}
-      <SectionLayout variant="alternate">
-        <div className="text-center mb-12 md:mb-16">
-          <SectionTitle>
-            Onze Technologische Kern
-          </SectionTitle>
-          <BodyText className="max-w-3xl mx-auto">
-            Wij geloven in het kiezen van het juiste gereedschap voor elke
-            uitdaging. Onze expertise ligt in een moderne, performante en
-            schaalbare technologiestack, ontworpen om u een
-            concurrentievoordeel te geven.
-          </BodyText>
-        </div>
+      <section className="py-section px-4 sm:px-6 bg-cosmic-800/20 border-t border-cosmic-700/60">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
+              Onze Technologische Kern
+            </h2>
+            <p className="text-base sm:text-lg text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+              Wij geloven in het kiezen van het juiste gereedschap voor elke
+              uitdaging. Onze expertise ligt in een moderne, performante en
+              schaalbare technologiestack, ontworpen om u een
+              concurrentievoordeel te geven.
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 text-center">
             <div className="glass p-6 rounded-xl">
@@ -277,15 +276,17 @@ export default function Diensten() {
               </ul>
             </div>
           </div>
-      </SectionLayout>
+        </div>
+      </section>
 
       {/* Related Services & Internal Links Section */}
-      <SectionLayout variant="content">
-        <div className="text-center mb-12 md:mb-16">
-          <SectionTitle>
-            Ontdek Meer van ProWeb Studio
-          </SectionTitle>
-        </div>
+      <section className="py-section px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
+              Ontdek Meer van ProWeb Studio
+            </h2>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12">
             <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
@@ -362,20 +363,21 @@ export default function Diensten() {
               </Button>
             </div>
           </div>
-      </SectionLayout>
+        </div>
+      </section>
 
       {/* Call to action */}
-      <SectionLayout variant="content" className="relative overflow-hidden">
+      <section className="py-section px-4 sm:px-6 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none -z-10 bg-gradient-to-b from-transparent via-cosmic-900/15 to-transparent" />
         <div className="absolute inset-0 pointer-events-none -z-10 portal-gradient opacity-40" />
         <div className="max-w-4xl mx-auto text-center glass rounded-2xl p-6 sm:p-8 md:p-10">
-          <SectionTitle>
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-white leading-tight">
             Op maat gemaakte oplossingen
-          </SectionTitle>
-          <BodyText className="mb-8 max-w-3xl mx-auto">
+          </h2>
+          <p className="text-base sm:text-lg text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Elk project is uniek. Laten we samen jouw perfecte oplossing bouwen
             die jouw verwachtingen overtreft.
-          </BodyText>
+          </p>
           <div className="flex gap-6 justify-center flex-wrap">
             <Button href="/contact" variant="primary">
               Plan een intake
@@ -402,10 +404,11 @@ export default function Diensten() {
             </Button>
           </div>
         </div>
-      </SectionLayout>
+      </section>
 
       {/* SEO Content Section */}
-      <SectionLayout variant="alternate">
+      <section className="py-section px-4 sm:px-6 bg-cosmic-800/20 border-t border-cosmic-700/60">
+        <div className="max-w-7xl mx-auto">
           <div
             id="seo-content"
             className="prose prose-sm sm:prose-base prose-invert max-w-4xl mx-auto leading-relaxed"
@@ -463,13 +466,14 @@ export default function Diensten() {
               krachtige verkoopmotor. Elke aanpassing is data-gedreven en
               gericht op het verhogen van uw conversie en omzet.
             </p>
-            <div className="mt-4">
-              <Button href="/contact" variant="secondary" size="normal">
+            <p>
+              <a href="/contact" className="inline-block mt-4">
                 Vraag een groeiscan aan
-              </Button>
-            </div>
+              </a>
+            </p>
           </div>
-      </SectionLayout>
+        </div>
+      </section>
 
       <FAQSection title="Vragen over onze Diensten">
         <DutchMarketFAQ />
@@ -480,6 +484,6 @@ export default function Diensten() {
       <ContentSuggestions />
 
       <SEOSchema pageType="services" includeFAQ={true} />
-    </PageLayout>
+    </main>
   );
 }

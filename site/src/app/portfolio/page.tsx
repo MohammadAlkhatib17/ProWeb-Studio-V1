@@ -8,12 +8,6 @@ import { Button } from "@/components/Button";
 import SimplePortfolioComputer from "@/components/SimplePortfolioComputer";
 import SimpleEcommerceShowcase from "@/components/SimpleEcommerceShowcase";
 import SimpleBrandIdentityModel from "@/components/SimpleBrandIdentityModel";
-import {
-  PageLayout,
-  SectionLayout,
-  SectionTitle,
-  BodyText,
-} from "@/components/unified/LayoutComponents";
 
 // ISR Configuration for portfolio page
 export const dynamic = "force-static";
@@ -72,15 +66,15 @@ const breadcrumbs = [
 
 export default function PortfolioPage() {
   return (
-    <PageLayout>
+    <>
       <PortfolioSchema />
-      
-      {/* Breadcrumbs */}
-      <div className="relative z-10 pt-4 pb-8">
-        <div className="container mx-auto px-safe">
-          <Breadcrumbs items={breadcrumbs} />
+      <main className="relative min-h-screen overflow-x-hidden">
+        {/* Breadcrumbs */}
+        <div className="relative z-10 pt-24 pb-8">
+          <div className="container mx-auto px-safe">
+            <Breadcrumbs items={breadcrumbs} />
+          </div>
         </div>
-      </div>
 
         {/* Portfolio Hero Section */}
         <PortfolioHero />
@@ -88,19 +82,20 @@ export default function PortfolioPage() {
         {/* Capabilities Showcase Sections */}
         <section id="capabilities" className="relative py-16 lg:py-24">
           {/* Section 1: Interactive 3D Web Development */}
-          <SectionLayout variant="content">
-            <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-center">
-              <div className="order-2 lg:order-1">
-                <SectionTitle className="mb-4 text-cyan-300">
-                  Webontwikkeling met een Extra Dimensie
-                </SectionTitle>
-                <BodyText className="mb-6">
-                  Wij creëren websites die verder gaan dan platte schermen.
-                  Met technologie zoals Three.js en React Three Fiber bouwen
-                  we interactieve 3D-ervaringen die uw digitale visie tot
-                  leven brengen. Dit is geen template; dit is cutting-edge
-                  technologie, op maat gemaakt voor uw merk.
-                </BodyText>
+          <section className="py-12 md:py-16 px-4">
+            <div className="container mx-auto">
+              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div className="order-2 lg:order-1">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-cyan-300">
+                    Webontwikkeling met een Extra Dimensie
+                  </h2>
+                  <p className="text-base md:text-lg text-slate-200 mb-6 leading-relaxed">
+                    Wij creëren websites die verder gaan dan platte schermen.
+                    Met technologie zoals Three.js en React Three Fiber bouwen
+                    we interactieve 3D-ervaringen die uw digitale visie tot
+                    leven brengen. Dit is geen template; dit is cutting-edge
+                    technologie, op maat gemaakt voor uw merk.
+                  </p>
                   <div className="flex flex-wrap gap-2 mb-6">
                     <span className="px-3 py-1 text-xs font-medium bg-blue-500/20 text-blue-300 rounded-full">
                       Three.js
@@ -119,13 +114,14 @@ export default function PortfolioPage() {
                 <div className="order-1 lg:order-2">
                   <SimplePortfolioComputer />
                 </div>
+              </div>
             </div>
-          </SectionLayout>
+          </section>
 
           {/* Section 2: Immersive E-commerce Platforms */}
           <section className="py-12 md:py-16 px-4 bg-cosmic-900/30">
             <div className="container mx-auto">
-              <div className="grid lg:grid-cols-2 gap-6 md:gap-8 items-center">
+              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
                 <div className="order-2">
                   <h2 className="text-2xl md:text-3xl font-bold mb-4 text-cyan-300">
                     E-commerce Platforms die Converteren
@@ -213,20 +209,21 @@ export default function PortfolioPage() {
               <Button
                 href="/contact"
                 variant="primary"
-                size="large"
+                className="text-base md:text-lg px-6 md:px-8 py-3 md:py-4"
               >
                 Start Uw 3D Project
               </Button>
               <Button
                 href="/diensten"
                 variant="secondary"
-                size="large"
+                className="text-base md:text-lg px-6 md:px-8 py-3 md:py-4"
               >
                 Ontdek Onze Diensten
               </Button>
             </div>
           </div>
         </section>
-    </PageLayout>
+      </main>
+    </>
   );
 }
