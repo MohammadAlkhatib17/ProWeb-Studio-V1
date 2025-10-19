@@ -31,7 +31,7 @@ export function PageStructuredData({
   additionalSchemas = [],
 }: PageStructuredDataProps) {
   const headersList = headers();
-  const nonce = headersList.get('X-Nonce') || '';
+  const nonce = headersList.get('x-nonce') || '';
 
   // Build schema array
   const schemas: Array<Record<string, unknown>> = [
@@ -53,5 +53,5 @@ export function PageStructuredData({
   // Add any additional schemas
   schemas.push(...additionalSchemas);
 
-  return <StructuredData data={schemas} nonce={nonce} />;
+  return <StructuredData data={schemas} nonce={nonce} id={`page-structured-data-${pageType}`} />;
 }

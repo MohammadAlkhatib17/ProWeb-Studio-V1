@@ -181,41 +181,6 @@ const nextConfig = {
   output: 'standalone',
 
   async headers() {
-    // CSP configuration for enforcement
-    const cspDirectives = [
-      "default-src 'self'",
-      // script-src: Allow self, Plausible analytics, Vercel Analytics
-      "script-src 'self' https://plausible.io https://va.vercel-scripts.com",
-      // style-src: Allow self, inline styles for critical CSS, Google Fonts
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      // font-src: Allow self and Google Fonts
-      "font-src 'self' https://fonts.gstatic.com",
-      // img-src: Allow self, data URIs, and HTTPS images
-      "img-src 'self' data: https:",
-      // connect-src: Allow self, Plausible, Vercel Analytics/Vitals
-      "connect-src 'self' https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
-      // media-src: Allow self and HTTPS
-      "media-src 'self' https:",
-      // object-src: Block all plugins
-      "object-src 'none'",
-      // base-uri: Restrict to self
-      "base-uri 'self'",
-      // frame-ancestors: Prevent clickjacking
-      "frame-ancestors 'none'",
-      // form-action: Restrict form submissions to self
-      "form-action 'self'",
-      // upgrade-insecure-requests: Upgrade HTTP to HTTPS
-      "upgrade-insecure-requests"
-    ];
-
-    const enforcedCSP = cspDirectives.join('; ');
-
-    // Report-only CSP for monitoring /api/csp-report
-    const reportOnlyCSP = [
-      ...cspDirectives,
-      `report-uri ${process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://prowebstudio.nl'}/api/csp-report`
-    ].join('; ');
-
     return [
       {
         // Immutable caching for static assets by extension
@@ -224,29 +189,26 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
-      // ENFORCED CSP for homepage
+      // Homepage - X-* headers only, CSP handled by middleware.ts with nonce
       {
         source: '/',
         headers: [
-          { key: 'Content-Security-Policy', value: enforcedCSP },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
         ],
       },
-      // ENFORCED CSP for /diensten/* pages
+      // /diensten/* pages - X-* headers only, CSP handled by middleware.ts with nonce
       {
         source: '/diensten/:path*',
         headers: [
-          { key: 'Content-Security-Policy', value: enforcedCSP },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
         ],
       },
-      // REPORT-ONLY CSP for /api/csp-report (7-day monitoring window)
+      // /api/csp-report - no CSP enforcement for reporting endpoint
       {
         source: '/api/csp-report',
         headers: [
-          { key: 'Content-Security-Policy-Report-Only', value: reportOnlyCSP },
           { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate, private' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
