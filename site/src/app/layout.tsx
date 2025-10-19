@@ -24,8 +24,12 @@ import { WebVitalsReporter } from '@/components/WebVitalsReporter';
 // Initialize environment validation for production deployments
 initProductionEnvValidation();
 
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+// Get canonical URL from environment with safe fallback
+const SITE_URL = (
+  process.env.SITE_URL ?? 
+  process.env.NEXT_PUBLIC_SITE_URL ?? 
+  (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000')
+).replace(/\/+$/, '');
 
 export const viewport = {
   width: 'device-width',

@@ -5,14 +5,20 @@
 
 import { siteConfig } from '@/config/site.config';
 
+/**
+ * Get SITE_URL from environment with safe fallback
+ * In production, this should always come from SITE_URL or NEXT_PUBLIC_SITE_URL
+ * Fallback is provided for development safety only
+ */
 export const SITE_URL = (
   process.env.SITE_URL ??
   process.env.NEXT_PUBLIC_SITE_URL ??
-  'https://prowebstudio.nl'
+  (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000')
 ).replace(/\/+$/, '');
 
 /**
  * Dutch metadata defaults for all pages
+ * Enforces nl-NL as the primary locale across the site
  */
 export const dutchMetadataDefaults = {
   locale: 'nl_NL' as const,

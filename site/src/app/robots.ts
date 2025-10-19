@@ -12,7 +12,7 @@ export default function robots(): MetadataRoute.Robots {
   const SITE_URL = (
     process.env.SITE_URL ?? 
     process.env.NEXT_PUBLIC_SITE_URL ?? 
-    'https://prowebstudio.nl'
+    (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000')
   ).replace(/\/+$/, '');
   
   const isPreview = process.env.VERCEL_ENV === 'preview';

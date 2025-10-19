@@ -6,10 +6,12 @@ export const revalidate = 0;
 // Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
 export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
-// CSP Report-Only 48h Window Started: 2025-09-18T00:00:00Z
-// Switch to enforcement after monitoring period ends: 2025-09-20T00:00:00Z
-const CSP_MONITORING_START = new Date('2025-09-18T00:00:00Z');
-const CSP_MONITORING_END = new Date('2025-09-20T00:00:00Z');
+// CSP Report-Only 7-day Monitoring Window Started: 2025-10-19T00:00:00Z
+// Monitor /api/csp-report endpoint with report-only policy for 7 days
+// Public pages (/, /diensten/*) now use enforced CSP
+// Switch to enforcement after monitoring period ends: 2025-10-26T00:00:00Z
+const CSP_MONITORING_START = new Date('2025-10-19T00:00:00Z');
+const CSP_MONITORING_END = new Date('2025-10-26T00:00:00Z');
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,7 +19,7 @@ export async function POST(req: NextRequest) {
     const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     const now = new Date();
     
-    // Enhanced CSP violation logging with 48h window tracking
+    // Enhanced CSP violation logging with 7-day monitoring window tracking
     const violationData = {
       timestamp: now.toISOString(),
       monitoringWindow: {
@@ -41,7 +43,7 @@ export async function POST(req: NextRequest) {
     };
     
     // Log CSP violation with enhanced monitoring context
-    console.warn('CSP Violation Report [48h Window]:', violationData);
+    console.warn('CSP Violation Report [7-day Monitoring Window]:', violationData);
     
     // Track specific violation types that may indicate need for unsafe-eval
     const violatedDirective = report['violated-directive'] || '';
@@ -49,7 +51,7 @@ export async function POST(req: NextRequest) {
       console.warn('⚠️  eval() usage detected - review if unsafe-eval removal is feasible');
     }
     
-    // In production during 48h window:
+    // In production during 7-day monitoring window:
     // 1. Store reports in a database with timestamp
     // 2. Send alerts for critical violations
     // 3. Aggregate reports for analysis

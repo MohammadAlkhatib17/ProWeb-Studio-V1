@@ -101,10 +101,9 @@ function validateRequest(req: NextRequest): { valid: boolean; reason?: string } 
     
     // Validate origin for API requests
     if (req.nextUrl.pathname.startsWith('/api/')) {
+      const siteUrl = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/+$/, '');
       const allowedOrigins = [
-        (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/+$/, ''),
-        'https://prowebstudio.nl',
-        'https://www.prowebstudio.nl'
+        siteUrl,
       ];
       // Allow Vercel preview deployments
       const isVercelPreview = origin?.endsWith('.vercel.app');

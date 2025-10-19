@@ -243,7 +243,7 @@ export default function PrivacyPage() {
         <h2>Beveiliging</h2>
         <p>Passende technische en organisatorische maatregelen.</p>
         <h2>Contact</h2>
-        <p>privacy@prowebstudio.nl of contact@prowebstudio.nl</p>
+        <p>{contactEmail}</p>
       </section>
     </LegalContentLayout>
     </>

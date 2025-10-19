@@ -29,6 +29,7 @@ export interface MetadataOptions {
 
 /**
  * Generate complete metadata with Dutch defaults
+ * Automatically applies noindex for preview deployments
  */
 export function generateMetadata(options: MetadataOptions = {}): Metadata {
   const {
@@ -44,6 +45,10 @@ export function generateMetadata(options: MetadataOptions = {}): Metadata {
   const fullTitle = title || `${siteConfig.name} - ${siteConfig.tagline}`;
   const canonicalUrl = `${SITE_URL}${path}`;
   const mergedKeywords = mergeWithDefaultKeywords(keywords);
+
+  // Enforce noindex for preview deployments
+  const isPreview = process.env.VERCEL_ENV === 'preview';
+  const shouldNoIndex = noIndex || isPreview;
 
   // Default OG image
   const defaultOgImage = {
@@ -107,7 +112,7 @@ export function generateMetadata(options: MetadataOptions = {}): Metadata {
       description,
       images: [finalOgImage.url],
     },
-    robots: noIndex
+    robots: shouldNoIndex
       ? {
           index: false,
           follow: false,

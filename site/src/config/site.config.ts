@@ -5,7 +5,7 @@ export const siteConfig = {
     'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D‑websites die scoren in Google en converteren.',
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, ''),
   email: process.env.NEXT_PUBLIC_CONTACT_INBOX || process.env.CONTACT_INBOX || 'contact@prowebstudio.nl',
-  phone: '+31686412430',
+  phone: process.env.NEXT_PUBLIC_PHONE || process.env.PHONE || '+31000000000',
   social: {
     linkedin: 'https://linkedin.com/company/proweb-studio',
     github: 'https://github.com/proweb-studio',
