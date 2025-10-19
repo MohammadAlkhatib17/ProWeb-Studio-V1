@@ -3,23 +3,37 @@ import './globals.css';
 import { headers } from 'next/headers';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import dynamic from 'next/dynamic';
 import { siteConfig } from '@/config/site.config';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CursorTrail from '@/components/CursorTrail';
 import SEOSchema from '@/components/SEOSchema';
 import { initProductionEnvValidation } from '@/lib/env.server';
 import BackgroundLayer from '@/components/layout/BackgroundLayer';
 import HeroBackground from '@/components/HeroBackground';
 import TopVignetteOverlay from '@/components/layout/TopVignetteOverlay';
 import PWAServiceWorker from '@/components/PWAServiceWorker';
-import DutchPerformanceMonitor from '@/components/DutchPerformanceMonitor';
 import { primaryFont } from '@/lib/fonts';
 import { generateResourcePreconnects } from '@/lib/preconnect';
 import CookieConsentBanner from '@/components/cookies/CookieConsentBanner';
 import CookieSettingsModal from '@/components/cookies/CookieSettingsModal';
 import ConsentAwareAnalytics from '@/components/cookies/ConsentAwareAnalytics';
-import { WebVitalsReporter } from '@/components/WebVitalsReporter';
+
+// Lazy load heavy visual components to avoid delaying cookie banner hydration
+const CursorTrail = dynamic(() => import('@/components/CursorTrail'), { 
+  ssr: false,
+  loading: () => null 
+});
+
+const DutchPerformanceMonitor = dynamic(() => import('@/components/DutchPerformanceMonitor'), { 
+  ssr: false,
+  loading: () => null 
+});
+
+const WebVitalsReporter = dynamic(() => import('@/components/WebVitalsReporter').then(mod => ({ default: mod.WebVitalsReporter })), { 
+  ssr: false,
+  loading: () => null 
+});
 
 // Initialize environment validation for production deployments
 initProductionEnvValidation();
@@ -216,11 +230,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const headersList = headers();
-  const nonce = headersList.get('X-Nonce') || '';
+  const nonce = headersList.get('x-nonce') || '';
   
   return (
     <html lang="nl">
       <head>
+        {/* CSP nonce meta tag - Next.js will auto-apply to internal scripts */}
+        {nonce && <meta property="csp-nonce" content={nonce} />}
+        
         {/* Hreflang tags for Dutch market targeting */}
         <link rel="alternate" hrefLang="nl" href={`${SITE_URL}/`} />
         <link rel="alternate" hrefLang="nl-NL" href={`${SITE_URL}/`} />
@@ -262,6 +279,16 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180.png" />
       </head>
       <body className={`${primaryFont.className} bg-transparent`}>
+        {/* Cookie Consent Banner - mounted first for fastest hydration */}
+        <CookieConsentBanner />
+        <CookieSettingsModal />
+
+        {/* Consent-aware analytics - only loads after user consent */}
+        <ConsentAwareAnalytics
+          plausibleDomain={siteConfig.analytics.plausibleDomain}
+          nonce={nonce}
+        />
+
         <BackgroundLayer />
         {/**
          * Global cosmic background placed at the root, behind all content.
@@ -273,31 +300,25 @@ export default function RootLayout({
          * backdrop from the very top across all pages while keeping header
          * wrappers fully transparent.
          */}
-  <HeroBackground />
-  {/* Global top vignette to unify luminance behind the header across routes */}
-  <TopVignetteOverlay />
+        <HeroBackground />
+        {/* Global top vignette to unify luminance behind the header across routes */}
+        <TopVignetteOverlay />
         <a href="#main" className="skip-to-content">
           Ga naar hoofdinhoud
         </a>
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        
+        {/* Heavy visual components - lazy loaded to avoid blocking cookie banner */}
         <CursorTrail />
 
         <SEOSchema nonce={nonce} pageType="generic" />
         <PWAServiceWorker />
+        
+        {/* Performance monitors - lazy loaded */}
         <DutchPerformanceMonitor />
         <WebVitalsReporter />
-
-        {/* Cookie Consent System */}
-        <CookieConsentBanner />
-        <CookieSettingsModal />
-
-        {/* Consent-aware analytics - only loads after user consent */}
-        <ConsentAwareAnalytics
-          plausibleDomain={siteConfig.analytics.plausibleDomain}
-          nonce={nonce}
-        />
         
         <Analytics />
         <SpeedInsights />

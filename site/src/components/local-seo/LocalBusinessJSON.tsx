@@ -67,6 +67,11 @@ export interface LocalBusinessJSONProps {
    * Additional schema properties
    */
   additionalProperties?: Record<string, unknown>;
+  
+  /**
+   * CSP nonce for inline scripts
+   */
+  nonce?: string;
 }
 
 export default function LocalBusinessJSON({
@@ -74,6 +79,7 @@ export default function LocalBusinessJSON({
   geo,
   areaServed,
   additionalProperties = {},
+  nonce,
 }: LocalBusinessJSONProps) {
   // Merge address data
   const finalAddress = address 
@@ -219,6 +225,7 @@ export default function LocalBusinessJSON({
       id="local-business-json-ld"
       type="application/ld+json"
       strategy="afterInteractive"
+      nonce={nonce}
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(structuredData, null, 2),
       }}

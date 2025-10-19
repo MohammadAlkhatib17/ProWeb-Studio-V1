@@ -13,6 +13,7 @@ import {
 
 /**
  * Get cookie value by name
+ * SSR-safe: returns null on server
  */
 export function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null;
@@ -30,21 +31,21 @@ export function getCookie(name: string): string | null {
 
 /**
  * Set secure cookie with proper flags
+ * SSR-safe: no-op on server
+ * Uses Max-Age for precise expiry and SameSite=Lax for CSRF protection
+ * Secure flag auto-added on HTTPS
  */
 export function setCookie(name: string, value: string, days: number): void {
   if (typeof document === 'undefined') return;
   
-  const date = new Date();
-  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-  
-  const expires = `expires=${date.toUTCString()}`;
+  const maxAge = days * 24 * 60 * 60; // Convert days to seconds
   const sameSite = 'SameSite=Lax';
-  const secure = window.location.protocol === 'https:' ? 'Secure' : '';
+  const secure = typeof window !== 'undefined' && window.location.protocol === 'https:' ? 'Secure' : '';
   const path = 'path=/';
   
   const cookieString = [
     `${name}=${value}`,
-    expires,
+    `Max-Age=${maxAge}`,
     path,
     sameSite,
     secure,
@@ -57,6 +58,7 @@ export function setCookie(name: string, value: string, days: number): void {
 
 /**
  * Delete cookie by setting expired date
+ * SSR-safe: no-op on server
  */
 export function deleteCookie(name: string): void {
   if (typeof document === 'undefined') return;
@@ -65,6 +67,8 @@ export function deleteCookie(name: string): void {
 
 /**
  * Get stored consent data
+ * SSR-safe: returns null on server
+ * Validates version and structure before returning
  */
 export function getStoredConsent(): ConsentData | null {
   const cookieValue = getCookie(CONSENT_COOKIE_NAME);
@@ -74,16 +78,20 @@ export function getStoredConsent(): ConsentData | null {
   try {
     const parsed = JSON.parse(decodeURIComponent(cookieValue)) as ConsentData;
     
-    // Validate structure
+    // Validate structure and version
     if (
       typeof parsed.version === 'number' &&
+      parsed.version === CONSENT_VERSION &&
       typeof parsed.timestamp === 'number' &&
-      typeof parsed.consent === 'object'
+      typeof parsed.consent === 'object' &&
+      typeof parsed.consent.necessary === 'boolean' &&
+      typeof parsed.consent.analytics === 'boolean' &&
+      typeof parsed.consent.marketing === 'boolean'
     ) {
       return parsed;
     }
-  } catch (error) {
-    console.warn('Failed to parse consent cookie:', error);
+  } catch {
+    // Silently fail for invalid JSON
   }
   
   return null;
@@ -91,6 +99,8 @@ export function getStoredConsent(): ConsentData | null {
 
 /**
  * Save consent data to secure cookie
+ * Enforces necessary=true and adds version+timestamp
+ * Persists for CONSENT_EXPIRY_DAYS (180 days) with SameSite=Lax and Secure on HTTPS
  */
 export function saveConsent(consent: ConsentState): void {
   const data: ConsentData = {
@@ -108,26 +118,22 @@ export function saveConsent(consent: ConsentState): void {
 
 /**
  * Check if user has given consent for a specific category
+ * Falls back to DEFAULT_CONSENT if no stored consent
  */
 export function hasConsent(category: keyof ConsentState): boolean {
   const stored = getStoredConsent();
   
-  if (!stored) return category === 'necessary';
+  if (!stored) {
+    return DEFAULT_CONSENT[category];
+  }
   
-  return stored.consent[category] ?? (category === 'necessary');
+  return stored.consent[category] ?? DEFAULT_CONSENT[category];
 }
 
 /**
  * Check if consent banner should be shown
+ * Returns true when no valid consent cookie exists
  */
 export function shouldShowBanner(): boolean {
   return getStoredConsent() === null;
-}
-
-/**
- * Get current consent state or default
- */
-export function getCurrentConsent(): ConsentState {
-  const stored = getStoredConsent();
-  return stored ? stored.consent : DEFAULT_CONSENT;
 }

@@ -3,7 +3,11 @@
 import Script from 'next/script';
 import { siteConfig } from '@/config/site.config';
 
-export default function PortfolioSchema() {
+interface PortfolioSchemaProps {
+  nonce?: string;
+}
+
+export default function PortfolioSchema({ nonce }: PortfolioSchemaProps = {}) {
   const portfolioSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -228,6 +232,7 @@ export default function PortfolioSchema() {
       <Script
         id="portfolio-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(portfolioSchema)
         }}
@@ -235,6 +240,7 @@ export default function PortfolioSchema() {
       <Script
         id="organization-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(organizationSchema)
         }}
@@ -242,6 +248,7 @@ export default function PortfolioSchema() {
       <Script
         id="breadcrumb-schema"
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(breadcrumbSchema)
         }}

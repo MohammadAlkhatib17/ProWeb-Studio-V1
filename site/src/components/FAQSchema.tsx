@@ -9,6 +9,7 @@ interface FAQItem {
 interface FAQSchemaProps {
   faqs?: FAQItem[];
   id?: string;
+  nonce?: string;
 }
 
 export default function FAQSchema({
@@ -55,6 +56,7 @@ export default function FAQSchema({
     },
   ],
   id,
+  nonce,
 }: FAQSchemaProps) {
   const structuredData = {
     '@context': 'https://schema.org',
@@ -93,6 +95,7 @@ export default function FAQSchema({
     <Script
       id="faq-schema"
       type="application/ld+json"
+      nonce={nonce}
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(structuredData, null, 2),
       }}

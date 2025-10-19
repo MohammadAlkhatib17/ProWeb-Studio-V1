@@ -32,9 +32,10 @@ interface Service {
 
 interface ServiceSchemaProps {
   services: Service[];
+  nonce?: string;
 }
 
-export default function ServiceSchema({ services }: ServiceSchemaProps) {
+export default function ServiceSchema({ services, nonce }: ServiceSchemaProps) {
   const serviceSchemas = services.map((service) => ({
     "@context": "https://schema.org",
     "@type": "Service",
@@ -98,6 +99,7 @@ export default function ServiceSchema({ services }: ServiceSchemaProps) {
           key={index}
           id={`service-schema-${index}`}
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(schema, null, 0)
           }}

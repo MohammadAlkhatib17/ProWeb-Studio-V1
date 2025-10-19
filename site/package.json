@@ -18,6 +18,8 @@
     "lint-staged": "lint-staged",
     "test": "vitest",
     "test:ui": "vitest --ui",
+    "test:e2e": "playwright test",
+    "test:e2e:ci": "playwright test --reporter=list",
     "analyze": "ANALYZE=true next build",
     "build:analyze": "ANALYZE=true next build",
     "build:prod": "NODE_ENV=production node scripts/validate-env.js && NODE_ENV=production next build",
@@ -80,6 +82,7 @@
   "devDependencies": {
     "@lhci/cli": "^0.13.0",
     "@next/bundle-analyzer": "^15.5.2",
+    "@playwright/test": "^1.40.1",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^15.0.7",
     "@types/cheerio": "^0.22.35",

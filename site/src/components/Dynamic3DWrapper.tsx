@@ -140,7 +140,6 @@ export default function Dynamic3DWrapper({
 }: Dynamic3DWrapperProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [hasWebGL, setHasWebGL] = useState(true);
-  const [shouldRender3D, setShouldRender3D] = useState(false);
   const [deviceCapabilities, setDeviceCapabilities] = useState<DeviceCapabilities | null>(null);
   const [progressiveEnhancement, setProgressiveEnhancement] = useState(false);
   
@@ -193,19 +192,6 @@ export default function Dynamic3DWrapper({
       
       setDeviceCapabilities(capabilities);
       onDeviceCapabilities?.(capabilities);
-      
-      // Enhanced decision logic for 3D rendering
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const lowBattery = batteryLevel !== undefined && batteryLevel < 20;
-      const thermalThrottling = thermalState === 'serious' || thermalState === 'critical';
-      
-      const shouldEnable = hasWebGLSupport && 
-                          !prefersReducedMotion && 
-                          !lowBattery && 
-                          !thermalThrottling &&
-                          performanceTier !== 'low';
-      
-      setShouldRender3D(shouldEnable);
     }
     
     detectCapabilities();
@@ -213,7 +199,7 @@ export default function Dynamic3DWrapper({
 
   // Progressive enhancement: start with basic scene, add effects based on performance
   useEffect(() => {
-    if (!shouldRender3D || !deviceCapabilities) return;
+    if (!deviceCapabilities) return;
     
     // Start with basic scene immediately
     setProgressiveEnhancement(false);
@@ -246,11 +232,11 @@ export default function Dynamic3DWrapper({
         clearTimeout(enhancementTimeoutRef.current);
       }
     };
-  }, [shouldRender3D, deviceCapabilities, performanceState.metrics.fps]);
+  }, [deviceCapabilities, performanceState.metrics.fps]);
 
   // Monitor performance and adjust progressive enhancement
   useEffect(() => {
-    if (!enablePerformanceMonitoring || !shouldRender3D) return;
+    if (!enablePerformanceMonitoring) return;
     
     // If performance drops significantly, disable enhancements
     if (performanceState.metrics.fps < 25 && progressiveEnhancement) {
@@ -263,11 +249,11 @@ export default function Dynamic3DWrapper({
       console.log('Performance improved, re-enabling enhancements');
       setProgressiveEnhancement(true);
     }
-  }, [performanceState.metrics.fps, performanceState.qualityLevel, progressiveEnhancement, enablePerformanceMonitoring, shouldRender3D]);
+  }, [performanceState.metrics.fps, performanceState.qualityLevel, progressiveEnhancement, enablePerformanceMonitoring]);
 
   // Performance monitoring
   useEffect(() => {
-    if (!enablePerformanceMonitoring || !shouldRender3D) return;
+    if (!enablePerformanceMonitoring) return;
 
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
@@ -280,20 +266,20 @@ export default function Dynamic3DWrapper({
     observer.observe({ entryTypes: ['measure'] });
 
     return () => observer.disconnect();
-  }, [shouldRender3D, enablePerformanceMonitoring]);
+  }, [enablePerformanceMonitoring]);
 
   if (!isMounted) {
     return <LoadingSkeleton variant={variant} className={className} />;
   }
 
-  if (!hasWebGL || !shouldRender3D) {
+  if (!hasWebGL) {
     return (
       <div className={`${className} flex items-center justify-center bg-gradient-to-br from-gray-900 to-black`}>
         <div className="text-center p-6 sm:p-7 md:p-8">
           <p className="text-slate-400">
-            {!hasWebGL ? 'WebGL is not supported on this device' : '3D content is disabled due to performance or accessibility settings'}
+            WebGL is not supported on this device
           </p>
-          <p className="text-sm text-gray-500 mt-2">3D content has been disabled</p>
+          <p className="text-sm text-gray-500 mt-2">3D content requires WebGL support</p>
         </div>
       </div>
     );

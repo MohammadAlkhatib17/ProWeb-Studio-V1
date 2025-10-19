@@ -124,17 +124,7 @@ function validateRequest(req: NextRequest): { valid: boolean; reason?: string } 
   return { valid: true };
 }
 
-function createSecurityHeaders(nonce: string): Record<string, string> {
-  return {
-    // Nonce for inline scripts (unique per request)
-    // Used in CSP when switching from Report-Only to Enforce mode
-    // When enforced CSP is activated, this nonce will be used in:
-    // - script-src directive: "script-src 'self' 'nonce-{nonce}' ..."
-    // - Inline script tags: <script nonce="{nonce}">...</script>
-    // This replaces 'unsafe-inline' directive for improved security
-    'X-Nonce': nonce
-  };
-}
+// Removed createSecurityHeaders - nonce now handled directly in CSP header
 
 export async function middleware(req: NextRequest) {
   const ip = getClientIP(req);
@@ -231,24 +221,46 @@ export async function middleware(req: NextRequest) {
     });
   }
   
-  // 5. Generate nonce for CSP
-  const nonce = (globalThis.crypto && 'randomUUID' in globalThis.crypto)
-    ? globalThis.crypto.randomUUID()
-    : Math.random().toString(36).slice(2);
+  // 5. Generate cryptographically secure nonce for CSP
+  const nonceBytes = new Uint8Array(16);
+  globalThis.crypto.getRandomValues(nonceBytes);
+  const nonce = btoa(String.fromCharCode(...nonceBytes));
   
   // 6. Set nonce on request headers for components to access
   const requestHeaders = new Headers(req.headers);
-  requestHeaders.set('X-Nonce', nonce);
+  requestHeaders.set('x-nonce', nonce);
   requestHeaders.set('X-Geographic-Hint', geoHint);
   requestHeaders.set('X-Client-IP', ip);
   
-  // 7. Apply Security Headers
-  const response = NextResponse.next({ request: { headers: requestHeaders } });
-  const securityHeaders = createSecurityHeaders(nonce);
+  // 7. Build CSP string with nonce and strict-dynamic
+  const isDev = process.env.NODE_ENV === 'development';
   
-  Object.entries(securityHeaders).forEach(([key, value]) => {
-    response.headers.set(key, value);
-  });
+  const cspDirectives = [
+    "default-src 'self'",
+    // script-src: nonce + strict-dynamic for Next.js; unsafe-eval ONLY in dev for React Refresh
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: http:${isDev ? " 'unsafe-eval'" : ''}`,
+    // style-src: nonce + unsafe-inline (fallback for older browsers)
+    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https:`,
+    "img-src 'self' data: https: blob:",
+    "font-src 'self' https: data:",
+    "connect-src 'self' https: wss:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "frame-ancestors 'self'",
+    "frame-src 'self' https:",
+    "form-action 'self'",
+  ];
+  
+  const cspValue = cspDirectives.join('; ');
+  
+  // 8. Apply Security Headers with CSP
+  const response = NextResponse.next({ request: { headers: requestHeaders } });
+  
+  // ENFORCED CSP with nonce - no report-only
+  response.headers.set('Content-Security-Policy', cspValue);
+  response.headers.set('x-nonce', nonce);
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
 
   // Add geographic and performance headers
   response.headers.set('X-Geographic-Hint', geoHint);
@@ -258,31 +270,6 @@ export async function middleware(req: NextRequest) {
   if (geoHint === 'nl' && !path.startsWith('/api/')) {
     response.headers.set('Cache-Control', 'public, max-age=7200, s-maxage=86400, stale-while-revalidate=3600');
     response.headers.set('X-Cache-Strategy', 'dutch-optimized');
-  }
-  
-  // 8. Apply Contact-specific CSP with nonce
-  if (path === '/contact') {
-    const cspValue = [
-      "default-src 'self'",
-      // ENFORCED: Using nonces for inline scripts - no unsafe-inline or unsafe-eval
-      `script-src 'self' 'nonce-${nonce}' https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://js.cal.com https://plausible.io https://va.vercel-scripts.com`,
-      `script-src-elem 'self' 'nonce-${nonce}' https://www.google.com https://www.gstatic.com https://plausible.io https://va.vercel-scripts.com`,
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: https: blob:",
-      "media-src 'self' https:",
-      "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com",
-      "connect-src 'self' https://api.cal.com https://www.google-analytics.com https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
-      "object-src 'none'",
-      "base-uri 'self'",
-      "frame-ancestors 'none'",
-      "form-action 'self'",
-      "upgrade-insecure-requests"
-    ].join('; ');
-    
-    response.headers.set('Content-Security-Policy', cspValue);
-    response.headers.set('Expect-CT', 'max-age=86400, enforce');
-    response.headers.set('X-Content-Type-Options', 'nosniff');
   }
   
   // 8. Apply X-Robots-Tag for speeltuin route and error pages

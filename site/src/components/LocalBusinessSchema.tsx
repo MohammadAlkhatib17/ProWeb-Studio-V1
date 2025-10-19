@@ -45,6 +45,7 @@ interface LocalBusinessSchemaProps {
       worstRating?: string;
     };
   }>;
+  nonce?: string;
 }
 
 export default function LocalBusinessSchema({
@@ -56,6 +57,7 @@ export default function LocalBusinessSchema({
   areaServed,
   aggregateRating,
   reviews,
+  nonce,
 }: LocalBusinessSchemaProps) {
   // Build the structured data dynamically based on available props
   type StructuredData = Record<string, unknown> & {
@@ -623,6 +625,7 @@ export default function LocalBusinessSchema({
     <Script
       id="local-business-schema"
       type="application/ld+json"
+      nonce={nonce}
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(structuredData, null, 2),
       }}

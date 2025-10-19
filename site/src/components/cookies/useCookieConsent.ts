@@ -1,16 +1,17 @@
 /**
  * Cookie Consent Hook
  * React hook for managing cookie consent state and preferences
+ * SSR-safe with synchronous initial state
  */
 
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import type { ConsentState } from './types';
+import { DEFAULT_CONSENT } from './types';
 import {
-  getCurrentConsent,
+  getStoredConsent,
   saveConsent,
-  shouldShowBanner,
   hasConsent,
 } from './cookie-utils';
 
@@ -30,19 +31,58 @@ interface UseCookieConsentReturn {
 /**
  * Custom hook for cookie consent management
  * Provides state and methods for managing user privacy preferences
+ * Initial state is synchronous to prevent banner flashing
  */
 export function useCookieConsent(): UseCookieConsentReturn {
-  const [consent, setConsent] = useState<ConsentState>(getCurrentConsent());
-  const [showBanner, setShowBanner] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  // Synchronous initial state - reads consent immediately on client
+  const [state, setState] = useState(() => {
+    // SSR path: return safe defaults
+    if (typeof document === 'undefined') {
+      return {
+        consent: DEFAULT_CONSENT,
+        showBanner: false,
+        showSettings: false,
+      };
+    }
+    
+    // Client path: read stored consent synchronously
+    const stored = getStoredConsent();
+    return {
+      consent: stored?.consent ?? DEFAULT_CONSENT,
+      showBanner: !stored,
+      showSettings: false,
+    };
+  });
 
-  // Initialize on mount
+  // Reconcile state if cookie changes externally (e.g., from another tab)
   useEffect(() => {
-    setMounted(true);
-    const shouldShow = shouldShowBanner();
-    setShowBanner(shouldShow);
-    setConsent(getCurrentConsent());
+    const checkConsent = () => {
+      const stored = getStoredConsent();
+      const newConsent = stored?.consent ?? DEFAULT_CONSENT;
+      const shouldShow = !stored;
+      
+      setState((prev) => {
+        // Only update if consent or banner state actually changed
+        if (
+          JSON.stringify(prev.consent) !== JSON.stringify(newConsent) ||
+          prev.showBanner !== shouldShow
+        ) {
+          return {
+            ...prev,
+            consent: newConsent,
+            showBanner: shouldShow,
+          };
+        }
+        return prev;
+      });
+    };
+
+    // Listen for storage events (cross-tab sync)
+    window.addEventListener('storage', checkConsent);
+    
+    return () => {
+      window.removeEventListener('storage', checkConsent);
+    };
   }, []);
 
   /**
@@ -50,22 +90,23 @@ export function useCookieConsent(): UseCookieConsentReturn {
    */
   const hasConsentFor = useCallback(
     (category: keyof ConsentState): boolean => {
-      if (!mounted) return false;
       return hasConsent(category);
     },
-    [mounted]
+    []
   );
 
   /**
    * Update consent preferences
+   * Enforces necessary=true and persists to cookie
    */
   const updateConsent = useCallback((newConsent: Partial<ConsentState>) => {
-    setConsent((prev) => {
-      const updated = {
-        ...prev,
+    setState((prev) => {
+      const updated: ConsentState = {
+        ...prev.consent,
         ...newConsent,
         necessary: true, // Always enforce necessary
       };
+      
       saveConsent(updated);
       
       // Trigger custom event for analytics loaders
@@ -77,10 +118,12 @@ export function useCookieConsent(): UseCookieConsentReturn {
         );
       }
       
-      return updated;
+      return {
+        consent: updated,
+        showBanner: false,
+        showSettings: false,
+      };
     });
-    setShowBanner(false);
-    setShowSettings(false);
   }, []);
 
   /**
@@ -109,30 +152,40 @@ export function useCookieConsent(): UseCookieConsentReturn {
    * Open settings modal
    */
   const openSettings = useCallback(() => {
-    setShowSettings(true);
-    setShowBanner(false);
+    setState((prev) => ({
+      ...prev,
+      showSettings: true,
+      showBanner: false,
+    }));
   }, []);
 
   /**
    * Close settings modal
    */
   const closeSettings = useCallback(() => {
-    setShowSettings(false);
+    setState((prev) => ({
+      ...prev,
+      showSettings: false,
+    }));
   }, []);
 
   /**
-   * Close banner without saving (only if consent exists)
+   * Close banner without saving (no-op if no consent exists)
    */
   const closeBanner = useCallback(() => {
-    if (!shouldShowBanner()) {
-      setShowBanner(false);
+    const stored = getStoredConsent();
+    if (stored) {
+      setState((prev) => ({
+        ...prev,
+        showBanner: false,
+      }));
     }
   }, []);
 
   return {
-    consent,
-    showBanner,
-    showSettings,
+    consent: state.consent,
+    showBanner: state.showBanner,
+    showSettings: state.showSettings,
     hasConsentFor,
     updateConsent,
     acceptAll,

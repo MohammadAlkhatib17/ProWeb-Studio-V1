@@ -62,10 +62,12 @@ export default function CookieConsentBanner() {
         aria-modal="true"
         aria-labelledby="cookie-banner-title"
         aria-describedby="cookie-banner-description"
-        className="fixed bottom-0 left-0 right-0 z-[9999] bg-cosmic-900/95 backdrop-blur-md border-t border-cosmic-700 shadow-2xl animate-slide-up"
+        className="fixed bottom-0 left-0 right-0 z-[9999] bg-cosmic-900/95 backdrop-blur-md border-t border-cosmic-700 shadow-2xl"
         style={{
-          // Prevent CLS - reserve space
+          // Prevent CLS - reserve space; visible immediately
           willChange: 'transform',
+          opacity: 1,
+          transform: 'translateY(0)',
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
