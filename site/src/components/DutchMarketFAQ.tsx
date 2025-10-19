@@ -1,8 +1,20 @@
+'use client';
+
 import { siteConfig } from '@/config/site.config';
 import { Button } from '@/components/Button';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { Accordion, AccordionItem } from '@/components/faq';
 
-// Dutch Market FAQ Component with Regional and Business-Specific Content
+/**
+ * Dutch Market FAQ Component with Regional and Business-Specific Content
+ * 
+ * Features:
+ * - Full-width rectangular rows on mobile (no card boxes)
+ * - Single-open accordion behavior
+ * - Complete keyboard navigation
+ * - Dutch language accessibility labels
+ * - SEO-optimized with structured data
+ */
 export default function DutchMarketFAQ() {
   const faqs = [
     // Business Growth & ROI
@@ -93,83 +105,59 @@ export default function DutchMarketFAQ() {
   const categories = [...new Set(faqs.map(faq => faq.category))];
 
   return (
-    <section className="py-section px-4 sm:px-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 glow-text">
-            Veelgestelde vragen van Nederlandse ondernemers
-          </h2>
-          <p className="text-lg sm:text-xl text-slate-200 max-w-3xl mx-auto">
-            Antwoorden op de belangrijkste vragen over website laten maken, 
-            specifiek voor de Nederlandse markt en bedrijfscultuur.
-          </p>
-        </div>
+    <div className="w-full max-w-none px-4 sm:px-5 md:max-w-2xl md:mx-auto">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 glow-text">
+          Veelgestelde vragen van Nederlandse ondernemers
+        </h2>
+        <p className="text-lg sm:text-xl text-slate-200 max-w-3xl mx-auto">
+          Antwoorden op de belangrijkste vragen over website laten maken, 
+          specifiek voor de Nederlandse markt en bedrijfscultuur.
+        </p>
+      </div>
 
-        {categories.map((category, categoryIndex) => (
-          <div key={category} className="mb-12">
-            <h3 className="text-2xl font-bold mb-6 text-cyan-300 border-b border-cyan-400/20 pb-2">
-              {category}
-            </h3>
-            
-            <div className="space-y-6">
-              {faqs
-                .filter(faq => faq.category === category)
-                .map((faq, faqIndex) => (
-                  <details 
-                    key={`${categoryIndex}-${faqIndex}`}
-                    className="group bg-neutral-800/30 border border-neutral-700 rounded-lg overflow-hidden hover:border-cyan-400/30 transition-all duration-300 ease-in-out hover:shadow-lg hover:shadow-cyan-400/10"
-                  >
-                    <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                      <h4 className="text-lg font-semibold text-white pr-4 group-hover:text-cyan-300 transition-colors duration-300">
-                        {faq.question}
-                      </h4>
-                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-400/20 flex items-center justify-center group-open:rotate-180 transition-all duration-500 ease-in-out group-hover:bg-cyan-400/30">
-                        <ChevronDown className="w-4 h-4 text-cyan-300 transition-all duration-300 ease-in-out group-open:scale-110" />
-                      </div>
-                    </summary>
-                    
-                    <div className="px-6 pb-6 animate-fade-in">
-                      <p className="text-slate-200 leading-relaxed">
-                        {faq.answer}
-                      </p>
-                      
-                      {/* Keywords for SEO context */}
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {faq.keywords.map((keyword, keywordIndex) => (
-                          <span 
-                            key={keywordIndex}
-                            className="text-xs px-2 py-1 bg-cyan-400/10 text-cyan-300 rounded-full border border-cyan-400/20"
-                          >
-                            {keyword}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </details>
-                ))}
-            </div>
-          </div>
-        ))}
-
-        {/* Call to Action */}
-        <div className="mt-16 text-center bg-gradient-to-r from-cyan-400/10 to-purple-400/10 border border-cyan-400/20 rounded-lg p-8">
-          <h3 className="text-2xl font-bold mb-4 text-white">
-            Nog vragen over website laten maken?
+      {categories.map((category) => (
+        <div key={category} className="mb-12">
+          {/* Category header - slim sticky subheader */}
+          <h3 className="text-xl md:text-2xl font-bold mb-4 text-cyan-300 pb-2 border-b border-white/10 sticky top-20 bg-cosmic-950/95 backdrop-blur-sm py-2 z-10">
+            {category}
           </h3>
-          <p className="text-slate-200 mb-6 max-w-2xl mx-auto">
-            Elke ondernemer heeft unieke vragen en uitdagingen. We beantwoorden graag 
-            uw specifieke vragen over website ontwikkeling, SEO, of digitale strategie.
-          </p>
-          <Button
-            href="/contact"
-            variant="primary"
-          >
-            <span className="flex items-center gap-2">
-              Stel uw vraag
-              <ArrowRight className="w-4 h-4" />
-            </span>
-          </Button>
+          
+          {/* FAQ items as full-width rows */}
+          <Accordion type="single">
+            {faqs
+              .filter(faq => faq.category === category)
+              .map((faq, faqIndex) => (
+                <AccordionItem
+                  key={`${category}-${faqIndex}`}
+                  id={`${category.toLowerCase().replace(/\s+/g, '-')}-${faqIndex + 1}`}
+                  question={faq.question}
+                  answer={faq.answer}
+                  keywords={faq.keywords}
+                />
+              ))}
+          </Accordion>
         </div>
+      ))}
+
+      {/* Call to Action */}
+      <div className="mt-16 text-center bg-gradient-to-r from-cyan-400/10 to-purple-400/10 border border-cyan-400/20 rounded-lg p-8">
+        <h3 className="text-2xl font-bold mb-4 text-white">
+          Nog vragen over website laten maken?
+        </h3>
+        <p className="text-slate-200 mb-6 max-w-2xl mx-auto">
+          Elke ondernemer heeft unieke vragen en uitdagingen. We beantwoorden graag 
+          uw specifieke vragen over website ontwikkeling, SEO, of digitale strategie.
+        </p>
+        <Button
+          href="/contact"
+          variant="primary"
+        >
+          <span className="flex items-center gap-2">
+            Stel uw vraag
+            <ArrowRight className="w-4 h-4" />
+          </span>
+        </Button>
       </div>
 
       {/* Structured Data for FAQ */}
@@ -212,6 +200,6 @@ export default function DutchMarketFAQ() {
           }),
         }}
       />
-    </section>
+    </div>
   );
 }
