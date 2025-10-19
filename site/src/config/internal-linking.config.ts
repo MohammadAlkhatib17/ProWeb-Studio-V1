@@ -195,12 +195,13 @@ export const footerLinkGroups: LinkGroup[] = [
     ]
   },
   {
-    title: 'Support',
+    title: 'Juridisch',
     links: [
-      { title: 'Site Overzicht', href: '/overzicht-site', priority: 'low' },
-      { title: 'Privacybeleid', href: '/privacy', priority: 'low' },
-      { title: 'Algemene Voorwaarden', href: '/voorwaarden', priority: 'low' },
-      { title: 'Sitemap', href: '/sitemap.xml', priority: 'low' }
+      { title: 'Privacybeleid', href: '/privacy', priority: 'medium' },
+      { title: 'Cookiebeleid', href: '/cookiebeleid', priority: 'medium' },
+      { title: 'Algemene Voorwaarden', href: '/voorwaarden', priority: 'medium' },
+      { title: 'Contact', href: '/contact', priority: 'high' },
+      { title: 'Site Overzicht', href: '/overzicht-site', priority: 'low' }
     ]
   }
 ];

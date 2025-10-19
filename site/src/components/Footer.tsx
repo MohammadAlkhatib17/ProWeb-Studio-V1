@@ -146,8 +146,50 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Contact Information */}
+        {/* Legal & Company Information Section */}
         <div className="mt-8 pt-8 border-t border-cosmic-700/50">
+          {/* Legal Links */}
+          <nav aria-label="Juridische informatie" className="mb-6">
+            <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+              <li>
+                <Link
+                  href="/privacy"
+                  className="text-slate-400 hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded underline-offset-4 hover:underline"
+                >
+                  Privacybeleid
+                </Link>
+              </li>
+              <li aria-hidden="true" className="text-cosmic-600">•</li>
+              <li>
+                <Link
+                  href="/cookiebeleid"
+                  className="text-slate-400 hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded underline-offset-4 hover:underline"
+                >
+                  Cookiebeleid
+                </Link>
+              </li>
+              <li aria-hidden="true" className="text-cosmic-600">•</li>
+              <li>
+                <Link
+                  href="/voorwaarden"
+                  className="text-slate-400 hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded underline-offset-4 hover:underline"
+                >
+                  Algemene voorwaarden
+                </Link>
+              </li>
+              <li aria-hidden="true" className="text-cosmic-600">•</li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="text-slate-400 hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded underline-offset-4 hover:underline"
+                >
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </nav>
+
+          {/* Contact & Company Info */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex flex-col sm:flex-row gap-4 text-sm text-slate-400">
               <a
@@ -163,19 +205,20 @@ export default function Footer() {
               >
                 {siteConfig.phone}
               </a>
-              {process.env.NEXT_PUBLIC_KVK && (
-                <>
-                  <span className="hidden sm:inline text-cosmic-600">•</span>
-                  <span>KVK: {process.env.NEXT_PUBLIC_KVK}</span>
-                </>
-              )}
-              {process.env.NEXT_PUBLIC_BTW && (
-                <>
-                  <span className="hidden sm:inline text-cosmic-600">•</span>
-                  <span>BTW: {process.env.NEXT_PUBLIC_BTW}</span>
-                </>
-              )}
             </div>
+          </div>
+
+          {/* Dutch Company Registration Info */}
+          <div className="mt-4 text-xs text-slate-500">
+            <p className="flex flex-wrap gap-x-3 gap-y-1">
+              <span>
+                <strong>KVK:</strong> {process.env.NEXT_PUBLIC_KVK || '[Te bepalen]'}
+              </span>
+              <span aria-hidden="true">•</span>
+              <span>
+                <strong>BTW/VAT:</strong> {process.env.NEXT_PUBLIC_BTW || '[Te bepalen]'}
+              </span>
+            </p>
           </div>
         </div>
 
