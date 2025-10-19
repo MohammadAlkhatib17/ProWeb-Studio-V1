@@ -28,6 +28,30 @@ jobs:
       - name: Install dependencies
         run: npm install --prefix site
 
+      - name: Load CI environment variables
+        run: |
+          echo "📦 Loading CI environment configuration..."
+          set -a
+          source .env.ci
+          set +a
+          # Export to GITHUB_ENV for subsequent steps
+          while IFS='=' read -r key value; do
+            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
+              echo "$key=$value" >> $GITHUB_ENV
+            fi
+          done < .env.ci
+          echo "✅ CI environment loaded"
+
+      - name: Validate production environment
+        run: |
+          echo "🔍 Validating critical environment variables..."
+          NODE_ENV=production node scripts/validate-production-env.js
+
+      - name: Validate Next.js config loading
+        run: |
+          echo "⚙️ Testing Next.js configuration in production mode..."
+          cd site && NODE_ENV=production node -e "import('./next.config.mjs').then(() => { console.log('✅ Next.js config loaded successfully'); process.exit(0); }).catch(err => { console.error('❌ Next.js config failed:', err.message); process.exit(1); })"
+
       - name: TypeScript check
         run: npm --prefix site run typecheck
 
@@ -42,6 +66,8 @@ jobs:
 
       - name: Build project with analysis
         run: npm --prefix site run build:analyze
+        env:
+          NODE_ENV: production
 
       - name: Generate bundle analysis data
         run: npm --prefix site run analyze:generate
@@ -106,6 +132,20 @@ jobs:
       - name: Install dependencies
         run: npm install --prefix site
 
+      - name: Load CI environment variables
+        run: |
+          echo "📦 Loading CI environment configuration..."
+          set -a
+          source .env.ci
+          set +a
+          # Export to GITHUB_ENV for subsequent steps
+          while IFS='=' read -r key value; do
+            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
+              echo "$key=$value" >> $GITHUB_ENV
+            fi
+          done < .env.ci
+          echo "✅ CI environment loaded"
+
       - name: Build current branch
         run: npm --prefix site run build:analyze
 
@@ -122,6 +162,20 @@ jobs:
 
       - name: Install dependencies (base)
         run: npm install --prefix site
+
+      - name: Load CI environment variables for base
+        run: |
+          echo "📦 Loading CI environment configuration for base branch..."
+          set -a
+          source .env.ci
+          set +a
+          # Export to GITHUB_ENV for subsequent steps
+          while IFS='=' read -r key value; do
+            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
+              echo "$key=$value" >> $GITHUB_ENV
+            fi
+          done < .env.ci
+          echo "✅ CI environment loaded"
 
       - name: Build base branch
         run: npm --prefix site run build:analyze
