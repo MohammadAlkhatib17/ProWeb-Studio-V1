@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Node.js runtime for complex logging/business logic (see docs/ADR-runtime.md)
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
 export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 // CSP Report-Only 7-day Monitoring Window Started: 2025-10-19T00:00:00Z

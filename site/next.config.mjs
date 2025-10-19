@@ -90,6 +90,10 @@ validateProductionEnv();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Runtime & Region Configuration: See docs/ADR-runtime.md
+  // Individual routes configure runtime (edge/nodejs) and preferredRegion at route level
+  // No global runtime override - App Router handles optimization automatically
+  
   // Disable powered by header for security
   poweredByHeader: false,
   

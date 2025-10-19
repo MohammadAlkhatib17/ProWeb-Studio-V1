@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { subscribeRateLimiter, getClientIP, checkRateLimit } from '@/lib/rateLimit';
 
+// Edge runtime for simple subscription API (see docs/ADR-runtime.md)
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
 export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 const subscribeSchema = z.object({

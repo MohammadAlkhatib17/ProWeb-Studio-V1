@@ -208,18 +208,29 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Dutch Company Registration Info */}
-          <div className="mt-4 text-xs text-slate-500">
-            <p className="flex flex-wrap gap-x-3 gap-y-1">
-              <span>
-                <strong>KVK:</strong> {process.env.NEXT_PUBLIC_KVK || '[Te bepalen]'}
-              </span>
-              <span aria-hidden="true">•</span>
-              <span>
-                <strong>BTW/VAT:</strong> {process.env.NEXT_PUBLIC_BTW || '[Te bepalen]'}
-              </span>
-            </p>
-          </div>
+          {/* Dutch Company Registration Info - Only show when env vars are present */}
+          {(process.env.NEXT_PUBLIC_KVK || process.env.NEXT_PUBLIC_BTW) && (
+            <div 
+              className="mt-4 text-xs text-slate-500"
+              data-testid="company-registration-info"
+            >
+              <p className="flex flex-wrap gap-x-3 gap-y-1">
+                {process.env.NEXT_PUBLIC_KVK && (
+                  <span data-testid="kvk-info">
+                    <strong>KVK:</strong> {process.env.NEXT_PUBLIC_KVK}
+                  </span>
+                )}
+                {process.env.NEXT_PUBLIC_KVK && process.env.NEXT_PUBLIC_BTW && (
+                  <span aria-hidden="true">•</span>
+                )}
+                {process.env.NEXT_PUBLIC_BTW && (
+                  <span data-testid="btw-info">
+                    <strong>BTW/VAT:</strong> {process.env.NEXT_PUBLIC_BTW}
+                  </span>
+                )}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/70">

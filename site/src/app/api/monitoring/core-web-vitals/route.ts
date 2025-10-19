@@ -9,7 +9,9 @@ import { addVitalEvent, getVitalEvents, getAllVitalEvents } from '@/lib/monitori
 import { calculateStats } from '@/lib/monitoring/utils';
 import type { VitalEvent } from '@/lib/monitoring/types';
 
+// Node.js runtime for storage operations (see docs/ADR-runtime.md)
 export const runtime = 'nodejs';
+export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 /**
  * POST - Store a vital event

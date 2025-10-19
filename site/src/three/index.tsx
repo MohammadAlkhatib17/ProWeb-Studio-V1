@@ -8,6 +8,15 @@ import BrandIdentityModel from './BrandIdentityModel'
 // Enhanced components with performance optimizations
 export { PerformanceCanvas, useLOD, OptimizedMaterial, useOptimizedAssets } from './PerformanceOptimizations'
 
+// KTX2/BasisU Asset Pipeline
+export * from './assetPipeline'
+
+// KTX2-enabled components
+export * from './components'
+
+// Demo scene
+export { default as KTX2DemoScene } from './KTX2DemoScene'
+
 interface OptimizedPortfolioComputerProps {
   className?: string
 }

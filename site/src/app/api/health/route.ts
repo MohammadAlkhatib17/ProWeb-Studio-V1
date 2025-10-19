@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 
+// Edge runtime for simple health check API (see docs/ADR-runtime.md)
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
 export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 export async function GET() {

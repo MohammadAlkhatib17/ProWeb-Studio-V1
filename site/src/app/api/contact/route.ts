@@ -4,10 +4,10 @@ import { z } from 'zod';
 import { contactRateLimiter, getClientIP, checkRateLimit } from '@/lib/rateLimit';
 import { sanitizeText } from '@/lib/sanitize';
 
+// Node.js runtime required for nodemailer (see docs/ADR-runtime.md)
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
 export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 // Enhanced validation schema with security considerations

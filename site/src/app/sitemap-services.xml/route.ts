@@ -7,8 +7,10 @@
 
 import { generateServicesSegment } from '@/lib/sitemap-advanced';
 
+// Edge runtime for static XML generation (see docs/ADR-runtime.md)
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
+export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 export async function GET() {
   const services = generateServicesSegment();

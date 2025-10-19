@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Edge runtime for analytics forwarding (see docs/ADR-runtime.md)
 export const runtime = 'edge';
-// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
 export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 interface WebVitalMetric {

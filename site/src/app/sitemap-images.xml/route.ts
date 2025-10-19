@@ -1,7 +1,6 @@
-// Edge runtime configuration for better performance and region distribution
+// Edge runtime for static XML generation (see docs/ADR-runtime.md)
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
-// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
 export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
