@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import Link from "next/link";
-import Logo from "@/components/Logo";
-import { siteConfig } from "@/config/site.config";
-import { Button } from "@/components/Button";
+import { useEffect } from 'react';
+import Link from 'next/link';
+import Logo from '@/components/Logo';
+import { siteConfig } from '@/config/site.config';
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -17,42 +16,28 @@ interface ErrorProps {
 export default function Error({ error, reset }: ErrorProps) {
   useEffect(() => {
     // Log error to monitoring service if needed
-    console.error("Application error:", error);
+    console.error('Application error:', error);
   }, [error]);
 
   const troubleshootingSteps = [
-    "Ververs de pagina (F5 of Ctrl+R)",
-    "Controleer uw internetverbinding",
-    "Probeer het over een paar minuten opnieuw",
-    "Schakel eventuele browser extensies uit",
+    'Ververs de pagina (F5 of Ctrl+R)',
+    'Controleer uw internetverbinding',
+    'Probeer het over een paar minuten opnieuw',
+    'Schakel eventuele browser extensies uit',
   ];
 
   const helpfulLinks = [
-    { href: "/", label: "Home", description: "Terug naar de hoofdpagina" },
-    {
-      href: "/contact",
-      label: "Contact",
-      description: "Meld dit probleem aan ons",
-    },
-    {
-      href: "/diensten",
-      label: "Diensten",
-      description: "Bekijk onze diensten",
-    },
+    { href: '/', label: 'Home', description: 'Terug naar de hoofdpagina' },
+    { href: '/contact', label: 'Contact', description: 'Meld dit probleem aan ons' },
+    { href: '/diensten', label: 'Diensten', description: 'Bekijk onze diensten' },
   ];
 
   return (
     <html lang="nl">
       <head>
         <title>Er is iets misgegaan | {siteConfig.name}</title>
-        <meta
-          name="description"
-          content="Er is een onverwachte fout opgetreden. Probeer het opnieuw of neem contact met ons op."
-        />
-        <meta
-          name="robots"
-          content="noindex, nofollow, nocache, nosnippet, noarchive, noimageindex"
-        />
+        <meta name="description" content="Er is een onverwachte fout opgetreden. Probeer het opnieuw of neem contact met ons op." />
+        <meta name="robots" content="noindex, nofollow, nocache, nosnippet, noarchive, noimageindex" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className="min-h-screen bg-gradient-to-br from-cosmic-900 via-cosmic-800 to-cosmic-900 flex flex-col">
@@ -68,8 +53,8 @@ export default function Error({ error, reset }: ErrorProps) {
         {/* Header */}
         <header className="relative z-20 px-4 sm:px-6 lg:px-8 py-6">
           <div className="max-w-7xl mx-auto">
-            <Link
-              href="/"
+            <Link 
+              href="/" 
               className="inline-block transform hover:scale-105 transition-transform duration-300"
               aria-label="Terug naar home"
             >
@@ -84,18 +69,18 @@ export default function Error({ error, reset }: ErrorProps) {
             {/* Error Icon */}
             <div className="mb-8">
               <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-red-500/20 to-orange-500/20 flex items-center justify-center">
-                <svg
-                  className="w-12 h-12 text-red-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
+                <svg 
+                  className="w-12 h-12 text-red-400" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
                   stroke="currentColor"
                   aria-hidden="true"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
                   />
                 </svg>
               </div>
@@ -110,8 +95,8 @@ export default function Error({ error, reset }: ErrorProps) {
                 Er is iets misgegaan
               </h2>
               <p className="text-lg text-slate-200 max-w-md mx-auto leading-relaxed">
-                Er is een onverwachte fout opgetreden. Dit kan tijdelijk zijn -
-                probeer het opnieuw.
+                Er is een onverwachte fout opgetreden. 
+                Dit kan tijdelijk zijn - probeer het opnieuw.
               </p>
               {error.digest && (
                 <p className="text-sm text-slate-400 font-mono bg-cosmic-800/30 px-3 py-2 rounded border border-cosmic-700/30 inline-block">
@@ -122,15 +107,14 @@ export default function Error({ error, reset }: ErrorProps) {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <Button
-                as="button"
+              <button
                 onClick={reset}
-                variant="primary"
-                size="large"
+                className="group relative px-8 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-medium rounded-lg hover:from-primary-500 hover:to-secondary-500 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                Probeer opnieuw
-              </Button>
-
+                <span className="relative z-10">Probeer opnieuw</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-700 to-secondary-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </button>
+              
               <button
                 onClick={() => window.location.reload()}
                 className="text-slate-200 hover:text-primary-300 transition-colors font-medium"
@@ -181,15 +165,15 @@ export default function Error({ error, reset }: ErrorProps) {
         <footer className="relative z-20 px-4 sm:px-6 lg:px-8 py-8 text-center">
           <div className="max-w-7xl mx-auto">
             <p className="text-sm text-slate-400">
-              Probleem blijft bestaan? Neem contact op:{" "}
-              <a
+              Probleem blijft bestaan? Neem contact op:{' '}
+              <a 
                 href={`tel:${siteConfig.phone}`}
                 className="text-primary-300 hover:text-primary-200 transition-colors"
               >
                 {siteConfig.phone}
-              </a>{" "}
-              of{" "}
-              <a
+              </a>
+              {' '}of{' '}
+              <a 
                 href={`mailto:${siteConfig.email}`}
                 className="text-primary-300 hover:text-primary-200 transition-colors"
               >

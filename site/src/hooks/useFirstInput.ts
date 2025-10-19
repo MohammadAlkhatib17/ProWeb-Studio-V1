@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Hook to detect the first user input and defer non-critical listeners
@@ -11,34 +11,28 @@ export function useFirstInput() {
   const listenerAdded = useRef(false);
 
   useEffect(() => {
-    if (typeof window === "undefined" || listenerAdded.current) return;
+    if (typeof window === 'undefined' || listenerAdded.current) return;
 
     const handleFirstInput = () => {
       setHasFirstInput(true);
       // Remove listeners once first input is detected
-      window.removeEventListener("pointerdown", handleFirstInput, {
-        passive: true,
-      } as AddEventListenerOptions);
-      window.removeEventListener("keydown", handleFirstInput, {
-        passive: true,
-      } as AddEventListenerOptions);
-      window.removeEventListener("touchstart", handleFirstInput, {
-        passive: true,
-      } as AddEventListenerOptions);
+      window.removeEventListener('pointerdown', handleFirstInput, { passive: true } as AddEventListenerOptions);
+      window.removeEventListener('keydown', handleFirstInput, { passive: true } as AddEventListenerOptions);
+      window.removeEventListener('touchstart', handleFirstInput, { passive: true } as AddEventListenerOptions);
     };
 
     // Listen for first meaningful user interaction
-    window.addEventListener("pointerdown", handleFirstInput, { passive: true });
-    window.addEventListener("keydown", handleFirstInput, { passive: true });
-    window.addEventListener("touchstart", handleFirstInput, { passive: true });
-
+    window.addEventListener('pointerdown', handleFirstInput, { passive: true });
+    window.addEventListener('keydown', handleFirstInput, { passive: true });
+    window.addEventListener('touchstart', handleFirstInput, { passive: true });
+    
     listenerAdded.current = true;
 
     return () => {
       if (listenerAdded.current) {
-        window.removeEventListener("pointerdown", handleFirstInput);
-        window.removeEventListener("keydown", handleFirstInput);
-        window.removeEventListener("touchstart", handleFirstInput);
+        window.removeEventListener('pointerdown', handleFirstInput);
+        window.removeEventListener('keydown', handleFirstInput);
+        window.removeEventListener('touchstart', handleFirstInput);
       }
     };
   }, []);
@@ -55,7 +49,7 @@ export function useFirstInput() {
 export function useDeferredInit(
   callback: () => void,
   immediate: boolean = false,
-  timeout: number = 3000,
+  timeout: number = 3000
 ) {
   const hasFirstInput = useFirstInput();
   const initialized = useRef(false);

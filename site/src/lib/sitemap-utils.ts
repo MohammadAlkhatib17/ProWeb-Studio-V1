@@ -1,39 +1,28 @@
-import { statSync } from "fs";
-import { join } from "path";
+import { statSync } from 'fs';
+import { join } from 'path';
 
 /**
  * Maps route paths to their corresponding source files
  * This allows us to compute lastModified from actual file modification times
  */
 export const ROUTE_TO_FILE_MAP: Record<string, string> = {
-  "/": "src/app/page.tsx",
-  "/diensten": "src/app/diensten/page.tsx",
-  "/diensten/website-laten-maken":
-    "src/app/diensten/website-laten-maken/page.tsx",
-  "/diensten/webshop-laten-maken":
-    "src/app/diensten/webshop-laten-maken/page.tsx",
-  "/diensten/seo-optimalisatie": "src/app/diensten/seo-optimalisatie/page.tsx",
-  "/diensten/3d-website-ervaringen":
-    "src/app/diensten/3d-website-ervaringen/page.tsx",
-  "/diensten/onderhoud-support": "src/app/diensten/onderhoud-support/page.tsx",
-  "/werkwijze": "src/app/werkwijze/page.tsx",
-  "/contact": "src/app/contact/page.tsx",
-  "/over-ons": "src/app/over-ons/page.tsx",
-  "/portfolio": "src/app/portfolio/page.tsx",
-  "/locaties": "src/app/locaties/page.tsx",
-  "/privacy": "src/app/privacy/page.tsx",
-  "/voorwaarden": "src/app/voorwaarden/page.tsx",
+  '/': 'src/app/page.tsx',
+  '/diensten': 'src/app/diensten/page.tsx',
+  '/werkwijze': 'src/app/werkwijze/page.tsx',
+  '/contact': 'src/app/contact/page.tsx',
+  '/over-ons': 'src/app/over-ons/page.tsx',
+  '/privacy': 'src/app/privacy/page.tsx',
+  '/voorwaarden': 'src/app/voorwaarden/page.tsx',
 };
 
 /**
  * Additional service routes that use the diensten page as source
  */
 export const SERVICE_ROUTES = [
-  "/diensten/website-laten-maken",
-  "/diensten/3d-website-ervaringen", // Updated to match actual route
-  "/diensten/seo-optimalisatie",
-  "/diensten/webshop-laten-maken",
-  "/diensten/onderhoud-support",
+  '/diensten/website-laten-maken',
+  '/diensten/3d-website-ontwikkeling',
+  '/diensten/seo-optimalisatie',
+  '/diensten/webshop-laten-maken',
 ];
 
 /**
@@ -45,12 +34,12 @@ export function getRouteMtime(route: string): Date | null {
   try {
     // Check if it's a service sub-route
     if (SERVICE_ROUTES.includes(route)) {
-      route = "/diensten"; // Use diensten page as source for service routes
+      route = '/diensten'; // Use diensten page as source for service routes
     }
 
     const filePath = ROUTE_TO_FILE_MAP[route];
     if (!filePath) {
-      if (process.env.NODE_ENV !== "production") {
+      if (process.env.NODE_ENV !== 'production') {
         console.warn(`No file mapping found for route: ${route}`);
       }
       return null;
@@ -59,10 +48,10 @@ export function getRouteMtime(route: string): Date | null {
     // Get absolute path (assuming we're running from site directory)
     const absolutePath = join(process.cwd(), filePath);
     const stats = statSync(absolutePath);
-
+    
     return stats.mtime;
   } catch (error) {
-    if (process.env.NODE_ENV !== "production") {
+    if (process.env.NODE_ENV !== 'production') {
       console.warn(`Unable to read mtime for route ${route}:`, error);
     }
     return null;
@@ -77,11 +66,11 @@ export function getRouteMtime(route: string): Date | null {
  */
 export function getRouteLastModified(route: string, fallbackDate?: Date): Date {
   const mtime = getRouteMtime(route);
-
+  
   if (mtime) {
     return mtime;
   }
-
+  
   // Fall back to provided date or current date
   return fallbackDate || new Date();
 }
@@ -99,12 +88,12 @@ export function getLatestMtime(filePaths: string[]): Date | null {
     try {
       const absolutePath = join(process.cwd(), filePath);
       const stats = statSync(absolutePath);
-
+      
       if (!latestMtime || stats.mtime > latestMtime) {
         latestMtime = stats.mtime;
       }
     } catch (error) {
-      if (process.env.NODE_ENV !== "production") {
+      if (process.env.NODE_ENV !== 'production') {
         console.warn(`Unable to read mtime for file ${filePath}:`, error);
       }
     }
@@ -120,10 +109,7 @@ export function getLatestMtime(filePaths: string[]): Date | null {
  * @param additionalFiles - Additional files to check (e.g., shared components)
  * @returns Most recent modification date or null
  */
-export function getComprehensiveRouteMtime(
-  route: string,
-  additionalFiles: string[] = [],
-): Date | null {
+export function getComprehensiveRouteMtime(route: string, additionalFiles: string[] = []): Date | null {
   const mainFile = ROUTE_TO_FILE_MAP[route];
   if (!mainFile) {
     return null;

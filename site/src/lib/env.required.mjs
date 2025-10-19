@@ -43,12 +43,6 @@ export const ENV_VAR_GROUPS = {
     description: 'Primary site URL and domain settings',
     variables: ['SITE_URL'],
     guidance: 'Set your production domain. Example: https://yourdomain.com'
-  },
-  rateLimit: {
-    name: 'Rate Limiting',
-    description: 'Upstash Redis configuration for API rate limiting',
-    variables: ['UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_REST_TOKEN'],
-    guidance: 'Get credentials from Upstash Redis console: https://console.upstash.com/'
   }
 };
 
@@ -69,6 +63,8 @@ export const RECOMMENDED_ENV_VARS = [
   'NEXT_PUBLIC_PLAUSIBLE_DOMAIN',
   'SITE_NAME',
   'NEXT_PUBLIC_CALCOM_URL',
+  'UPSTASH_REDIS_REST_URL',
+  'UPSTASH_REDIS_REST_TOKEN',
   // Additional schema and SEO enhancement variables
   'NEXT_PUBLIC_GOOGLE_PLACE_ID',
   'NEXT_PUBLIC_GOOGLE_BUSINESS_URL',
@@ -104,10 +100,7 @@ export const OPTIONAL_ENV_VARS = [
   'NEXT_PUBLIC_SOCIAL_DRIBBBLE',
   'NEXT_PUBLIC_SOCIAL_YOUTUBE',
   'NEXT_PUBLIC_SOCIAL_FACEBOOK',
-  'NEXT_PUBLIC_SOCIAL_INSTAGRAM',
-  // Rate limiting (optional for development)
-  'UPSTASH_REDIS_REST_URL',
-  'UPSTASH_REDIS_REST_TOKEN'
+  'NEXT_PUBLIC_SOCIAL_INSTAGRAM'
 ];
 
 /**
@@ -138,85 +131,3 @@ export const PLACEHOLDER_VALUES = [
   'changeme',
   ''
 ];
-
-/**
- * Check if the current environment is a production build
- */
-export const isProductionBuild = () => {
-  return process.env.NODE_ENV === 'production' || 
-         process.env.NEXT_PHASE === 'phase-production-build' ||
-         process.env.CI === 'true';
-};
-
-/**
- * Check if a value is a placeholder or invalid for production
- */
-export const isPlaceholderValue = (value) => {
-  if (!value || typeof value !== 'string') return true;
-  
-  const normalizedValue = value.toLowerCase().trim();
-  
-  return PLACEHOLDER_VALUES.some(placeholder => 
-    normalizedValue === placeholder.toLowerCase() ||
-    normalizedValue.includes('placeholder') ||
-    normalizedValue.includes('example') ||
-    normalizedValue.includes('your_') ||
-    normalizedValue.includes('changeme') ||
-    normalizedValue === 'localhost:3000' ||
-    normalizedValue === 'http://localhost:3000'
-  );
-};
-
-/**
- * Production build validation - throws error if validation fails
- * This ensures production builds fail fast when environment is not properly configured
- */
-export const validateProductionEnvironment = () => {
-  if (!isProductionBuild()) {
-    return; // Skip validation for non-production builds
-  }
-
-  const errors = [];
-  const missingVars = [];
-  const placeholderVars = [];
-
-  // Check all critical environment variables
-  for (const envVar of CRITICAL_ENV_VARS) {
-    const value = process.env[envVar];
-    
-    if (!value) {
-      missingVars.push(envVar);
-    } else if (isPlaceholderValue(value)) {
-      placeholderVars.push({ var: envVar, value });
-    }
-  }
-
-  // Build error messages by category
-  if (missingVars.length > 0) {
-    errors.push(`Missing required environment variables: ${missingVars.join(', ')}`);
-  }
-
-  if (placeholderVars.length > 0) {
-    const placeholderDetails = placeholderVars
-      .map(({ var: envVar, value }) => `${envVar}="${value}"`)
-      .join(', ');
-    errors.push(`Placeholder values detected: ${placeholderDetails}`);
-  }
-
-  if (errors.length > 0) {
-    const errorMessage = [
-      '🚨 PRODUCTION BUILD FAILED: Environment validation errors detected!',
-      '',
-      ...errors.map(error => `❌ ${error}`),
-      '',
-      '💡 Required actions:',
-      '   1. Set all required environment variables in your deployment platform',
-      '   2. Replace all placeholder values with real configuration',
-      '   3. Verify values are properly configured before deployment',
-      '',
-      '📚 See docs/DEPLOY_CHECKLIST.md for detailed setup instructions'
-    ].join('\n');
-
-    throw new Error(errorMessage);
-  }
-};

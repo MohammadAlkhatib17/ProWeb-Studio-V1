@@ -9,10 +9,10 @@
       setMetrics(latest);Web Vitals monitoring
  */
 
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { initCoreWebVitalsMonitoring } from "@/lib/core-web-vitals-monitor";
+import { useEffect, useState } from 'react';
+import { initCoreWebVitalsMonitoring } from '@/lib/core-web-vitals-monitor';
 
 interface PerformanceMetrics {
   LCP: number | null;
@@ -25,13 +25,13 @@ interface PerformanceMetrics {
 interface PerformanceDashboardProps {
   enabled?: boolean;
   dutchOptimized?: boolean;
-  position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
+  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
 }
 
 export function PerformanceDashboard({
-  enabled = process.env.NODE_ENV === "development",
+  enabled = process.env.NODE_ENV === 'development',
   dutchOptimized = true,
-  position = "bottom-right",
+  position = 'bottom-right'
 }: PerformanceDashboardProps) {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     LCP: null,
@@ -46,7 +46,7 @@ export function PerformanceDashboard({
 
     const cwvMonitor = initCoreWebVitalsMonitoring({
       enableReporting: false, // Dashboard mode
-      dutchOptimizationLevel: dutchOptimized ? "premium" : "basic",
+      dutchOptimizationLevel: dutchOptimized ? 'premium' : 'basic',
     });
 
     // Update metrics periodically
@@ -61,7 +61,7 @@ export function PerformanceDashboard({
       };
 
       // Get the latest value for each metric
-      currentMetrics.forEach((metric) => {
+      currentMetrics.forEach(metric => {
         if (metric.name in latest) {
           latest[metric.name as keyof PerformanceMetrics] = metric.value;
         }
@@ -78,22 +78,22 @@ export function PerformanceDashboard({
   if (!enabled) return null;
 
   const positionClasses = {
-    "bottom-right": "bottom-4 right-4",
-    "bottom-left": "bottom-4 left-4",
-    "top-right": "top-4 right-4",
-    "top-left": "top-4 left-4",
+    'bottom-right': 'bottom-4 right-4',
+    'bottom-left': 'bottom-4 left-4',
+    'top-right': 'top-4 right-4',
+    'top-left': 'top-4 left-4',
   };
 
   const formatMetric = (value: number | null, type: string): string => {
-    if (value === null) return "-";
-
+    if (value === null) return '-';
+    
     switch (type) {
-      case "CLS":
+      case 'CLS':
         return value.toFixed(3);
-      case "LCP":
-      case "INP":
-      case "FCP":
-      case "TTFB":
+      case 'LCP':
+      case 'INP':
+      case 'FCP':
+      case 'TTFB':
         return `${Math.round(value)}ms`;
       default:
         return Math.round(value).toString();
@@ -101,8 +101,8 @@ export function PerformanceDashboard({
   };
 
   const getMetricColor = (value: number | null, type: string): string => {
-    if (value === null) return "text-slate-400";
-
+    if (value === null) return 'text-slate-400';
+    
     const thresholds = {
       LCP: { good: 2500, poor: 4000 },
       INP: { good: 200, poor: 500 }, // INP replaced FID in web-vitals v5.x
@@ -112,19 +112,17 @@ export function PerformanceDashboard({
     };
 
     const threshold = thresholds[type as keyof typeof thresholds];
-    if (!threshold) return "text-white";
+    if (!threshold) return 'text-white';
 
-    if (value <= threshold.good) return "text-green-400";
-    if (value <= threshold.poor) return "text-yellow-400";
-    return "text-red-400";
+    if (value <= threshold.good) return 'text-green-400';
+    if (value <= threshold.poor) return 'text-yellow-400';
+    return 'text-red-400';
   };
 
   return (
-    <div
-      className={`fixed ${positionClasses[position]} bg-black/90 backdrop-blur-sm text-white p-3 rounded-lg text-xs font-mono z-50 max-w-xs border border-gray-700 shadow-lg`}
-    >
+    <div className={`fixed ${positionClasses[position]} bg-black/90 backdrop-blur-sm text-white p-3 rounded-lg text-xs font-mono z-50 max-w-xs border border-gray-700 shadow-lg`}>
       <div className="font-bold mb-2 text-blue-400 flex items-center gap-1">
-        🇳🇱 {dutchOptimized ? "Dutch" : "Global"} Performance
+        🇳🇱 {dutchOptimized ? 'Dutch' : 'Global'} Performance
       </div>
       <div className="space-y-1">
         {Object.entries(metrics).map(([key, value]) => (

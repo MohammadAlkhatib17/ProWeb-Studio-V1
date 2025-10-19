@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 interface UseInViewOptions {
   threshold?: number;
@@ -9,7 +9,7 @@ interface UseInViewOptions {
 }
 
 export function useInView(options: UseInViewOptions = {}) {
-  const { threshold = 0.1, rootMargin = "50px", triggerOnce = true } = options;
+  const { threshold = 0.1, rootMargin = '50px', triggerOnce = true } = options;
   const [isInView, setIsInView] = useState(false);
   const [hasTriggered, setHasTriggered] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -22,12 +22,12 @@ export function useInView(options: UseInViewOptions = {}) {
 
   useEffect(() => {
     if (!isMounted) return;
-
+    
     const element = ref.current;
     if (!element || (triggerOnce && hasTriggered)) return;
 
     // Check if IntersectionObserver is available
-    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
       // Fallback: assume in view for SSR or unsupported browsers
       setIsInView(true);
       if (triggerOnce) setHasTriggered(true);
@@ -38,7 +38,7 @@ export function useInView(options: UseInViewOptions = {}) {
       ([entry]) => {
         const inView = entry.isIntersecting;
         setIsInView(inView);
-
+        
         if (inView && triggerOnce) {
           setHasTriggered(true);
         }
@@ -46,7 +46,7 @@ export function useInView(options: UseInViewOptions = {}) {
       {
         threshold,
         rootMargin,
-      },
+      }
     );
 
     observer.observe(element);
@@ -56,8 +56,8 @@ export function useInView(options: UseInViewOptions = {}) {
     };
   }, [threshold, rootMargin, triggerOnce, hasTriggered, isMounted]);
 
-  return {
-    ref,
-    isInView: isMounted ? (triggerOnce ? hasTriggered : isInView) : false,
+  return { 
+    ref, 
+    isInView: isMounted ? (triggerOnce ? hasTriggered : isInView) : false 
   };
 }

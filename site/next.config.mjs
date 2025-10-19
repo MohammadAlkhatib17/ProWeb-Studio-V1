@@ -1,31 +1,92 @@
 // @ts-check
 
 import nextBundleAnalyzer from '@next/bundle-analyzer';
-import { 
-  CRITICAL_ENV_VARS, 
-  ENV_VAR_GROUPS, 
-  isProductionBuild, 
-  isPlaceholderValue,
-  validateProductionEnvironment 
-} from './src/lib/env.required.mjs';
+import { CRITICAL_ENV_VARS, PLACEHOLDER_VALUES, ENV_VAR_GROUPS } from './src/lib/env.required.mjs';
 
 const withBundleAnalyzer = nextBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
-// Build-time environment validation for production builds  
-// This runs during Next.js build phase to fail fast if environment is not configured
-try {
-  if (isProductionBuild()) {
-    console.log('🔧 Next.js Build: Running environment validation quality gate...');
-    validateProductionEnvironment();
-    console.log('✅ Next.js Build: Environment validation passed\n');
+// Build-time environment validation for production
+function validateProductionEnv() {
+  // Only validate in production builds
+  if (process.env.NODE_ENV !== 'production') {
+    return;
   }
-} catch (error) {
-  console.error('🚨 Next.js Build: Environment validation failed!');
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exit(1);
+
+  /**
+   * @param {string} value
+   * @returns {boolean}
+   */
+  function isPlaceholderValue(value) {
+    if (!value || typeof value !== 'string') return true;
+    
+    const normalizedValue = value.toLowerCase().trim();
+    
+    return PLACEHOLDER_VALUES.some(placeholder => 
+      normalizedValue === placeholder.toLowerCase() ||
+      normalizedValue.includes('placeholder') ||
+      normalizedValue.includes('example') ||
+      normalizedValue.includes('your_') ||
+      normalizedValue.includes('changeme') ||
+      normalizedValue === 'localhost:3000' ||
+      normalizedValue === 'http://localhost:3000'
+    );
+  }
+
+  // Group errors by category
+  /** @type {Record<string, {name: string, description: string, variables: string[], guidance: string, errors: string[]}>} */
+  const errorsByGroup = {};
+  let hasErrors = false;
+  
+  // Check each environment variable and group by category
+  for (const envVar of CRITICAL_ENV_VARS) {
+    const value = process.env[envVar];
+    let error = null;
+    
+    if (!value) {
+      error = `${envVar} is not set`;
+    } else if (isPlaceholderValue(value)) {
+      error = `${envVar} contains placeholder value: "${value}"`;
+    }
+
+    if (error) {
+      hasErrors = true;
+      // Find which group this variable belongs to
+      for (const [groupKey, groupConfig] of Object.entries(ENV_VAR_GROUPS)) {
+        if (groupConfig.variables.includes(envVar)) {
+          if (!errorsByGroup[groupKey]) {
+            errorsByGroup[groupKey] = {
+              ...groupConfig,
+              errors: []
+            };
+          }
+          errorsByGroup[groupKey].errors.push(error);
+          break;
+        }
+      }
+    }
+  }
+
+  if (hasErrors) {
+    console.error('\n🚨 Build failed! Critical environment variables are missing or invalid:\n');
+    
+    // Display errors grouped by category
+    for (const [groupKey, groupData] of Object.entries(errorsByGroup)) {
+      console.error(`📁 ${groupData.name} (${groupData.description})`);
+      groupData.errors.forEach(/** @param {string} error */ error => console.error(`   ❌ ${error}`));
+      console.error(`   💡 ${groupData.guidance}`);
+      console.error(''); // Empty line for spacing
+    }
+    
+    console.error('📚 For complete setup instructions, see docs/DEPLOY_CHECKLIST.md');
+    console.error('🔧 Set these variables in your deployment platform (Vercel, Netlify, etc.)\n');
+    throw new Error('Environment validation failed - missing or invalid critical environment variables');
+  }
 }
+
+// Run validation during build
+validateProductionEnv();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -37,20 +98,17 @@ const nextConfig = {
     optimizePackageImports: ['@react-three/fiber', '@react-three/drei', 'three'],
   },
   
-  // Aggressive image optimization for perfect Core Web Vitals
+  // Image optimization
   images: {
-    // Prioritize AVIF for maximum compression, fallback to WebP
     formats: ['image/avif', 'image/webp'],
-    // Comprehensive device size coverage for perfect responsive images
-    deviceSizes: [640, 750, 828, 1080, 1200, 1440, 1920, 2048, 3840],
-    // Extended image sizes for better granularity
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512, 640, 768],
-    // Long-term caching for static images
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Enable responsive images with optimized settings
     unoptimized: false,
-    // Remote patterns for external images
+    // Remote patterns for external images (if needed)
     remotePatterns: [
       {
         protocol: 'https',
@@ -58,76 +116,40 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'vercel.com',
-        port: '',
-        pathname: '/**',
-      },
-      // Add other trusted domains as needed
+      // Add more remote patterns as needed for external images
     ],
+    // Enable loader for better performance
     loader: 'default',
+    // Domains for external images (legacy - prefer remotePatterns)
     domains: [],
   },
 
   // PWA and Service Worker: serve /public/sw.js directly as /sw.js
 
-  // Advanced webpack optimization for perfect Core Web Vitals
+  // Webpack optimization
   webpack: (config, { dev, isServer }) => {
-    // Enhanced chunk splitting for optimal loading
+    // Optimize chunk splitting
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',
-        minSize: 20000,
-        maxSize: 244000,
-        minChunks: 1,
-        maxAsyncRequests: 30,
-        maxInitialRequests: 30,
         cacheGroups: {
           default: {
             minChunks: 2,
             priority: -10,
             reuseExistingChunk: true,
           },
-          // Framework chunk for React, Next.js core
-          framework: {
-            test: /[\\/]node_modules[\\/](react|react-dom|next)[\\/]/,
-            name: 'framework',
-            priority: 40,
-            chunks: 'all',
-            enforce: true,
-          },
-          // Vendor libraries chunk
           vendor: {
-            test: /[\\/]node_modules[\\/](?!(react|react-dom|next|three|@react-three)[\\/])/,
-            name: 'vendor',
-            priority: 30,
-            chunks: 'all',
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: -5,
             reuseExistingChunk: true,
           },
-          // Three.js and related libraries (heavy 3D libs)
           three: {
             test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
             name: 'three',
-            priority: 35,
-            chunks: 'async',
-            enforce: true,
-          },
-          // Animation libraries
-          animation: {
-            test: /[\\/]node_modules[\\/](framer-motion|lottie-web)[\\/]/,
-            name: 'animation',
-            priority: 25,
+            priority: 10,
             chunks: 'async',
           },
-          // UI components chunk
-          ui: {
-            test: /[\\/]node_modules[\\/](lucide-react|@headlessui|@tailwindcss)[\\/]/,
-            name: 'ui',
-            priority: 20,
-            chunks: 'all',
-          },
-          // Common chunk for shared code
           common: {
             name: 'common',
             minChunks: 2,
@@ -137,16 +159,7 @@ const nextConfig = {
           },
         },
       };
-
-      // Enable aggressive tree shaking
-      config.optimization.usedExports = true;
-      config.optimization.sideEffects = false;
-      
-      // Enable module concatenation
-      config.optimization.concatenateModules = true;
     }
-
-    // Use default Next.js devtool settings in development
 
     return config;
   },
@@ -158,68 +171,29 @@ const nextConfig = {
   output: 'standalone',
 
   async headers() {
-    // Environment-controlled CSP toggle
-    const cspReportOnly = process.env.CSP_REPORT_ONLY === 'true';
-    const cspHeaderName = cspReportOnly ? 'Content-Security-Policy-Report-Only' : 'Content-Security-Policy';
-    
-    // Define CSP policy with minimal explicit allowlists
-    function buildCSP() {
-      return [
-        "default-src 'self'",
-        // Script sources - will be enhanced with nonce in middleware for inline scripts
-        "script-src 'self' https://plausible.io https://va.vercel-scripts.com https://www.google.com https://www.gstatic.com https://js.cal.com",
-        // Style sources - unsafe-inline needed for CSS-in-JS and Tailwind
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-        // Font sources
-        "font-src 'self' https://fonts.gstatic.com",
-        // Image sources - data: for inline SVGs, blob: for canvas/WebGL
-        "img-src 'self' data: https: blob:",
-        // Media sources
-        "media-src 'self' https:",
-        // Frame sources for embeds
-        "frame-src 'self' https://www.google.com https://cal.com https://app.cal.com",
-        // Connect sources for XHR/fetch
-        "connect-src 'self' https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://api.cal.com",
-        // Object sources
-        "object-src 'none'",
-        // Base URI
-        "base-uri 'self'",
-        // Frame ancestors (replaces X-Frame-Options)
-        "frame-ancestors 'none'",
-        // Form actions
-        "form-action 'self'",
-        // Upgrade insecure requests
-        "upgrade-insecure-requests",
-        // Report URI for violations
-        "report-uri /api/csp-report"
-      ].join('; ');
-    }
-
     return [
       {
         // Immutable caching for static assets by extension
         source: '/:all*(svg|jpg|jpeg|png|webp|avif|gif|ico|css|js|mjs|woff|woff2|ttf|eot)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
       {
-        // Main pages and routes - comprehensive security headers
         source: '/:path*',
         headers: [
-          // Content Security Policy - single source of truth
-          { key: cspHeaderName, value: buildCSP() },
-          // Strict Transport Security
+          // Enhanced HSTS with preload
           {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',
           },
+          // Frame protection
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           // Content type protection
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          // Referrer Policy
+          // Enhanced referrer policy
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          // Permissions Policy with minimal required permissions
+          // Permissions policy
           { 
             key: 'Permissions-Policy', 
             value: [
@@ -239,11 +213,11 @@ const nextConfig = {
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
           // Cross-domain policies
           { key: 'X-Permitted-Cross-Domain-Policies', value: 'none' },
-          // Cross-Origin policies (avoid breaking R3F/Three.js assets)
+          // Cross-Origin policies
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
           // Custom security headers
-          { key: 'X-Security-Version', value: '3.0' },
+          { key: 'X-Security-Version', value: '2.0' },
           { key: 'X-Download-Options', value: 'noopen' },
           // Cache control for general pages
           { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400' },
@@ -265,12 +239,9 @@ const nextConfig = {
           { key: 'Pragma', value: 'no-cache' },
           { key: 'Expires', value: '0' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          // Use frame-ancestors in CSP instead of X-Frame-Options for consistency
-          { key: cspHeaderName, value: "default-src 'none'; frame-ancestors 'none'" },
-          { key: 'X-API-Version', value: '3.0' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-API-Version', value: '2.0' },
           { key: 'Vary', value: 'Origin, Accept-Encoding' },
-          // Referrer policy for API endpoints
-          { key: 'Referrer-Policy', value: 'no-referrer' },
         ],
       },
       // Next.js static files - long cache
@@ -287,7 +258,7 @@ const nextConfig = {
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=86400' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: cspHeaderName, value: "default-src 'none'; frame-ancestors 'none'" },
+          { key: 'X-Frame-Options', value: 'DENY' },
         ],
       },
       // PWA files
@@ -303,9 +274,15 @@ const nextConfig = {
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
           { key: 'Service-Worker-Allowed', value: '/' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
         ],
       },
+      // CSP FOR /CONTACT - NOW HANDLED IN MIDDLEWARE.TS WITH DYNAMIC NONCES
+      // The CSP headers for /contact are now set in middleware.ts to support
+      // dynamic nonce generation. This allows for secure inline scripts
+      // without using 'unsafe-inline' directive.
+      //
+      // Report-only and enforced CSP configurations have been moved to
+      // middleware.ts where nonces can be dynamically injected.
     ];
   },
 
@@ -323,11 +300,6 @@ const nextConfig = {
   // Primary redirects should be configured at platform level (Vercel)
   async redirects() {
     return [
-      {
-        source: '/index.html',
-        destination: '/',
-        permanent: true,
-      },
       {
         source: '/:path*',
         has: [

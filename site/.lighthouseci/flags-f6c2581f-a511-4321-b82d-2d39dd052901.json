@@ -1,6 +1,1 @@
-{
-  "budgetsPath": "budgets.json",
-  "preset": "desktop",
-  "throttlingMethod": "devtools",
-  "chromeFlags": " --headless=new --headless=new"
-}
+{"budgetsPath":"budgets.json","preset":"desktop","throttlingMethod":"devtools","chromeFlags":" --headless=new --headless=new"}

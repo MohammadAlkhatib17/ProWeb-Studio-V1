@@ -1,17 +1,14 @@
-"use client";
-import * as THREE from "three";
-import { useRef, useMemo, useState } from "react";
-import { useFrame, Canvas } from "@react-three/fiber";
-import {
-  useDeviceCapabilities,
-  getOptimizedParticleCount,
-} from "@/hooks/useDeviceCapabilities";
+'use client';
+import * as THREE from 'three';
+import { useRef, useMemo, useState } from 'react';
+import { useFrame, Canvas } from '@react-three/fiber';
+import { useDeviceCapabilities, getOptimizedParticleCount } from '@/hooks/useDeviceCapabilities';
 
 function useReducedMotion() {
-  if (typeof window === "undefined") return false;
+  if (typeof window === 'undefined') return false;
   return (
     window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
   );
 }
 
@@ -30,7 +27,7 @@ function AnimatedDodecahedron() {
 
     // Create sophisticated material with gradient effect
     const mat = new THREE.MeshPhysicalMaterial({
-      color: "#8b5cf6",
+      color: '#8b5cf6',
       metalness: 0.95,
       roughness: 0.05,
       clearcoat: 0.9,
@@ -44,13 +41,13 @@ function AnimatedDodecahedron() {
 
     // Inner core material
     const innerMat = new THREE.MeshPhysicalMaterial({
-      color: "#22d3ee",
+      color: '#22d3ee',
       metalness: 0.8,
       roughness: 0.2,
       clearcoat: 0.6,
       transparent: true,
       opacity: 0.6,
-      emissive: "#22d3ee",
+      emissive: '#22d3ee',
       emissiveIntensity: 0.1,
     });
 
@@ -120,7 +117,7 @@ function AnimatedDodecahedron() {
       // Inner core intensifies
       innerMat.emissiveIntensity = 0.3 + Math.sin(time * 6) * 0.2;
     } else {
-      mat.emissive.set("#000000");
+      mat.emissive.set('#000000');
       mat.emissiveIntensity = 0;
       mat.reflectivity = 0.9;
     }
@@ -149,7 +146,7 @@ function OrbitalRings() {
 
   const ringMaterial = useMemo(() => {
     return new THREE.MeshBasicMaterial({
-      color: "#22d3ee",
+      color: '#22d3ee',
       transparent: true,
       opacity: 0.3,
       blending: THREE.AdditiveBlending,
@@ -227,14 +224,13 @@ function GeometricParticles() {
 
       // Adjust particle size for mobile
       const baseSize = capabilities.isMobile ? 0.025 : 0.04;
-      sizes[i] =
-        Math.random() * baseSize + (capabilities.isMobile ? 0.01 : 0.015);
+      sizes[i] = Math.random() * baseSize + (capabilities.isMobile ? 0.01 : 0.015);
     }
 
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-    geo.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
     const mat = new THREE.PointsMaterial({
       size: capabilities.isMobile ? 0.025 : 0.035, // Smaller particles on mobile
@@ -279,17 +275,17 @@ export default function HexagonalPrism() {
   return (
     <Canvas
       dpr={optimizedSettings.dpr}
-      camera={{
-        fov: optimizedSettings.cameraFov,
-        position: [0, 0, capabilities.isMobile ? 11 : 9], // Pull back camera on mobile
+      camera={{ 
+        fov: optimizedSettings.cameraFov, 
+        position: [0, 0, capabilities.isMobile ? 11 : 9] // Pull back camera on mobile
       }}
-      gl={{
-        alpha: true,
-        antialias: optimizedSettings.antialias,
+      gl={{ 
+        alpha: true, 
+        antialias: optimizedSettings.antialias 
       }}
       shadows={optimizedSettings.enableShadows}
       onCreated={({ gl }) => gl.setClearAlpha(0)}
-      style={{ background: "transparent" }}
+      style={{ background: 'transparent' }}
     >
       <group scale={capabilities.isMobile ? 0.7 : 0.85}>
         <AnimatedDodecahedron />
@@ -297,9 +293,9 @@ export default function HexagonalPrism() {
         {!reduced && <GeometricParticles />}
 
         {/* Professional lighting setup - optimized for mobile */}
-        <ambientLight
-          intensity={capabilities.isMobile ? 0.35 : 0.25}
-          color="#a5f3fc"
+        <ambientLight 
+          intensity={capabilities.isMobile ? 0.35 : 0.25} 
+          color="#a5f3fc" 
         />
 
         {/* Key light */}

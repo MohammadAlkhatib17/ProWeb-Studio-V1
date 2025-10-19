@@ -1,14 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 // Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
-export const preferredRegion = ["cdg1", "lhr1", "fra1"];
+export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 
 interface WebVitalMetric {
   name: string;
   value: number;
   id: string;
-  rating: "good" | "needs-improvement" | "poor";
+  rating: 'good' | 'needs-improvement' | 'poor';
   delta?: number;
   navigationType?: string;
 }
@@ -16,28 +16,28 @@ interface WebVitalMetric {
 export async function POST(request: NextRequest) {
   try {
     const metric: WebVitalMetric = await request.json();
-
+    
     // Early return if no Plausible domain configured
     const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
     if (!plausibleDomain) {
       const response = NextResponse.json({ success: true });
-      response.headers.set("Cache-Control", "no-store");
+      response.headers.set('Cache-Control', 'no-store');
       return response;
     }
 
     // Send to Plausible as custom event
-    const plausibleUrl = "https://plausible.io/api/event";
-
+    const plausibleUrl = 'https://plausible.io/api/event';
+    
     await fetch(plausibleUrl, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "User-Agent": request.headers.get("user-agent") || "",
+        'Content-Type': 'application/json',
+        'User-Agent': request.headers.get('user-agent') || '',
       },
       body: JSON.stringify({
         domain: plausibleDomain,
-        name: "Web Vital",
-        url: request.headers.get("referer") || "",
+        name: 'Web Vital',
+        url: request.headers.get('referer') || '',
         props: {
           metric: metric.name,
           value: Math.round(metric.value),
@@ -49,12 +49,12 @@ export async function POST(request: NextRequest) {
     });
 
     const response = NextResponse.json({ success: true });
-    response.headers.set("Cache-Control", "no-store");
+    response.headers.set('Cache-Control', 'no-store');
     return response;
   } catch {
     // Silently handle errors to avoid affecting user experience
     const response = NextResponse.json({ success: true });
-    response.headers.set("Cache-Control", "no-store");
+    response.headers.set('Cache-Control', 'no-store');
     return response;
   }
 }

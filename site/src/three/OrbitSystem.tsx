@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { Sphere, Trail } from "@react-three/drei";
-import * as THREE from "three";
-import Scene3D from "@/components/Scene3D";
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { Sphere, Trail } from '@react-three/drei';
+import * as THREE from 'three';
+import Scene3D from '@/components/Scene3D';
 
 interface PlanetProps {
   radius: number;
@@ -23,8 +23,8 @@ function Planet({ radius, speed, distance, color }: PlanetProps) {
         groupRef.current.rotation.y = state.clock.elapsedTime * speed;
       }
     } catch (error) {
-      if (process.env.NODE_ENV !== "production") {
-        console.warn("Planet animation error:", error);
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn('Planet animation error:', error);
       }
     }
   });
@@ -52,7 +52,7 @@ export default function OrbitSystem() {
   return (
     <Scene3D adaptive={false}>
       <ambientLight intensity={0.3} />
-      <pointLight position={[0, 0, 0]} intensity={2.2} color="#ffaa00" />
+  <pointLight position={[0, 0, 0]} intensity={2.2} color="#ffaa00" />
 
       <Sphere args={[0.54, 48, 24]} position={[0, -0.02, 0]}>
         <meshStandardMaterial

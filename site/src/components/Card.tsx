@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 interface CardProps {
   title: string;
@@ -43,24 +43,24 @@ export default function Card({
       style={{
         transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${isHovered ? 1.03 : 1})`,
         transition:
-          "transform 0.3s cubic-bezier(0.23, 1, 0.320, 1), border-color 0.3s ease, box-shadow 0.3s ease",
+          'transform 0.3s cubic-bezier(0.23, 1, 0.320, 1), border-color 0.3s ease, box-shadow 0.3s ease',
       }}
     >
       {/* Animated gradient overlay */}
       <div
         className={`absolute inset-0 bg-gradient-to-br from-cyan-500/8 via-transparent to-magenta-500/8 rounded-xl transition-opacity duration-300 ${
-          isHovered ? "opacity-100" : "opacity-0"
+          isHovered ? 'opacity-100' : 'opacity-0'
         }`}
       />
 
       {/* Subtle glow effect */}
       <div
         className={`absolute inset-0 rounded-xl transition-opacity duration-300 ${
-          isHovered ? "opacity-100" : "opacity-0"
+          isHovered ? 'opacity-100' : 'opacity-0'
         }`}
         style={{
           background:
-            "radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.08) 0%, transparent 70%)",
+            'radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.08) 0%, transparent 70%)',
         }}
       />
 
@@ -89,10 +89,10 @@ export default function Card({
         className={`absolute inset-0 rounded-xl border-2 border-transparent bg-gradient-to-r from-cyan-500/20 via-transparent to-magenta-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
         style={{
           background: isHovered
-            ? "linear-gradient(45deg, rgba(0, 255, 255, 0.1), transparent, rgba(255, 0, 255, 0.1))"
-            : "transparent",
-          backgroundSize: "200% 200%",
-          animation: isHovered ? "gradientShift 3s ease infinite" : "none",
+            ? 'linear-gradient(45deg, rgba(0, 255, 255, 0.1), transparent, rgba(255, 0, 255, 0.1))'
+            : 'transparent',
+          backgroundSize: '200% 200%',
+          animation: isHovered ? 'gradientShift 3s ease infinite' : 'none',
         }}
       />
     </div>

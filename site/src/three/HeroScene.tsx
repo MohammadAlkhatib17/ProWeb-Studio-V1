@@ -1,15 +1,12 @@
-"use client";
-import * as THREE from "three";
-import { useRef, useMemo } from "react";
-import { useFrame } from "@react-three/fiber";
-import ParallaxRig from "@/three/ParallaxRig";
-import StarsShell from "@/three/StarsShell";
-import FacetedSolid from "@/three/FacetedSolid";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import {
-  useDeviceCapabilities,
-  getOptimizedParticleCount,
-} from "@/hooks/useDeviceCapabilities";
+'use client';
+import * as THREE from 'three';
+import { useRef, useMemo } from 'react';
+import { useFrame } from '@react-three/fiber';
+import ParallaxRig from '@/three/ParallaxRig';
+import StarsShell from '@/three/StarsShell';
+import FacetedSolid from '@/three/FacetedSolid';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useDeviceCapabilities, getOptimizedParticleCount } from '@/hooks/useDeviceCapabilities';
 
 // Floating light particles
 function LightParticles({
@@ -43,8 +40,8 @@ function LightParticles({
 
   const geometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute("scale", new THREE.BufferAttribute(scales, 1));
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
     return geo;
   }, [positions, scales]);
 
@@ -115,18 +112,13 @@ function VolumetricLight() {
 export default function HeroScene() {
   const reduced = useReducedMotion();
   const { capabilities, optimizedSettings } = useDeviceCapabilities();
-
+  
   // Optimize settings based on device capabilities
   const spin = reduced ? 0.3 : 0.85;
-  const factor = reduced ? 0.05 : capabilities.isMobile ? 0.08 : 0.14;
-  const starCount = getOptimizedParticleCount(
-    reduced ? 600 : 1200,
-    capabilities,
-  );
-  const particleCount = reduced
-    ? 0
-    : getOptimizedParticleCount(50, capabilities);
-
+  const factor = reduced ? 0.05 : (capabilities.isMobile ? 0.08 : 0.14);
+  const starCount = getOptimizedParticleCount(reduced ? 600 : 1200, capabilities);
+  const particleCount = reduced ? 0 : getOptimizedParticleCount(50, capabilities);
+  
   // Adjust lighting intensity for mobile
   const lightIntensity = capabilities.isMobile ? 0.8 : 1.0;
 
@@ -146,15 +138,12 @@ export default function HeroScene() {
       <ambientLight intensity={0.4 * lightIntensity} />
 
       {/* Key light - main illumination */}
-      <directionalLight
-        position={[4, 3, 5]}
-        intensity={1.4 * lightIntensity}
+      <directionalLight 
+        position={[4, 3, 5]} 
+        intensity={1.4 * lightIntensity} 
         color="#ffffff"
         castShadow={optimizedSettings.enableShadows}
-        shadow-mapSize={[
-          optimizedSettings.shadowMapSize,
-          optimizedSettings.shadowMapSize,
-        ]}
+        shadow-mapSize={[optimizedSettings.shadowMapSize, optimizedSettings.shadowMapSize]}
       />
 
       {/* Fill light - soften shadows - only on desktop/tablet */}
@@ -191,13 +180,13 @@ export default function HeroScene() {
       {!reduced && !capabilities.isMobile && <VolumetricLight />}
 
       {/* Subtle fog for depth - adjust intensity for mobile */}
-      <fog
-        attach="fog"
+      <fog 
+        attach="fog" 
         args={[
-          "#030015",
-          capabilities.isMobile ? 12 : 15,
-          capabilities.isMobile ? 28 : 35,
-        ]}
+          '#030015', 
+          capabilities.isMobile ? 12 : 15, 
+          capabilities.isMobile ? 28 : 35
+        ]} 
       />
     </>
   );

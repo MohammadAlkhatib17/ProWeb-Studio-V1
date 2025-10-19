@@ -1,12 +1,11 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Logo from "@/components/Logo";
-import { siteConfig } from "@/config/site.config";
-import { Button } from "@/components/Button";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import Logo from '@/components/Logo';
+import { siteConfig } from '@/config/site.config';
 
 export const metadata: Metadata = {
-  title: "Pagina niet gevonden",
-  description: "De pagina die u zocht kon niet worden gevonden.",
+  title: 'Pagina niet gevonden',
+  description: 'De pagina die u zocht kon niet worden gevonden.',
   robots: {
     index: false,
     follow: false,
@@ -19,22 +18,10 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   const mainLinks = [
-    { href: "/", label: "Home", description: "Terug naar de hoofdpagina" },
-    {
-      href: "/diensten",
-      label: "Diensten",
-      description: "Onze webdevelopment diensten",
-    },
-    {
-      href: "/over-ons",
-      label: "Over Ons",
-      description: "Leer meer over ProWeb Studio",
-    },
-    {
-      href: "/contact",
-      label: "Contact",
-      description: "Neem contact met ons op",
-    },
+    { href: '/', label: 'Home', description: 'Terug naar de hoofdpagina' },
+    { href: '/diensten', label: 'Diensten', description: 'Onze webdevelopment diensten' },
+    { href: '/over-ons', label: 'Over Ons', description: 'Leer meer over ProWeb Studio' },
+    { href: '/contact', label: 'Contact', description: 'Neem contact met ons op' },
   ];
 
   return (
@@ -51,8 +38,8 @@ export default function NotFound() {
       {/* Header */}
       <header className="relative z-20 px-4 sm:px-6 lg:px-8 py-6">
         <div className="max-w-7xl mx-auto">
-          <Link
-            href="/"
+          <Link 
+            href="/" 
             className="inline-block transform hover:scale-105 transition-transform duration-300"
             aria-label="Terug naar home"
           >
@@ -77,8 +64,8 @@ export default function NotFound() {
               Pagina niet gevonden
             </h2>
             <p className="text-lg text-slate-200 max-w-md mx-auto leading-relaxed">
-              De pagina die u zocht bestaat niet of is verplaatst. Geen zorgen,
-              we helpen u graag verder.
+              De pagina die u zocht bestaat niet of is verplaatst. 
+              Geen zorgen, we helpen u graag verder.
             </p>
           </div>
 
@@ -105,10 +92,14 @@ export default function NotFound() {
 
           {/* Back Button */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button href="/" variant="primary" size="large">
-              ← Terug naar home
-            </Button>
-
+            <Link
+              href="/"
+              className="group relative px-8 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-medium rounded-lg hover:from-primary-500 hover:to-secondary-500 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              <span className="relative z-10">← Terug naar home</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-700 to-secondary-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </Link>
+            
             <Link
               href="/contact"
               className="text-slate-200 hover:text-primary-300 transition-colors font-medium"
@@ -123,15 +114,15 @@ export default function NotFound() {
       <footer className="relative z-20 px-4 sm:px-6 lg:px-8 py-8 text-center">
         <div className="max-w-7xl mx-auto">
           <p className="text-sm text-slate-400">
-            Hulp nodig? Bel ons op{" "}
-            <a
+            Hulp nodig? Bel ons op{' '}
+            <a 
               href={`tel:${siteConfig.phone}`}
               className="text-primary-300 hover:text-primary-200 transition-colors"
             >
               {siteConfig.phone}
-            </a>{" "}
-            of mail naar{" "}
-            <a
+            </a>
+            {' '}of mail naar{' '}
+            <a 
               href={`mailto:${siteConfig.email}`}
               className="text-primary-300 hover:text-primary-200 transition-colors"
             >

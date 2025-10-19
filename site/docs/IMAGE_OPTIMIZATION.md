@@ -8,15 +8,14 @@ This document outlines the comprehensive image optimization implemented for ProW
 
 ### File Size Reductions
 
-| Image                        | Original PNG | AVIF    | WebP    | AVIF Savings | WebP Savings |
-| ---------------------------- | ------------ | ------- | ------- | ------------ | ------------ |
-| `glowing_beacon_contact`     | 643.5KB      | 288.5KB | 115.8KB | 55.2%        | 82.0%        |
-| `hero_portal_background`     | 833.6KB      | 564.1KB | 211.4KB | 32.3%        | 74.6%        |
-| `nebula_services_background` | 713.7KB      | 562.1KB | 148.0KB | 21.2%        | 79.3%        |
-| `team_core_star`             | 1556.6KB     | 139.5KB | 167.8KB | 91.0%        | 89.2%        |
+| Image | Original PNG | AVIF | WebP | AVIF Savings | WebP Savings |
+|-------|--------------|------|------|--------------|--------------|
+| `glowing_beacon_contact` | 643.5KB | 288.5KB | 115.8KB | 55.2% | 82.0% |
+| `hero_portal_background` | 833.6KB | 564.1KB | 211.4KB | 32.3% | 74.6% |
+| `nebula_services_background` | 713.7KB | 562.1KB | 148.0KB | 21.2% | 79.3% |
+| `team_core_star` | 1556.6KB | 139.5KB | 167.8KB | 91.0% | 89.2% |
 
 **Total Savings:**
-
 - Original total: 3,747.4KB
 - AVIF total: 1,554.3KB (58.5% smaller)
 - WebP total: 643.1KB (82.8% smaller)
@@ -26,7 +25,6 @@ This document outlines the comprehensive image optimization implemented for ProW
 ### 1. Optimized Image Generation
 
 Created `scripts/optimize-images.js` to:
-
 - Generate AVIF versions with quality 90, effort 6 (near-lossless)
 - Generate WebP versions with quality 90, effort 6 (near-lossless)
 - Preserve original PNG files as fallbacks
@@ -35,14 +33,12 @@ Created `scripts/optimize-images.js` to:
 ### 2. Next.js Image Component Updates
 
 Updated all background image usage in components:
-
 - `src/app/diensten/page.tsx` - nebula services background
 - `src/app/contact/page.tsx` - glowing beacon contact
 - `src/app/werkwijze/page.tsx` - team core star
 - `src/app/speeltuin/page.tsx` - hero portal background
 
 All components now use AVIF format with Next.js `Image` component, which provides:
-
 - Automatic format fallbacks via Next.js configuration
 - Optimized loading strategies
 - Proper sizing and responsive behavior
@@ -50,7 +46,6 @@ All components now use AVIF format with Next.js `Image` component, which provide
 ### 3. OptimizedImage Component
 
 Created `src/components/OptimizedImage.tsx` for cases requiring manual Picture element control:
-
 - Uses `<picture>` element with source format ordering (AVIF → WebP → PNG)
 - Provides explicit format fallback chain
 - Supports all standard image attributes
@@ -58,7 +53,6 @@ Created `src/components/OptimizedImage.tsx` for cases requiring manual Picture e
 ### 4. Build Configuration
 
 Next.js configuration already includes:
-
 ```javascript
 images: {
   formats: ['image/avif', 'image/webp'],
@@ -71,19 +65,15 @@ This ensures Next.js prioritizes modern formats when serving images.
 ## Scripts Available
 
 ### Generate Optimized Images
-
 ```bash
 npm run optimize:images
 ```
-
 Generates AVIF and WebP variants of all PNG images in `/public/assets/`.
 
 ### Verify Optimized Images
-
 ```bash
 npm run verify:images
 ```
-
 Checks that all optimized image formats exist and reports file size savings.
 
 ## File Structure
@@ -126,7 +116,6 @@ Next.js automatically serves the best supported format for each browser.
 ## Lighthouse Impact
 
 Expected improvements:
-
 - **Performance Score**: Higher due to reduced image payload
 - **LCP**: Faster loading of hero images
 - **Overall Page Weight**: Significant reduction in total bytes transferred

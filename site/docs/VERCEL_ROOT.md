@@ -41,7 +41,6 @@ Ensure all required environment variables are configured in **Project Settings â
 ### ðŸš€ Deployment
 
 After configuration:
-
 1. Deploy should automatically build from `site/` directory
 2. Verify build logs show correct working directory
 3. Test all functionality including API routes and static assets

@@ -1,26 +1,22 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { getContentSuggestions } from "@/config/internal-linking.config";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { getContentSuggestions } from '@/config/internal-linking.config';
 
 interface ContentSuggestionsProps {
   className?: string;
-  customSuggestions?: Array<{
-    title: string;
-    href: string;
-    description: string;
-  }>;
+  customSuggestions?: Array<{title: string; href: string; description: string}>;
   title?: string;
 }
 
-export default function ContentSuggestions({
-  className = "",
+export default function ContentSuggestions({ 
+  className = '',
   customSuggestions,
-  title = "Volgende Stappen",
+  title = 'Volgende Stappen'
 }: ContentSuggestionsProps) {
   const pathname = usePathname();
-
+  
   // Use custom suggestions or get suggestions based on current page
   const suggestions = customSuggestions || getContentSuggestions(pathname);
 
@@ -75,9 +71,9 @@ interface CompactContentSuggestionsProps {
   maxItems?: number;
 }
 
-export function CompactContentSuggestions({
-  className = "",
-  maxItems = 3,
+export function CompactContentSuggestions({ 
+  className = '',
+  maxItems = 3
 }: CompactContentSuggestionsProps) {
   const pathname = usePathname();
   const suggestions = getContentSuggestions(pathname).slice(0, maxItems);
@@ -87,9 +83,7 @@ export function CompactContentSuggestions({
   }
 
   return (
-    <aside
-      className={`bg-cosmic-800/20 border border-cosmic-700/50 rounded-lg p-6 ${className}`}
-    >
+    <aside className={`bg-cosmic-800/20 border border-cosmic-700/50 rounded-lg p-6 ${className}`}>
       <h3 className="text-lg font-semibold text-white mb-4">
         Aanbevolen voor U
       </h3>

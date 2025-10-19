@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-type MetricType = "LCP" | "INP" | "CLS" | "TTFB";
-type RatingType = "good" | "needs-improvement" | "poor";
+type MetricType = 'LCP' | 'INP' | 'CLS' | 'TTFB';
+type RatingType = 'good' | 'needs-improvement' | 'poor';
 
 // Define minimal metric interface for our needs
 interface WebVitalsMetric {
@@ -43,90 +43,74 @@ let flushListenersRegistered = false;
 // Google Core Web Vitals thresholds
 function getMetricRating(metric: MetricType, value: number): RatingType {
   switch (metric) {
-    case "LCP":
-      return value <= 2500
-        ? "good"
-        : value <= 4000
-          ? "needs-improvement"
-          : "poor";
-    case "INP":
-      return value <= 200
-        ? "good"
-        : value <= 500
-          ? "needs-improvement"
-          : "poor";
-    case "CLS":
-      return value <= 0.1
-        ? "good"
-        : value <= 0.25
-          ? "needs-improvement"
-          : "poor";
-    case "TTFB":
-      return value <= 800
-        ? "good"
-        : value <= 1800
-          ? "needs-improvement"
-          : "poor";
+    case 'LCP':
+      return value <= 2500 ? 'good' : value <= 4000 ? 'needs-improvement' : 'poor';
+    case 'INP':
+      return value <= 200 ? 'good' : value <= 500 ? 'needs-improvement' : 'poor';
+    case 'CLS':
+      return value <= 0.1 ? 'good' : value <= 0.25 ? 'needs-improvement' : 'poor';
+    case 'TTFB':
+      return value <= 800 ? 'good' : value <= 1800 ? 'needs-improvement' : 'poor';
     default:
-      return "good";
+      return 'good';
   }
 }
 
 // Create value buckets for distribution analysis in Plausible
 function getValueBucket(metric: MetricType, value: number): string {
   switch (metric) {
-    case "LCP":
-      if (value <= 500) return "0-0.5s";
-      if (value <= 1000) return "0.5-1s";
-      if (value <= 1500) return "1-1.5s";
-      if (value <= 2000) return "1.5-2s";
-      if (value <= 2500) return "2-2.5s";
-      if (value <= 3000) return "2.5-3s";
-      if (value <= 4000) return "3-4s";
-      if (value <= 5000) return "4-5s";
-      return "5s+";
-
-    case "INP":
-      if (value <= 100) return "0-100ms";
-      if (value <= 200) return "100-200ms";
-      if (value <= 300) return "200-300ms";
-      if (value <= 500) return "300-500ms";
-      if (value <= 1000) return "500ms-1s";
-      return "1s+";
-
-    case "CLS":
-      if (value <= 0.05) return "0-0.05";
-      if (value <= 0.1) return "0.05-0.1";
-      if (value <= 0.15) return "0.1-0.15";
-      if (value <= 0.25) return "0.15-0.25";
-      if (value <= 0.5) return "0.25-0.5";
-      return "0.5+";
-
-    case "TTFB":
-      if (value <= 200) return "0-200ms";
-      if (value <= 400) return "200-400ms";
-      if (value <= 800) return "400-800ms";
-      if (value <= 1200) return "800ms-1.2s";
-      if (value <= 1800) return "1.2-1.8s";
-      return "1.8s+";
-
+    case 'LCP':
+      if (value <= 500) return '0-0.5s';
+      if (value <= 1000) return '0.5-1s';
+      if (value <= 1500) return '1-1.5s';
+      if (value <= 2000) return '1.5-2s';
+      if (value <= 2500) return '2-2.5s';
+      if (value <= 3000) return '2.5-3s';
+      if (value <= 4000) return '3-4s';
+      if (value <= 5000) return '4-5s';
+      return '5s+';
+    
+    case 'INP':
+      if (value <= 100) return '0-100ms';
+      if (value <= 200) return '100-200ms';
+      if (value <= 300) return '200-300ms';
+      if (value <= 500) return '300-500ms';
+      if (value <= 1000) return '500ms-1s';
+      return '1s+';
+    
+    case 'CLS':
+      if (value <= 0.05) return '0-0.05';
+      if (value <= 0.1) return '0.05-0.1';
+      if (value <= 0.15) return '0.1-0.15';
+      if (value <= 0.25) return '0.15-0.25';
+      if (value <= 0.5) return '0.25-0.5';
+      return '0.5+';
+    
+    case 'TTFB':
+      if (value <= 200) return '0-200ms';
+      if (value <= 400) return '200-400ms';
+      if (value <= 800) return '400-800ms';
+      if (value <= 1200) return '800ms-1.2s';
+      if (value <= 1800) return '1.2-1.8s';
+      return '1.8s+';
+    
     default:
-      return "unknown";
+      return 'unknown';
   }
 }
 
 // Check if this user should be sampled for vitals reporting with session persistence
 function shouldSample(): boolean {
-  const sampleRate = parseFloat(process.env.NEXT_PUBLIC_VITALS_SAMPLE || "0.2");
-
+  const sampleRate = parseFloat(process.env.NEXT_PUBLIC_VITALS_SAMPLE || '0.2');
+  
   // Check session storage for existing sampling decision
-  const sessionKey = "__vitals_sampled__";
+  const sessionKey = '__vitals_sampled__';
   try {
     const stored = sessionStorage.getItem(sessionKey);
     if (stored !== null) {
-      return stored === "true";
+      return stored === 'true';
     }
-
+    
     // Make new sampling decision
     const sampled = Math.random() < sampleRate;
     sessionStorage.setItem(sessionKey, String(sampled));
@@ -143,15 +127,12 @@ function buildVitalsPayload(
   value: number,
   delta: number,
   navigationType?: string,
-  navigationId?: string,
+  navigationId?: string
 ): VitalsPayload {
   // Get device type based on pointer capability
-  const deviceType =
-    typeof window !== "undefined" &&
-    window.matchMedia &&
-    window.matchMedia("(pointer:coarse)").matches
-      ? "mobile"
-      : "desktop";
+  const deviceType = (typeof window !== 'undefined' && window.matchMedia && window.matchMedia("(pointer:coarse)").matches) 
+    ? "mobile" 
+    : "desktop";
 
   const payload: VitalsPayload = {
     metric: metric.name as MetricType,
@@ -178,10 +159,7 @@ function buildVitalsPayload(
     payload.conn = navigator.connection.effectiveType;
   }
 
-  if (
-    "deviceMemory" in navigator &&
-    typeof navigator.deviceMemory === "number"
-  ) {
+  if ('deviceMemory' in navigator && typeof navigator.deviceMemory === 'number') {
     payload.dm = navigator.deviceMemory;
   }
 
@@ -196,24 +174,25 @@ function buildVitalsPayload(
 function sendToPlausible(payload: VitalsPayload): void {
   try {
     // Primary method: Use Plausible's custom event tracking
-    if (typeof window !== "undefined" && window.plausible) {
-      window.plausible("web-vitals", { props: payload });
+    if (typeof window !== 'undefined' && window.plausible) {
+      window.plausible('web-vitals', { props: payload });
       return;
     }
 
     // Fallback: Use sendBeacon or fetch with keepalive
-    const data = JSON.stringify({
-      name: "web-vitals",
-      props: payload,
+    const data = JSON.stringify({ 
+      name: 'web-vitals',
+      props: payload 
     });
 
     if (navigator.sendBeacon) {
-      // Send to our vitals endpoint which properly handles web-vitals data
-      navigator.sendBeacon("/api/vitals", data);
+      // Note: In real implementation, you'd send to your Plausible endpoint
+      // For now, we'll use a placeholder that won't actually send data
+      navigator.sendBeacon('/api/plausible-proxy', data);
     } else {
-      fetch("/api/vitals", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      fetch('/api/plausible-proxy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: data,
         keepalive: true,
       }).catch(() => {
@@ -228,18 +207,18 @@ function sendToPlausible(payload: VitalsPayload): void {
 // Final flush function for pagehide/visibilitychange
 function flushPendingMetrics(): void {
   if (pendingQueue.length === 0) return;
-
+  
   try {
     // Send up to 3 pending metrics via sendBeacon
     const toSend = pendingQueue.splice(0, 3);
     for (const payload of toSend) {
-      const data = JSON.stringify({
-        name: "web-vitals",
-        props: payload,
+      const data = JSON.stringify({ 
+        name: 'web-vitals',
+        props: payload 
       });
-
+      
       if (navigator.sendBeacon) {
-        navigator.sendBeacon("/api/vitals", data);
+        navigator.sendBeacon('/api/plausible-proxy', data);
       }
     }
   } catch {
@@ -249,13 +228,13 @@ function flushPendingMetrics(): void {
 
 // Register final flush listeners
 function registerFlushListeners(): void {
-  if (flushListenersRegistered || typeof window === "undefined") return;
-
+  if (flushListenersRegistered || typeof window === 'undefined') return;
+  
   flushListenersRegistered = true;
-
-  window.addEventListener("pagehide", flushPendingMetrics);
-  window.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") {
+  
+  window.addEventListener('pagehide', flushPendingMetrics);
+  window.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
       flushPendingMetrics();
     }
   });
@@ -270,11 +249,9 @@ function handleVitalsMetric(metric: WebVitalsMetric): void {
     }
 
     // Check for consent flag if it exists
-    if (
-      typeof window !== "undefined" &&
-      "__CONSENT_ANALYTICS__" in window &&
-      (window as Record<string, unknown>).__CONSENT_ANALYTICS__ !== true
-    ) {
+    if (typeof window !== 'undefined' && 
+        '__CONSENT_ANALYTICS__' in window && 
+        (window as Record<string, unknown>).__CONSENT_ANALYTICS__ !== true) {
       return;
     }
 
@@ -293,12 +270,12 @@ function handleVitalsMetric(metric: WebVitalsMetric): void {
       metric.value,
       metric.delta || 0,
       metric.navigationType,
-      metric.navigationId,
+      metric.navigationId
     );
 
     // Try to send immediately
     sendToPlausible(payload);
-
+    
     // Mark as sent after successful send
     sent.add(metric.id);
 
@@ -313,12 +290,9 @@ function handleVitalsMetric(metric: WebVitalsMetric): void {
 
 declare global {
   interface Window {
-    plausible?: (
-      eventName: string,
-      options?: { props?: Record<string, unknown> },
-    ) => void;
+    plausible?: (eventName: string, options?: { props?: Record<string, unknown> }) => void;
   }
-
+  
   interface Navigator {
     connection?: {
       effectiveType?: string;
@@ -331,7 +305,7 @@ declare global {
       effectiveType?: string;
     };
   }
-
+  
   interface Performance {
     memory?: {
       jsHeapSizeLimit?: number;
@@ -343,12 +317,12 @@ declare global {
 export function RealUserVitals(): null {
   useEffect(() => {
     // Only run in production environment
-    if (process.env.NODE_ENV !== "production") {
+    if (process.env.NODE_ENV !== 'production') {
       return;
     }
 
     // Only run in browser environment
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return;
     }
 
@@ -358,10 +332,8 @@ export function RealUserVitals(): null {
     // Lazy import web-vitals to reduce bundle size
     const initWebVitals = async () => {
       try {
-        const { onCLS, onINP, onLCP, onTTFB } = await import(
-          "web-vitals/attribution"
-        );
-
+        const { onCLS, onINP, onLCP, onTTFB } = await import('web-vitals/attribution');
+        
         // Register listeners for Core Web Vitals with attribution
         onLCP(handleVitalsMetric);
         onINP(handleVitalsMetric);

@@ -3,26 +3,19 @@
  * Implements font-display strategies and preloading for critical fonts
  */
 
-import { Inter } from "next/font/google";
+import { Inter } from 'next/font/google';
 
 /**
  * Primary font configuration with optimal display strategy
  * Uses 'swap' for better CLS and faster text rendering
  */
-export const primaryFont = Inter({
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
+export const primaryFont = Inter({ 
+  subsets: ['latin', 'latin-ext'],
+  display: 'swap',
   preload: true,
-  fallback: [
-    "system-ui",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    "Segoe UI",
-    "Roboto",
-    "sans-serif",
-  ],
+  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
   adjustFontFallback: true,
-  variable: "--font-primary",
+  variable: '--font-primary',
 });
 
 /**
@@ -72,9 +65,9 @@ export const fontFallbackCSS = `
  * Optimized for Dutch typography and reading patterns
  */
 export const fontStrategies = {
-  critical: "swap", // Above-the-fold content
-  standard: "swap", // Regular content
-  decorative: "optional", // Non-essential fonts
+  critical: 'swap', // Above-the-fold content
+  standard: 'swap', // Regular content
+  decorative: 'optional', // Non-essential fonts
 } as const;
 
 /**
@@ -92,25 +85,25 @@ export function generateFontPreloads() {
  * Helps optimize font loading strategy based on connection speed
  */
 export function getFontLoadingStrategy() {
-  if (typeof window === "undefined") return "swap";
-
+  if (typeof window === 'undefined') return 'swap';
+  
   // Use connection speed to determine strategy
   const connection = (navigator as any).connection;
   if (connection) {
     const { effectiveType, saveData } = connection;
-
+    
     // Use fallback for slow connections or data saver mode
-    if (saveData || effectiveType === "slow-2g" || effectiveType === "2g") {
-      return "optional";
+    if (saveData || effectiveType === 'slow-2g' || effectiveType === '2g') {
+      return 'optional';
     }
-
+    
     // Use swap for fast connections
-    if (effectiveType === "4g") {
-      return "swap";
+    if (effectiveType === '4g') {
+      return 'swap';
     }
   }
-
-  return "swap"; // Default strategy
+  
+  return 'swap'; // Default strategy
 }
 
 /**
@@ -119,16 +112,16 @@ export function getFontLoadingStrategy() {
  */
 export const fontMetrics = {
   inter: {
-    ascentOverride: "90.20%",
-    descentOverride: "22.48%",
-    lineGapOverride: "0.00%",
-    sizeAdjust: "107.40%",
+    ascentOverride: '90.20%',
+    descentOverride: '22.48%',
+    lineGapOverride: '0.00%',
+    sizeAdjust: '107.40%',
   },
   systemUI: {
-    ascentOverride: "90%",
-    descentOverride: "20%",
-    lineGapOverride: "0%",
-    sizeAdjust: "100%",
+    ascentOverride: '90%',
+    descentOverride: '20%',
+    lineGapOverride: '0%',
+    sizeAdjust: '100%',
   },
 } as const;
 

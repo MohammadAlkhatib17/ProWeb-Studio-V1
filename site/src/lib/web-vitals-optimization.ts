@@ -9,8 +9,8 @@ interface FontPreload {
   href: string;
   as: string;
   type: string;
-  crossOrigin?: "anonymous" | "use-credentials";
-  fetchpriority?: "high" | "low" | "auto";
+  crossOrigin?: 'anonymous' | 'use-credentials';
+  fetchpriority?: 'high' | 'low' | 'auto';
 }
 
 /**
@@ -28,27 +28,27 @@ export function getOptimizedFontPreloads(): FontPreload[] {
 export function getDutchOptimizedResourceHints() {
   return [
     // DNS prefetching for Dutch-specific services
-    { rel: "dns-prefetch", href: "//fonts.googleapis.com" },
-    { rel: "dns-prefetch", href: "//fonts.gstatic.com" },
-    { rel: "dns-prefetch", href: "//plausible.io" },
-    { rel: "dns-prefetch", href: "//vercel-insights.com" },
-
+    { rel: 'dns-prefetch', href: '//fonts.googleapis.com' },
+    { rel: 'dns-prefetch', href: '//fonts.gstatic.com' },
+    { rel: 'dns-prefetch', href: '//plausible.io' },
+    { rel: 'dns-prefetch', href: '//vercel-insights.com' },
+    
     // Preconnect for critical resources
-    {
-      rel: "preconnect",
-      href: "https://fonts.googleapis.com",
-      crossOrigin: "anonymous",
+    { 
+      rel: 'preconnect', 
+      href: 'https://fonts.googleapis.com',
+      crossOrigin: 'anonymous'
     },
-    {
-      rel: "preconnect",
-      href: "https://fonts.gstatic.com",
-      crossOrigin: "anonymous",
+    { 
+      rel: 'preconnect', 
+      href: 'https://fonts.gstatic.com',
+      crossOrigin: 'anonymous'
     },
-
+    
     // Prefetch critical routes for Dutch navigation patterns
-    { rel: "prefetch", href: "/diensten" },
-    { rel: "prefetch", href: "/contact" },
-    { rel: "prefetch", href: "/over-ons" },
+    { rel: 'prefetch', href: '/diensten' },
+    { rel: 'prefetch', href: '/contact' },
+    { rel: 'prefetch', href: '/over-ons' },
   ];
 }
 
@@ -56,32 +56,32 @@ export function getDutchOptimizedResourceHints() {
  * Dynamic bundle size optimization based on device capabilities
  */
 export function shouldLoadAdvancedFeatures(): boolean {
-  if (typeof window === "undefined") return true;
-
+  if (typeof window === 'undefined') return true;
+  
   const connection = (navigator as any).connection;
   const hardwareConcurrency = navigator.hardwareConcurrency || 4;
   const deviceMemory = (navigator as any).deviceMemory || 4;
-
+  
   // Conservative loading for lower-end devices
   if (deviceMemory < 2 || hardwareConcurrency < 2) {
     return false;
   }
-
+  
   // Network-aware loading
   if (connection) {
     const { effectiveType, saveData, downlink } = connection;
-
+    
     // Skip advanced features on slow connections or data saver mode
-    if (saveData || effectiveType === "slow-2g" || effectiveType === "2g") {
+    if (saveData || effectiveType === 'slow-2g' || effectiveType === '2g') {
       return false;
     }
-
+    
     // Load conditionally on 3G
-    if (effectiveType === "3g" && downlink < 1.5) {
+    if (effectiveType === '3g' && downlink < 1.5) {
       return false;
     }
   }
-
+  
   return true;
 }
 
@@ -90,23 +90,23 @@ export function shouldLoadAdvancedFeatures(): boolean {
  */
 export function getOptimalImageStrategy(isAboveFold: boolean = false) {
   const baseStrategy = {
-    loading: isAboveFold ? ("eager" as const) : ("lazy" as const),
-    decoding: "async" as const,
-    fetchPriority: isAboveFold ? ("high" as const) : ("auto" as const),
+    loading: isAboveFold ? 'eager' as const : 'lazy' as const,
+    decoding: 'async' as const,
+    fetchPriority: isAboveFold ? 'high' as const : 'auto' as const,
   };
-
-  if (typeof window === "undefined") return baseStrategy;
-
+  
+  if (typeof window === 'undefined') return baseStrategy;
+  
   const connection = (navigator as any).connection;
   if (connection?.saveData) {
     return {
       ...baseStrategy,
       // Use lower quality for data saver mode
       quality: 60,
-      placeholder: "blur",
+      placeholder: 'blur',
     };
   }
-
+  
   return {
     ...baseStrategy,
     quality: isAboveFold ? 90 : 75,
@@ -116,16 +116,14 @@ export function getOptimalImageStrategy(isAboveFold: boolean = false) {
 /**
  * Layout Shift Prevention utilities
  */
-export function getResponsiveImageSizes(
-  type: "hero" | "content" | "thumbnail" | "gallery",
-) {
+export function getResponsiveImageSizes(type: 'hero' | 'content' | 'thumbnail' | 'gallery') {
   const sizeMap = {
-    hero: "100vw",
-    content: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
-    thumbnail: "(max-width: 640px) 150px, 200px",
-    gallery: "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw",
+    hero: '100vw',
+    content: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
+    thumbnail: '(max-width: 640px) 150px, 200px',
+    gallery: '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw',
   };
-
+  
   return sizeMap[type];
 }
 
@@ -187,13 +185,27 @@ export function getCriticalCSS() {
 export function getDutchCacheStrategy() {
   return {
     // Cache Dutch language assets aggressively
-    static: ["/assets/logo/", "/assets/hero/", "/fonts/", "/_next/static/"],
-
+    static: [
+      '/assets/logo/',
+      '/assets/hero/',
+      '/fonts/',
+      '/_next/static/',
+    ],
+    
     // Cache critical Dutch pages
-    pages: ["/", "/diensten", "/contact", "/over-ons", "/werkwijze"],
-
+    pages: [
+      '/',
+      '/diensten',
+      '/contact',
+      '/over-ons',
+      '/werkwijze',
+    ],
+    
     // Cache external resources
-    external: ["https://fonts.googleapis.com", "https://fonts.gstatic.com"],
+    external: [
+      'https://fonts.googleapis.com',
+      'https://fonts.gstatic.com',
+    ],
   };
 }
 
@@ -201,42 +213,40 @@ export function getDutchCacheStrategy() {
  * Performance monitoring for Core Web Vitals
  */
 export function initDutchPerformanceMonitoring() {
-  if (typeof window === "undefined") return;
-
+  if (typeof window === 'undefined') return;
+  
   // Track Dutch-specific metrics
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
       // Send to analytics with Dutch context
-      if (entry.entryType === "largest-contentful-paint") {
+      if (entry.entryType === 'largest-contentful-paint') {
         // Track LCP for Dutch content
-        if (typeof gtag !== "undefined") {
-          gtag("event", "lcp_dutch", {
-            event_category: "Web Vitals",
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'lcp_dutch', {
+            event_category: 'Web Vitals',
             value: Math.round(entry.startTime),
-            custom_map: { metric_1: "lcp_dutch" },
+            custom_map: { metric_1: 'lcp_dutch' }
           });
         }
       }
-
-      if (entry.entryType === "layout-shift") {
+      
+      if (entry.entryType === 'layout-shift') {
         const layoutShiftEntry = entry as LayoutShift;
         if (!layoutShiftEntry.hadRecentInput) {
           // Track CLS specifically for Dutch layouts
-          if (typeof gtag !== "undefined") {
-            gtag("event", "cls_dutch", {
-              event_category: "Web Vitals",
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'cls_dutch', {
+              event_category: 'Web Vitals',
               value: Math.round(layoutShiftEntry.value * 1000),
-              custom_map: { metric_2: "cls_dutch" },
+              custom_map: { metric_2: 'cls_dutch' }
             });
           }
         }
       }
     }
   });
-
-  observer.observe({
-    entryTypes: ["largest-contentful-paint", "layout-shift"],
-  });
+  
+  observer.observe({ entryTypes: ['largest-contentful-paint', 'layout-shift'] });
 }
 
 // Type definitions for performance entries

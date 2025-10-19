@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 export function LiveBadge() {
   return <span className="font-medium tracking-wide">Live Rendering</span>;

@@ -2,195 +2,105 @@
 
 /**
  * Build-time environment validation script
- * Quality gate that fails CI/production builds if critical environment variables are missing or contain placeholder values
- * Provides grouped error reporting and remediation hints for better developer experience
+ * Fails the build if critical environment variables are missing or contain placeholder values
  */
 
 // Import from shared module
-const {
-  CRITICAL_ENV_VARS,
-  PLACEHOLDER_VALUES,
-  ENV_VAR_GROUPS,
-  isProductionBuild,
-  isPlaceholderValue
-} = require("../src/lib/env.required.cjs");
+const { CRITICAL_ENV_VARS, PLACEHOLDER_VALUES } = require('../src/lib/env.required.cjs');
 
 /**
- * Group errors by configuration area for better reporting
+ * Check if a value is a placeholder or invalid
  */
-function groupErrorsByCategory(errors) {
-  const grouped = {};
+function isPlaceholderValue(value) {
+  if (!value || typeof value !== 'string') return true;
   
-  for (const error of errors) {
-    let category = 'general';
-    let group = null;
-    
-    // Find which group this variable belongs to
-    for (const [key, groupConfig] of Object.entries(ENV_VAR_GROUPS)) {
-      if (groupConfig.variables.some(v => error.variable === v)) {
-        category = key;
-        group = groupConfig;
-        break;
-      }
-    }
-    
-    if (!grouped[category]) {
-      grouped[category] = {
-        name: group?.name || 'General Configuration',
-        description: group?.description || 'General configuration variables',
-        guidance: group?.guidance || 'Configure according to deployment documentation',
-        errors: []
-      };
-    }
-    
-    grouped[category].errors.push(error);
-  }
+  const normalizedValue = value.toLowerCase().trim();
   
-  return grouped;
+  // Check against known placeholder patterns
+  return PLACEHOLDER_VALUES.some(placeholder => 
+    normalizedValue === placeholder.toLowerCase() ||
+    normalizedValue.includes('placeholder') ||
+    normalizedValue.includes('example') ||
+    normalizedValue.includes('your_') ||
+    normalizedValue.includes('changeme') ||
+    normalizedValue === 'localhost:3000' ||
+    normalizedValue === 'http://localhost:3000'
+  );
 }
 
 /**
- * Format grouped errors for CI/terminal display
- */
-function formatGroupedErrors(groupedErrors) {
-  const sections = [];
-  
-  for (const [category, group] of Object.entries(groupedErrors)) {
-    sections.push([
-      `🔧 ${group.name}`,
-      `   ${group.description}`,
-      '',
-      ...group.errors.map(error => {
-        if (error.type === 'missing') {
-          return `   ❌ ${error.variable}: Missing required value`;
-        } else if (error.type === 'placeholder') {
-          return `   ❌ ${error.variable}: Contains placeholder value "${error.value}"`;
-        } else if (error.type === 'invalid') {
-          return `   ❌ ${error.variable}: ${error.message}`;
-        }
-        return `   ❌ ${error.variable}: ${error.message || 'Invalid value'}`;
-      }),
-      '',
-      `   💡 Guidance: ${group.guidance}`,
-      ''
-    ].join('\n'));
-  }
-  
-  return sections.join('\n');
-}
-
-/**
- * Validate critical environment variables with grouped error reporting
+ * Validate critical environment variables
  */
 function validateEnvironment() {
   const errors = [];
   const warnings = [];
-  const isProduction = isProductionBuild();
   
-  console.log(`🔍 Environment Validation Quality Gate`);
-  console.log(`   Mode: ${isProduction ? 'Production Build' : 'Development'}${process.env.CI ? ' (CI)' : ''}`);
-  console.log(`   Phase: ${process.env.NEXT_PHASE || 'runtime'}\n`);
-
+  console.log('🔍 Validating environment variables for production build...\n');
+  
   // Check critical environment variables
   for (const envVar of CRITICAL_ENV_VARS) {
     const value = process.env[envVar];
-
+    
     if (!value) {
-      errors.push({
-        variable: envVar,
-        type: 'missing',
-        message: 'Missing required value'
-      });
+      errors.push(`❌ ${envVar} is not set`);
     } else if (isPlaceholderValue(value)) {
-      errors.push({
-        variable: envVar,
-        type: 'placeholder',
-        value,
-        message: `Contains placeholder value "${value}"`
-      });
+      errors.push(`❌ ${envVar} contains placeholder value: "${value}"`);
     } else {
       console.log(`✅ ${envVar}: configured`);
     }
   }
-
+  
   // Special validation for URL format
   const siteUrl = process.env.SITE_URL;
   if (siteUrl && !isPlaceholderValue(siteUrl)) {
     try {
       const url = new URL(siteUrl);
-      if (url.protocol !== "https:" && isProduction) {
-        warnings.push(
-          `⚠️  SITE_URL should use HTTPS in production: ${siteUrl}`,
-        );
+      if (url.protocol !== 'https:' && process.env.NODE_ENV === 'production') {
+        warnings.push(`⚠️  SITE_URL should use HTTPS in production: ${siteUrl}`);
       }
-      if (siteUrl.endsWith("/")) {
+      if (siteUrl.endsWith('/')) {
         warnings.push(`⚠️  SITE_URL should not end with a slash: ${siteUrl}`);
       }
     } catch (e) {
-      errors.push({
-        variable: 'SITE_URL',
-        type: 'invalid',
-        value: siteUrl,
-        message: `Not a valid URL: ${siteUrl}`
-      });
+      errors.push(`❌ SITE_URL is not a valid URL: ${siteUrl}`);
     }
   }
-
+  
   // Check for email format in CONTACT_INBOX
   const contactInbox = process.env.CONTACT_INBOX;
   if (contactInbox && !isPlaceholderValue(contactInbox)) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(contactInbox)) {
-      errors.push({
-        variable: 'CONTACT_INBOX',
-        type: 'invalid',
-        value: contactInbox,
-        message: `Not a valid email address: ${contactInbox}`
-      });
+      errors.push(`❌ CONTACT_INBOX is not a valid email address: ${contactInbox}`);
     }
   }
-
+  
   // Display warnings
   if (warnings.length > 0) {
-    console.log("\n⚠️  Configuration Warnings:");
-    warnings.forEach((warning) => console.log(`   ${warning}`));
+    console.log('\n⚠️  Warnings:');
+    warnings.forEach(warning => console.log(`   ${warning}`));
   }
-
-  // Handle errors with grouped reporting
+  
+  // Display errors and exit if any
   if (errors.length > 0) {
-    const groupedErrors = groupErrorsByCategory(errors);
+    console.log('\n🚨 Build validation failed! Critical environment variables are missing or invalid:\n');
+    errors.forEach(error => console.log(`   ${error}`));
+    console.log('\n💡 To fix this:');
+    console.log('   1. Set the required environment variables in your deployment platform');
+    console.log('   2. Ensure all values are real, not placeholders');
+    console.log('   3. For local development, copy .env.example to .env.local and fill in real values');
+    console.log('\n📚 See docs/DEPLOY_CHECKLIST.md for detailed setup instructions\n');
     
-    console.log("\n🚨 QUALITY GATE FAILED: Environment Validation Errors");
-    console.log("=".repeat(60));
-    console.log(formatGroupedErrors(groupedErrors));
-    
-    console.log("� Remediation Steps:");
-    console.log("   1. Set all required environment variables in your deployment platform");
-    console.log("   2. Replace placeholder values with real configuration");
-    console.log("   3. Verify values meet format requirements (URLs, emails, etc.)");
-    console.log("   4. For local development: copy .env.example to .env.local");
-    console.log("\n📚 Documentation: docs/DEPLOY_CHECKLIST.md");
-    console.log("🔗 Environment Setup: docs/GOOGLE_SETUP.md");
-    
-    if (process.env.CI) {
-      console.log("\n::error::Environment validation failed - see logs above for details");
-    }
-
     process.exit(1);
   }
-
-  console.log("\n✅ Environment Validation Quality Gate: PASSED");
-  console.log("   All critical environment variables are properly configured");
-  console.log("   Build can proceed safely\n");
+  
+  console.log('\n✅ All critical environment variables are properly configured!');
+  console.log('   Build can proceed safely.\n');
 }
 
-// Run validation based on context
-const shouldValidate = isProductionBuild() || process.env.FORCE_ENV_VALIDATION === 'true';
-
-if (shouldValidate) {
+// Only run validation for production builds
+if (process.env.NODE_ENV === 'production') {
   validateEnvironment();
 } else {
-  console.log("⏭️  Environment Validation Quality Gate: SKIPPED");
-  console.log("   (Development mode - validation only runs for production builds)");
-  console.log("   To force validation: FORCE_ENV_VALIDATION=true npm run validate-env\n");
+  console.log('⏭️  Skipping environment validation (not a production build)\n');
 }

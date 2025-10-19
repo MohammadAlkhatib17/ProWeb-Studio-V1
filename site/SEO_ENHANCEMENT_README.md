@@ -12,7 +12,6 @@
 - Structured data: Keep `SEOSchema`/`LocalBusinessSchema` up to date with accurate business info.
 
 Quick validation commands
-
 ```bash
 # Build and test locally
 npm run build

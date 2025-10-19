@@ -1,262 +1,529 @@
-import type { Metadata } from "next";
-import { generateMetadata } from "@/lib/metadata";
-import UnifiedServicePage from "@/components/unified/UnifiedServicePage";
-import { ServicePageProps } from "@/components/unified/ServicePageComponents";
+import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
-export const dynamic = "force-static";
+import Link from 'next/link';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { Button } from '@/components/Button';
+import SEOSchema from '@/components/SEOSchema';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import FAQSection from '@/components/sections/FAQSection';
+
+export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - service content is fairly stable
-export const fetchCache = "force-cache";
+export const fetchCache = 'force-cache';
 
-// Enhanced service page metadata with all SEO optimizations
-export const metadata: Metadata = generateMetadata(
-  "/diensten/webshop-laten-maken",
-  {
-    service: "webshop-laten-maken",
-    pageType: "service",
-    lastModified: new Date().toISOString(),
-    image: {
-      url: "/og-webshop-laten-maken.png",
-      alt: "Webshop Laten Maken Nederland - ProWeb Studio E-commerce Services",
-      width: 1200,
-      height: 630,
+// Get canonical URL from environment with fallback
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+
+export const metadata: Metadata = {
+  title: 'Webshop Laten Maken Nederland | E-commerce Ontwikkeling & iDEAL Integratie – ProWeb Studio',
+  description:
+    'Webshop laten maken met iDEAL betaling, voorraadbeheer en Nederlandse e-commerce functionaliteiten. Responsive webshops die verkopen - van productcatalogus tot checkout.',
+  alternates: {
+    canonical: `${SITE_URL}/diensten/webshop-laten-maken`,
+    languages: { 
+      'nl-NL': `${SITE_URL}/diensten/webshop-laten-maken`,
+      'x-default': `${SITE_URL}/diensten/webshop-laten-maken`
     },
   },
-);
-
-const servicePageData: ServicePageProps = {
-  // Hero Section
-  title: "Webshop Laten Maken",
-  subtitle: "Professionele e-commerce websites voor online verkoop",
-  heroDescription:
-    "Van productcatalogus tot betaalintegratie - wij bouwen complete webshops die verkopen. WooCommerce, Shopify en custom e-commerce oplossingen.",
-  primaryCTA: "Gratis Webshop Consult",
-  secondaryCTA: "Bekijk Webshops",
-
-  // Features Section
-  featuresTitle: "Complete E-commerce Oplossing",
-  featuresSubtitle:
-    "Van productbeheer tot betalingsverwerking - wij zorgen voor alle aspecten van moderne e-commerce.",
-  features: [
-    {
-      title: "Product Management",
-      description: "Uitgebreid productcatalogus systeem met voorraad beheer",
-      icon: "📦",
-      details: [
-        "Onbeperkt aantal producten",
-        "Varianten en opties beheer",
-        "Voorraad tracking & alerts",
-        "Bulk product import/export",
-      ],
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
-    {
-      title: "Betaal Integraties",
-      description: "Veilige betalingsverwerking met alle populaire methoden",
-      icon: "💳",
-      details: [
-        "iDEAL, Bancontact, PayPal integratie",
-        "Creditcard verwerking (Visa, Mastercard)",
-        "Achteraf betalen (Klarna, Afterpay)",
-        "PCI DSS compliant beveiliging",
-      ],
-    },
-    {
-      title: "Bestelling & Verzending",
-      description: "Geautomatiseerd bestel- en verzendproces voor efficiëntie",
-      icon: "�",
-      details: [
-        "Automatische bestelling notificaties",
-        "PostNL, DPD, UPS integratie",
-        "Track & trace functionaliteit",
-        "Verzendkosten calculator",
-      ],
-    },
-    {
-      title: "Marketing & SEO",
-      description: "E-commerce geoptimaliseerde marketing tools en SEO",
-      icon: "📈",
-      details: [
-        "Product SEO optimalisatie",
-        "Google Shopping integratie",
-        "Kortingscodes & promoties",
-        "E-mail marketing automation",
-      ],
-    },
-  ],
-
-  // Packages Section
-  packagesTitle: "Webshop Pakketten",
-  packagesSubtitle:
-    "Van basis webshop tot premium e-commerce platform - kies het pakket dat bij uw ambities past.",
-  packages: [
-    {
-      name: "Starter Webshop",
-      description: "Professionele webshop voor startende ondernemers",
-      price: "€2.500",
-      features: [
-        "Tot 50 producten",
-        "Basis betaalintegraties (iDEAL, PayPal)",
-        "Responsive design & mobiel geoptimaliseerd",
-        "Basis SEO optimalisatie",
-      ],
-      popular: false,
-    },
-    {
-      name: "Business Webshop",
-      description: "Complete e-commerce oplossing voor groeiende bedrijven",
-      price: "€4.500",
-      features: [
-        "Onbeperkt aantal producten",
-        "Alle betaalmethoden & verzendintegraties",
-        "Geavanceerde SEO & marketing tools",
-        "Customer portal & wishlist functionaliteit",
-      ],
-      popular: true,
-    },
-    {
-      name: "Enterprise Webshop",
-      description: "Premium e-commerce platform met custom functionaliteiten",
-      price: "€7.500",
-      features: [
-        "Custom functionaliteiten & integraties",
-        "Multi-vendor marketplace mogelijkheden",
-        "Geavanceerde analytics & rapportage",
-        "Dedicated account management",
-      ],
-      popular: false,
-    },
-  ],
-
-  // Statistics Section
-  statisticsTitle: "Bewezen E-commerce Resultaten",
-  statistics: [
-    {
-      value: "250%",
-      label: "Gemiddelde Omzet Stijging",
-      description: "Resultaten behaald door onze webshop klanten",
-    },
-    {
-      value: "85%",
-      label: "Websites Die Top 3 Bereiken",
-      description: "Succespercentage voor competitieve keywords",
-    },
-    {
-      value: "99.9%",
-      label: "Uptime Garantie",
-      description: "Betrouwbare hosting en ondersteuning",
-    },
-    {
-      value: "4 weken",
-      label: "Gemiddelde Oplevering",
-      description: "Van concept tot live webshop",
-    },
-  ],
-
-  // Process Section
-  processTitle: "Ons Webshop Proces",
-  processSubtitle:
-    "Van concept tot conversie - ons bewezen stappenplan voor succesvolle webshops.",
-  processSteps: [
-    {
-      step: "01",
-      title: "Strategie & Planning",
-      description:
-        "Complete e-commerce strategie, doelgroep analyse en technische planning voor uw perfecte webshop.",
-    },
-    {
-      step: "02",
-      title: "Design & Development",
-      description:
-        "Custom webshop design en development met focus op gebruiksvriendelijkheid en conversie.",
-    },
-    {
-      step: "03",
-      title: "Integratie & Testing",
-      description:
-        "Betaal- en verzendintegraties, uitgebreid testen en optimalisatie voor perfecte functionaliteit.",
-    },
-    {
-      step: "04",
-      title: "Launch & Support",
-      description:
-        "Succesvolle webshop launch met training, documentatie en doorlopende technische ondersteuning.",
-    },
-  ],
-
-  // Trust Indicators Section
-  trustTitle: "Waarom Kiezen Voor Onze E-commerce Expertise",
-  trustIndicators: [
-    {
-      icon: "🏆",
-      title: "Shopify & WooCommerce Certified",
-      description:
-        "Gecertificeerde e-commerce professionals met bewezen expertise in alle major platforms.",
-    },
-    {
-      icon: "🔒",
-      title: "PCI DSS & Security Experts",
-      description:
-        "Ervaren developers die veiligheid en compliance prioriteren voor vertrouwde webshops.",
-    },
-    {
-      icon: "⚡",
-      title: "Core Web Vitals Experts",
-      description:
-        "Gespecialiseerd in Google's nieuwste ranking factoren en performance optimalisatie.",
-    },
-    {
-      icon: "✅",
-      title: "White-hat SEO Methoden",
-      description:
-        "Uitsluitend veilige, Google-conforme SEO technieken voor duurzame resultaten.",
-    },
-  ],
-
-  // FAQ Section
-  faqTitle: "Veelgestelde Vragen over Webshop Laten Maken",
-  faqs: [
-    {
-      question: "Hoe lang duurt het om een webshop te laten maken?",
-      answer:
-        "Een professionele webshop is meestal binnen 4-6 weken gereed, afhankelijk van de complexiteit en het aantal producten. Voor enterprise webshops met custom functionaliteiten kunnen we 8-12 weken nodig hebben. We plannen alles vooraf en houden u op de hoogte via wekelijkse updates.",
-    },
-    {
-      question: "Wat zijn de kosten voor een webshop laten maken?",
-      answer:
-        "Onze webshop prijzen beginnen bij €2.500 voor een starter webshop tot €7.500+ voor enterprise oplossingen. De kosten hangen af van het aantal producten, gewenste integraties en custom functionaliteiten. We bieden altijd een gedetailleerde offerte inclusief alle kosten.",
-    },
-    {
-      question: "Welke betaalmethoden kunnen worden geïntegreerd?",
-      answer:
-        "We integreren alle populaire betaalmethoden: iDEAL, Bancontact, PayPal, creditcards (Visa/Mastercard), Apple Pay, Google Pay en achteraf betalen opties zoals Klarna en Afterpay. Alle betalingen zijn PCI DSS compliant beveiligd.",
-    },
-    {
-      question: "Krijg ik training om mijn webshop zelf te beheren?",
-      answer:
-        "Ja! Na oplevering krijgt u uitgebreide training en documentatie om producten toe te voegen, bestellingen te beheren en content bij te werken. We bieden ook optionele video tutorials en doorlopende support wanneer nodig.",
-    },
-    {
-      question: "Worden verzendintegraties meegeleverd?",
-      answer:
-        "Absoluut! We koppelen uw webshop aan major verzendpartners zoals PostNL, DPD, UPS en DHL. Dit omvat automatische track & trace, verzendlabels printen en dynamische verzendkosten berekening.",
-    },
-    {
-      question: "Is mijn webshop SEO geoptimaliseerd?",
-      answer:
-        "Alle webshops worden volledig SEO geoptimaliseerd geleverd: snelle laadtijden, mobiel-vriendelijk design, gestructureerde data voor producten, XML sitemaps en Google Shopping integratie voor maximale online vindbaarheid.",
-    },
-  ],
-
-  // Final CTA Section
-  finalCTATitle: "Klaar om uw eigen webshop te starten?",
-  finalCTADescription:
-    "Ontvang een gratis webshop consult en ontdek hoe wij uw e-commerce droom werkelijkheid maken.",
-  finalPrimaryCTA: "Gratis SEO Analyse",
-  finalSecondaryCTA: "Direct Bellen",
-
-  // SEO
-  pageSlug: "webshop-laten-maken",
+  },
+  openGraph: {
+    title: 'Webshop Laten Maken Nederland | E-commerce Ontwikkeling & iDEAL Integratie – ProWeb Studio',
+    description: 'Webshop laten maken met iDEAL betaling, voorraadbeheer en Nederlandse e-commerce functionaliteiten. Responsive webshops die verkopen - van productcatalogus tot checkout.',
+    url: `${SITE_URL}/diensten/webshop-laten-maken`,
+    type: 'website',
+    locale: 'nl_NL',
+    images: [{ url: `${SITE_URL}/og`, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Webshop Laten Maken Nederland | E-commerce Ontwikkeling & iDEAL Integratie – ProWeb Studio',
+    description: 'Webshop laten maken met iDEAL betaling, voorraadbeheer en Nederlandse e-commerce functionaliteiten.',
+    images: [`${SITE_URL}/og`],
+  },
 };
 
+const ecommerceFeatures = [
+  {
+    title: 'iDEAL & Betaalintegraties',
+    description: 'Veilige Nederlandse betaalmethoden inclusief iDEAL, Bancontact en creditcards',
+    icon: '💳',
+    details: [
+      'iDEAL directe bankbetalingen',
+      'Creditcard processing (Visa/Mastercard)',
+      'PayPal en Bancontact support',
+      'Veilige SSL-encryptie'
+    ]
+  },
+  {
+    title: 'Voorraadbeheer',
+    description: 'Automatisch voorraadbeheer met real-time updates en notificaties',
+    icon: '📦',
+    details: [
+      'Real-time voorraad tracking',
+      'Automatische low-stock alerts',
+      'Bulk product import/export',
+      'Variant en optie beheer'
+    ]
+  },
+  {
+    title: 'Nederlandse E-commerce',
+    description: 'Geoptimaliseerd voor Nederlandse wetgeving en consumentenrechten',
+    icon: '🇳🇱',
+    details: [
+      'AVG/GDPR compliance',
+      'Nederlandse retourwetgeving',
+      'BTW-berekening en rapportage',
+      'Thuiswinkel Waarborg integratie'
+    ]
+  },
+  {
+    title: 'Mobile Commerce',
+    description: 'Volledig responsive webshops geoptimaliseerd voor mobiele verkoop',
+    icon: '📱',
+    details: [
+      'Mobile-first checkout proces',
+      'Touch-vriendelijke interface',
+      'Progressive Web App features',
+      'Snelle mobiele laadtijden'
+    ]
+  }
+];
+
+const webshopTypes = [
+  {
+    type: 'Starter Webshop',
+    description: 'Ideaal voor startende ondernemers met beperkt productassortiment',
+    features: ['Tot 50 producten', 'iDEAL integratie', 'Basis SEO', 'Responsive design'],
+    startingPrice: '€2.750',
+    popular: false
+  },
+  {
+    type: 'Professional Webshop',
+    description: 'Uitgebreide webshop voor groeiende bedrijven met meer functionaliteiten',
+    features: ['Onbeperkt producten', 'Alle betaalmethoden', 'Geavanceerde SEO', 'Analytics integratie'],
+    startingPrice: '€4.500',
+    popular: true
+  },
+  {
+    type: 'Enterprise Webshop',
+    description: 'Custom e-commerce oplossingen voor grote bedrijven en complexe processen',
+    features: ['Maatwerk ontwikkeling', 'API integraties', 'Multi-vendor support', 'Geavanceerde rapportage'],
+    startingPrice: '€8.500',
+    popular: false
+  },
+  {
+    type: 'Marketplace Integratie',
+    description: 'Koppeling met Bol.com, Amazon en andere Nederlandse marketplaces',
+    features: ['Multi-channel verkoop', 'Voorraad synchronisatie', 'Order management', 'Pricing strategieën'],
+    startingPrice: '€3.200',
+    popular: false
+  }
+];
+
+const faqItems = [
+  {
+    question: 'Wat zijn de kosten voor het laten maken van een webshop?',
+    answer: 'Onze webshop prijzen starten vanaf €2.750 voor een starter webshop tot €8.500+ voor enterprise oplossingen. De exacte kosten hangen af van het aantal producten, gewenste functionaliteiten en maatwerk integraties. We bieden altijd een gratis offerte op maat.'
+  },
+  {
+    question: 'Welke betaalmethoden kunnen geïntegreerd worden?',
+    answer: 'We integreren alle populaire Nederlandse betaalmethoden: iDEAL, creditcards (Visa/Mastercard), PayPal, Bancontact, Apple Pay en Google Pay. Ook kunnen we specifieke betaalproviders zoals Mollie, Adyen of Stripe implementeren.'
+  },
+  {
+    question: 'Is de webshop geschikt voor mobiele apparaten?',
+    answer: 'Ja, alle webshops die wij ontwikkelen zijn volledig responsive en geoptimaliseerd voor mobiele verkoop. Met de groei van mobile commerce zorgen we ervoor dat het checkout-proces vlekkeloos verloopt op smartphones en tablets.'
+  },
+  {
+    question: 'Hoe werkt het voorraadbeheer in de webshop?',
+    answer: 'De webshop bevat een uitgebreid voorraadbeheer systeem met real-time updates. U ontvangt automatische meldingen bij lage voorraad, kunt bulk imports uitvoeren en productvarianten beheren. Ook synchronisatie met externe systemen is mogelijk.'
+  },
+  {
+    question: 'Is de webshop compliant met Nederlandse wetgeving?',
+    answer: 'Absoluut. Alle webshops worden ontwikkeld conform Nederlandse e-commerce wetgeving: AVG/GDPR privacy compliance, correcte BTW-berekening, retourrecht implementatie en optioneel Thuiswinkel Waarborg certificering.'
+  },
+  {
+    question: 'Kan de webshop gekoppeld worden aan marketplaces zoals Bol.com?',
+    answer: 'Ja, we kunnen uw webshop koppelen aan Nederlandse marketplaces zoals Bol.com, Amazon.nl en anderen. Dit zorgt voor gecentraal voorraadbeheer en orderverwerking vanuit één systeem.'
+  }
+];
+
 export default function WebshopLatenMaken() {
-  return <UnifiedServicePage {...servicePageData} />;
+  return (
+    <main className="pt-20 md:pt-24 relative overflow-hidden">
+      {/* SEO Schema */}
+      <SEOSchema 
+        pageType="services"
+        pageTitle="Webshop Laten Maken"
+        pageDescription="Professionele e-commerce ontwikkeling met iDEAL integratie en Nederlandse functionaliteiten"
+      />
+      
+      {/* Breadcrumbs */}
+      <Breadcrumbs />
+
+      {/* Hero Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            Webshop Laten{' '}
+            <span className="gradient-text-primary">
+              Maken
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Professionele e-commerce oplossingen met iDEAL integratie. Van productcatalogus 
+            tot Nederlandse checkout - webshops die écht verkopen.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              href="/contact"
+              variant="primary"
+              size="large"
+              className="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-500 hover:to-secondary-500"
+            >
+              Gratis Webshop Offerte
+            </Button>
+            <Button
+              href="/portfolio"
+              variant="secondary"
+              size="large"
+              className="border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white"
+            >
+              Bekijk Webshop Portfolio
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Nederlandse{' '}
+              <span className="gradient-text-primary">
+                E-commerce Expertise
+              </span>
+            </h2>
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+              Webshops die werken in de Nederlandse markt - van iDEAL betalingen 
+              tot AVG compliance en Thuiswinkel integratie.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+            {ecommerceFeatures.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300"
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
+                <p className="text-slate-200 mb-6">{feature.description}</p>
+                <ul className="space-y-2">
+                  {feature.details.map((detail, detailIndex) => (
+                    <li key={detailIndex} className="text-sm text-slate-400 flex items-center">
+                      <span className="text-primary-400 mr-2">✓</span>
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Webshop Types Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Webshop Pakketten &{' '}
+              <span className="gradient-text-primary">
+                Prijzen
+              </span>
+            </h2>
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+              Van starter webshop tot enterprise e-commerce platform - 
+              wij hebben de juiste oplossing voor uw business.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {webshopTypes.map((type, index) => (
+              <div
+                key={index}
+                className={`relative bg-cosmic-800/40 backdrop-blur-sm border rounded-xl p-6 hover:scale-105 transition-all duration-300 ${
+                  type.popular 
+                    ? 'border-primary-500/70 ring-2 ring-primary-500/30' 
+                    : 'border-cosmic-700/30 hover:border-primary-500/50'
+                }`}
+              >
+                {type.popular && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-gradient-to-r from-primary-500 to-secondary-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      POPULAIR
+                    </span>
+                  </div>
+                )}
+                <div className="text-center">
+                  <h3 className="text-xl font-semibold text-white mb-3">{type.type}</h3>
+                  <p className="text-slate-200 text-sm mb-4">{type.description}</p>
+                  <div className="text-2xl font-bold text-primary-400 mb-4">
+                    Vanaf {type.startingPrice}
+                  </div>
+                  <ul className="space-y-2 mb-6">
+                    {type.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="text-xs text-slate-400 flex items-center">
+                        <span className="text-primary-400 mr-2">✓</span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    href="/contact"
+                    variant="secondary"
+                    size="normal"
+                    className="w-full border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white"
+                  >
+                    Meer Info
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Webshop{' '}
+              <span className="gradient-text-primary">
+                Ontwikkelproces
+              </span>
+            </h2>
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+              Van concept tot succesvolle online verkoop - stap voor stap naar uw nieuwe webshop.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {[
+              {
+                step: '01',
+                title: 'E-commerce Strategie',
+                description: 'Doelgroep analyse, concurrentie onderzoek en verkoop strategie',
+                duration: '1-2 weken'
+              },
+              {
+                step: '02',
+                title: 'UX/UI Design',
+                description: 'Conversion-geoptimaliseerd design en gebruiksvriendelijke flows',
+                duration: '2-3 weken'
+              },
+              {
+                step: '03',
+                title: 'Ontwikkeling',
+                description: 'Frontend en backend development met betaal- en voorraadsystemen',
+                duration: '4-8 weken'
+              },
+              {
+                step: '04',
+                title: 'Testing & Launch',
+                description: 'Uitgebreid testen van checkout proces en live deployment',
+                duration: '1-2 weken'
+              }
+            ].map((phase, index) => (
+              <div
+                key={index}
+                className="relative bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6 text-center"
+              >
+                <div className="text-3xl font-bold text-primary-400 mb-4">{phase.step}</div>
+                <h3 className="text-lg font-semibold text-white mb-3">{phase.title}</h3>
+                <p className="text-slate-200 text-sm mb-3">{phase.description}</p>
+                <div className="text-xs text-primary-300 font-medium">{phase.duration}</div>
+                {index < 3 && (
+                  <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500"></div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Integration Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Integraties &{' '}
+              <span className="gradient-text-primary">
+                Koppelingen
+              </span>
+            </h2>
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+              Verbind uw webshop met bestaande systemen en externe platforms voor 
+              een naadloze workflow.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                category: 'Betaalsystemen',
+                integrations: ['Mollie', 'Adyen', 'Stripe', 'PayPal', 'iDEAL', 'Bancontact'],
+                icon: '💳'
+              },
+              {
+                category: 'Marketplaces',
+                integrations: ['Bol.com', 'Amazon.nl', 'Coolblue', 'Wehkamp', 'eBay'],
+                icon: '🛒'
+              },
+              {
+                category: 'Business Tools',
+                integrations: ['Exact Online', 'AFAS', 'Mailchimp', 'Google Analytics', 'Facebook Pixel'],
+                icon: '⚙️'
+              }
+            ].map((category, index) => (
+              <div
+                key={index}
+                className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300"
+              >
+                <div className="text-4xl mb-4 text-center">{category.icon}</div>
+                <h3 className="text-xl font-semibold text-white mb-6 text-center">{category.category}</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {category.integrations.map((integration, integrationIndex) => (
+                    <div
+                      key={integrationIndex}
+                      className="text-sm text-slate-200 bg-cosmic-700/30 rounded-lg p-2 text-center"
+                    >
+                      {integration}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <ErrorBoundary>
+        <Suspense fallback={<div className="h-96 bg-cosmic-900/30" />}>
+          <FAQSection
+            title="Veelgestelde Vragen over Webshop Ontwikkeling"
+          >
+            <div className="space-y-6">
+              {faqItems.map((item, index) => (
+                <div key={index} className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-white mb-3">{item.question}</h3>
+                  <p className="text-slate-200 leading-relaxed">{item.answer}</p>
+                </div>
+              ))}
+            </div>
+          </FAQSection>
+        </Suspense>
+      </ErrorBoundary>
+
+      {/* CTA Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Klaar om uw{' '}
+            <span className="gradient-text-primary">
+              Webshop te Lanceren?
+            </span>
+          </h2>
+          <p className="text-lg text-slate-200 mb-8 max-w-2xl mx-auto">
+            Begin vandaag nog met online verkopen. Onze e-commerce experts helpen u 
+            van concept tot succesvolle webshop.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              href="/contact"
+              variant="primary"
+              size="large"
+              className="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-500 hover:to-secondary-500"
+            >
+              Gratis E-commerce Consult
+            </Button>
+            <Button
+              href="/werkwijze"
+              variant="secondary"
+              size="large"
+              className="border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white"
+            >
+              Lees Over Onze Aanpak
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Related Services */}
+      <ErrorBoundary>
+        <Suspense fallback={<div className="h-64 bg-cosmic-900/30" />}>
+          <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 bg-cosmic-900/30">
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-12 text-center">
+                Gerelateerde{' '}
+                <span className="gradient-text-primary">
+                  Diensten
+                </span>
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[
+                  {
+                    title: 'Website Laten Maken',
+                    description: 'Professionele websites voor bedrijven',
+                    href: '/diensten/website-laten-maken',
+                    icon: '🌐'
+                  },
+                  {
+                    title: 'SEO Optimalisatie',
+                    description: 'Hogere Google rankings voor meer verkoop',
+                    href: '/diensten/seo-optimalisatie',
+                    icon: '📈'
+                  },
+                  {
+                    title: 'Onderhoud & Support',
+                    description: 'Technisch beheer en doorontwikkeling',
+                    href: '/diensten/onderhoud-support',
+                    icon: '🔧'
+                  }
+                ].map((service, index) => (
+                  <Link
+                    key={index}
+                    href={service.href}
+                    className="group bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6 hover:border-primary-500/50 transition-all duration-300 hover:scale-105"
+                  >
+                    <div className="text-3xl mb-4">{service.icon}</div>
+                    <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-slate-400 text-sm">{service.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        </Suspense>
+      </ErrorBoundary>
+    </main>
+  );
 }

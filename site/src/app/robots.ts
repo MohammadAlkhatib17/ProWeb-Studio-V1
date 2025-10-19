@@ -1,22 +1,18 @@
-import type { MetadataRoute } from "next";
+import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const SITE_URL = (
-    process.env.SITE_URL ??
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    "https://prowebstudio.nl"
-  ).replace(/\/+$/, "");
+  const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
   const base = SITE_URL; // Already normalized
-  const isPreview = process.env.VERCEL_ENV === "preview";
-
+  const isPreview = process.env.VERCEL_ENV === 'preview';
+  
   if (isPreview) {
     // For preview deployments: block all crawlers completely
     return {
       rules: [
         {
-          userAgent: "*",
-          disallow: ["/"],
-        },
+          userAgent: '*',
+          disallow: ['/'],
+        }
       ],
       sitemap: [], // No sitemap for preview
     };
@@ -26,118 +22,113 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
-        userAgent: "*",
+        userAgent: '*',
         allow: [
-          "/",
-          "/diensten/",
-          "/diensten/website-laten-maken",
-          "/diensten/webshop-laten-maken",
-          "/diensten/seo-optimalisatie",
-          "/diensten/3d-website-ervaringen",
-          "/diensten/onderhoud-support",
-          "/contact/",
-          "/werkwijze/",
-          "/portfolio/",
-          "/over-ons/",
-          "/locaties/",
-          "/privacy/",
-          "/voorwaarden/",
-          "/sitemap*.xml", // Allow all sitemap files
-          "/robots.txt",
+          '/',
+          '/diensten/',
+          '/contact/',
+          '/werkwijze/',
+          '/portfolio/',
+          '/over-ons/',
+          '/privacy/',
+          '/voorwaarden/',
+          '/sitemap.xml',
+          '/robots.txt',
         ],
         disallow: [
-          "/speeltuin/", // Playground area - not for public indexing
-          "/_next/", // Next.js internal files
-          "/api/", // API routes
-          "/admin/", // Admin areas if any
-          "*.json$", // JSON files
-          "/sw.js", // Service worker
-          "/offline.html", // Offline page
-          "/overzicht-site/", // Internal site overview
-          "/.well-known/", // Hidden directories except sitemap
-          "/manifest.json", // PWA manifest
+          '/speeltuin/',     // Playground area - not for public indexing
+          '/_next/',         // Next.js internal files
+          '/api/',           // API routes
+          '/admin/',         // Admin areas if any
+          '*.json$',         // JSON files
+          '*.xml$',          // XML files except sitemap
+          '/sw.js',          // Service worker
+          '/offline.html',   // Offline page
+          '/overzicht-site/', // Internal site overview
+          '/.well-known/',   // Hidden directories
+          '/manifest.json',  // PWA manifest
         ],
         crawlDelay: 1, // Be respectful to servers
       },
       {
-        userAgent: "Googlebot",
+        userAgent: 'Googlebot',
         allow: [
-          "/",
-          "/diensten/",
-          "/diensten/website-laten-maken",
-          "/diensten/webshop-laten-maken",
-          "/diensten/seo-optimalisatie",
-          "/diensten/3d-website-ervaringen",
-          "/diensten/onderhoud-support",
-          "/contact/",
-          "/werkwijze/",
-          "/portfolio/",
-          "/over-ons/",
-          "/locaties/",
-          "/privacy/",
-          "/voorwaarden/",
-          "/sitemap*.xml",
-          "/robots.txt",
+          '/',
+          '/diensten/',
+          '/contact/',
+          '/werkwijze/',
+          '/portfolio/',
+          '/over-ons/',
+          '/privacy/',
+          '/voorwaarden/',
+          '/sitemap.xml',
+          '/robots.txt',
         ],
         disallow: [
-          "/speeltuin/",
-          "/_next/",
-          "/api/",
-          "/admin/",
-          "/overzicht-site/",
+          '/speeltuin/',
+          '/_next/',
+          '/api/',
+          '/admin/',
+          '/overzicht-site/',
         ],
         // No crawl delay for Googlebot as it's well-behaved
       },
       {
-        userAgent: "Bingbot",
+        userAgent: 'Bingbot',
         allow: [
-          "/",
-          "/diensten/",
-          "/diensten/website-laten-maken",
-          "/diensten/webshop-laten-maken",
-          "/diensten/seo-optimalisatie",
-          "/diensten/3d-website-ervaringen",
-          "/diensten/onderhoud-support",
-          "/contact/",
-          "/werkwijze/",
-          "/portfolio/",
-          "/over-ons/",
-          "/locaties/",
-          "/privacy/",
-          "/voorwaarden/",
+          '/',
+          '/diensten/',
+          '/contact/',
+          '/werkwijze/',
+          '/portfolio/',
+          '/over-ons/',
+          '/privacy/',
+          '/voorwaarden/',
         ],
         disallow: [
-          "/speeltuin/",
-          "/_next/",
-          "/api/",
-          "/admin/",
-          "/overzicht-site/",
+          '/speeltuin/',
+          '/_next/',
+          '/api/',
+          '/admin/',
+          '/overzicht-site/',
         ],
         crawlDelay: 2, // Slightly more conservative for Bing
       },
       {
-        userAgent: "facebookexternalhit",
-        allow: ["/"], // Allow Facebook for social sharing
-        disallow: ["/speeltuin/", "/_next/", "/api/", "/admin/"],
+        userAgent: 'facebookexternalhit',
+        allow: ['/'], // Allow Facebook for social sharing
+        disallow: [
+          '/speeltuin/',
+          '/_next/',
+          '/api/',
+          '/admin/',
+        ],
       },
       {
-        userAgent: "Twitterbot",
-        allow: ["/"], // Allow Twitter for social sharing
-        disallow: ["/speeltuin/", "/_next/", "/api/", "/admin/"],
+        userAgent: 'Twitterbot',
+        allow: ['/'], // Allow Twitter for social sharing
+        disallow: [
+          '/speeltuin/',
+          '/_next/',
+          '/api/',
+          '/admin/',
+        ],
       },
       {
-        userAgent: "LinkedInBot",
-        allow: ["/"], // Allow LinkedIn for professional sharing
-        disallow: ["/speeltuin/", "/_next/", "/api/", "/admin/"],
-      },
+        userAgent: 'LinkedInBot',
+        allow: ['/'], // Allow LinkedIn for professional sharing
+        disallow: [
+          '/speeltuin/',
+          '/_next/',
+          '/api/',
+          '/admin/',
+        ],
+      }
     ],
     sitemap: [
-      `${base}/sitemap-index.xml`, // Main sitemap index for better crawl management
-      `${base}/sitemap.xml`, // Core pages sitemap
-      `${base}/sitemap-services.xml`, // Dedicated services sitemap
-      `${base}/sitemap-locations.xml`, // Dedicated locations sitemap
-      `${base}/sitemap-images.xml`, // Existing images sitemap
+      `${base}/sitemap.xml`,
+      `${base}/sitemap-images.xml`, // We'll create this image sitemap
     ],
-    host: "prowebstudio.nl",
+    host: 'prowebstudio.nl',
   };
 }

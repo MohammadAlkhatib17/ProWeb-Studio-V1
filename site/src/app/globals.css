@@ -8,34 +8,11 @@
     --cosmic-secondary: 255, 0, 255;
     --cosmic-accent: 0, 255, 255;
     /* App background variables for consistent theming */
-    --app-bg-color: transparent; /* Make background transparent to show HeroBackground */
+    --app-bg-color: #000d1a; /* cosmic-900 equivalent */
     --app-bg-gradient: radial-gradient(circle at 50% 30%, rgba(20, 140, 255, 0.1) 0%, rgba(255, 0, 255, 0.05) 40%, transparent 70%);
     /* Header offset for anchor scroll positioning - professional height */
     --header-offset: 80px; /* enhanced mobile header height */
-    
-    /* UI Component Variables */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
-    --radius: 0.5rem;
   }
-}
 
   @media (min-width: 768px) {
     :root {
@@ -151,23 +128,13 @@
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900;
+    @apply outline-none ring-2 ring-cyan-500 ring-offset-2 ring-offset-cosmic-900;
   }
 
   .skip-to-content {
-    @apply absolute -top-full left-4 z-[9999] bg-slate-900 px-6 py-3 text-white font-semibold rounded-md border-2 border-cyan-400 shadow-lg transition-all duration-200 ease-in-out focus:top-4 focus:outline-none focus:ring-4 focus:ring-cyan-400/50;
-    /* Ensure minimum 44px height for touch targets */
-    min-height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
+    @apply absolute -top-full left-4 z-50 bg-cosmic-800 px-4 py-2 text-white focus:top-4;
   }
-
-  .skip-to-content:hover {
-    @apply bg-slate-800 border-cyan-300;
-    transform: translateY(-1px);
-  }
+}
 
 @layer utilities {
   .magnetic-hover {
@@ -177,82 +144,6 @@
   .glass {
     @apply backdrop-blur-md bg-white/5 border border-white/10;
     backdrop-filter: blur(16px) saturate(180%);
-  }
-
-  /* Enhanced focus-visible styles for all interactive elements */
-  a:focus-visible,
-  button:focus-visible,
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible,
-  [tabindex]:focus-visible,
-  [role="button"]:focus-visible,
-  [role="link"]:focus-visible,
-  [role="tab"]:focus-visible,
-  [role="menuitem"]:focus-visible {
-    @apply outline-none ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900;
-    /* Ensure 3:1 color contrast minimum for focus indicators */
-    box-shadow: 0 0 0 2px rgb(34 211 238 / 0.8), 0 0 0 4px rgb(15 23 42);
-  }
-
-  /* Enhanced focus for form inputs */
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible {
-    @apply ring-2 ring-cyan-400 border-cyan-400;
-    box-shadow: 0 0 0 2px rgb(34 211 238 / 0.8), 0 0 0 4px rgb(15 23 42), inset 0 0 0 1px rgb(34 211 238 / 0.5);
-  }
-
-  /* Focus styles for navigation and menu items */
-  nav a:focus-visible,
-  [role="navigation"] a:focus-visible {
-    @apply ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900 rounded-md;
-  }
-
-  /* Focus styles for cards and interactive components */
-  .faq-card-header:focus-visible,
-  .card:focus-visible,
-  .interactive-card:focus-visible {
-    @apply ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900 rounded-lg;
-  }
-
-  /* Enhanced keyboard navigation styles */
-  .keyboard-nav-active a:focus,
-  .keyboard-nav-active button:focus,
-  .keyboard-nav-active input:focus,
-  .keyboard-nav-active textarea:focus,
-  .keyboard-nav-active select:focus {
-    outline: 2px solid rgb(34 211 238);
-    outline-offset: 2px;
-  }
-
-  /* Ensure text has sufficient contrast - WCAG AA compliance */
-  .text-low-contrast {
-    color: rgb(203 213 225); /* slate-300 - ensures 4.5:1 contrast on dark backgrounds */
-  }
-
-  /* Skip links for screen readers */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  .sr-only:focus {
-    position: static;
-    width: auto;
-    height: auto;
-    padding: inherit;
-    margin: inherit;
-    overflow: visible;
-    clip: auto;
-    white-space: normal;
   }
 
   .gradient-text-primary {
@@ -624,9 +515,8 @@
   visibility: hidden !important;
 }
 
-/* Enhanced reduced motion preferences support - WCAG 2.1 AA compliance */
+/* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  /* Global animation and transition reset */
   *,
   *::before,
   *::after {
@@ -634,71 +524,10 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-    transform: none !important;
   }
   
-  /* Specific animation classes */
-  .animate-fade-in,
-  .animate-slide-up,
-  .animate-pulse,
-  .animate-spin,
-  .animate-bounce,
-  .animate-ping {
+  .twinkle {
     animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-  
-  /* Background and decorative animations */
-  .twinkle,
-  .floating,
-  .glow-effect,
-  .gradient-shift {
-    animation: none !important;
-  }
-  
-  /* Logo and brand animations */
-  .logo-glow::after,
-  .logo-wrapper,
-  .homepage-hero header .logo-wrapper {
-    animation: none !important;
-    transform: none !important;
-    transition: none !important;
-  }
-  
-  /* Cursor trail and particle effects */
-  .cursor-trail,
-  .particle-effect {
-    display: none !important;
-  }
-  
-  /* Hover effects - maintain instant feedback but no motion */
-  .magnetic-hover,
-  .btn-hover-effect {
-    transition: none !important;
-    transform: none !important;
-  }
-  
-  /* Focus effects - keep them for accessibility but remove motion */
-  :focus-visible {
-    transition: none !important;
-  }
-  
-  /* Scroll-based animations */
-  .parallax,
-  .scroll-animation {
-    transform: none !important;
-  }
-
-  /* FAQ animations */
-  .faq-card-content-wrapper,
-  .faq-card-icon {
-    transition: none !important;
-  }
-  
-  /* 3D scenes and canvas animations should be disabled */
-  canvas {
-    filter: contrast(1.1) brightness(0.9) !important;
   }
 }
 
@@ -776,172 +605,5 @@
   .touch-target-lg {
     min-height: 48px;
     min-width: 48px;
-  }
-
-  /* ============================================
-     FAQ-Specific Mobile-Optimized Styles
-     ============================================ */
-  
-  /* FAQ Card Container - Mobile First */
-  .faq-card {
-    /* Mobile: Full width rectangular cards */
-    @apply w-full max-w-full;
-    @apply rounded-2xl overflow-hidden;
-    @apply border border-white/10;
-    @apply transition-all duration-300 ease-out;
-    @apply mb-3 md:mb-4;
-    
-    /* Mobile: Background gradient with reduced opacity */
-    background: linear-gradient(135deg, 
-      rgba(6, 182, 212, 0.08) 0%, 
-      rgba(139, 92, 246, 0.05) 50%, 
-      rgba(236, 72, 153, 0.03) 100%);
-    
-    /* Mobile: Subtle border and shadow */
-    border-left: 3px solid rgba(6, 182, 212, 0.2);
-    
-    /* Hover states */
-    &:hover {
-      @apply border-cyan-400/30 shadow-lg;
-      box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.1);
-      border-left-color: rgba(6, 182, 212, 0.4);
-    }
-  }
-
-  /* FAQ Card Header (Question + Icon) */
-  .faq-card-header {
-    @apply w-full text-left;
-    @apply flex items-start justify-between;
-    @apply p-4 md:p-5 lg:p-6;
-    @apply bg-transparent border-0 cursor-pointer;
-    @apply transition-colors duration-300;
-    @apply touch-target-lg; /* Ensure 48px minimum touch target */
-    
-    &:focus-visible {
-      @apply outline-2 outline-cyan-400 outline-offset-2;
-    }
-    
-    &:hover .faq-card-question {
-      @apply text-cyan-300;
-    }
-  }
-
-  /* FAQ Question Text */
-  .faq-card-question {
-    @apply text-base md:text-lg;
-    @apply font-semibold text-white;
-    @apply leading-snug pr-4;
-    @apply transition-colors duration-300;
-    @apply m-0 flex-1;
-    
-    /* Mobile: Ensure proper line clamping when collapsed */
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    
-    /* Desktop: Remove clamping */
-    @media (min-width: 768px) {
-      display: block;
-      overflow: visible;
-    }
-  }
-
-  /* FAQ Icon Container */
-  .faq-card-icon-container {
-    @apply flex-shrink-0 w-11 h-11;
-    @apply rounded-full bg-cyan-400/10;
-    @apply flex items-center justify-center;
-    @apply border border-cyan-400/20;
-    @apply transition-all duration-300 ease-out;
-    @apply touch-target-lg; /* Ensure proper touch target */
-    
-    .faq-card:hover & {
-      @apply bg-cyan-400/20 border-cyan-400/30;
-    }
-  }
-
-  /* FAQ Chevron Icon */
-  .faq-card-icon {
-    @apply w-5 h-5 text-cyan-300;
-    @apply transition-transform duration-300 ease-out;
-    
-    /* Smooth rotation with reduced motion support */
-    &.rotate-180 {
-      transform: rotate(180deg);
-    }
-    
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
-  }
-
-  /* FAQ Content Wrapper - Controls height animation */
-  .faq-card-content-wrapper {
-    @apply overflow-hidden;
-    @apply transition-all duration-300 ease-out;
-    
-    /* Prevent layout shift during animation */
-    will-change: height;
-    
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
-  }
-
-  /* FAQ Content Container */
-  .faq-card-content {
-    @apply px-4 md:px-5 lg:px-6 pb-4 md:pb-5 lg:pb-6;
-  }
-
-  /* FAQ Answer Text */
-  .faq-card-answer {
-    @apply text-sm md:text-base;
-    @apply text-slate-200 leading-relaxed;
-    @apply mb-4;
-    @apply m-0;
-    
-    /* Ensure good contrast ratio (4.5:1+) */
-    color: rgb(226, 232, 240); /* slate-200 with good contrast */
-  }
-
-  /* FAQ Keywords Container */
-  .faq-card-keywords {
-    @apply flex flex-wrap gap-2;
-    @apply mt-3;
-  }
-
-  /* FAQ Keyword Chips */
-  .faq-card-keyword {
-    @apply text-xs px-2 py-1;
-    @apply bg-cyan-400/5 text-cyan-300/80;
-    @apply rounded-full border border-cyan-400/10;
-    @apply transition-colors duration-200;
-    
-    &:hover {
-      @apply border-cyan-400/20;
-    }
-  }
-
-  /* Desktop-specific enhancements */
-  @media (min-width: 768px) {
-    .faq-card {
-      /* Desktop: Increase spacing and max width */
-      @apply max-w-4xl mx-auto mb-4;
-      @apply rounded-xl; /* Slightly smaller radius on desktop */
-      
-      /* Desktop: Enhanced border gradient */
-      border-left-width: 4px;
-    }
-    
-    .faq-card-question {
-      @apply text-lg;
-      font-weight: 600;
-    }
-    
-    .faq-card-answer {
-      @apply text-base;
-      line-height: 1.7;
-    }
   }
 }

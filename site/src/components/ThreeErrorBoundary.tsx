@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Component, ErrorInfo, ReactNode } from "react";
+import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
-  variant?: "hero" | "scene" | "canvas";
+  variant?: 'hero' | 'scene' | 'canvas';
 }
 
 interface State {
@@ -25,10 +25,10 @@ export default class ThreeErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error to monitoring service
-    console.error("3D Component Error:", error, errorInfo);
-
+    console.error('3D Component Error:', error, errorInfo);
+    
     // In production, you could send this to an error tracking service
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
       // Example: Sentry.captureException(error, { extra: errorInfo });
     }
   }
@@ -44,43 +44,38 @@ export default class ThreeErrorBoundary extends Component<Props, State> {
       }
 
       const variants = {
-        hero: "h-screen w-full",
-        scene: "h-64 w-full",
-        canvas: "h-full w-full",
+        hero: 'h-screen w-full',
+        scene: 'h-64 w-full',
+        canvas: 'h-full w-full'
       };
 
-      const variant = this.props.variant || "scene";
+      const variant = this.props.variant || 'scene';
 
       return (
-        <div
-          className={`${variants[variant]} relative flex items-center justify-center bg-gradient-to-br from-gray-900 to-black`}
-          role="alert"
-          aria-live="assertive"
-        >
+        <div className={`${variants[variant]} relative flex items-center justify-center bg-gradient-to-br from-gray-900 to-black`} role="alert" aria-live="assertive">
           <div className="text-center p-6 sm:p-7 md:p-8 max-w-md">
             <div className="mb-6">
-              <svg
+              <svg 
                 className="w-16 h-16 text-red-400 mx-auto mb-4"
-                fill="none"
-                stroke="currentColor"
+                fill="none" 
+                stroke="currentColor" 
                 viewBox="0 0 24 24"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" 
                 />
               </svg>
               <h3 className="text-lg font-semibold text-white mb-2">
                 3D Content Unavailable
               </h3>
               <p className="text-slate-400 text-sm mb-4">
-                The 3D experience couldn&apos;t load. This might be due to
-                device limitations or WebGL not being supported.
+                The 3D experience couldn&apos;t load. This might be due to device limitations or WebGL not being supported.
               </p>
             </div>
-
+            
             <div className="space-y-3">
               <button
                 onClick={this.handleRetry}
@@ -89,7 +84,7 @@ export default class ThreeErrorBoundary extends Component<Props, State> {
                 Try Again
               </button>
             </div>
-
+            
             <details className="mt-4 text-left">
               <summary className="text-xs text-gray-500 cursor-pointer hover:text-slate-400 min-h-[44px] flex items-center py-2 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-cosmic-900 rounded">
                 Technical Details

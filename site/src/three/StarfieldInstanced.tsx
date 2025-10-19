@@ -1,7 +1,7 @@
-"use client";
+'use client';
 // src/three/StarfieldInstanced.tsx
-import * as THREE from "three";
-import { useEffect, useMemo, useRef } from "react";
+import * as THREE from 'three';
+import { useEffect, useMemo, useRef } from 'react';
 
 type StarfieldProps = {
   count?: number;
@@ -16,7 +16,7 @@ export function StarfieldInstanced({
 }: StarfieldProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null!);
   const dummy = useMemo(() => new THREE.Object3D(), []);
-  const color = useMemo(() => new THREE.Color("#b0eaff"), []);
+  const color = useMemo(() => new THREE.Color('#b0eaff'), []);
   const geom = useMemo(() => new THREE.SphereGeometry(0.03, 6, 6), []);
   const mat = useMemo(
     () =>

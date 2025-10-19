@@ -1,45 +1,41 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { siteConfig } from "@/config/site.config";
-import { footerLinkGroups } from "@/config/internal-linking.config";
-import Logo from "@/components/Logo";
-import { Button } from "@/components/Button";
-import { ConsentModal } from "@/components/cookies";
+import { useState } from 'react';
+import Link from 'next/link';
+import { siteConfig } from '@/config/site.config';
+import { footerLinkGroups } from '@/config/internal-linking.config';
+import Logo from '@/components/Logo';
+import { Button } from '@/components/Button';
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<
-    "idle" | "sending" | "success" | "error"
-  >("idle");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("sending");
-    setErrorMessage("");
-    setSuccessMessage("");
+    setStatus('sending');
+    setErrorMessage('');
+    setSuccessMessage('');
 
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      setErrorMessage("Voer een geldig e-mailadres in.");
-      setStatus("error");
+      setErrorMessage('Voer een geldig e-mailadres in.');
+      setStatus('error');
       return;
     }
 
     try {
-      const response = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
 
       let data;
-      const contentType = response.headers.get("content-type");
-
-      if (contentType && contentType.includes("application/json")) {
+      const contentType = response.headers.get('content-type');
+      
+      if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
         // Handle non-JSON responses (e.g., plain text error messages)
@@ -48,17 +44,15 @@ export default function Footer() {
       }
 
       if (!response.ok) {
-        throw new Error(data.error || "Er is iets misgegaan.");
+        throw new Error(data.error || 'Er is iets misgegaan.');
       }
 
-      setStatus("success");
-      setSuccessMessage(data.message || "Bedankt voor je inschrijving!");
-      setEmail(""); // Clear input on success
+      setStatus('success');
+      setSuccessMessage(data.message || 'Bedankt voor je inschrijving!');
+      setEmail(''); // Clear input on success
     } catch (error) {
-      setStatus("error");
-      setErrorMessage(
-        error instanceof Error ? error.message : "Onbekende fout.",
-      );
+      setStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'Onbekende fout.');
     }
   };
 
@@ -73,17 +67,16 @@ export default function Footer() {
             <p className="text-slate-400 text-sm leading-relaxed -mt-1 mb-6">
               {siteConfig.tagline}
             </p>
-
+            
             {/* Newsletter signup */}
             <div>
               <h4 className="font-semibold mb-4 text-cyan-300">
                 Digitale Magie Direct in je Inbox
               </h4>
               <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-                Wil je weten hoe de toekomst van het web eruitziet? Ontvang
-                maandelijks onze nieuwste inzichten over webdesign,
-                3D-innovaties en digitale trends die jouw business vooruit
-                helpen. Geen spam, alleen waardevolle kennis.
+                Wil je weten hoe de toekomst van het web eruitziet? Ontvang maandelijks 
+                onze nieuwste inzichten over webdesign, 3D-innovaties en digitale trends 
+                die jouw business vooruit helpen. Geen spam, alleen waardevolle kennis.
               </p>
               <form className="space-y-3" onSubmit={handleSubmit}>
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -99,25 +92,25 @@ export default function Footer() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    disabled={status === "sending"}
+                    disabled={status === 'sending'}
                   />
                   <Button
                     as="button"
                     type="submit"
                     variant="primary"
                     className="whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed sm:min-w-[140px]"
-                    disabled={status === "sending"}
+                    disabled={status === 'sending'}
                   >
-                    {status === "sending" ? "Bezig..." : "Inschrijven"}
+                    {status === 'sending' ? 'Bezig...' : 'Inschrijven'}
                   </Button>
                 </div>
-                {status === "success" && (
+                {status === 'success' && (
                   <p className="text-xs text-green-400">{successMessage}</p>
                 )}
-                {status === "error" && (
+                {status === 'error' && (
                   <p className="text-xs text-red-400">{errorMessage}</p>
                 )}
-                {status === "idle" && (
+                {status === 'idle' && (
                   <p className="text-xs text-gray-500">
                     We respecteren je inbox. Uitschrijven doe je met één klik.
                   </p>
@@ -137,9 +130,9 @@ export default function Footer() {
                       <Link
                         href={link.href}
                         className={`text-sm min-h-[44px] inline-flex items-center py-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded ${
-                          link.priority === "high"
-                            ? "text-white hover:text-cyan-300 font-medium"
-                            : "text-slate-400 hover:text-cyan-300"
+                          link.priority === 'high' 
+                            ? 'text-white hover:text-cyan-300 font-medium' 
+                            : 'text-slate-400 hover:text-cyan-300'
                         }`}
                       >
                         {link.title}
@@ -186,47 +179,11 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/70">
-          <span>
-            &copy; {new Date().getFullYear()} {siteConfig.name}. Met trots
-            gemaakt in Nederland.
-          </span>
+          <span>&copy; {new Date().getFullYear()} {siteConfig.name}. Met trots gemaakt in Nederland.</span>
           <span aria-hidden>•</span>
           <span>Gebouwd met passie voor de digitale toekomst ❤️</span>
-          <span aria-hidden>•</span>
-          <Link
-            href="/privacybeleid"
-            className="text-cyan-300 hover:text-cyan-200 underline transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-          >
-            Privacybeleid
-          </Link>
-          <span aria-hidden>•</span>
-          <Link
-            href="/cookiebeleid"
-            className="text-cyan-300 hover:text-cyan-200 underline transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-          >
-            Cookiebeleid
-          </Link>
-          <span aria-hidden>•</span>
-          <Link
-            href="/algemene-voorwaarden"
-            className="text-cyan-300 hover:text-cyan-200 underline transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-          >
-            Algemene Voorwaarden
-          </Link>
-          <span aria-hidden>•</span>
-          <button
-            onClick={() => setIsConsentModalOpen(true)}
-            className="text-cyan-300 hover:text-cyan-200 underline transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-          >
-            Cookie Voorkeuren
-          </button>
         </div>
       </div>
-      
-      <ConsentModal
-        isOpen={isConsentModalOpen}
-        onClose={() => setIsConsentModalOpen(false)}
-      />
     </footer>
   );
 }

@@ -1,262 +1,610 @@
-import type { Metadata } from "next";
-import { generateMetadata } from "@/lib/metadata";
-import UnifiedServicePage from "@/components/unified/UnifiedServicePage";
-import { ServicePageProps } from "@/components/unified/ServicePageComponents";
+import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
-export const dynamic = "force-static";
+import Link from 'next/link';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { Button } from '@/components/Button';
+import SEOSchema from '@/components/SEOSchema';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import FAQSection from '@/components/sections/FAQSection';
+
+export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - service content is fairly stable
-export const fetchCache = "force-cache";
+export const fetchCache = 'force-cache';
 
-// Enhanced service page metadata with all SEO optimizations
-export const metadata: Metadata = generateMetadata(
-  "/diensten/onderhoud-support",
-  {
-    service: "onderhoud-support",
-    pageType: "service",
-    lastModified: new Date().toISOString(),
-    image: {
-      url: "/og-webshop-laten-maken.png",
-      alt: "Webshop Laten Maken Nederland - ProWeb Studio E-commerce Services",
-      width: 1200,
-      height: 630,
+// Get canonical URL from environment with fallback
+const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+
+export const metadata: Metadata = {
+  title: 'Website Onderhoud & Support | Technisch Beheer & Hosting Nederland – ProWeb Studio',
+  description:
+    'Professioneel website onderhoud en technische support. Hosting management, security updates, performance monitoring en 24/7 support voor Nederlandse websites.',
+  alternates: {
+    canonical: `${SITE_URL}/diensten/onderhoud-support`,
+    languages: { 
+      'nl-NL': `${SITE_URL}/diensten/onderhoud-support`,
+      'x-default': `${SITE_URL}/diensten/onderhoud-support`
     },
   },
-);
-
-const servicePageData: ServicePageProps = {
-  // Hero Section
-  title: "Onderhoud & Support",
-  subtitle: "Zorgeloos website onderhoud en technische support",
-  heroDescription:
-    "Van security updates tot performance monitoring - wij zorgen dat uw website altijd optimaal functioneert. Proactief onderhoud met 24/7 monitoring.",
-  primaryCTA: "Gratis Support Consult",
-  secondaryCTA: "Bekijk Support Plans",
-
-  // Features Section
-  featuresTitle: "Complete E-commerce Oplossing",
-  featuresSubtitle:
-    "Van productbeheer tot betalingsverwerking - wij zorgen voor alle aspecten van moderne e-commerce.",
-  features: [
-    {
-      title: "Product Management",
-      description: "Uitgebreid productcatalogus systeem met voorraad beheer",
-      icon: "📦",
-      details: [
-        "Onbeperkt aantal producten",
-        "Varianten en opties beheer",
-        "Voorraad tracking & alerts",
-        "Bulk product import/export",
-      ],
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
-    {
-      title: "Betaal Integraties",
-      description: "Veilige betalingsverwerking met alle populaire methoden",
-      icon: "💳",
-      details: [
-        "iDEAL, Bancontact, PayPal integratie",
-        "Creditcard verwerking (Visa, Mastercard)",
-        "Achteraf betalen (Klarna, Afterpay)",
-        "PCI DSS compliant beveiliging",
-      ],
-    },
-    {
-      title: "Bestelling & Verzending",
-      description: "Geautomatiseerd bestel- en verzendproces voor efficiëntie",
-      icon: "�",
-      details: [
-        "Automatische bestelling notificaties",
-        "PostNL, DPD, UPS integratie",
-        "Track & trace functionaliteit",
-        "Verzendkosten calculator",
-      ],
-    },
-    {
-      title: "Marketing & SEO",
-      description: "E-commerce geoptimaliseerde marketing tools en SEO",
-      icon: "📈",
-      details: [
-        "Product SEO optimalisatie",
-        "Google Shopping integratie",
-        "Kortingscodes & promoties",
-        "E-mail marketing automation",
-      ],
-    },
-  ],
-
-  // Packages Section
-  packagesTitle: "Webshop Pakketten",
-  packagesSubtitle:
-    "Van basis webshop tot premium e-commerce platform - kies het pakket dat bij uw ambities past.",
-  packages: [
-    {
-      name: "Starter Webshop",
-      description: "Professionele webshop voor startende ondernemers",
-      price: "€2.500",
-      features: [
-        "Tot 50 producten",
-        "Basis betaalintegraties (iDEAL, PayPal)",
-        "Responsive design & mobiel geoptimaliseerd",
-        "Basis SEO optimalisatie",
-      ],
-      popular: false,
-    },
-    {
-      name: "Business Webshop",
-      description: "Complete e-commerce oplossing voor groeiende bedrijven",
-      price: "€4.500",
-      features: [
-        "Onbeperkt aantal producten",
-        "Alle betaalmethoden & verzendintegraties",
-        "Geavanceerde SEO & marketing tools",
-        "Customer portal & wishlist functionaliteit",
-      ],
-      popular: true,
-    },
-    {
-      name: "Enterprise Webshop",
-      description: "Premium e-commerce platform met custom functionaliteiten",
-      price: "€7.500",
-      features: [
-        "Custom functionaliteiten & integraties",
-        "Multi-vendor marketplace mogelijkheden",
-        "Geavanceerde analytics & rapportage",
-        "Dedicated account management",
-      ],
-      popular: false,
-    },
-  ],
-
-  // Statistics Section
-  statisticsTitle: "Bewezen E-commerce Resultaten",
-  statistics: [
-    {
-      value: "250%",
-      label: "Gemiddelde Omzet Stijging",
-      description: "Resultaten behaald door onze webshop klanten",
-    },
-    {
-      value: "85%",
-      label: "Websites Die Top 3 Bereiken",
-      description: "Succespercentage voor competitieve keywords",
-    },
-    {
-      value: "99.9%",
-      label: "Uptime Garantie",
-      description: "Betrouwbare hosting en ondersteuning",
-    },
-    {
-      value: "4 weken",
-      label: "Gemiddelde Oplevering",
-      description: "Van concept tot live webshop",
-    },
-  ],
-
-  // Process Section
-  processTitle: "Ons Webshop Proces",
-  processSubtitle:
-    "Van concept tot conversie - ons bewezen stappenplan voor succesvolle webshops.",
-  processSteps: [
-    {
-      step: "01",
-      title: "Strategie & Planning",
-      description:
-        "Complete e-commerce strategie, doelgroep analyse en technische planning voor uw perfecte webshop.",
-    },
-    {
-      step: "02",
-      title: "Design & Development",
-      description:
-        "Custom webshop design en development met focus op gebruiksvriendelijkheid en conversie.",
-    },
-    {
-      step: "03",
-      title: "Integratie & Testing",
-      description:
-        "Betaal- en verzendintegraties, uitgebreid testen en optimalisatie voor perfecte functionaliteit.",
-    },
-    {
-      step: "04",
-      title: "Launch & Support",
-      description:
-        "Succesvolle webshop launch met training, documentatie en doorlopende technische ondersteuning.",
-    },
-  ],
-
-  // Trust Indicators Section
-  trustTitle: "Waarom Kiezen Voor Onze E-commerce Expertise",
-  trustIndicators: [
-    {
-      icon: "🏆",
-      title: "Shopify & WooCommerce Certified",
-      description:
-        "Gecertificeerde e-commerce professionals met bewezen expertise in alle major platforms.",
-    },
-    {
-      icon: "🔒",
-      title: "PCI DSS & Security Experts",
-      description:
-        "Ervaren developers die veiligheid en compliance prioriteren voor vertrouwde webshops.",
-    },
-    {
-      icon: "⚡",
-      title: "Core Web Vitals Experts",
-      description:
-        "Gespecialiseerd in Google's nieuwste ranking factoren en performance optimalisatie.",
-    },
-    {
-      icon: "✅",
-      title: "White-hat SEO Methoden",
-      description:
-        "Uitsluitend veilige, Google-conforme SEO technieken voor duurzame resultaten.",
-    },
-  ],
-
-  // FAQ Section
-  faqTitle: "Veelgestelde Vragen over Webshop Laten Maken",
-  faqs: [
-    {
-      question: "Hoe lang duurt het om een webshop te laten maken?",
-      answer:
-        "Een professionele webshop is meestal binnen 4-6 weken gereed, afhankelijk van de complexiteit en het aantal producten. Voor enterprise webshops met custom functionaliteiten kunnen we 8-12 weken nodig hebben. We plannen alles vooraf en houden u op de hoogte via wekelijkse updates.",
-    },
-    {
-      question: "Wat zijn de kosten voor een webshop laten maken?",
-      answer:
-        "Onze webshop prijzen beginnen bij €2.500 voor een starter webshop tot €7.500+ voor enterprise oplossingen. De kosten hangen af van het aantal producten, gewenste integraties en custom functionaliteiten. We bieden altijd een gedetailleerde offerte inclusief alle kosten.",
-    },
-    {
-      question: "Welke betaalmethoden kunnen worden geïntegreerd?",
-      answer:
-        "We integreren alle populaire betaalmethoden: iDEAL, Bancontact, PayPal, creditcards (Visa/Mastercard), Apple Pay, Google Pay en achteraf betalen opties zoals Klarna en Afterpay. Alle betalingen zijn PCI DSS compliant beveiligd.",
-    },
-    {
-      question: "Krijg ik training om mijn webshop zelf te beheren?",
-      answer:
-        "Ja! Na oplevering krijgt u uitgebreide training en documentatie om producten toe te voegen, bestellingen te beheren en content bij te werken. We bieden ook optionele video tutorials en doorlopende support wanneer nodig.",
-    },
-    {
-      question: "Worden verzendintegraties meegeleverd?",
-      answer:
-        "Absoluut! We koppelen uw webshop aan major verzendpartners zoals PostNL, DPD, UPS en DHL. Dit omvat automatische track & trace, verzendlabels printen en dynamische verzendkosten berekening.",
-    },
-    {
-      question: "Is mijn webshop SEO geoptimaliseerd?",
-      answer:
-        "Alle webshops worden volledig SEO geoptimaliseerd geleverd: snelle laadtijden, mobiel-vriendelijk design, gestructureerde data voor producten, XML sitemaps en Google Shopping integratie voor maximale online vindbaarheid.",
-    },
-  ],
-
-  // Final CTA Section
-  finalCTATitle: "Klaar om uw eigen webshop te starten?",
-  finalCTADescription:
-    "Ontvang een gratis webshop consult en ontdek hoe wij uw e-commerce droom werkelijkheid maken.",
-  finalPrimaryCTA: "Gratis SEO Analyse",
-  finalSecondaryCTA: "Direct Bellen",
-
-  // SEO
-  pageSlug: "onderhoud-support",
+  },
+  openGraph: {
+    title: 'Website Onderhoud & Support | Technisch Beheer & Hosting Nederland – ProWeb Studio',
+    description: 'Professioneel website onderhoud en technische support. Hosting management, security updates, en performance monitoring.',
+    url: `${SITE_URL}/diensten/onderhoud-support`,
+    type: 'website',
+    locale: 'nl_NL',
+    images: [{ url: `${SITE_URL}/og`, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Website Onderhoud & Support | Technisch Beheer & Hosting Nederland – ProWeb Studio',
+    description: 'Professioneel website onderhoud en technische support. Hosting management, security updates.',
+    images: [`${SITE_URL}/og`],
+  },
 };
 
-export default function OnderhoudSupport() {
-  return <UnifiedServicePage {...servicePageData} />;
+const maintenanceFeatures = [
+  {
+    title: 'Technisch Onderhoud',
+    description: 'Proactief onderhoud voor optimale website prestaties',
+    icon: '🔧',
+    details: [
+      'Software updates & patches',
+      'Security monitoring & fixes',
+      'Performance optimalisatie',
+      'Database maintenance'
+    ]
+  },
+  {
+    title: 'Hosting & Infrastructuur',
+    description: 'Betrouwbare hosting met maximale uptime',
+    icon: '🌐',
+    details: [
+      'Premium cloud hosting',
+      'CDN & caching optimalisatie',
+      'SSL certificaat beheer',
+      'Automatische backups'
+    ]
+  },
+  {
+    title: 'Security Management',
+    description: 'Complete beveiliging tegen cyber threats',
+    icon: '🔒',
+    details: [
+      'Malware scanning & removal',
+      'Firewall configuratie',
+      'Security headers setup',
+      'Vulnerability assessments'
+    ]
+  },
+  {
+    title: '24/7 Support',
+    description: 'Altijd bereikbare technische ondersteuning',
+    icon: '📞',
+    details: [
+      'Emergency response team',
+      'Proactive monitoring',
+      'Issue tracking systeem',
+      'Gedetailleerde rapportages'
+    ]
+  }
+];
+
+const supportPackages = [
+  {
+    type: 'Basic Support',
+    description: 'Essentieel onderhoud voor kleine websites',
+    features: ['Maandelijkse updates', 'Security monitoring', 'Backup management', 'Email support'],
+    price: '€75/maand',
+    responseTime: '24 uur',
+    recommended: false
+  },
+  {
+    type: 'Professional Support',
+    description: 'Uitgebreide ondersteuning voor zakelijke websites',
+    features: ['Wekelijkse updates', 'Performance monitoring', 'Priority support', 'SEO monitoring'],
+    price: '€150/maand',
+    responseTime: '4 uur',
+    recommended: true
+  },
+  {
+    type: 'Enterprise Support',
+    description: 'Premium onderhoud voor kritieke business applicaties',
+    features: ['Dagelijkse monitoring', '24/7 phone support', 'Custom development', 'SLA garanties'],
+    price: '€350/maand',
+    responseTime: '1 uur',
+    recommended: false
+  },
+  {
+    type: 'E-commerce Support',
+    description: 'Gespecialiseerd onderhoud voor webshops',
+    features: ['Transaction monitoring', 'Payment gateway support', 'Inventory management', 'Sales reporting'],
+    price: '€250/maand',
+    responseTime: '2 uur',
+    recommended: false
+  }
+];
+
+const maintenanceServices = [
+  {
+    name: 'Content Updates',
+    description: 'Regelmatige content updates en wijzigingen',
+    icon: '📝',
+    tasks: ['Tekst aanpassingen', 'Afbeelding uploads', 'Menu wijzigingen', 'Product catalogi']
+  },
+  {
+    name: 'Performance Monitoring',
+    description: 'Continue monitoring van website prestaties',
+    icon: '📊',
+    tasks: ['Load time tracking', 'Core Web Vitals', 'Error monitoring', 'User experience metrics']
+  },
+  {
+    name: 'Security Maintenance',
+    description: 'Proactieve beveiliging en threat prevention',
+    icon: '🛡️',
+    tasks: ['Security patches', 'Malware scans', 'Access control', 'Compliance checks']
+  },
+  {
+    name: 'Backup & Recovery',
+    description: 'Geautomatiseerde backups en disaster recovery',
+    icon: '💾',
+    tasks: ['Daily backups', 'Version control', 'Quick restore', 'Data integrity checks']
+  }
+];
+
+const monitoringTools = [
+  {
+    tool: 'Uptime Monitoring',
+    description: '24/7 beschikbaarheid controle',
+    features: ['Multi-location checks', 'Instant alerts', 'Historical reports', 'SLA tracking']
+  },
+  {
+    tool: 'Performance Analytics',
+    description: 'Gedetailleerde prestatie metrieken',
+    features: ['Page speed insights', 'User journey tracking', 'Conversion monitoring', 'A/B testing']
+  },
+  {
+    tool: 'Security Scanning',
+    description: 'Continue beveiligings checks',
+    features: ['Vulnerability scans', 'Malware detection', 'SSL monitoring', 'Code analysis']
+  },
+  {
+    tool: 'SEO Health Check',
+    description: 'SEO prestaties monitoring',
+    features: ['Ranking tracking', 'Technical SEO audit', 'Content optimization', 'Link monitoring']
+  }
+];
+
+const faqItems = [
+  {
+    question: 'Wat is inbegrepen bij website onderhoud?',
+    answer: 'Website onderhoud omvat technische updates, security patches, performance monitoring, backup management, content updates, en technische support. We zorgen ervoor dat uw website veilig, snel en up-to-date blijft.'
+  },
+  {
+    question: 'Hoe vaak worden updates uitgevoerd?',
+    answer: 'Dit hangt af van uw support pakket. Basic pakketten krijgen maandelijkse updates, Professional wekelijks, en Enterprise dagelijkse monitoring. Kritieke security updates worden altijd direct uitgevoerd.'
+  },
+  {
+    question: 'Wat gebeurt er bij een website crash?',
+    answer: 'Ons monitoring systeem detecteert problemen meestal binnen 1-5 minuten. We hebben 24/7 response teams en kunnen websites meestal binnen 15-60 minuten herstellen, afhankelijk van uw support level.'
+  },
+  {
+    question: 'Kunnen jullie ook hosting verzorgen?',
+    answer: 'Ja, we bieden premium managed hosting op enterprise-grade infrastructuur. Dit omvat CDN, SSL certificaten, automatische backups, en geoptimaliseerde servers voor maximale performance.'
+  },
+  {
+    question: 'Wat zijn de kosten voor website onderhoud?',
+    answer: 'Onderhoud pakketten starten vanaf €75/maand voor basis support tot €350/maand voor enterprise niveau. Prijzen hangen af van website complexiteit, traffic volume, en gewenste service levels.'
+  },
+  {
+    question: 'Hoe worden security threats aangepakt?',
+    answer: 'We gebruiken proactieve security monitoring, automatische malware scans, firewall management, en security patches. Bij security incidents hebben we rapid response protocollen en forensic analysis capabilities.'
+  }
+];
+
+export default function OnderhoudenSupport() {
+  return (
+    <main className="pt-20 md:pt-24 relative overflow-hidden">
+      {/* SEO Schema */}
+      <SEOSchema 
+        pageType="services"
+        pageTitle="Website Onderhoud & Support"
+        pageDescription="Professioneel website onderhoud en technische support met hosting management en security monitoring"
+      />
+      
+      {/* Breadcrumbs */}
+      <Breadcrumbs />
+      
+      {/* Hero Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            Website Onderhoud &{' '}
+            <span className="gradient-text-primary">
+              Support
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Zorgeloos website beheer met professioneel onderhoud, hosting management, 
+            security monitoring en 24/7 technische ondersteuning.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              href="/contact"
+              variant="primary"
+              size="large"
+              className="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-500 hover:to-secondary-500"
+            >
+              Support Pakket Kiezen
+            </Button>
+            <Button
+              href="/speeltuin"
+              variant="secondary"
+              size="large"
+              className="border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white"
+            >
+              Monitoring Dashboard
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Complete{' '}
+              <span className="gradient-text-primary">
+                Website Care
+              </span>
+            </h2>
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+              Van technisch onderhoud tot hosting management - wij zorgen voor alle 
+              aspecten van uw website zodat u zich kunt richten op uw business.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+            {maintenanceFeatures.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300"
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
+                <p className="text-slate-200 mb-6">{feature.description}</p>
+                <ul className="space-y-2">
+                  {feature.details.map((detail, detailIndex) => (
+                    <li key={detailIndex} className="text-sm text-slate-400 flex items-center">
+                      <span className="text-primary-400 mr-2">✓</span>
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Support Packages Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Support{' '}
+              <span className="gradient-text-primary">
+                Pakketten
+              </span>
+            </h2>
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+              Kies het support niveau dat past bij uw website en business behoeften.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {supportPackages.map((pkg, index) => (
+              <div
+                key={index}
+                className={`relative bg-cosmic-800/40 backdrop-blur-sm border rounded-xl p-8 transition-all duration-300 ${
+                  pkg.recommended 
+                    ? 'border-primary-500/80 bg-primary-900/20' 
+                    : 'border-cosmic-700/30 hover:border-primary-500/50'
+                }`}
+              >
+                {pkg.recommended && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-gradient-to-r from-primary-500 to-secondary-500 text-white text-xs px-3 py-1 rounded-full">
+                      Aanbevolen
+                    </span>
+                  </div>
+                )}
+                <h3 className="text-xl font-semibold text-white mb-3">{pkg.type}</h3>
+                <p className="text-slate-200 text-sm mb-4">{pkg.description}</p>
+                <div className="text-2xl font-bold text-primary-400 mb-2">
+                  {pkg.price}
+                </div>
+                <div className="text-sm text-slate-400 mb-6">
+                  Response: {pkg.responseTime}
+                </div>
+                <div className="mb-6">
+                  <h4 className="text-sm font-semibold text-white mb-3">Inbegrepen:</h4>
+                  <ul className="space-y-2">
+                    {pkg.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="text-sm text-slate-200 flex items-center">
+                        <span className="text-primary-400 mr-2">✓</span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <Button
+                  href="/contact"
+                  variant={pkg.recommended ? "primary" : "secondary"}
+                  size="normal"
+                  className={`w-full ${
+                    pkg.recommended 
+                      ? "bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-500 hover:to-secondary-500" 
+                      : "border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white"
+                  }`}
+                >
+                  Pakket Kiezen
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Maintenance Services Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Onderhoud{' '}
+              <span className="gradient-text-primary">
+                Services
+              </span>
+            </h2>
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+              Uitgebreide onderhouds diensten om uw website in optimale staat te houden.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {maintenanceServices.map((service, index) => (
+              <div
+                key={index}
+                className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6 hover:border-primary-500/50 transition-all duration-300 text-center"
+              >
+                <div className="text-4xl mb-4">{service.icon}</div>
+                <h3 className="text-lg font-semibold text-white mb-3">{service.name}</h3>
+                <p className="text-slate-200 text-sm mb-4">{service.description}</p>
+                <div className="space-y-1">
+                  {service.tasks.map((task, taskIndex) => (
+                    <div key={taskIndex} className="text-xs text-slate-400">
+                      • {task}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Monitoring Tools Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Monitoring{' '}
+              <span className="gradient-text-primary">
+                & Analytics
+              </span>
+            </h2>
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+              Geavanceerde monitoring tools voor complete inzichten in uw website prestaties.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {monitoringTools.map((tool, index) => (
+              <div
+                key={index}
+                className="bg-cosmic-800/40 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300"
+              >
+                <h3 className="text-xl font-semibold text-white mb-3">{tool.tool}</h3>
+                <p className="text-slate-200 text-sm mb-6">{tool.description}</p>
+                <div className="grid grid-cols-2 gap-4">
+                  {tool.features.map((feature, featureIndex) => (
+                    <div
+                      key={featureIndex}
+                      className="text-xs text-slate-400 bg-cosmic-700/30 rounded-lg p-3 text-center"
+                    >
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Support{' '}
+              <span className="gradient-text-primary">
+                Proces
+              </span>
+            </h2>
+            <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+              Gestructureerde aanpak voor optimaal website beheer en onderhoud.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[
+              {
+                step: '01',
+                title: 'Website Audit',
+                description: 'Complete analyse van huidige staat en behoeften',
+                duration: '1 week'
+              },
+              {
+                step: '02',
+                title: 'Setup & Migratie',
+                description: 'Hosting setup en monitoring configuratie',
+                duration: '1-2 weken'
+              },
+              {
+                step: '03',
+                title: 'Proactief Onderhoud',
+                description: 'Continue monitoring en preventief onderhoud',
+                duration: 'Doorlopend'
+              },
+              {
+                step: '04',
+                title: 'Rapportage & Optimalisatie',
+                description: 'Maandelijkse rapporten en verbeteringen',
+                duration: 'Maandelijks'
+              }
+            ].map((phase, index) => (
+              <div
+                key={index}
+                className="relative bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6 text-center"
+              >
+                <div className="text-2xl font-bold text-primary-400 mb-3">{phase.step}</div>
+                <h3 className="text-lg font-semibold text-white mb-3">{phase.title}</h3>
+                <p className="text-slate-200 text-sm mb-3">{phase.description}</p>
+                <div className="text-xs text-primary-300 font-medium">{phase.duration}</div>
+                {index < 3 && (
+                  <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500"></div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <ErrorBoundary>
+        <Suspense fallback={<div className="h-96 bg-cosmic-900/30" />}>
+          <FAQSection
+            title="Veelgestelde Vragen over Website Onderhoud"
+          >
+            <div className="space-y-6">
+              {faqItems.map((item, index) => (
+                <div key={index} className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-white mb-3">{item.question}</h3>
+                  <p className="text-slate-200 leading-relaxed">{item.answer}</p>
+                </div>
+              ))}
+            </div>
+          </FAQSection>
+        </Suspense>
+      </ErrorBoundary>
+
+      {/* CTA Section */}
+      <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Zorgeloos{' '}
+            <span className="gradient-text-primary">
+              Website Beheer
+            </span>
+          </h2>
+          <p className="text-lg text-slate-200 mb-8 max-w-2xl mx-auto">
+            Laat ons uw website beheren zodat u zich kunt focussen op wat u het beste doet: 
+            uw business laten groeien.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              href="/contact"
+              variant="primary"
+              size="large"
+              className="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-500 hover:to-secondary-500"
+            >
+              Support Pakket Selecteren
+            </Button>
+            <Button
+              href="/speeltuin"
+              variant="secondary"
+              size="large"
+              className="border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white"
+            >
+              Live Monitoring Demo
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Related Services */}
+      <ErrorBoundary>
+        <Suspense fallback={<div className="h-64 bg-cosmic-900/30" />}>
+          <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-16 bg-cosmic-900/30">
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-12 text-center">
+                Gerelateerde{' '}
+                <span className="gradient-text-primary">
+                  Diensten
+                </span>
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[
+                  {
+                    title: 'Website Laten Maken',
+                    description: 'Nieuwe websites met ingebouwd onderhoudsplan',
+                    href: '/diensten/website-laten-maken',
+                    icon: '🌐'
+                  },
+                  {
+                    title: 'SEO Optimalisatie',
+                    description: 'Continue SEO monitoring en verbetering',
+                    href: '/diensten/seo-optimalisatie',
+                    icon: '📈'
+                  },
+                  {
+                    title: '3D Website Ervaringen',
+                    description: 'Gespecialiseerd onderhoud voor complexe 3D sites',
+                    href: '/diensten/3d-website-ervaringen',
+                    icon: '🎮'
+                  }
+                ].map((service, index) => (
+                  <Link
+                    key={index}
+                    href={service.href}
+                    className="group bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6 hover:border-primary-500/50 transition-all duration-300 hover:scale-105"
+                  >
+                    <div className="text-3xl mb-4">{service.icon}</div>
+                    <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-primary-300 transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-slate-400 text-sm">{service.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        </Suspense>
+      </ErrorBoundary>
+    </main>
+  );
 }

@@ -3,8 +3,8 @@
  * Tailored for Dutch users, language, and market requirements
  */
 
-import { ReactNode, useEffect } from "react";
-import { initDutchPerformanceMonitoring } from "@/lib/web-vitals-optimization";
+import { ReactNode, useEffect } from 'react';
+import { initDutchPerformanceMonitoring } from '@/lib/web-vitals-optimization';
 
 interface DutchCoreWebVitalsProps {
   children: ReactNode;
@@ -23,26 +23,23 @@ export function DutchCoreWebVitals({
   enableDutchLanguageOptimizations = true,
   enableAnalytics = true,
 }: DutchCoreWebVitalsProps) {
+  
   useEffect(() => {
     if (enableAnalytics) {
       // Initialize Dutch-specific performance monitoring
       initDutchPerformanceMonitoring();
     }
-
+    
     if (enableRegionalOptimizations) {
       // Optimize for Dutch network conditions
       optimizeForDutchNetwork();
     }
-
+    
     if (enableDutchLanguageOptimizations) {
       // Optimize typography for Dutch language
       optimizeDutchTypography();
     }
-  }, [
-    enableAnalytics,
-    enableRegionalOptimizations,
-    enableDutchLanguageOptimizations,
-  ]);
+  }, [enableAnalytics, enableRegionalOptimizations, enableDutchLanguageOptimizations]);
 
   return (
     <>
@@ -56,27 +53,21 @@ export function DutchCoreWebVitals({
           <meta httpEquiv="Content-Language" content="nl-NL" />
         </>
       )}
-
+      
       {/* Regional performance optimizations */}
       {enableRegionalOptimizations && (
         <>
           {/* Dutch CDN optimization hints */}
           <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
           <link rel="dns-prefetch" href="//unpkg.com" />
-          <link
-            rel="preconnect"
-            href="https://fonts.googleapis.com"
-            crossOrigin="anonymous"
-          />
-          <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossOrigin="anonymous"
-          />
+          <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         </>
       )}
-
-      <div className="dutch-optimized-content">{children}</div>
+      
+      <div className="dutch-optimized-content">
+        {children}
+      </div>
     </>
   );
 }
@@ -85,46 +76,28 @@ export function DutchCoreWebVitals({
  * Optimize network settings for Dutch infrastructure
  */
 function optimizeForDutchNetwork() {
-  if (typeof window === "undefined") return;
-
+  if (typeof window === 'undefined') return;
+  
   // Set up adaptive loading based on Dutch network conditions
-  const connection = (
-    navigator as unknown as {
-      connection?: { effectiveType?: string; downlink?: number; rtt?: number };
-    }
-  ).connection;
-
+  const connection = (navigator as unknown as { connection?: { effectiveType?: string; downlink?: number; rtt?: number } }).connection;
+  
   if (connection) {
     const { effectiveType, downlink, rtt } = connection;
-
+    
     // Dutch average connection speeds are high, but optimize for mobile
-    const isDutchMobile = effectiveType === "3g" || effectiveType === "4g";
-    const isSlowConnection =
-      (downlink !== undefined && downlink < 2) ||
-      (rtt !== undefined && rtt > 200);
-
+    const isDutchMobile = effectiveType === '3g' || effectiveType === '4g';
+    const isSlowConnection = (downlink !== undefined && downlink < 2) || (rtt !== undefined && rtt > 200);
+    
     if (isDutchMobile || isSlowConnection) {
       // Enable aggressive resource prioritization
-      document.documentElement.style.setProperty(
-        "--loading-strategy",
-        "conservative",
-      );
-
+      document.documentElement.style.setProperty('--loading-strategy', 'conservative');
+      
       // Reduce animation complexity for mobile Dutch users
-      document.documentElement.style.setProperty(
-        "--animation-complexity",
-        "reduced",
-      );
+      document.documentElement.style.setProperty('--animation-complexity', 'reduced');
     } else {
       // Enable full features for desktop Dutch users with fast connections
-      document.documentElement.style.setProperty(
-        "--loading-strategy",
-        "aggressive",
-      );
-      document.documentElement.style.setProperty(
-        "--animation-complexity",
-        "full",
-      );
+      document.documentElement.style.setProperty('--loading-strategy', 'aggressive');
+      document.documentElement.style.setProperty('--animation-complexity', 'full');
     }
   }
 }
@@ -133,9 +106,9 @@ function optimizeForDutchNetwork() {
  * Optimize typography specifically for Dutch language
  */
 function optimizeDutchTypography() {
-  if (typeof window === "undefined") return;
-
-  const style = document.createElement("style");
+  if (typeof window === 'undefined') return;
+  
+  const style = document.createElement('style');
   style.textContent = `
     /* Dutch language typography optimizations */
     .dutch-text, .dutch-optimized-content {
@@ -200,7 +173,7 @@ function optimizeDutchTypography() {
       }
     }
   `;
-
+  
   document.head.appendChild(style);
 }
 
@@ -212,24 +185,18 @@ export function DutchSEOOptimizations() {
     <>
       {/* Dutch search engine optimizations */}
       <meta name="google" content="notranslate" />
-      <meta
-        name="robots"
-        content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"
-      />
-      <meta
-        name="googlebot"
-        content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"
-      />
-
+      <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+      <meta name="googlebot" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" />
+      
       {/* Dutch accessibility optimizations */}
       <meta name="color-scheme" content="light dark" />
       <meta name="supported-color-schemes" content="light dark" />
-
+      
       {/* Dutch social media optimizations */}
       <meta property="og:locale" content="nl_NL" />
       <meta property="og:locale:alternate" content="en_US" />
       <meta name="twitter:card" content="summary_large_image" />
-
+      
       {/* Dutch region-specific tags */}
       <meta name="geo.position" content="52.3676;4.9041" />
       <meta name="ICBM" content="52.3676, 4.9041" />
@@ -250,21 +217,21 @@ export const DutchPerformanceThresholds = {
     needsImprovement: 3000, // 3s
     poor: 4000, // 4s
   },
-
+  
   // FID thresholds for Dutch interaction patterns
   FID: {
     good: 80, // 80ms - Dutch users interact quickly
     needsImprovement: 150, // 150ms
     poor: 300, // 300ms
   },
-
+  
   // CLS thresholds for Dutch reading patterns
   CLS: {
     good: 0.05, // Very low tolerance for layout shifts
     needsImprovement: 0.1,
     poor: 0.25,
   },
-
+  
   // INP thresholds for Dutch user interactions
   INP: {
     good: 150, // 150ms
@@ -277,45 +244,40 @@ export const DutchPerformanceThresholds = {
  * Monitor Dutch-specific performance metrics
  */
 export function monitorDutchPerformance() {
-  if (typeof window === "undefined") return;
-
+  if (typeof window === 'undefined') return;
+  
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
       const entryName = entry.name;
       const entryType = entry.entryType;
-
+      
       // Track Dutch page performance
-      if (entryType === "navigation") {
+      if (entryType === 'navigation') {
         const nav = entry as PerformanceNavigationTiming;
         const pageLoadTime = nav.loadEventEnd - nav.startTime;
-
+        
         // Report Dutch page performance
-        if (typeof gtag !== "undefined") {
-          gtag("event", "dutch_page_performance", {
-            event_category: "Dutch Performance",
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'dutch_page_performance', {
+            event_category: 'Dutch Performance',
             page_load_time: Math.round(pageLoadTime),
-            connection_type:
-              (
-                navigator as unknown as {
-                  connection?: { effectiveType?: string };
-                }
-              ).connection?.effectiveType || "unknown",
-            custom_map: {
-              metric_dutch_1: "page_load_time",
-              metric_dutch_2: "connection_type",
-            },
+            connection_type: (navigator as unknown as { connection?: { effectiveType?: string } }).connection?.effectiveType || 'unknown',
+            custom_map: { 
+              metric_dutch_1: 'page_load_time',
+              metric_dutch_2: 'connection_type'
+            }
           });
         }
       }
-
+      
       // Track Dutch resource loading
-      if (entryType === "resource" && entryName.includes("nl")) {
+      if (entryType === 'resource' && entryName.includes('nl')) {
         const resource = entry as PerformanceResourceTiming;
         const resourceLoadTime = resource.responseEnd - resource.startTime;
-
-        if (typeof gtag !== "undefined") {
-          gtag("event", "dutch_resource_performance", {
-            event_category: "Dutch Resources",
+        
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'dutch_resource_performance', {
+            event_category: 'Dutch Resources',
             resource_load_time: Math.round(resourceLoadTime),
             resource_type: entryName,
           });
@@ -323,8 +285,8 @@ export function monitorDutchPerformance() {
       }
     }
   });
-
-  observer.observe({ entryTypes: ["navigation", "resource"] });
+  
+  observer.observe({ entryTypes: ['navigation', 'resource'] });
 }
 
 // Global gtag declaration

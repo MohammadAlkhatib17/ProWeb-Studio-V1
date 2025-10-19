@@ -1,52 +1,45 @@
-"use client";
+'use client'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { useRef, useMemo, Suspense } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-  Box,
-  RoundedBox,
-  OrbitControls,
-  Environment,
+import React, { useRef, useMemo, Suspense } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { 
+  Box, 
+  RoundedBox, 
+  OrbitControls, 
+  Environment, 
   ContactShadows,
   Html,
   Preload,
-  useDetectGPU,
-} from "@react-three/drei";
-import { Mesh, Group } from "three";
-import { motion } from "framer-motion";
+  useDetectGPU
+} from '@react-three/drei'
+import { Mesh, Group } from 'three'
+import { motion } from 'framer-motion'
 
 interface LaptopModelProps {
-  position?: [number, number, number];
-  rotation?: [number, number, number];
-  scale?: [number, number, number];
+  position?: [number, number, number]
+  rotation?: [number, number, number]
+  scale?: [number, number, number]
 }
 
-function LaptopModel({
-  position = [0, 0, 0],
-  rotation = [0, 0, 0],
-  scale = [1, 1, 1],
-}: LaptopModelProps) {
-  const groupRef = useRef<Group>(null);
-  const screenRef = useRef<Mesh>(null);
-
+function LaptopModel({ position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1] }: LaptopModelProps) {
+  const groupRef = useRef<Group>(null)
+  const screenRef = useRef<Mesh>(null)
+  
   // Smooth rotation animation
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y =
-        Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
-      groupRef.current.position.y =
-        Math.sin(state.clock.elapsedTime * 0.5) * 0.05;
+      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1
+      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.05
     }
-
+    
     if (screenRef.current) {
-      const material = screenRef.current.material as any;
+      const material = screenRef.current.material as any
       if (material.emissiveIntensity !== undefined) {
-        material.emissiveIntensity =
-          0.1 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
+        material.emissiveIntensity = 0.1 + Math.sin(state.clock.elapsedTime * 2) * 0.05
       }
     }
-  });
+  })
 
   return (
     <group ref={groupRef} position={position} rotation={rotation} scale={scale}>
@@ -59,36 +52,40 @@ function LaptopModel({
       >
         <meshStandardMaterial color="#2c3e50" metalness={0.8} roughness={0.2} />
       </RoundedBox>
-
+      
       {/* Laptop Screen */}
       <group position={[0, 0.8, -0.9]} rotation={[-0.1, 0, 0]}>
-        <RoundedBox args={[2.8, 1.8, 0.1]} radius={0.05} smoothness={4}>
-          <meshStandardMaterial
-            color="#1a1a1a"
-            metalness={0.9}
-            roughness={0.1}
-          />
+        <RoundedBox
+          args={[2.8, 1.8, 0.1]}
+          radius={0.05}
+          smoothness={4}
+        >
+          <meshStandardMaterial color="#1a1a1a" metalness={0.9} roughness={0.1} />
         </RoundedBox>
-
+        
         {/* Screen Display */}
-        <Box ref={screenRef} args={[2.4, 1.4, 0.02]} position={[0, 0, 0.06]}>
-          <meshStandardMaterial
+        <Box
+          ref={screenRef}
+          args={[2.4, 1.4, 0.02]}
+          position={[0, 0, 0.06]}
+        >
+          <meshStandardMaterial 
             color="#0066cc"
             emissive="#0033aa"
             emissiveIntensity={0.1}
           />
         </Box>
-
+        
         {/* Screen Content */}
         <Html
           transform
           occlude
           position={[0, 0, 0.07]}
           style={{
-            width: "240px",
-            height: "140px",
-            pointerEvents: "none",
-            userSelect: "none",
+            width: '240px',
+            height: '140px',
+            pointerEvents: 'none',
+            userSelect: 'none'
           }}
         >
           <div className="w-full h-full bg-gradient-to-br from-blue-600 to-purple-700 rounded-lg flex items-center justify-center text-white text-sm font-bold shadow-lg">
@@ -99,12 +96,15 @@ function LaptopModel({
           </div>
         </Html>
       </group>
-
+      
       {/* Laptop Keyboard */}
-      <Box args={[2.6, 0.05, 1.6]} position={[0, 0.025, 0.2]}>
+      <Box
+        args={[2.6, 0.05, 1.6]}
+        position={[0, 0.025, 0.2]}
+      >
         <meshStandardMaterial color="#34495e" roughness={0.8} />
       </Box>
-
+      
       {/* Trackpad */}
       <RoundedBox
         args={[0.8, 0.02, 0.6]}
@@ -115,21 +115,21 @@ function LaptopModel({
         <meshStandardMaterial color="#2c3e50" metalness={0.5} roughness={0.3} />
       </RoundedBox>
     </group>
-  );
+  )
 }
 
 function Scene() {
-  const { gl } = useThree();
-  const gpu = useDetectGPU();
-
+  const { gl } = useThree()
+  const gpu = useDetectGPU()
+  
   // Optimize based on device capabilities
   const shadows = useMemo(() => {
-    return gpu?.tier >= 2;
-  }, [gpu]);
-
+    return gpu?.tier >= 2
+  }, [gpu])
+  
   React.useEffect(() => {
-    gl.shadowMap.enabled = shadows;
-  }, [gl, shadows]);
+    gl.shadowMap.enabled = shadows
+  }, [gl, shadows])
 
   return (
     <>
@@ -141,7 +141,7 @@ function Scene() {
         autoRotate
         autoRotateSpeed={0.5}
       />
-
+      
       <ambientLight intensity={0.4} />
       <directionalLight
         position={[10, 10, 5]}
@@ -151,9 +151,9 @@ function Scene() {
         shadow-mapSize-height={1024}
       />
       <pointLight position={[-10, -10, -10]} intensity={0.3} />
-
+      
       <LaptopModel />
-
+      
       {shadows && (
         <ContactShadows
           position={[0, -1, 0]}
@@ -163,19 +163,17 @@ function Scene() {
           far={4}
         />
       )}
-
+      
       <Environment preset="city" />
     </>
-  );
+  )
 }
 
 interface PortfolioComputerProps {
-  className?: string;
+  className?: string
 }
 
-export default function PortfolioComputer({
-  className = "",
-}: PortfolioComputerProps) {
+export default function PortfolioComputer({ className = '' }: PortfolioComputerProps) {
   return (
     <div className={`w-full h-96 ${className}`}>
       {/* SEO Fallback Content */}
@@ -190,9 +188,9 @@ export default function PortfolioComputer({
           </div>
         </div>
       </noscript>
-
+      
       {/* Loading Fallback */}
-      <Suspense
+      <Suspense 
         fallback={
           <div className="w-full h-96 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center">
             <motion.div
@@ -214,5 +212,5 @@ export default function PortfolioComputer({
         </Canvas>
       </Suspense>
     </div>
-  );
+  )
 }

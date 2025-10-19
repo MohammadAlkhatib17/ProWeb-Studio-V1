@@ -1,6 +1,6 @@
 /**
  * Non-intrusive Service Worker Registration Utility
- *
+ * 
  * This utility handles service worker registration for PWA functionality
  * with production-only and same-origin safety checks. It runs silently
  * without affecting the UI or user experience.
@@ -8,17 +8,17 @@
 
 interface ServiceWorkerRegistrationOptions {
   scope?: string;
-  updateViaCache?: "imports" | "all" | "none";
+  updateViaCache?: 'imports' | 'all' | 'none';
 }
 
 class ServiceWorkerManager {
   private static instance: ServiceWorkerManager;
   private isRegistered = false;
   private registration: ServiceWorkerRegistration | null = null;
-  private readonly SW_PATH = "/sw.js";
-
+  private readonly SW_PATH = '/sw.js';
+  
   private constructor() {}
-
+  
   static getInstance(): ServiceWorkerManager {
     if (!ServiceWorkerManager.instance) {
       ServiceWorkerManager.instance = new ServiceWorkerManager();
@@ -31,39 +31,36 @@ class ServiceWorkerManager {
    */
   private async canRegisterServiceWorker(): Promise<boolean> {
     // Check browser support first
-    if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
-      if (process.env.NODE_ENV !== "production") {
-        console.log("SW: Registration skipped - no browser support");
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('SW: Registration skipped - no browser support');
       }
       return false;
     }
 
     // Handle development environment or localhost/127.0.0.1
-    const isDevelopment = process.env.NODE_ENV !== "production";
-    const isLocalhost =
-      location.hostname === "localhost" || location.hostname === "127.0.0.1";
-
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+    const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    
     if (isDevelopment || isLocalhost) {
       try {
         const registrations = await navigator.serviceWorker.getRegistrations();
         if (registrations.length > 0) {
-          await Promise.all(
-            registrations.map((registration) => registration.unregister()),
-          );
-          if (process.env.NODE_ENV !== "production") {
-            console.log("SW: Unregistered stale dev registrations");
+          await Promise.all(registrations.map(registration => registration.unregister()));
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('SW: Unregistered stale dev registrations');
           }
         }
       } catch (error) {
-        console.warn("SW: Failed to unregister existing registrations:", error);
+        console.warn('SW: Failed to unregister existing registrations:', error);
       }
       return false;
     }
 
     // Ensure same-origin policy for production
-    if (location.protocol !== "https:") {
-      if (process.env.NODE_ENV !== "production") {
-        console.log("SW: Registration skipped - not HTTPS");
+    if (location.protocol !== 'https:') {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('SW: Registration skipped - not HTTPS');
       }
       return false;
     }
@@ -74,9 +71,7 @@ class ServiceWorkerManager {
   /**
    * Register the service worker with error handling and logging
    */
-  async register(
-    options: ServiceWorkerRegistrationOptions = {},
-  ): Promise<ServiceWorkerRegistration | null> {
+  async register(options: ServiceWorkerRegistrationOptions = {}): Promise<ServiceWorkerRegistration | null> {
     if (this.isRegistered) {
       return this.registration;
     }
@@ -87,38 +82,30 @@ class ServiceWorkerManager {
 
     try {
       const defaultOptions: ServiceWorkerRegistrationOptions = {
-        scope: "/",
-        updateViaCache: "none",
+        scope: '/',
+        updateViaCache: 'none',
         ...options,
       };
 
-      if (process.env.NODE_ENV !== "production") {
-        console.log("SW: Attempting registration...");
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('SW: Attempting registration...');
       }
-
-      this.registration = await navigator.serviceWorker.register(
-        this.SW_PATH,
-        defaultOptions,
-      );
+      
+      this.registration = await navigator.serviceWorker.register(this.SW_PATH, defaultOptions);
       this.isRegistered = true;
 
       // Handle service worker updates
-      this.registration.addEventListener("updatefound", () => {
-        if (process.env.NODE_ENV !== "production") {
-          console.log("SW: Update found, installing new version");
+      this.registration.addEventListener('updatefound', () => {
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('SW: Update found, installing new version');
         }
         const newWorker = this.registration?.installing;
-
+        
         if (newWorker) {
-          newWorker.addEventListener("statechange", () => {
-            if (
-              newWorker.state === "installed" &&
-              navigator.serviceWorker.controller
-            ) {
-              if (process.env.NODE_ENV !== "production") {
-                console.log(
-                  "SW: New version available, will activate on next visit",
-                );
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              if (process.env.NODE_ENV !== 'production') {
+                console.log('SW: New version available, will activate on next visit');
               }
             }
           });
@@ -126,19 +113,19 @@ class ServiceWorkerManager {
       });
 
       // Log registration success
-      if (process.env.NODE_ENV !== "production") {
+      if (process.env.NODE_ENV !== 'production') {
         if (this.registration.installing) {
-          console.log("SW: Installing...");
+          console.log('SW: Installing...');
         } else if (this.registration.waiting) {
-          console.log("SW: Waiting to activate...");
+          console.log('SW: Waiting to activate...');
         } else if (this.registration.active) {
-          console.log("SW: Active and running");
+          console.log('SW: Active and running');
         }
       }
 
       return this.registration;
     } catch (error) {
-      console.error("SW: Registration failed:", error);
+      console.error('SW: Registration failed:', error);
       this.isRegistered = false;
       this.registration = null;
       return null;
@@ -158,13 +145,13 @@ class ServiceWorkerManager {
       if (success) {
         this.isRegistered = false;
         this.registration = null;
-        if (process.env.NODE_ENV !== "production") {
-          console.log("SW: Successfully unregistered");
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('SW: Successfully unregistered');
         }
       }
       return success;
     } catch (error) {
-      console.error("SW: Unregistration failed:", error);
+      console.error('SW: Unregistration failed:', error);
       return false;
     }
   }
@@ -189,19 +176,19 @@ class ServiceWorkerManager {
  * This function should be called once when the application loads
  */
 export async function initializeServiceWorker(): Promise<void> {
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return; // Skip on server-side
   }
 
   // Wait for the page to be fully loaded to avoid interfering with critical rendering
-  if (document.readyState === "loading") {
-    await new Promise((resolve) => {
-      document.addEventListener("DOMContentLoaded", resolve, { once: true });
+  if (document.readyState === 'loading') {
+    await new Promise(resolve => {
+      document.addEventListener('DOMContentLoaded', resolve, { once: true });
     });
   }
 
   // Small delay to ensure the main thread is not blocked
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const swManager = ServiceWorkerManager.getInstance();
   await swManager.register();
@@ -217,7 +204,7 @@ export const serviceWorkerManager = ServiceWorkerManager.getInstance();
  */
 export function isPWAInstallable(): Promise<boolean> {
   return new Promise((resolve) => {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       resolve(false);
       return;
     }
@@ -227,16 +214,11 @@ export function isPWAInstallable(): Promise<boolean> {
       resolve(true);
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt, {
-      once: true,
-    });
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt, { once: true });
 
     // Timeout after 2 seconds
     setTimeout(() => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt,
-      );
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       resolve(false);
     }, 2000);
   });
