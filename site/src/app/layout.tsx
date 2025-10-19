@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Script from 'next/script';
 import { headers } from 'next/headers';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -17,6 +16,10 @@ import PWAServiceWorker from '@/components/PWAServiceWorker';
 import DutchPerformanceMonitor from '@/components/DutchPerformanceMonitor';
 import { primaryFont } from '@/lib/fonts';
 import { generateResourcePreconnects } from '@/lib/preconnect';
+import CookieConsentBanner from '@/components/cookies/CookieConsentBanner';
+import CookieSettingsModal from '@/components/cookies/CookieSettingsModal';
+import ConsentAwareAnalytics from '@/components/cookies/ConsentAwareAnalytics';
+import { WebVitalsReporter } from '@/components/WebVitalsReporter';
 
 // Initialize environment validation for production deployments
 initProductionEnvValidation();
@@ -212,7 +215,7 @@ export default function RootLayout({
   const nonce = headersList.get('X-Nonce') || '';
   
   return (
-    <html lang="nl-NL">
+    <html lang="nl">
       <head>
         {/* Hreflang tags for Dutch market targeting */}
         <link rel="alternate" hrefLang="nl" href={`${SITE_URL}/`} />
@@ -280,14 +283,18 @@ export default function RootLayout({
         <SEOSchema nonce={nonce} pageType="generic" />
         <PWAServiceWorker />
         <DutchPerformanceMonitor />
+        <WebVitalsReporter />
 
-        <Script
-          defer
-          data-domain={siteConfig.analytics.plausibleDomain}
-          src="https://plausible.io/js/script.js"
-          strategy="afterInteractive"
+        {/* Cookie Consent System */}
+        <CookieConsentBanner />
+        <CookieSettingsModal />
+
+        {/* Consent-aware analytics - only loads after user consent */}
+        <ConsentAwareAnalytics
+          plausibleDomain={siteConfig.analytics.plausibleDomain}
           nonce={nonce}
         />
+        
         <Analytics />
         <SpeedInsights />
       </body>

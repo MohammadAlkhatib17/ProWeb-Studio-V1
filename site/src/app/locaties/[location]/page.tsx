@@ -6,6 +6,8 @@ import { Button } from '@/components/Button';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import RelatedServices from '@/components/RelatedServices';
 import ContentSuggestions from '@/components/ContentSuggestions';
+import { DutchBusinessInfo, LocalBusinessJSON, CitySelector } from '@/components/local-seo';
+import type { City } from '@/components/local-seo';
 
 
 export const dynamic = 'force-static';
@@ -354,6 +356,47 @@ export default function LocationPage({ params }: LocationPageProps) {
         </div>
       </section>
 
+      {/* City Selector Section */}
+      <section className="py-section bg-cosmic-800/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <CitySelector
+            cities={locations.map(loc => ({
+              name: loc.name,
+              slug: loc.slug,
+              province: loc.region,
+              popular: ['amsterdam', 'rotterdam', 'utrecht', 'den-haag', 'eindhoven'].includes(loc.slug),
+            } as City))}
+            variant="grid"
+            currentCity={location.slug}
+            highlightPopular={true}
+            label={`Ontdek onze diensten in andere steden`}
+          />
+        </div>
+      </section>
+
+      {/* Business Info Section - NAP Consistency */}
+      <section className="py-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Neem Contact Op voor Website Project in {location.name}
+            </h2>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+              Klaar om uw online aanwezigheid in {location.name} te versterken? 
+              Neem contact op voor een vrijblijvend gesprek.
+            </p>
+          </div>
+          
+          <DutchBusinessInfo 
+            variant="full"
+            showAddress={true}
+            showOpeningHours={true}
+            showContact={true}
+            showRegistration={true}
+          />
+        </div>
+      </section>
+
       <RelatedServices showAll={true} maxItems={6} />
       
       <ContentSuggestions 
@@ -362,6 +405,15 @@ export default function LocationPage({ params }: LocationPageProps) {
           { title: 'Bekijk Onze Werkwijze', href: '/werkwijze', description: 'Ontdek hoe wij samen tot het beste resultaat komen' },
           { title: 'Portfolio Inzien', href: '/portfolio', description: 'Zie voorbeelden van onze professionele websites' }
         ]}
+      />
+
+      {/* Location-specific JSON-LD */}
+      <LocalBusinessJSON
+        address={{
+          addressLocality: location.name,
+          addressRegion: location.region,
+        }}
+        areaServed={[location.name, ...nearbyLocations.map(l => l.name)]}
       />
     </main>
   );

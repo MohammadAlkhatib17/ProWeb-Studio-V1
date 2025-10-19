@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { locations } from '@/config/internal-linking.config';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ContentSuggestions from '@/components/ContentSuggestions';
+import { CitySelector, DutchBusinessInfo } from '@/components/local-seo';
+import type { City } from '@/components/local-seo';
 
 
 export const dynamic = 'force-static';
@@ -59,15 +61,6 @@ const locationsSchema = {
 };
 
 export default function LocatiesPage() {
-  // Group locations by region for better organization
-  const locationsByRegion = locations.reduce((acc, location) => {
-    if (!acc[location.region]) {
-      acc[location.region] = [];
-    }
-    acc[location.region].push(location);
-    return acc;
-  }, {} as Record<string, typeof locations>);
-
   return (
     <main className="pt-20 md:pt-24 relative overflow-hidden">
       <Breadcrumbs />
@@ -123,67 +116,41 @@ export default function LocatiesPage() {
             </p>
           </div>
 
-          {Object.entries(locationsByRegion).map(([region, regionLocations]) => (
-            <div key={region} className="mb-12">
-              <h3 className="text-2xl font-bold text-cyan-300 mb-6 text-center">
-                {region}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {regionLocations.map((location) => (
-                  <Link
-                    key={location.slug}
-                    href={`/locaties/${location.slug}`}
-                    className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:bg-cosmic-800/50"
-                  >
-                    <div className="flex flex-col h-full">
-                      <div className="flex items-start justify-between mb-4">
-                        <h4 className="text-xl font-semibold text-white group-hover:text-cyan-300 transition-colors">
-                          {location.name}
-                        </h4>
-                        {location.population && (
-                          <span className="text-xs text-gray-500 bg-cosmic-700/50 px-2 py-1 rounded">
-                            {location.population.toLocaleString('nl-NL')} inw.
-                          </span>
-                        )}
-                      </div>
-                      
-                      <p className="text-slate-400 text-sm leading-relaxed flex-grow mb-4">
-                        {location.description}
-                      </p>
-                      
-                      <div className="space-y-2">
-                        <div className="text-xs text-gray-500 font-medium">
-                          Beschikbare diensten:
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {location.relatedServices.slice(0, 3).map((service) => (
-                            <span
-                              key={service}
-                              className="text-xs bg-cyan-400/10 text-cyan-300 px-2 py-1 rounded border border-cyan-400/20"
-                            >
-                              {service.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase())}
-                            </span>
-                          ))}
-                          {location.relatedServices.length > 3 && (
-                            <span className="text-xs text-gray-500">
-                              +{location.relatedServices.length - 3} meer
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className="mt-4 flex items-center text-cyan-300 text-sm font-medium">
-                        Bekijk diensten in {location.name}
-                        <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
-                          →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
+          {/* City Selector - Grid View */}
+          <CitySelector
+            cities={locations.map(loc => ({
+              name: loc.name,
+              slug: loc.slug,
+              province: loc.region,
+              popular: ['amsterdam', 'rotterdam', 'utrecht', 'den-haag', 'eindhoven'].includes(loc.slug),
+            } as City))}
+            variant="grid"
+            highlightPopular={true}
+            label="Kies uw locatie"
+          />
+        </div>
+      </section>
+
+      {/* Business Info Section */}
+      <section className="py-section bg-cosmic-800/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Contact & Bedrijfsinformatie
+            </h2>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+              Neem contact op voor een vrijblijvend gesprek over uw website project.
+            </p>
+          </div>
+          
+          <DutchBusinessInfo 
+            variant="compact"
+            showAddress={true}
+            showOpeningHours={true}
+            showContact={true}
+            showRegistration={true}
+            className="max-w-xl mx-auto"
+          />
         </div>
       </section>
 

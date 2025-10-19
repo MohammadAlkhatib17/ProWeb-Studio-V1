@@ -1,6 +1,8 @@
 import nodemailer from 'nodemailer';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { contactRateLimiter, getClientIP, checkRateLimit } from '@/lib/rateLimit';
+import { sanitizeText } from '@/lib/sanitize';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -59,18 +61,8 @@ const contactSchema = z.object({
 
 // Input sanitization function
 function sanitizeInput(input: string): string {
-  // Use a safer sanitization approach for build compatibility
-  // Basic HTML entity encoding and dangerous pattern removal
-  return input
-    .replace(/[<>]/g, '') // Remove < and > characters
-    .replace(/javascript:/gi, '') // Remove javascript: protocols
-    .replace(/data:/gi, '') // Remove data: protocols
-    .replace(/vbscript:/gi, '') // Remove vbscript: protocols
-    .replace(/[<>'"&]/g, '') // Remove HTML chars
-    .replace(/javascript:/gi, '') // Remove javascript: protocol
-    .replace(/data:/gi, '') // Remove data: protocol
-    .replace(/vbscript:/gi, '') // Remove vbscript: protocol
-    .trim();
+  // Use DOMPurify-based sanitization for robust XSS protection
+  return sanitizeText(input).trim();
 }
 
 // reCAPTCHA verification
@@ -158,8 +150,29 @@ ${sanitizedData.message}
 
 export async function POST(req: NextRequest) {
   try {
-    // Get client IP for logging
-    const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    // Get client IP for logging and rate limiting
+    const clientIP = getClientIP(req);
+    
+    // Check rate limit (60 requests per minute per IP)
+    const rateLimit = await checkRateLimit(clientIP, contactRateLimiter, 'contact');
+    
+    if (!rateLimit.success) {
+      const retryAfter = Math.ceil((rateLimit.reset - Date.now()) / 1000);
+      const res = NextResponse.json(
+        { 
+          ok: false, 
+          error: 'Te veel verzoeken. Probeer het later opnieuw.',
+          retryAfter,
+        },
+        { status: 429 }
+      );
+      res.headers.set('Retry-After', retryAfter.toString());
+      res.headers.set('X-RateLimit-Limit', rateLimit.limit.toString());
+      res.headers.set('X-RateLimit-Remaining', rateLimit.remaining.toString());
+      res.headers.set('X-RateLimit-Reset', new Date(rateLimit.reset).toISOString());
+      res.headers.set('Cache-Control', 'no-store');
+      return res;
+    }
     
     // Parse and validate request body
     const body = await req.json();

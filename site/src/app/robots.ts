@@ -1,8 +1,20 @@
 import type { MetadataRoute } from 'next';
 
+/**
+ * Dynamic robots.txt generator
+ * 
+ * - Production: Allow crawling with proper directives
+ * - Preview: Block all crawling
+ * - Includes proper Host and Sitemap entries
+ * - No duplicates, clean structure
+ */
 export default function robots(): MetadataRoute.Robots {
-  const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-  const base = SITE_URL; // Already normalized
+  const SITE_URL = (
+    process.env.SITE_URL ?? 
+    process.env.NEXT_PUBLIC_SITE_URL ?? 
+    'https://prowebstudio.nl'
+  ).replace(/\/+$/, '');
+  
   const isPreview = process.env.VERCEL_ENV === 'preview';
   
   if (isPreview) {
@@ -18,52 +30,31 @@ export default function robots(): MetadataRoute.Robots {
     };
   }
 
-  // Production robots.txt with optimized crawling directives
+  // Production robots.txt with optimized crawling directives for Dutch SEO
   return {
     rules: [
+      // Default rule for all bots - most permissive
       {
         userAgent: '*',
-        allow: [
-          '/',
-          '/diensten/',
-          '/contact/',
-          '/werkwijze/',
-          '/portfolio/',
-          '/over-ons/',
-          '/privacy/',
-          '/voorwaarden/',
-          '/sitemap.xml',
-          '/robots.txt',
-        ],
+        allow: ['/'],
         disallow: [
-          '/speeltuin/',     // Playground area - not for public indexing
-          '/_next/',         // Next.js internal files
-          '/api/',           // API routes
-          '/admin/',         // Admin areas if any
-          '*.json$',         // JSON files
-          '*.xml$',          // XML files except sitemap
-          '/sw.js',          // Service worker
-          '/offline.html',   // Offline page
+          '/speeltuin/',      // Playground area - not for public indexing
+          '/_next/',          // Next.js internal files
+          '/api/',            // API routes
+          '/admin/',          // Admin areas if any
+          '/*.json$',         // JSON files
+          '/sw.js',           // Service worker
+          '/offline.html',    // Offline page
           '/overzicht-site/', // Internal site overview
-          '/.well-known/',   // Hidden directories
-          '/manifest.json',  // PWA manifest
+          '/.well-known/',    // Hidden directories (except specific public ones)
+          '/manifest.json',   // PWA manifest
         ],
-        crawlDelay: 1, // Be respectful to servers
+        crawlDelay: 1,
       },
+      // Googlebot - most important for Dutch market
       {
         userAgent: 'Googlebot',
-        allow: [
-          '/',
-          '/diensten/',
-          '/contact/',
-          '/werkwijze/',
-          '/portfolio/',
-          '/over-ons/',
-          '/privacy/',
-          '/voorwaarden/',
-          '/sitemap.xml',
-          '/robots.txt',
-        ],
+        allow: ['/'],
         disallow: [
           '/speeltuin/',
           '/_next/',
@@ -71,20 +62,21 @@ export default function robots(): MetadataRoute.Robots {
           '/admin/',
           '/overzicht-site/',
         ],
-        // No crawl delay for Googlebot as it's well-behaved
+        // No crawl delay for Googlebot
       },
+      // Googlebot-Image for image indexing
+      {
+        userAgent: 'Googlebot-Image',
+        allow: ['/'],
+        disallow: [
+          '/speeltuin/',
+          '/_next/static/', // Allow optimized images but not internal static files
+        ],
+      },
+      // Bingbot
       {
         userAgent: 'Bingbot',
-        allow: [
-          '/',
-          '/diensten/',
-          '/contact/',
-          '/werkwijze/',
-          '/portfolio/',
-          '/over-ons/',
-          '/privacy/',
-          '/voorwaarden/',
-        ],
+        allow: ['/'],
         disallow: [
           '/speeltuin/',
           '/_next/',
@@ -92,43 +84,26 @@ export default function robots(): MetadataRoute.Robots {
           '/admin/',
           '/overzicht-site/',
         ],
-        crawlDelay: 2, // Slightly more conservative for Bing
+        crawlDelay: 2,
       },
+      // Social media crawlers for rich previews
       {
         userAgent: 'facebookexternalhit',
-        allow: ['/'], // Allow Facebook for social sharing
-        disallow: [
-          '/speeltuin/',
-          '/_next/',
-          '/api/',
-          '/admin/',
-        ],
+        allow: ['/'],
+        disallow: ['/speeltuin/', '/_next/', '/api/', '/admin/'],
       },
       {
         userAgent: 'Twitterbot',
-        allow: ['/'], // Allow Twitter for social sharing
-        disallow: [
-          '/speeltuin/',
-          '/_next/',
-          '/api/',
-          '/admin/',
-        ],
+        allow: ['/'],
+        disallow: ['/speeltuin/', '/_next/', '/api/', '/admin/'],
       },
       {
         userAgent: 'LinkedInBot',
-        allow: ['/'], // Allow LinkedIn for professional sharing
-        disallow: [
-          '/speeltuin/',
-          '/_next/',
-          '/api/',
-          '/admin/',
-        ],
-      }
+        allow: ['/'],
+        disallow: ['/speeltuin/', '/_next/', '/api/', '/admin/'],
+      },
     ],
-    sitemap: [
-      `${base}/sitemap.xml`,
-      `${base}/sitemap-images.xml`, // We'll create this image sitemap
-    ],
-    host: 'prowebstudio.nl',
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

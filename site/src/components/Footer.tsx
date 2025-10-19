@@ -6,6 +6,7 @@ import { siteConfig } from '@/config/site.config';
 import { footerLinkGroups } from '@/config/internal-linking.config';
 import Logo from '@/components/Logo';
 import { Button } from '@/components/Button';
+import CookieSettingsButton from '@/components/cookies/CookieSettingsButton';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -182,6 +183,8 @@ export default function Footer() {
           <span>&copy; {new Date().getFullYear()} {siteConfig.name}. Met trots gemaakt in Nederland.</span>
           <span aria-hidden>•</span>
           <span>Gebouwd met passie voor de digitale toekomst ❤️</span>
+          <span aria-hidden>•</span>
+          <CookieSettingsButton />
         </div>
       </div>
     </footer>

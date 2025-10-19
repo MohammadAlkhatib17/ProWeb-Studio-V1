@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
+import { generatePageMetadata } from '@/lib/metadata';
 import dynamicImport from 'next/dynamic';
 
 export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - services content is fairly stable
 export const fetchCache = 'force-cache';
+
+export const metadata: Metadata = generatePageMetadata('services');
 
 import { Suspense } from 'react';
 
@@ -16,30 +19,11 @@ import FAQSection from '@/components/sections/FAQSection';
 import DutchMarketFAQ from '@/components/DutchMarketFAQ';
 import RelatedServices from '@/components/RelatedServices';
 import ContentSuggestions from '@/components/ContentSuggestions';
+import { DutchBusinessInfo, LocalBusinessJSON } from '@/components/local-seo';
+import { locations } from '@/config/internal-linking.config';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-
-export const metadata: Metadata = {
-  title: 'Website laten maken & Webshop bouwen | Nederlandse webdesign diensten – ProWeb Studio',
-  description:
-    'Professionele website laten maken of webshop bouwen voor Nederlandse bedrijven. Responsive webdesign, SEO-optimalisatie, iDEAL integratie. Betrouwbare partner voor uw digitale groei.',
-  alternates: {
-    canonical: '/diensten',
-    languages: { 
-      'nl-NL': '/diensten',
-      'x-default': '/diensten'
-    },
-  },
-  openGraph: {
-    title: 'Website laten maken & Webshop bouwen | Nederlandse webdesign diensten – ProWeb Studio',
-    description:
-      'Maatwerk webdesign & development met 3D-ervaringen, technische SEO, Core Web Vitals en headless CMS. Gericht op groei en resultaat.',
-    url: `${SITE_URL}/diensten`,
-    type: 'website',
-    locale: 'nl_NL',
-  },
-};
 
 const ServicesPolyhedra = dynamicImport(() => import('@/three/ServicesPolyhedra'), {
   ssr: false,
@@ -462,6 +446,29 @@ export default function Diensten() {
         </p>
       </section>
 
+      {/* Business Info Section - NAP for Local SEO */}
+      <section className="py-section px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Contact & Bedrijfsinformatie
+            </h2>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+              Professionele webdevelopment diensten voor Nederlandse bedrijven. 
+              Neem contact op voor een vrijblijvend gesprek.
+            </p>
+          </div>
+          
+          <DutchBusinessInfo 
+            variant="full"
+            showAddress={true}
+            showOpeningHours={true}
+            showContact={true}
+            showRegistration={true}
+          />
+        </div>
+      </section>
+
       <FAQSection title="Vragen over onze Diensten">
         <DutchMarketFAQ />
       </FAQSection>
@@ -469,6 +476,11 @@ export default function Diensten() {
       <RelatedServices showAll={true} />
       
       <ContentSuggestions />
+      
+      {/* LocalBusiness JSON-LD Schema */}
+      <LocalBusinessJSON 
+        areaServed={locations.map(loc => loc.name)}
+      />
       
       <SEOSchema 
         pageType="services" 

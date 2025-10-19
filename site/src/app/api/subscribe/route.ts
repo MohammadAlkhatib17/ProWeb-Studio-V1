@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { subscribeRateLimiter, getClientIP, checkRateLimit } from '@/lib/rateLimit';
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
@@ -12,6 +13,30 @@ const subscribeSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  // Get client IP for rate limiting
+  const clientIP = getClientIP(req);
+  
+  // Check rate limit (30 requests per minute per IP)
+  const rateLimit = await checkRateLimit(clientIP, subscribeRateLimiter, 'subscribe');
+  
+  if (!rateLimit.success) {
+    const retryAfter = Math.ceil((rateLimit.reset - Date.now()) / 1000);
+    const res = NextResponse.json(
+      { 
+        ok: false, 
+        error: 'Te veel verzoeken. Probeer het later opnieuw.',
+        retryAfter,
+      },
+      { status: 429 }
+    );
+    res.headers.set('Retry-After', retryAfter.toString());
+    res.headers.set('X-RateLimit-Limit', rateLimit.limit.toString());
+    res.headers.set('X-RateLimit-Remaining', rateLimit.remaining.toString());
+    res.headers.set('X-RateLimit-Reset', new Date(rateLimit.reset).toISOString());
+    res.headers.set('Cache-Control', 'no-store');
+    return res;
+  }
+  
   // 1. Validate Environment Variables
   const apiKey = process.env.BREVO_API_KEY;
   const listId = process.env.BREVO_LIST_ID;
