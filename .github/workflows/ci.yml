@@ -72,6 +72,10 @@ jobs:
       - name: Generate bundle analysis data
         run: npm --prefix site run analyze:generate
 
+      - name: Generate bundle size report
+        run: npm --prefix site run analyze:report
+        continue-on-error: true
+
       - name: Run SEO preflight checks post-build
         run: npm --prefix site run seo:preflight
 
@@ -95,6 +99,8 @@ jobs:
           path: |
             site/reports/bundles/analysis-data.json
             site/reports/bundles/summary.md
+            site/reports/bundles/bundle-report.json
+            site/reports/bundles/bundle-report.md
           retention-days: 30
 
   # E2E Tests: Cookie Banner & 3D Canvas
@@ -160,25 +166,28 @@ jobs:
             site/test-results/
           retention-days: 7
 
-  # Bundle Size Regression Protection
+  # Bundle Size Analysis & Enforcement
   # 
-  # This job checks for bundle size regressions by comparing the current PR
-  # against the base branch. If bundle size increases beyond the threshold,
-  # the check fails unless overridden.
+  # Analyzes bundle sizes per-route, enforces budgets.json thresholds,
+  # and posts comparison report as PR comment with artifacts.
+  #
+  # Features:
+  # - Per-route JS/CSS size tracking
+  # - Budget enforcement from budgets.json
+  # - Delta comparison vs main branch
+  # - PR comment with detailed breakdown
+  # - Downloadable artifacts for analysis
   #
   # Override Mechanism:
   # - Add 'bundle-size-override' label to the PR
   # - Document justification in PR comments
   # - See reports/ci/quality-gates.md for acceptable rationale
-  #
-  # Acceptable Override Reasons:
-  # - New features requiring additional dependencies
-  # - Critical library updates for security/performance
-  # - Temporary increases with optimization plan
-  # - Business-critical functionality with approved trade-offs
   bundle-size-check:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
     
     steps:
       - uses: actions/checkout@v4
@@ -201,7 +210,6 @@ jobs:
           set -a
           source .env.ci
           set +a
-          # Export to GITHUB_ENV for subsequent steps
           while IFS='=' read -r key value; do
             if [[ ! "$key" =~ ^# && -n "$key" ]]; then
               echo "$key=$value" >> $GITHUB_ENV
@@ -209,14 +217,19 @@ jobs:
           done < .env.ci
           echo "✅ CI environment loaded"
 
-      - name: Build current branch
+      - name: Build current branch with analysis
         run: npm --prefix site run build:analyze
+        env:
+          NODE_ENV: production
 
-      - name: Generate current bundle analysis
-        run: npm --prefix site run analyze:generate
+      - name: Generate current bundle report
+        run: npm --prefix site run analyze:report
 
-      - name: Save current bundle data
-        run: cp reports/bundles/analysis-data.json current-bundle.json
+      - name: Save current bundle report
+        run: |
+          mkdir -p /tmp/bundle-reports
+          cp reports/bundles/bundle-report.json /tmp/bundle-reports/bundle-report-current.json
+          cp reports/bundles/bundle-report.md /tmp/bundle-reports/bundle-report-current.md
 
       - name: Checkout base branch
         run: |
@@ -228,11 +241,10 @@ jobs:
 
       - name: Load CI environment variables for base
         run: |
-          echo "📦 Loading CI environment configuration for base branch..."
+          echo "📦 Loading CI environment for base branch..."
           set -a
           source .env.ci
           set +a
-          # Export to GITHUB_ENV for subsequent steps
           while IFS='=' read -r key value; do
             if [[ ! "$key" =~ ^# && -n "$key" ]]; then
               echo "$key=$value" >> $GITHUB_ENV
@@ -240,20 +252,89 @@ jobs:
           done < .env.ci
           echo "✅ CI environment loaded"
 
-      - name: Build base branch
+      - name: Build base branch with analysis
         run: npm --prefix site run build:analyze
+        env:
+          NODE_ENV: production
 
-      - name: Generate base bundle analysis
-        run: npm --prefix site run analyze:generate
+      - name: Generate base bundle report
+        run: npm --prefix site run analyze:report
 
-      - name: Compare bundle sizes
-        id: bundle-check
+      - name: Save base bundle report
         run: |
-          if npm --prefix site run bundle:compare current-bundle.json reports/bundles/analysis-data.json; then
-            echo "bundle-check-passed=true" >> $GITHUB_OUTPUT
-          else
-            echo "bundle-check-passed=false" >> $GITHUB_OUTPUT
-          fi
+          cp reports/bundles/bundle-report.json /tmp/bundle-reports/bundle-report-base.json
+          cp reports/bundles/bundle-report.md /tmp/bundle-reports/bundle-report-base.md
+
+      - name: Restore current branch
+        run: git checkout ${{ github.head_ref }}
+
+      - name: Install dependencies (restore)
+        run: npm install --prefix site
+
+      - name: Compare bundle sizes and generate PR comment
+        id: bundle-compare
+        continue-on-error: true
+        run: |
+          npm --prefix site run bundle:compare-pr /tmp/bundle-reports/bundle-report-current.json /tmp/bundle-reports/bundle-report-base.json reports/bundles/pr-comment.md
+          echo "comparison-status=$?" >> $GITHUB_OUTPUT
+
+      - name: Post PR comment with bundle analysis
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const commentPath = 'reports/bundles/pr-comment.md';
+            
+            if (!fs.existsSync(commentPath)) {
+              console.log('No PR comment file found, skipping comment');
+              return;
+            }
+            
+            const comment = fs.readFileSync(commentPath, 'utf8');
+            
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && comment.body.includes('Bundle Size Report')
+            );
+            
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }
+
+      - name: Upload bundle analysis artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bundle-analysis-reports
+          path: |
+            /tmp/bundle-reports/bundle-report-current.json
+            /tmp/bundle-reports/bundle-report-current.md
+            /tmp/bundle-reports/bundle-report-base.json
+            /tmp/bundle-reports/bundle-report-base.md
+            reports/bundles/pr-comment.md
+          retention-days: 30
 
       - name: Check for bundle size override label
         id: check-override
@@ -267,32 +348,30 @@ jobs:
             core.setOutput('has-override', hasOverride);
 
       - name: Fail on bundle size regression
-        if: steps.bundle-check.outputs.bundle-check-passed == 'false' && steps.check-override.outputs.has-override != 'true'
+        if: steps.bundle-compare.outputs.comparison-status != '0' && steps.check-override.outputs.has-override != 'true'
         run: |
-          echo "❌ Bundle size regression detected!"
+          echo "❌ Bundle size check failed!"
           echo ""
-          echo "📊 Bundle size has increased beyond the acceptable threshold."
-          echo "This may impact application performance and user experience."
+          echo "📊 Bundle size has increased beyond budgets or threshold."
+          echo "Review the bundle analysis report in the PR comment above."
           echo ""
           echo "🔧 To override this check:"
           echo "1. Add the 'bundle-size-override' label to this PR"
           echo "2. Document the justification in a PR comment"
           echo "3. See reports/ci/quality-gates.md for acceptable rationale"
           echo ""
-          echo "💡 Consider optimizing bundle size before overriding:"
-          echo "- Remove unused dependencies"
+          echo "💡 Consider optimizing before overriding:"
+          echo "- Check per-route sizes in the report"
+          echo "- Review budgets.json thresholds"
           echo "- Use dynamic imports for large components"
-          echo "- Optimize images and assets"
-          echo "- Check for duplicate dependencies"
+          echo "- Remove unused dependencies"
           exit 1
 
-      - name: Upload bundle analysis reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: bundle-analysis-reports
-          path: |
-            current-bundle.json
-            reports/bundles/analysis-data.json
-            reports/bundles/summary.md
-          retention-days: 30
+      - name: Bundle size check passed
+        if: steps.bundle-compare.outputs.comparison-status == '0' || steps.check-override.outputs.has-override == 'true'
+        run: |
+          if [ "${{ steps.check-override.outputs.has-override }}" == "true" ]; then
+            echo "✅ Bundle size check passed (override label applied)"
+          else
+            echo "✅ Bundle size check passed - all routes within budget"
+          fi

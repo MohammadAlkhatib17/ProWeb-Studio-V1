@@ -189,22 +189,6 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
-      // Homepage - X-* headers only, CSP handled by middleware.ts with nonce
-      {
-        source: '/',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-        ],
-      },
-      // /diensten/* pages - X-* headers only, CSP handled by middleware.ts with nonce
-      {
-        source: '/diensten/:path*',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-        ],
-      },
       // /api/csp-report - no CSP enforcement for reporting endpoint
       {
         source: '/api/csp-report',
@@ -221,8 +205,8 @@ const nextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',
           },
-          // Frame protection
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          // Frame protection - DENY for maximum security
+          { key: 'X-Frame-Options', value: 'DENY' },
           // Content type protection
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           // Enhanced referrer policy
@@ -251,7 +235,7 @@ const nextConfig = {
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
           // Custom security headers
-          { key: 'X-Security-Version', value: '2.0' },
+          { key: 'X-Security-Version', value: '3.0' },
           { key: 'X-Download-Options', value: 'noopen' },
           // Cache control for general pages
           { key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400' },

@@ -72,7 +72,10 @@ describe('CookieConsentBanner', () => {
       // Note: In tests with fake timers, actual time is negligible
       // We verify the banner is present after minimal time advancement
       expect(renderTime).toBeLessThan(500);
-      expect(banner).toHaveClass('animate-slide-up');
+      
+      // Verify banner has fixed positioning at bottom
+      expect(banner).toHaveClass('fixed');
+      expect(banner).toHaveClass('bottom-0');
     });
 
     it('should not appear when consent cookie exists', () => {

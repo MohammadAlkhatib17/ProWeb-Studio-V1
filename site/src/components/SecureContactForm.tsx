@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useTransition } from 'react';
 import { z } from 'zod';
 import { siteConfig } from '@/config/site.config';
 import CalEmbed from '@/components/CalEmbed';
+import { useDebouncedCallback } from '@/hooks/useDebounce';
+import { useIdleCallback } from '@/hooks/useIdleCallback';
 
 // Enhanced validation schema matching the API
 const contactSchema = z.object({
@@ -59,10 +61,11 @@ export default function SecureContactForm() {
   const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
   const [formStartTime] = useState(Date.now());
   const formRef = useRef<HTMLFormElement>(null);
+  const [, startTransition] = useTransition();
 
-  // Load reCAPTCHA script
-  useEffect(() => {
-    const loadRecaptcha = () => {
+  // Load reCAPTCHA script during idle time to avoid blocking main thread
+  useIdleCallback(
+    () => {
       if (typeof window !== 'undefined' && !window.grecaptcha) {
         const script = document.createElement('script');
         script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`;
@@ -73,10 +76,9 @@ export default function SecureContactForm() {
       } else if (window.grecaptcha) {
         setRecaptchaLoaded(true);
       }
-    };
-
-    loadRecaptcha();
-  }, []);
+    },
+    { timeout: 3000 } // Load within 3 seconds even if not idle
+  );
 
   // Basic bot detection - track user interaction patterns
   const [userInteractions, setUserInteractions] = useState({
@@ -119,6 +121,26 @@ export default function SecureContactForm() {
     return undefined;
   }, []);
 
+  // Debounced validation to reduce re-renders and improve INP
+  const validateField = useDebouncedCallback((name: string, value: string) => {
+    // Perform validation in a non-blocking way
+    startTransition(() => {
+      try {
+        const fieldSchema = contactSchema.pick({ [name]: true } as any);
+        fieldSchema.parse({ [name]: value });
+        // Clear error if valid
+        setErrors(prev => ({ ...prev, [name]: '' }));
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          const fieldError = error.issues[0]?.message;
+          if (fieldError) {
+            setErrors(prev => ({ ...prev, [name]: fieldError }));
+          }
+        }
+      }
+    });
+  }, 500); // 500ms debounce for validation
+
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -130,10 +152,14 @@ export default function SecureContactForm() {
       .replace(/javascript:/gi, '') // Remove javascript: protocol
       .replace(/on\w+\s*=/gi, ''); // Remove event handlers
 
+    // Update form state immediately for responsive feel
     setForm(prev => ({ ...prev, [name]: sanitizedValue }));
     
-    // Clear field error when user starts typing
-    if (errors[name]) {
+    // Debounce validation to avoid blocking input
+    if (sanitizedValue && name !== 'website') {
+      validateField(name, sanitizedValue);
+    } else if (errors[name]) {
+      // Clear error immediately when user starts typing
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };

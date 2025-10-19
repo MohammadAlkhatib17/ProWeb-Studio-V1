@@ -41,3 +41,10 @@ export {
   generateLocalBusinessSchema,
   generateServiceListSchema,
 } from './structured-data';
+
+export {
+  validateMetadata,
+  validateSiteUrl,
+  getPagePathFromFilePath,
+  type MetadataValidationResult,
+} from './validator';

@@ -277,60 +277,260 @@ function CustomTexturedMesh() {
 
 ## 🔄 Texture Conversion
 
+### Prerequisites
+
+Install `toktx` from KTX-Software (required for conversion):
+
+**macOS:**
+```bash
+brew install khronosgroup/toktx/toktx
+
+# Verify installation
+toktx --version
+```
+
+**Ubuntu/Debian Linux:**
+```bash
+# Download latest release
+wget https://github.com/KhronosGroup/KTX-Software/releases/download/v4.3.2/KTX-Software-4.3.2-Linux-x86_64.deb
+
+# Install package
+sudo dpkg -i KTX-Software-4.3.2-Linux-x86_64.deb
+
+# Verify installation
+toktx --version
+```
+
+**Fedora/RHEL Linux:**
+```bash
+# Download latest release
+wget https://github.com/KhronosGroup/KTX-Software/releases/download/v4.3.2/KTX-Software-4.3.2-Linux-x86_64.rpm
+
+# Install package
+sudo rpm -i KTX-Software-4.3.2-Linux-x86_64.rpm
+
+# Verify installation
+toktx --version
+```
+
+**Windows:**
+1. Download installer from: https://github.com/KhronosGroup/KTX-Software/releases
+2. Run `KTX-Software-4.3.2-Windows-x64.exe`
+3. Add to PATH: `C:\Program Files\KTX-Software\bin`
+4. Verify in PowerShell: `toktx --version`
+
+**Docker (Universal):**
+```bash
+# Pull official image
+docker pull khronosgroup/ktx-software:latest
+
+# Create alias for easy use
+alias toktx='docker run --rm -v $(pwd):/work -w /work khronosgroup/ktx-software toktx'
+
+# Verify installation
+toktx --version
+```
+
+**Optional Dependencies:**
+
+For WebP/PNG fallback generation, install one of:
+
+```bash
+# Option 1: Sharp (recommended, installed via npm)
+npm install sharp  # Already in package.json
+
+# Option 2: ImageMagick (system-wide)
+# macOS
+brew install imagemagick
+
+# Ubuntu/Debian
+sudo apt install imagemagick
+
+# Windows
+# Download from: https://imagemagick.org/script/download.php
+```
+
 ### Convert Existing Textures
+
+**Basic Usage:**
 
 ```bash
 # Convert all textures in public/assets
 node site/scripts/convert-textures.js
 
-# Custom source and output directories
+# With custom directories
 node site/scripts/convert-textures.js \
-  --source site/public/assets/hero \
-  --output site/public/textures/hero
+  --source=site/public/assets/hero \
+  --output=site/public/textures/hero
 
-# Use UASTC for better quality (normal maps, detail)
+# Preview without writing files
+node site/scripts/convert-textures.js --dry-run --verbose
+```
+
+**Quality Modes:**
+
+```bash
+# ETC1S (default) - Best compression, good quality
+node site/scripts/convert-textures.js --quality=etc1s
+
+# UASTC - Higher quality for normal maps and detail
+node site/scripts/convert-textures.js --quality=uastc
+
+# UASTC-MAX - Maximum quality for hero textures
+node site/scripts/convert-textures.js --quality=uastc-max
+```
+
+**Advanced Options:**
+
+```bash
+# Limit maximum texture size
+node site/scripts/convert-textures.js --max-size=1024
+
+# Skip fallback generation (KTX2 only)
+node site/scripts/convert-textures.js --no-webp --no-png
+
+# Verbose mode with detailed logs
+node site/scripts/convert-textures.js --verbose
+
+# Complete example
 node site/scripts/convert-textures.js \
-  --quality uastc \
-  --max-size 2048
+  --source=public/assets/materials \
+  --output=public/textures/materials \
+  --quality=uastc \
+  --max-size=2048 \
+  --verbose
 ```
 
 ### Compression Quality Modes
 
-**ETC1S (Default) - Best Compression**
+| Mode | Size Reduction | Quality | Best For | Use Cases |
+|------|---------------|---------|----------|-----------|
+| **etc1s** | ~80% | Good | Diffuse, Albedo | UI textures, backgrounds, color maps |
+| **uastc** | ~60% | Excellent | Normal, Detail | Normal maps, roughness, metallic |
+| **uastc-max** | ~40% | Maximum | Hero Assets | Key visuals, close-up textures |
+
+**ETC1S (Default) - Best Compression:**
 - ~80% size reduction
 - Good quality for most textures
+- Fast transcoding on all devices
 - Recommended for: diffuse, albedo, UI textures
 
 ```bash
-node scripts/convert-textures.js --quality etc1s
+node site/scripts/convert-textures.js --quality=etc1s
 ```
 
-**UASTC - Higher Quality**
+**UASTC - Higher Quality:**
 - ~60% size reduction
 - Excellent quality preservation
+- Slower transcoding, higher memory usage
 - Recommended for: normal maps, detail textures, important visuals
 
 ```bash
-node scripts/convert-textures.js --quality uastc
+node site/scripts/convert-textures.js --quality=uastc
 ```
 
-### Manual Conversion
+**UASTC-MAX - Maximum Quality:**
+- ~40% size reduction
+- Near-lossless quality
+- Use sparingly for hero assets
+- Recommended for: key hero textures, marketing visuals
 
 ```bash
-# ETC1S compression
-toktx --bcmp --clevel 4 --qlevel 128 --t2 \
-  --mipmap --resize 2048x2048 \
-  output.ktx2 input.png
+node site/scripts/convert-textures.js --quality=uastc-max
+```
 
-# UASTC compression
-toktx --uastc 2 --uastc_rdo_l 0.5 --t2 \
-  --mipmap --resize 2048x2048 \
-  output.ktx2 input.png
+### Manual Conversion (Advanced)
 
-# Normal map
-toktx --uastc 2 --normal_map --t2 \
-  --mipmap --resize 2048x2048 \
+For fine-grained control, use `toktx` directly:
+
+**ETC1S compression:**
+```bash
+toktx --bcmp \              # BasisU ETC1S mode
+  --clevel 4 \              # Compression level (0-5, higher = smaller)
+  --qlevel 128 \            # Quality level (1-255, higher = better)
+  --t2 \                    # KTX2 format
+  --mipmap \                # Generate mipmaps
+  --resize 2048x2048 \      # Resize to power-of-2
+  --genmipmap \             # Generate all mipmap levels
+  output.ktx2 input.png
+```
+
+**UASTC compression:**
+```bash
+toktx --uastc 2 \           # UASTC quality level (0-4, higher = better)
+  --uastc_rdo_l 0.5 \       # Rate-distortion optimization (0.0-10.0)
+  --t2 \                    # KTX2 format
+  --mipmap \                # Generate mipmaps
+  --resize 2048x2048 \      # Resize to power-of-2
+  output.ktx2 input.png
+```
+
+**Normal map (UASTC recommended):**
+```bash
+toktx --uastc 2 \           # High quality for normals
+  --normal_map \            # Optimize for normal data
+  --t2 \                    # KTX2 format
+  --mipmap \                # Generate mipmaps
+  --resize 2048x2048 \      # Resize to power-of-2
   normal.ktx2 normal_input.png
+```
+
+**Cube map (environment):**
+```bash
+# Convert each face individually
+for face in px nx py ny pz nz; do
+  toktx --bcmp --clevel 4 --qlevel 128 --t2 \
+    --mipmap --resize 1024x1024 \
+    env_${face}.ktx2 env_${face}.png
+done
+```
+
+**Batch conversion with shell script:**
+```bash
+#!/bin/bash
+# Convert all PNGs in current directory to KTX2
+
+for file in *.png; do
+  basename="${file%.png}"
+  
+  # Detect if it's a normal map
+  if [[ "$basename" == *"normal"* ]] || [[ "$basename" == *"_n" ]]; then
+    # Use UASTC for normal maps
+    toktx --uastc 2 --normal_map --t2 --mipmap \
+      "${basename}.ktx2" "$file"
+  else
+    # Use ETC1S for other textures
+    toktx --bcmp --clevel 4 --qlevel 128 --t2 --mipmap \
+      "${basename}.ktx2" "$file"
+  fi
+  
+  echo "✓ Converted: $file → ${basename}.ktx2"
+done
+```
+
+### Texture Organization
+
+Organize textures by usage for better management:
+
+```
+public/textures/
+├── environment/          # Environment maps (1024×512, UASTC)
+│   ├── studio.ktx2
+│   ├── studio.webp
+│   └── studio.png
+├── materials/            # PBR material textures (2048×2048, ETC1S)
+│   ├── wood_diffuse.ktx2
+│   ├── wood_diffuse.webp
+│   ├── wood_normal.ktx2  # UASTC for normal maps
+│   ├── wood_normal.webp
+│   └── ...
+├── ui/                   # UI textures (1024×1024, ETC1S)
+│   ├── logo.ktx2
+│   ├── logo.webp
+│   └── ...
+└── detail/               # Detail textures (512×512, UASTC)
+    ├── noise.ktx2
+    └── ...
 ```
 
 ## 📊 Performance Guidelines

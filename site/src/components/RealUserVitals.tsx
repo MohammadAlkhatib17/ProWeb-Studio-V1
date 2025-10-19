@@ -30,6 +30,13 @@ interface VitalsPayload {
   navType?: string;
   navId?: string;
   valueBucket: string;
+  // INP attribution fields
+  inpEventType?: string;
+  inpEventTarget?: string;
+  inpInputDelay?: number;
+  inpProcessingDuration?: number;
+  inpPresentationDelay?: number;
+  inpLoadState?: string;
   [key: string]: unknown; // Allow additional properties for plausible
 }
 
@@ -152,6 +159,19 @@ function buildVitalsPayload(
   }
   if (navigationId) {
     payload.navId = navigationId;
+  }
+
+  // Add INP attribution data for better debugging
+  if (metric.name === 'INP' && 'attribution' in metric) {
+    const attr = (metric as any).attribution;
+    if (attr) {
+      payload.inpEventType = attr.eventType;
+      payload.inpEventTarget = attr.eventTarget?.tagName || attr.eventTarget?.nodeName;
+      payload.inpInputDelay = Math.round(attr.inputDelay || 0);
+      payload.inpProcessingDuration = Math.round(attr.processingDuration || 0);
+      payload.inpPresentationDelay = Math.round(attr.presentationDelay || 0);
+      payload.inpLoadState = attr.loadState;
+    }
   }
 
   // Add optional properties only if available (short keys for lean payload)
@@ -335,8 +355,28 @@ export function RealUserVitals(): null {
         const { onCLS, onINP, onLCP, onTTFB } = await import('web-vitals/attribution');
         
         // Register listeners for Core Web Vitals with attribution
+        // INP with enhanced attribution for debugging interaction delays
+        onINP((metric) => {
+          handleVitalsMetric(metric);
+          
+          // Log detailed INP attribution in development for debugging
+          if (process.env.NODE_ENV === 'development' && 'attribution' in metric) {
+            const attr = metric.attribution as any;
+            console.log('[INP Attribution]', {
+              value: Math.round(metric.value),
+              rating: metric.rating,
+              eventType: attr?.eventType,
+              eventTarget: attr?.eventTarget,
+              eventTime: attr?.eventTime,
+              loadState: attr?.loadState,
+              inputDelay: Math.round(attr?.inputDelay || 0),
+              processingDuration: Math.round(attr?.processingDuration || 0),
+              presentationDelay: Math.round(attr?.presentationDelay || 0),
+            });
+          }
+        });
+        
         onLCP(handleVitalsMetric);
-        onINP(handleVitalsMetric);
         onCLS(handleVitalsMetric);
         onTTFB(handleVitalsMetric);
       } catch {

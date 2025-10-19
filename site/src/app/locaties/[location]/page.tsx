@@ -39,20 +39,24 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
     };
   }
 
+  const canonicalUrl = `${SITE_URL}/locaties/${location.slug}`;
+  
   return {
+    metadataBase: new URL(SITE_URL),
     title: `Website laten maken ${location.name} | Webdesign ${location.name} | ProWeb Studio`,
     description: `Professionele website laten maken in ${location.name}. Lokale webdesign expertise met Nederlandse kwaliteit. SEO-geoptimaliseerd en mobiel-vriendelijk.`,
     alternates: {
-      canonical: `/locaties/${location.slug}`,
+      canonical: canonicalUrl,
       languages: { 
-        'nl-NL': `/locaties/${location.slug}`,
-        'x-default': `/locaties/${location.slug}`
+        'nl-NL': canonicalUrl,
+        'nl': canonicalUrl,
+        'x-default': canonicalUrl,
       },
     },
     openGraph: {
       title: `Website laten maken ${location.name} | ProWeb Studio`,
       description: `Webdesign ${location.name} - ${location.description}`,
-      url: `${SITE_URL}/locaties/${location.slug}`,
+      url: canonicalUrl,
       type: 'website',
       locale: 'nl_NL',
     },

@@ -232,35 +232,64 @@ export async function middleware(req: NextRequest) {
   requestHeaders.set('X-Geographic-Hint', geoHint);
   requestHeaders.set('X-Client-IP', ip);
   
-  // 7. Build CSP string with nonce and strict-dynamic
+  // 7. Build strict CSP with nonce + strict-dynamic
   const isDev = process.env.NODE_ENV === 'development';
+  const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
+  
+  // CSP Report-Only Mode: Oct 19-26, 2025 (7 days monitoring)
+  // After validation, switch to enforcement by changing header name
+  const cspMonitoringStart = new Date('2025-10-19T00:00:00Z');
+  const cspMonitoringEnd = new Date('2025-10-26T00:00:00Z');
+  const now = new Date();
+  const isMonitoringPhase = now >= cspMonitoringStart && now <= cspMonitoringEnd;
   
   const cspDirectives = [
     "default-src 'self'",
-    // script-src: nonce + strict-dynamic for Next.js; unsafe-eval ONLY in dev for React Refresh
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https: http:${isDev ? " 'unsafe-eval'" : ''}`,
-    // style-src: nonce + unsafe-inline (fallback for older browsers)
-    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https:`,
+    // script-src: nonce + strict-dynamic; minimal whitelisted domains
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://plausible.io${isDev ? " 'unsafe-eval'" : ''}`,
+    // style-src: nonce + unsafe-inline fallback for older browsers
+    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://fonts.googleapis.com`,
+    // img-src: allow data URIs and HTTPS images for OG/analytics
     "img-src 'self' data: https: blob:",
-    "font-src 'self' https: data:",
-    "connect-src 'self' https: wss:",
+    // font-src: Google Fonts CDN
+    "font-src 'self' https://fonts.gstatic.com data:",
+    // connect-src: API endpoints and analytics
+    `connect-src 'self' https://plausible.io https://vitals.vercel-insights.com${isDev ? ' ws://localhost:*' : ''}`,
+    "media-src 'self' https: blob:",
     "object-src 'none'",
     "base-uri 'self'",
-    "frame-ancestors 'self'",
-    "frame-src 'self' https:",
+    // frame-ancestors: prevent clickjacking
+    "frame-ancestors 'none'",
+    "frame-src 'self'",
     "form-action 'self'",
+    "upgrade-insecure-requests",
   ];
+  
+  // Add CSP reporting endpoint
+  if (siteUrl) {
+    cspDirectives.push(`report-uri ${siteUrl}/api/csp-report`);
+  }
   
   const cspValue = cspDirectives.join('; ');
   
   // 8. Apply Security Headers with CSP
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   
-  // ENFORCED CSP with nonce - no report-only
-  response.headers.set('Content-Security-Policy', cspValue);
+  // CSP Mode Selection: Report-Only for 7 days, then Enforce
+  // CHANGE THIS LINE after monitoring period to enforce:
+  // response.headers.set('Content-Security-Policy', cspValue);
+  if (isMonitoringPhase) {
+    response.headers.set('Content-Security-Policy-Report-Only', cspValue);
+  } else {
+    // After Oct 26, 2025: switch to enforcement
+    response.headers.set('Content-Security-Policy', cspValue);
+  }
+  
   response.headers.set('x-nonce', nonce);
   response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
   // Add geographic and performance headers
   response.headers.set('X-Geographic-Hint', geoHint);

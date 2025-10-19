@@ -33,6 +33,9 @@ export interface MonitoringStats {
   avgLCP: number;
   avgCLS: number;
   avgINP: number;
+  p75LCP: number;
+  p75CLS: number;
+  p75INP: number;
   goodCount: number;
   needsImprovementCount: number;
   poorCount: number;

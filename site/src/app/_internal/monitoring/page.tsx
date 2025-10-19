@@ -6,7 +6,18 @@
  * Displays recent vitals events and statistics
  */
 
+import type { Metadata } from 'next';
 import { useEffect, useState } from 'react';
+
+// Internal page - noindex
+export const metadata: Metadata = {
+  title: 'Core Web Vitals Monitor - Internal',
+  description: 'Internal monitoring dashboard for Core Web Vitals',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 import type { VitalEvent, MonitoringStats } from '@/lib/monitoring/types';
 import { formatMetricValue, getRatingColor, getMetricDescription } from '@/lib/monitoring/utils';
 
@@ -147,21 +158,32 @@ function StatsCards({ stats }: { stats: MonitoringStats }) {
         value={stats.totalEvents.toString()}
         color="#6366f1"
       />
+      
+      {/* LCP Stats */}
       <StatCard
         title="Avg LCP"
         value={`${stats.avgLCP}ms`}
+        subtitle={`P75: ${stats.p75LCP}ms`}
         color={getRatingColor(getRating('LCP', stats.avgLCP))}
       />
+      
+      {/* CLS Stats */}
       <StatCard
         title="Avg CLS"
         value={(stats.avgCLS / 1000).toFixed(3)}
+        subtitle={`P75: ${(stats.p75CLS / 1000).toFixed(3)}`}
         color={getRatingColor(getRating('CLS', stats.avgCLS / 1000))}
       />
+      
+      {/* INP Stats - Most Important for This Task */}
       <StatCard
         title="Avg INP"
         value={`${stats.avgINP}ms`}
+        subtitle={`P75: ${stats.p75INP}ms`}
         color={getRatingColor(getRating('INP', stats.avgINP))}
+        highlight={stats.p75INP > 200}
       />
+      
       <StatCard
         title="Good Ratings"
         value={`${stats.goodCount} (${percentage(stats.goodCount, stats.totalEvents)}%)`}
@@ -177,17 +199,40 @@ function StatsCards({ stats }: { stats: MonitoringStats }) {
         value={`${stats.poorCount} (${percentage(stats.poorCount, stats.totalEvents)}%)`}
         color="#ef4444"
       />
+      
+      {/* P75 INP Target Indicator */}
+      <StatCard
+        title="P75 INP Target"
+        value={stats.p75INP <= 200 ? '✓ Met' : '✗ Not Met'}
+        subtitle={`Target: ≤200ms`}
+        color={stats.p75INP <= 200 ? '#22c55e' : '#ef4444'}
+      />
     </div>
   );
 }
 
-function StatCard({ title, value, color }: { title: string; value: string; color: string }) {
+function StatCard({ 
+  title, 
+  value, 
+  subtitle, 
+  color, 
+  highlight 
+}: { 
+  title: string; 
+  value: string; 
+  subtitle?: string;
+  color: string;
+  highlight?: boolean;
+}) {
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+    <div className={`bg-gray-900 border rounded-lg p-6 ${highlight ? 'border-yellow-500 ring-2 ring-yellow-500/50' : 'border-gray-800'}`}>
       <p className="text-gray-400 text-sm mb-2">{title}</p>
       <p className="text-2xl font-bold" style={{ color }}>
         {value}
       </p>
+      {subtitle && (
+        <p className="text-xs text-gray-500 mt-1">{subtitle}</p>
+      )}
     </div>
   );
 }
@@ -281,6 +326,9 @@ function calculateStatsFromEvents(events: VitalEvent[]): MonitoringStats {
       avgLCP: 0,
       avgCLS: 0,
       avgINP: 0,
+      p75LCP: 0,
+      p75CLS: 0,
+      p75INP: 0,
       goodCount: 0,
       needsImprovementCount: 0,
       poorCount: 0,
@@ -313,6 +361,9 @@ function calculateStatsFromEvents(events: VitalEvent[]): MonitoringStats {
     avgLCP: average(lcpValues),
     avgCLS: average(clsValues), // Keep scaled
     avgINP: average(inpValues),
+    p75LCP: percentile(lcpValues, 75),
+    p75CLS: percentile(clsValues, 75),
+    p75INP: percentile(inpValues, 75),
     goodCount,
     needsImprovementCount,
     poorCount,
@@ -323,6 +374,13 @@ function calculateStatsFromEvents(events: VitalEvent[]): MonitoringStats {
 function average(values: number[]): number {
   if (values.length === 0) return 0;
   return Math.round(values.reduce((sum, val) => sum + val, 0) / values.length);
+}
+
+function percentile(values: number[], p: number): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const index = Math.ceil((p / 100) * sorted.length) - 1;
+  return Math.round(sorted[Math.max(0, index)] || 0);
 }
 
 function percentage(value: number, total: number): string {

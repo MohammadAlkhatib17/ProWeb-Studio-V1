@@ -1,18 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site.config';
 import { footerLinkGroups } from '@/config/internal-linking.config';
 import Logo from '@/components/Logo';
 import { Button } from '@/components/Button';
 import CookieSettingsButton from '@/components/cookies/CookieSettingsButton';
+import { useDebounce } from '@/hooks/useDebounce';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  
+  // Debounce email validation to reduce unnecessary re-renders
+  const debouncedEmail = useDebounce(email, 300);
+
+  // Memoized validation to avoid re-creating on every render
+  const isEmailValid = useCallback((emailValue: string) => {
+    return emailValue && /^\S+@\S+\.\S+$/.test(emailValue);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +29,8 @@ export default function Footer() {
     setErrorMessage('');
     setSuccessMessage('');
 
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+    // Use debounced value for submission
+    if (!isEmailValid(debouncedEmail)) {
       setErrorMessage('Voer een geldig e-mailadres in.');
       setStatus('error');
       return;
@@ -30,7 +40,7 @@ export default function Footer() {
       const response = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: debouncedEmail }),
       });
 
       let data;

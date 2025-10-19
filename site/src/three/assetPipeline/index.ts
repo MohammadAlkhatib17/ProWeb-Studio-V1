@@ -19,12 +19,20 @@ export {
   getOptimalTextureSize,
   estimateTextureMemory,
   createInstancedMesh,
+  createLODInstancedMesh,
+  mergeGeometries,
+  createCullingGroup,
   getTextureCompressionInfo,
   disposeObject,
   createOptimizedMaterial,
+  createLODTexture,
+  selectLODTexture,
+  ResourceDisposer,
+  resourceDisposer,
   TextureMemoryMonitor,
   textureMemoryMonitor,
   type TextureCompressionInfo,
+  type LODLevel,
 } from './textureUtils';
 
 export { useKTX2Texture, useKTX2Environment } from './useKTX2Texture';

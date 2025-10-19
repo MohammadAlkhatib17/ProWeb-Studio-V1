@@ -30,6 +30,7 @@ export interface MetadataOptions {
 /**
  * Generate complete metadata with Dutch defaults
  * Automatically applies noindex for preview deployments
+ * CRITICAL: Always includes canonical URL and nl-NL hreflang tags
  */
 export function generateMetadata(options: MetadataOptions = {}): Metadata {
   const {
@@ -43,7 +44,9 @@ export function generateMetadata(options: MetadataOptions = {}): Metadata {
   } = options;
 
   const fullTitle = title || `${siteConfig.name} - ${siteConfig.tagline}`;
-  const canonicalUrl = `${SITE_URL}${path}`;
+  // Ensure path starts with / and canonical URL is properly formatted
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const canonicalUrl = `${SITE_URL}${normalizedPath}`;
   const mergedKeywords = mergeWithDefaultKeywords(keywords);
 
   // Enforce noindex for preview deployments
@@ -71,6 +74,14 @@ export function generateMetadata(options: MetadataOptions = {}): Metadata {
       }
     : defaultOgImage;
 
+  // Build time validation - fail fast if SITE_URL is not configured
+  if (!SITE_URL && process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'CRITICAL: SITE_URL or NEXT_PUBLIC_SITE_URL must be configured in production. ' +
+      'Canonical URLs cannot be generated without a valid base URL.'
+    );
+  }
+
   return {
     metadataBase: new URL(SITE_URL),
     title: fullTitle,
@@ -82,6 +93,7 @@ export function generateMetadata(options: MetadataOptions = {}): Metadata {
     ],
     creator: siteConfig.name,
     publisher: siteConfig.name,
+    // CRITICAL: These fields are required for SEO compliance
     alternates: {
       canonical: canonicalUrl,
       languages: {

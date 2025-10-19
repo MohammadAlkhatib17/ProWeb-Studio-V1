@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { headers } from 'next/headers';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import dynamic from 'next/dynamic';
 import { siteConfig } from '@/config/site.config';
 import Header from '@/components/Header';
@@ -287,6 +285,8 @@ export default function RootLayout({
         <ConsentAwareAnalytics
           plausibleDomain={siteConfig.analytics.plausibleDomain}
           nonce={nonce}
+          enableVercelAnalytics={true}
+          enableSpeedInsights={true}
         />
 
         <BackgroundLayer />
@@ -319,9 +319,6 @@ export default function RootLayout({
         {/* Performance monitors - lazy loaded */}
         <DutchPerformanceMonitor />
         <WebVitalsReporter />
-        
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

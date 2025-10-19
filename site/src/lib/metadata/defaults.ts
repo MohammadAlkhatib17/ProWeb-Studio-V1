@@ -9,12 +9,27 @@ import { siteConfig } from '@/config/site.config';
  * Get SITE_URL from environment with safe fallback
  * In production, this should always come from SITE_URL or NEXT_PUBLIC_SITE_URL
  * Fallback is provided for development safety only
+ * 
+ * CRITICAL: This value is used for:
+ * - Canonical URLs (required for SEO)
+ * - Hreflang tags (required for international SEO)
+ * - OpenGraph URLs (required for social sharing)
+ * - Structured data URLs (required for rich snippets)
  */
 export const SITE_URL = (
   process.env.SITE_URL ??
   process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000')
 ).replace(/\/+$/, '');
+
+// Validate SITE_URL at module load time in production
+if (!SITE_URL && process.env.NODE_ENV === 'production') {
+  throw new Error(
+    'CRITICAL: SITE_URL or NEXT_PUBLIC_SITE_URL must be set in production environment. ' +
+    'This is required for canonical URLs, hreflang tags, and structured data. ' +
+    'Set one of these environment variables before building.'
+  );
+}
 
 /**
  * Dutch metadata defaults for all pages

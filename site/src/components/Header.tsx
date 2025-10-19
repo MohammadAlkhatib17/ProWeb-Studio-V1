@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { siteConfig } from '@/config/site.config';
 import Logo from '@/components/Logo';
+import { useRAFThrottle } from '@/hooks/useThrottle';
 
 const MobileMenu = dynamic(() => import('@/components/navigation/MobileMenu'), {
   ssr: false,
@@ -22,22 +23,15 @@ export default function Header() {
     label: item.name
   }));
 
-  useEffect(() => {
-    // Throttle scroll handler to reduce INP impact
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 50);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+  // Create RAF-throttled scroll handler for optimal performance
+  const handleScroll = useRAFThrottle(() => {
+    setIsScrolled(window.scrollY > 50);
+  });
 
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [handleScroll]);
 
   return (
     <header
