@@ -42,8 +42,8 @@ export function useLazyComponent<P extends object>(
       
       setIsLoading(true);
       try {
-        const module = await factory();
-        setComponent(() => module.default);
+        const loadedModule = await factory();
+        setComponent(() => loadedModule.default);
       } catch (error) {
         console.error('Failed to load lazy component:', error);
       } finally {

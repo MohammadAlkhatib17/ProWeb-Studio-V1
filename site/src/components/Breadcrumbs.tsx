@@ -26,13 +26,20 @@ const routeTranslations: Record<string, string> = {
   'privacy': 'Privacy',
   'voorwaarden': 'Voorwaarden',
   'sitemap': 'Sitemap',
+  'steden': 'Steden',
+  'locaties': 'Locaties',
   // Service-specific routes
+  'website-laten-maken': 'Website Laten Maken',
+  'webshop-laten-maken': 'Webshop Laten Maken',
+  'seo-optimalisatie': 'SEO Optimalisatie',
+  '3d-website-ervaringen': '3D Website Ervaringen',
+  'onderhoud-support': 'Onderhoud & Support',
   'webdesign': 'Webdesign',
   'webshop': 'Webshop',
   'seo': 'SEO Optimalisatie',
   '3d-experiences': '3D Ervaringen',
   'maintenance': 'Onderhoud',
-  // Location-specific routes
+  // City-specific routes
   'amsterdam': 'Amsterdam',
   'rotterdam': 'Rotterdam',
   'utrecht': 'Utrecht',
@@ -43,7 +50,11 @@ const routeTranslations: Record<string, string> = {
   'almere': 'Almere',
   'breda': 'Breda',
   'nijmegen': 'Nijmegen',
-  'locaties': 'Locaties',
+  'haarlem': 'Haarlem',
+  'arnhem': 'Arnhem',
+  'amersfoort': 'Amersfoort',
+  'zaanstad': 'Zaanstad',
+  'den-bosch': 'Den Bosch',
 };
 
 export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {

@@ -14,6 +14,9 @@ export function calculateStats(events: VitalEvent[]): MonitoringStats {
       avgLCP: 0,
       avgCLS: 0,
       avgINP: 0,
+      p75LCP: 0,
+      p75CLS: 0,
+      p75INP: 0,
       goodCount: 0,
       needsImprovementCount: 0,
       poorCount: 0,
@@ -48,6 +51,9 @@ export function calculateStats(events: VitalEvent[]): MonitoringStats {
     avgLCP: average(lcpValues),
     avgCLS: average(clsValues),
     avgINP: average(inpValues),
+    p75LCP: percentile(lcpValues, 75),
+    p75CLS: percentile(clsValues, 75),
+    p75INP: percentile(inpValues, 75),
     goodCount,
     needsImprovementCount,
     poorCount,
@@ -61,6 +67,16 @@ export function calculateStats(events: VitalEvent[]): MonitoringStats {
 function average(values: number[]): number {
   if (values.length === 0) return 0;
   return Math.round(values.reduce((sum, val) => sum + val, 0) / values.length);
+}
+
+/**
+ * Calculate percentile of an array of numbers
+ */
+function percentile(values: number[], p: number): number {
+  if (values.length === 0) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const index = Math.ceil((p / 100) * sorted.length) - 1;
+  return Math.round(sorted[Math.max(0, index)]);
 }
 
 /**
