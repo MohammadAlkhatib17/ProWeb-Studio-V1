@@ -218,24 +218,24 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Dutch Company Registration Info - Only show when env vars are present */}
-          {(process.env.NEXT_PUBLIC_KVK || process.env.NEXT_PUBLIC_BTW) && (
+          {/* Dutch Company Registration Info - Only show when business IDs are present */}
+          {(siteConfig.business.kvk || siteConfig.business.btw) && (
             <div 
               className="mt-4 text-xs text-slate-500"
               data-testid="company-registration-info"
             >
               <p className="flex flex-wrap gap-x-3 gap-y-1">
-                {process.env.NEXT_PUBLIC_KVK && (
+                {siteConfig.business.kvk && (
                   <span data-testid="kvk-info">
-                    <strong>KVK:</strong> {process.env.NEXT_PUBLIC_KVK}
+                    <strong>KVK:</strong> {siteConfig.business.kvk}
                   </span>
                 )}
-                {process.env.NEXT_PUBLIC_KVK && process.env.NEXT_PUBLIC_BTW && (
+                {siteConfig.business.kvk && siteConfig.business.btw && (
                   <span aria-hidden="true">•</span>
                 )}
-                {process.env.NEXT_PUBLIC_BTW && (
+                {siteConfig.business.btw && (
                   <span data-testid="btw-info">
-                    <strong>BTW/VAT:</strong> {process.env.NEXT_PUBLIC_BTW}
+                    <strong>BTW/VAT:</strong> {siteConfig.business.btw}
                   </span>
                 )}
               </p>
