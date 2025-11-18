@@ -2,11 +2,7 @@ import Script from 'next/script';
 import { siteConfig } from '@/config/site.config';
 
 // Helper function to build absolute URLs safely
-const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  process.env.SITE_URL ??
-  'https://prowebstudio.nl'
-).replace(/\/+$/, '');
+const SITE_URL = siteConfig.url;
 
 function abs(path: string): string {
   try {
@@ -301,15 +297,11 @@ export default function SEOSchema({
       siteConfig.social.linkedin,
       siteConfig.social.github, 
       siteConfig.social.twitter,
-      // Add environment-based social profiles if they exist
-      process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN,
-      process.env.NEXT_PUBLIC_SOCIAL_GITHUB,
-      process.env.NEXT_PUBLIC_SOCIAL_TWITTER,
-      process.env.NEXT_PUBLIC_SOCIAL_BEHANCE,
-      process.env.NEXT_PUBLIC_SOCIAL_DRIBBBLE,
-      process.env.NEXT_PUBLIC_SOCIAL_YOUTUBE,
-      process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK,
-      process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM,
+      siteConfig.social.behance,
+      siteConfig.social.dribbble,
+      siteConfig.social.youtube,
+      siteConfig.social.facebook,
+      siteConfig.social.instagram,
     ];
     
     // Filter out falsy values and ensure unique URLs
@@ -796,8 +788,8 @@ function generateDutchReviewSchema() {
 
 // Helper function to generate Dutch Google Business Profile schema
 function generateGoogleBusinessProfileSchema() {
-  const gmb_place_id = process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID;
-  const gmb_url = process.env.NEXT_PUBLIC_GOOGLE_BUSINESS_URL;
+  const gmb_place_id = siteConfig.analytics.googlePlaceId;
+  const gmb_url = siteConfig.links.googleBusiness;
   
   if (!gmb_place_id && !gmb_url) return null;
 
@@ -1315,20 +1307,16 @@ function generateDutchHowToGuideSchema(
   };
 
   // Organization schema with optional address and Dutch business identifiers
-  const addrStreet = process.env.NEXT_PUBLIC_ADDR_STREET;
-  const addrCity = process.env.NEXT_PUBLIC_ADDR_CITY;
-  const addrZip = process.env.NEXT_PUBLIC_ADDR_ZIP;
-  const addrRegion = process.env.NEXT_PUBLIC_ADDR_REGION || 'NH'; // Default to Noord-Holland
-  const hasAddress = Boolean(addrStreet && addrCity && addrZip);
+  const hasAddress = Boolean(siteConfig.address.street && siteConfig.address.city && siteConfig.address.postalCode);
   
-  // Dutch business identifiers
-  const kvkNumber = process.env.NEXT_PUBLIC_KVK;
-  const btwNumber = process.env.NEXT_PUBLIC_BTW;
-  const rsinNumber = process.env.NEXT_PUBLIC_RSIN;
-  const ibanNumber = process.env.NEXT_PUBLIC_IBAN;
-  const sbiCode = process.env.NEXT_PUBLIC_SBI_CODE || '62010'; // Computer programming activities
-  const kvkPlace = process.env.NEXT_PUBLIC_KVK_PLACE || addrCity;
-  const establishmentNumber = process.env.NEXT_PUBLIC_VESTIGINGSNUMMER;
+  // Dutch business identifiers from siteConfig
+  const kvkNumber = siteConfig.business.kvk;
+  const btwNumber = siteConfig.business.btw;
+  const rsinNumber = siteConfig.business.rsin;
+  const ibanNumber = siteConfig.business.iban;
+  const sbiCode = siteConfig.business.sbiCode;
+  const kvkPlace = siteConfig.business.kvkPlace || siteConfig.address.city;
+  const establishmentNumber = siteConfig.business.vestigingsnummer;
 
   const organizationSchema = {
     '@context': 'https://schema.org',
@@ -1347,7 +1335,7 @@ function generateDutchHowToGuideSchema(
         '@id': `${SITE_URL}#logo`,
       },
     ],
-    email: process.env.NEXT_PUBLIC_CONTACT_INBOX || process.env.CONTACT_INBOX || siteConfig.email,
+    email: siteConfig.email,
     telephone: siteConfig.phone,
     openingHours: ['Mo-Fr 09:00-18:00'],
     priceRange: '$$',
@@ -1465,11 +1453,11 @@ function generateDutchHowToGuideSchema(
     ...(hasAddress && {
       address: {
         '@type': 'PostalAddress',
-        streetAddress: addrStreet,
-        addressLocality: addrCity,
-        postalCode: addrZip,
-        addressRegion: addrRegion,
-        addressCountry: 'NL',
+        streetAddress: siteConfig.address.street,
+        addressLocality: siteConfig.address.city,
+        postalCode: siteConfig.address.postalCode,
+        addressRegion: siteConfig.address.region,
+        addressCountry: siteConfig.address.countryCode,
       },
     }),
     hasOfferCatalog: {
@@ -1843,11 +1831,11 @@ function generateDutchHowToGuideSchema(
     ...(hasAddress && {
       address: {
         '@type': 'PostalAddress',
-        streetAddress: addrStreet,
-        addressLocality: addrCity,
-        postalCode: addrZip,
-        addressRegion: addrRegion,
-        addressCountry: 'NL',
+        streetAddress: siteConfig.address.street,
+        addressLocality: siteConfig.address.city,
+        postalCode: siteConfig.address.postalCode,
+        addressRegion: siteConfig.address.region,
+        addressCountry: siteConfig.address.countryCode,
       },
     }),
     sameAs: socialProfiles,
