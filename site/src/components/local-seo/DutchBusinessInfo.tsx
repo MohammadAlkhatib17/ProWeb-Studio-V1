@@ -40,25 +40,23 @@ export interface DutchBusinessInfoProps {
 /**
  * Business information constants
  * These should match the data in LocalBusinessSchema exactly (NAP consistency)
+ * All data sourced from environment variables through siteConfig
  */
 const BUSINESS_INFO = {
-  name: 'ProWeb Studio',
-  legalName: 'ProWeb Studio',
-  // Placeholders - replace with actual values
-  kvk: process.env.NEXT_PUBLIC_KVK || 'KVK: [In aanvraag]',
-  vat: process.env.NEXT_PUBLIC_BTW || 'BTW: NL[nummer]B01',
+  name: siteConfig.name,
+  legalName: siteConfig.legalName,
+  // Business identifiers from environment variables
+  kvk: siteConfig.business.kvk,
+  vat: siteConfig.business.btw,
   address: {
-    street: 'Voorbeeldstraat 123',
-    postalCode: '1234 AB',
-    city: 'Amsterdam',
-    country: 'Nederland',
+    street: siteConfig.address.street,
+    postalCode: siteConfig.address.postalCode,
+    city: siteConfig.address.city,
+    country: siteConfig.address.country,
   },
   phone: siteConfig.phone,
   email: siteConfig.email,
-  openingHours: [
-    { days: 'Maandag - Vrijdag', hours: '09:00 - 17:00' },
-    { days: 'Weekend', hours: 'Op afspraak' },
-  ],
+  openingHours: siteConfig.openingHours,
 } as const;
 
 export default function DutchBusinessInfo({
@@ -105,7 +103,7 @@ export default function DutchBusinessInfo({
           <p className="text-sm text-slate-400">{siteConfig.tagline}</p>
         </div>
 
-        {showAddress && (
+        {showAddress && BUSINESS_INFO.address.street && (
           <div className="text-sm text-slate-300">
             <p className="font-semibold text-white mb-1">Adres</p>
             <address className="not-italic leading-relaxed text-slate-400">
@@ -157,10 +155,10 @@ export default function DutchBusinessInfo({
           </div>
         )}
 
-        {showRegistration && (
+        {showRegistration && (BUSINESS_INFO.kvk || BUSINESS_INFO.vat) && (
           <div className="text-xs text-slate-500 space-y-1 pt-2 border-t border-slate-700">
-            <p>{BUSINESS_INFO.kvk}</p>
-            <p>{BUSINESS_INFO.vat}</p>
+            {BUSINESS_INFO.kvk && <p>KVK: {BUSINESS_INFO.kvk}</p>}
+            {BUSINESS_INFO.vat && <p>BTW-ID: {BUSINESS_INFO.vat}</p>}
           </div>
         )}
       </div>
@@ -180,7 +178,7 @@ export default function DutchBusinessInfo({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         {/* Left Column */}
         <div className="space-y-6">
-          {showAddress && (
+          {showAddress && BUSINESS_INFO.address.street && (
             <div>
               <h3 className="text-sm font-semibold text-cyan-300 uppercase tracking-wider mb-3">
                 Adres
@@ -194,20 +192,24 @@ export default function DutchBusinessInfo({
             </div>
           )}
 
-          {showRegistration && (
+          {showRegistration && (BUSINESS_INFO.kvk || BUSINESS_INFO.vat) && (
             <div>
               <h3 className="text-sm font-semibold text-cyan-300 uppercase tracking-wider mb-3">
                 Registratie
               </h3>
               <div className="text-slate-300 space-y-1">
-                <p className="flex items-start gap-2">
-                  <span className="text-slate-500 min-w-[60px]">KVK:</span>
-                  <span>{BUSINESS_INFO.kvk.replace('KVK: ', '')}</span>
-                </p>
-                <p className="flex items-start gap-2">
-                  <span className="text-slate-500 min-w-[60px]">BTW-ID:</span>
-                  <span>{BUSINESS_INFO.vat.replace('BTW: ', '')}</span>
-                </p>
+                {BUSINESS_INFO.kvk && (
+                  <p className="flex items-start gap-2">
+                    <span className="text-slate-500 min-w-[60px]">KVK:</span>
+                    <span>{BUSINESS_INFO.kvk}</span>
+                  </p>
+                )}
+                {BUSINESS_INFO.vat && (
+                  <p className="flex items-start gap-2">
+                    <span className="text-slate-500 min-w-[60px]">BTW-ID:</span>
+                    <span>{BUSINESS_INFO.vat}</span>
+                  </p>
+                )}
               </div>
             </div>
           )}
