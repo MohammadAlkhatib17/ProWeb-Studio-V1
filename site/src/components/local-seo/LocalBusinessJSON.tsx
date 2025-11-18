@@ -14,19 +14,20 @@ import { siteConfig } from '@/config/site.config';
 /**
  * Centralized NAP data - MUST match DutchBusinessInfo component
  * This ensures consistency between visual display and structured data
+ * All data sourced from environment variables through siteConfig
  */
 export const NAP_DATA = {
-  name: 'ProWeb Studio',
-  legalName: 'ProWeb Studio',
-  // Placeholders - replace with actual registered values
-  kvk: process.env.NEXT_PUBLIC_KVK || undefined,
-  vat: process.env.NEXT_PUBLIC_BTW || undefined,
+  name: siteConfig.name,
+  legalName: siteConfig.legalName,
+  // Business identifiers from environment variables
+  kvk: siteConfig.business.kvk || undefined,
+  vat: siteConfig.business.btw || undefined,
   address: {
-    streetAddress: 'Voorbeeldstraat 123',
-    postalCode: '1234 AB',
-    addressLocality: 'Amsterdam',
-    addressRegion: 'Noord-Holland',
-    addressCountry: 'NL',
+    streetAddress: siteConfig.address.street || '',
+    postalCode: siteConfig.address.postalCode || '',
+    addressLocality: siteConfig.address.city,
+    addressRegion: siteConfig.address.region,
+    addressCountry: siteConfig.address.countryCode,
   },
   phone: siteConfig.phone,
   email: siteConfig.email,
