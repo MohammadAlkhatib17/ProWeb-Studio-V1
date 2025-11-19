@@ -291,55 +291,70 @@ export default function HomePage() {
         className="py-section px-4 sm:px-6 relative overflow-hidden"
       >
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight">
-                3D Websites Nederland: Waar Het Onmogelijke Werkelijkheid Wordt
-              </h2>
-              <p className="text-base sm:text-lg md:text-xl text-slate-200 mb-8 leading-relaxed">
-                In een digitale wereld vol vlakke ervaringen creëren wij dimensies die ontroeren. Wij transformeren uw producten en visies in levensechte, 
-                interactieve **3D website** ervaringen die de grenzen tussen fysiek en digitaal doen vervagen. Van configurators tot virtuele showrooms — 
-                wij architectureren de toekomst van het web, vandaag. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">innovatieve webdevelopment services</Link>.
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight max-w-4xl mx-auto">
+              3D Websites Nederland: Waar Het Onmogelijke Werkelijkheid Wordt
+            </h2>
+            <p className="text-base sm:text-lg md:text-xl text-slate-200 mb-8 leading-relaxed max-w-3xl mx-auto">
+              In een digitale wereld vol vlakke ervaringen creëren wij dimensies die ontroeren. Wij transformeren uw producten en visies in levensechte, 
+              interactieve 3D website ervaringen die de grenzen tussen fysiek en digitaal doen vervagen. Van configurators tot virtuele showrooms — 
+              wij architectureren de toekomst van het web, vandaag. Bekijk onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">innovatieve webdevelopment services</Link>.
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-3 gap-6 mb-12">
+            <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                ⚡
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-cyan-300">
+                Real-time 3D Rendering
+              </h3>
+              <p className="text-slate-200 leading-relaxed">
+                Vloeiende 60+ FPS experiences op elk device
               </p>
-              <ul className="space-y-4 mb-8">
-                <li className="flex items-start gap-3">
-                  <span className="text-base sm:text-lg md:text-xl mt-1">→</span>
-                  <span className="text-slate-200">
-                    <strong className="text-white">
-                      Real-time 3D Rendering:
-                    </strong>{' '}
-                    Vloeiende 60+ FPS experiences op elk device
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-base sm:text-lg md:text-xl mt-1">→</span>
-                  <span className="text-slate-200">
-                    <strong className="text-white">WebGL & Three.js:</strong>{' '}
-                    Cutting-edge tech, maximale browser support
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-base sm:text-lg md:text-xl mt-1">→</span>
-                  <span className="text-slate-200">
-                    <strong className="text-white">Performance First:</strong>{' '}
-                    Geoptimaliseerd voor mobile en desktop
-                  </span>
-                </li>
-              </ul>
-              <Button
-                href="/speeltuin"
-                variant="secondary"
-                className="gap-2 hover:gap-4 group"
-              >
-                Bekijk 3D website voorbeelden
-                <span className="group-hover:translate-x-1 transition-transform duration-300">
-                  →
-                </span>
-              </Button>
             </div>
-            <div className="h-[400px] rounded-2xl overflow-hidden border border-cosmic-700/60 bg-cosmic-800/20 relative">
-              <HexagonalPrism />
+            
+            <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
+                🎮
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-cyan-300">
+                WebGL & Three.js
+              </h3>
+              <p className="text-slate-200 leading-relaxed">
+                Cutting-edge tech, maximale browser support
+              </p>
             </div>
+            
+            <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                🚀
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-cyan-300">
+                Performance First
+              </h3>
+              <p className="text-slate-200 leading-relaxed">
+                Geoptimaliseerd voor mobile en desktop
+              </p>
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <Button
+              href="/speeltuin"
+              variant="secondary"
+              className="gap-2 hover:gap-4 group"
+            >
+              Bekijk 3D website voorbeelden
+              <span className="group-hover:translate-x-1 transition-transform duration-300">
+                →
+              </span>
+            </Button>
+          </div>
+          
+          <div className="h-[400px] rounded-2xl overflow-hidden border border-cosmic-700/60 bg-cosmic-800/20 relative mt-12">
+            <HexagonalPrism />
           </div>
         </div>
       </section>
@@ -380,7 +395,7 @@ export default function HomePage() {
         id="seo-content"
         className="py-section px-4 sm:px-6 lg:px-8 bg-cosmic-900/30"
       >
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <article className="prose prose-invert prose-lg max-w-none">
             <header>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-center gradient-text">

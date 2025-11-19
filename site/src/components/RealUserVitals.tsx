@@ -1,6 +1,18 @@
 'use client';
 
 import { useEffect } from 'react';
+import type { Metric } from 'web-vitals';
+
+interface MetricAttribution {
+  eventType?: string;
+  eventTarget?: { tagName?: string; nodeName?: string };
+  eventTime?: number;
+  loadState?: string;
+  inputDelay?: number;
+  processingDuration?: number;
+  presentationDelay?: number;
+  [key: string]: unknown;
+}
 
 type MetricType = 'LCP' | 'INP' | 'CLS' | 'TTFB';
 type RatingType = 'good' | 'needs-improvement' | 'poor';
@@ -163,7 +175,7 @@ function buildVitalsPayload(
 
   // Add INP attribution data for better debugging
   if (metric.name === 'INP' && 'attribution' in metric) {
-    const attr = (metric as any).attribution;
+    const attr = 'attribution' in metric ? (metric as Metric & { attribution: MetricAttribution }).attribution : undefined;
     if (attr) {
       payload.inpEventType = attr.eventType;
       payload.inpEventTarget = attr.eventTarget?.tagName || attr.eventTarget?.nodeName;
@@ -361,7 +373,7 @@ export function RealUserVitals(): null {
           
           // Log detailed INP attribution in development for debugging
           if (process.env.NODE_ENV === 'development' && 'attribution' in metric) {
-            const attr = metric.attribution as any;
+            const attr = 'attribution' in metric ? (metric as unknown as Metric & { attribution: MetricAttribution }).attribution : undefined;
             console.log('[INP Attribution]', {
               value: Math.round(metric.value),
               rating: metric.rating,

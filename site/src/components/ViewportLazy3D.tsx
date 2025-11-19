@@ -45,7 +45,7 @@ function ViewportLazy3D({
 }
 
 // Factory function for creating viewport-aware dynamic 3D components
-export function createViewportLazy3D<T = object>(
+export function createViewportLazy3D<T = Record<string, unknown>>(
   importFn: () => Promise<{ default: ComponentType<T> }>,
   options: {
     className?: string;
@@ -60,7 +60,7 @@ export function createViewportLazy3D<T = object>(
     return (
       <ViewportLazy3D {...options}>
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <LazyComponent {...(props as any)} />
+        <LazyComponent {...props as any} />
       </ViewportLazy3D>
     );
   };

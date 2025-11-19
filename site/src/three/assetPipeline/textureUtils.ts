@@ -404,7 +404,7 @@ export class ResourceDisposer {
     
     // Dispose all texture properties
     Object.keys(material).forEach((key) => {
-      const value = (material as any)[key];
+      const value = (material as unknown as Record<string, unknown>)[key];
       if (value instanceof THREE.Texture && !this.disposed.has(value)) {
         value.dispose();
         this.disposed.add(value);

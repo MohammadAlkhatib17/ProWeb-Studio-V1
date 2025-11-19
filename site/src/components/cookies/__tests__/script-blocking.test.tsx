@@ -226,7 +226,7 @@ describe('Script Blocking - AVG/GDPR Compliance', () => {
     it('should load ALL analytics tools after consent', async () => {
       mockHasConsentFor.mockReturnValue(true);
 
-      const { container } = render(
+      render(
         <ConsentAwareAnalytics
           plausibleDomain="prowebstudio.nl"
           enableVercelAnalytics={true}

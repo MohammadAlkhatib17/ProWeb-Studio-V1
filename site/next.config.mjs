@@ -102,6 +102,13 @@ const nextConfig = {
     optimizePackageImports: ['@react-three/fiber', '@react-three/drei', 'three'],
   },
   
+  // Remove console.log in production (keep error, warn, info)
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn', 'info'],
+    } : false,
+  },
+  
   // i18n configuration - enforce nl-NL as default locale
   i18n: {
     locales: ['nl-NL'],

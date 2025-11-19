@@ -4,6 +4,7 @@
  */
 
 import { onCLS, onFCP, onLCP, onTTFB, onINP, type Metric } from 'web-vitals';
+import type { NavigatorWithConnection } from '@/types/analytics';
 
 interface VitalMetric {
   name: string;
@@ -25,7 +26,6 @@ interface PerformanceReport {
   dutchOptimizationLevel: 'basic' | 'enhanced' | 'premium';
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Core Web Vitals monitoring and performance optimization
  * Monitors LCP, FID, CLS, FCP, TTFB specifically optimized for Dutch market conditions
@@ -148,8 +148,8 @@ export class CoreWebVitalsMonitor {
     };
   }
 
-  private triggerPerformanceAlert(metric: VitalMetric, threshold: any) {
-    console.warn(`🚨 Dutch Performance Alert: ${metric.name} is ${metric.value}ms (threshold: ${threshold.poor}ms)`);
+  private triggerPerformanceAlert(metric: VitalMetric, threshold: { good: number; needsImprovement: number }) {
+    console.warn(`🚨 Dutch Performance Alert: ${metric.name} is ${metric.value}ms (threshold: ${threshold.needsImprovement}ms)`);
     
     // Report critical performance issue
     if (typeof gtag !== 'undefined') {
@@ -162,7 +162,7 @@ export class CoreWebVitalsMonitor {
     }
   }
 
-  private logOptimizationOpportunity(metric: VitalMetric, threshold: any) {
+  private logOptimizationOpportunity(metric: VitalMetric, threshold: { good: number; needsImprovement: number }) {
     console.info(`💡 Dutch Optimization Opportunity: ${metric.name} could be improved from ${metric.value}ms to under ${threshold.good}ms`);
     
     // Track optimization opportunities
@@ -263,12 +263,13 @@ export class CoreWebVitalsMonitor {
   private async sendReport() {
     if (!this.isReportingEnabled || this.metrics.length === 0) return;
 
+    const nav = navigator as NavigatorWithConnection;
     const report: PerformanceReport = {
       timestamp: Date.now(),
       url: window.location.href,
       userAgent: navigator.userAgent,
-      connectionType: (navigator as any).connection?.effectiveType || 'unknown',
-      deviceMemory: (navigator as any).deviceMemory || 0,
+      connectionType: nav.connection?.effectiveType || 'unknown',
+      deviceMemory: nav.deviceMemory || 0,
       hardwareConcurrency: navigator.hardwareConcurrency || 0,
       metrics: [...this.metrics],
       dutchOptimizationLevel: this.dutchOptimizationLevel,
@@ -304,12 +305,13 @@ export class CoreWebVitalsMonitor {
   }
 
   public getReport(): PerformanceReport {
+    const nav = navigator as NavigatorWithConnection;
     return {
       timestamp: Date.now(),
       url: window.location.href,
       userAgent: navigator.userAgent,
-      connectionType: (navigator as any).connection?.effectiveType || 'unknown',
-      deviceMemory: (navigator as any).deviceMemory || 0,
+      connectionType: nav.connection?.effectiveType || 'unknown',
+      deviceMemory: nav.deviceMemory || 0,
       hardwareConcurrency: navigator.hardwareConcurrency || 0,
       metrics: [...this.metrics],
       dutchOptimizationLevel: this.dutchOptimizationLevel,
@@ -344,7 +346,7 @@ export const PerformanceDashboardConfig = {
 
 // Global type declarations
 declare global {
-  function gtag(...args: any[]): void;
+  function gtag(...args: unknown[]): void;
   function plausible(event: string, options?: { props?: Record<string, any> }): void;
 }
 

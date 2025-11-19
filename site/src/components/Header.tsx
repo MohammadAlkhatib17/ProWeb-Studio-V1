@@ -95,14 +95,14 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`font-medium transition-all duration-300 relative group py-3 px-3 rounded-lg hover:bg-cyan-400/5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900 min-h-[44px] inline-flex items-center ${
+                className={`font-medium transition-all duration-300 relative group py-3 px-3 rounded-lg hover:bg-cyan-400/5 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-cosmic-900 min-h-[44px] inline-flex items-center whitespace-nowrap ${
                   isActive 
                     ? 'text-white' 
                     : 'text-slate-200 hover:text-white'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >
-                <span className="relative z-10">{item.name}</span>
+                <span className="relative z-10 whitespace-nowrap">{item.name}</span>
                 <div className={`absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-cyan-400 to-magenta-400 transform transition-transform duration-300 origin-left ${
                   isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                 }`} />

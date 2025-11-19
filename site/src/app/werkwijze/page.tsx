@@ -91,15 +91,20 @@ export default function Werkwijze() {
             {steps.map((step, i) => (
               <div
                 key={i}
-                className="glass p-6 rounded-lg hover:border-cyan-500/50 transition-all"
+                className="glass p-6 rounded-lg hover:border-cyan-500/50 transition-all text-center flex flex-col h-full group hover:scale-105 duration-300"
               >
-                <div className="flex items-center mb-4">
-                  <span className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mr-3">
+                {/* Number badge centered */}
+                <div className="mb-4">
+                  <span className="inline-block text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 bg-cyan-500/10 rounded-full w-14 h-14 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     {String(i + 1).padStart(2, '0')}
                   </span>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold">{step.name}</h3>
                 </div>
-                <p className="text-slate-200">{step.description}</p>
+                
+                {/* Step name centered */}
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 group-hover:text-cyan-300 transition-colors duration-300 text-center">{step.name}</h3>
+                
+                {/* Description centered */}
+                <p className="text-slate-200 text-center leading-relaxed flex-grow">{step.description}</p>
               </div>
             ))}
           </div>
@@ -107,42 +112,54 @@ export default function Werkwijze() {
       </section>
 
       <section className="py-12 sm:py-section px-4 sm:px-6 bg-cosmic-800/20">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-12">
             Onze Principes
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            <div className="glass p-6 sm:p-7 md:p-8 rounded-lg">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <div className="glass p-6 sm:p-7 md:p-8 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-cyan-500/10 flex items-center justify-center text-3xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                🔍
+              </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-cyan-300">
                 Transparantie
               </h3>
-              <p className="text-slate-200">
+              <p className="text-slate-200 leading-relaxed">
                 Open communicatie tijdens het hele proces. Je weet altijd waar
                 we staan.
               </p>
             </div>
-            <div className="glass p-6 sm:p-7 md:p-8 rounded-lg">
+            <div className="glass p-6 sm:p-7 md:p-8 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-magenta-500/10 flex items-center justify-center text-3xl group-hover:bg-magenta-500/20 transition-colors duration-300">
+                💡
+              </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-magenta-400">
                 Innovatie
               </h3>
-              <p className="text-slate-200">
+              <p className="text-slate-200 leading-relaxed">
                 We gebruiken de nieuwste technologieën om je voorsprong te
                 geven.
               </p>
             </div>
-            <div className="glass p-6 sm:p-7 md:p-8 rounded-lg">
+            <div className="glass p-6 sm:p-7 md:p-8 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-cyan-500/10 flex items-center justify-center text-3xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                ⭐
+              </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-cyan-300">
                 Kwaliteit
               </h3>
-              <p className="text-slate-200">
+              <p className="text-slate-200 leading-relaxed">
                 Geen compromissen. Elk detail wordt geperfectioneerd.
               </p>
             </div>
-            <div className="glass p-6 sm:p-7 md:p-8 rounded-lg">
+            <div className="glass p-6 sm:p-7 md:p-8 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-magenta-500/10 flex items-center justify-center text-3xl group-hover:bg-magenta-500/20 transition-colors duration-300">
+                🤝
+              </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-magenta-400">
                 Partnership
               </h3>
-              <p className="text-slate-200">
+              <p className="text-slate-200 leading-relaxed">
                 We zijn niet alleen leverancier, maar strategische partner in
                 jouw groei.
               </p>
@@ -153,8 +170,10 @@ export default function Werkwijze() {
 
       <section
         id="seo-content"
-        className="prose prose-invert max-w-none py-section px-4 sm:px-6 lg:px-8"
+        className="py-section px-4 sm:px-6 lg:px-8"
       >
+        <div className="max-w-4xl mx-auto">
+          <article className="prose prose-invert max-w-none">
         <h1>Een Duidelijk Proces voor een Succesvolle Website</h1>
         <p>
           Ons bewezen stappenplan website bouwen garandeert resultaat,
@@ -227,11 +246,13 @@ export default function Werkwijze() {
           </Link>{' '}
           om te zien hoe wij uw visie tot leven brengen.
         </p>
-        <p>
-          <Link href="/contact" className="inline-block mt-4">
+        <div className="text-center mt-8">
+          <Link href="/contact" className="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25">
             Start uw project met ons bewezen proces
           </Link>
-        </p>
+        </div>
+          </article>
+        </div>
       </section>
     </main>
   );

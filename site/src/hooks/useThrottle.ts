@@ -47,7 +47,7 @@ export function useThrottle<T>(value: T, interval: number = 200): T {
  * @param deps - Dependency array for the callback
  * @returns Throttled callback function
  */
-export function useThrottledCallback<T extends (...args: any[]) => any>(
+export function useThrottledCallback<T extends (...args: never[]) => unknown>(
   callback: T,
   limit: number = 200,
   deps: React.DependencyList = []
@@ -100,7 +100,7 @@ export function useThrottledCallback<T extends (...args: any[]) => any>(
  * @param deps - Dependency array for the callback
  * @returns rAF-throttled callback function
  */
-export function useRAFThrottle<T extends (...args: any[]) => any>(
+export function useRAFThrottle<T extends (...args: never[]) => unknown>(
   callback: T,
   deps: React.DependencyList = []
 ): (...args: Parameters<T>) => void {

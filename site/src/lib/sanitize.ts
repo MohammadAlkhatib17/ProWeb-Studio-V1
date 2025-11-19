@@ -114,28 +114,37 @@ export function sanitizeUserInput(input: string, maxLength: number = 10000): str
  * @param sanitizer - The sanitization function to use (defaults to sanitizeText)
  * @returns New object with sanitized string properties
  */
-export function sanitizeObject<T extends Record<string, any>>(
+export function sanitizeObject<T>(
   obj: T,
   sanitizer: (value: string) => string = sanitizeText
 ): T {
-  if (!obj || typeof obj !== 'object') {
+  if (obj === null || obj === undefined) {
     return obj;
   }
-  
-  const sanitized: any = Array.isArray(obj) ? [] : {};
-  
+
+  if (typeof obj === 'string') {
+    return sanitizer(obj) as T;
+  }
+
+  if (typeof obj !== 'object') {
+    return obj;
+  }
+
+  const sanitized = Array.isArray(obj) ? [] : {} as Record<string, unknown>;
+
   for (const key in obj) {
-    const value = obj[key];
-    
-    if (typeof value === 'string') {
-      sanitized[key] = sanitizer(value);
-    } else if (typeof value === 'object' && value !== null) {
-      sanitized[key] = sanitizeObject(value, sanitizer);
-    } else {
-      sanitized[key] = value;
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const value = obj[key];
+      if (typeof value === 'string') {
+        (sanitized as Record<string, unknown>)[key] = sanitizer(value);
+      } else if (value && typeof value === 'object') {
+        (sanitized as Record<string, unknown>)[key] = sanitizeObject(value, sanitizer);
+      } else {
+        (sanitized as Record<string, unknown>)[key] = value;
+      }
     }
   }
-  
+
   return sanitized as T;
 }
 

@@ -248,9 +248,15 @@ export default function SpeeltuinClient() {
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight break-words px-2 sm:px-0">
               De Technologie Achter de Magie
             </h2>
+            <p className="text-base sm:text-lg md:text-xl text-cyan-100 max-w-3xl mx-auto leading-relaxed">
+              Ontdek de krachtige technologieën die onze interactieve 3D-ervaringen mogelijk maken
+            </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            <div className="glass p-4 sm:p-6 md:p-8 rounded-xl">
+            <div className="glass p-6 sm:p-7 md:p-8 rounded-xl text-center group hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
+                🎮
+              </div>
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 WebGL/Three.js
               </h3>
@@ -260,7 +266,10 @@ export default function SpeeltuinClient() {
                 zonder plugins.
               </p>
             </div>
-            <div className="glass p-4 sm:p-6 md:p-8 rounded-xl">
+            <div className="glass p-6 sm:p-7 md:p-8 rounded-xl text-center group hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-magenta-500/20 to-pink-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
+                ⚛️
+              </div>
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 React Three Fiber
               </h3>
@@ -270,7 +279,10 @@ export default function SpeeltuinClient() {
                 naadloos integreren in onze webapplicaties.
               </p>
             </div>
-            <div className="glass p-4 sm:p-6 md:p-8 rounded-xl">
+            <div className="glass p-6 sm:p-7 md:p-8 rounded-xl text-center group hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300">
+              <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
+                💡
+              </div>
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 text-cyan-300 break-words">
                 Real-time Lighting
               </h3>
@@ -306,63 +318,95 @@ export default function SpeeltuinClient() {
 
       <section
         id="seo-content"
-        className="prose prose-sm sm:prose-base prose-invert max-w-5xl px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16 leading-relaxed overflow-x-hidden mx-auto md:mx-0"
+        className="py-8 sm:py-12 md:py-16 px-4 md:px-6 lg:px-8 overflow-x-hidden"
       >
-        <h1>Speeltuin: 3D Webtechnologie in de Praktijk</h1>
-        <p>
-          Deze interactieve speeltuin demonstreert onze praktijkervaring in het
-          creëren van hoogperformante, meeslepende 3D-webervaringen. Als React
-          Three Fiber bureau Nederland specialiseren wij ons in WebGL
-          ontwikkeling die niet alleen visueel indrukwekkend is, maar ook
-          technisch geoptimaliseerd voor alle apparaten. Hier kunt u ervaren hoe
-          geavanceerde webtechnologie uw digitale aanwezigheid kan
-          transformeren.
-        </p>
+        <div className="max-w-5xl mx-auto">
+          <article className="prose prose-sm sm:prose-base prose-invert max-w-none">
+            <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8 gradient-text">Speeltuin: 3D Webtechnologie in de Praktijk</h1>
+            
+            <div className="text-center mb-12">
+              <p className="text-base sm:text-lg text-slate-200 leading-relaxed max-w-3xl mx-auto">
+                Deze interactieve speeltuin demonstreert onze praktijkervaring in het
+                creëren van hoogperformante, meeslepende 3D-webervaringen. Als React
+                Three Fiber bureau Nederland specialiseren wij ons in WebGL
+                ontwikkeling die niet alleen visueel indrukwekkend is, maar ook
+                technisch geoptimaliseerd voor alle apparaten. Hier kunt u ervaren hoe
+                geavanceerde webtechnologie uw digitale aanwezigheid kan
+                transformeren.
+              </p>
+            </div>
 
-        <h2>Wat Kunt U Hier Ervaren?</h2>
-        <ul>
-          <li>
-            <strong>Interactieve Productconfiguratoren:</strong> Perfect voor
-            e-commerce en verkoop, waarbij klanten producten in real-time kunnen
-            aanpassen en visualiseren. Deze technologie verhoogt betrokkenheid
-            en converteert bezoekers effectiever naar kopers.
-          </li>
-          <li>
-            <strong>Real-time 3D-visualisaties:</strong> Ideaal voor
-            datavisualisatie, architecturale presentaties, of het toegankelijk
-            maken van complexe concepten. Wij maken abstract concreet door
-            middel van interactieve 3D website ervaringen.
-          </li>
-          <li>
-            <strong>Scroll-gebaseerde Animaties:</strong> Voor boeiende
-            storytelling en merkbeleving die gebruikers meeneemt op een visuele
-            reis. Deze animaties verbeteren de gebruikerservaring en zorgen voor
-            langere sessietijden.
-          </li>
-          <li>
-            <strong>Parallax &amp; Diepte-effecten:</strong> Creëer dimensie en
-            beweging die uw content tot leven brengt, met subtiele effecten die
-            professioneel ogen en technisch geoptimaliseerd zijn.
-          </li>
-        </ul>
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                  🛠️
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-cyan-300">Interactieve Productconfiguratoren</h3>
+                <p className="text-slate-200 leading-relaxed text-sm">
+                  Perfect voor e-commerce en verkoop, waarbij klanten producten in real-time kunnen
+                  aanpassen en visualiseren. Deze technologie verhoogt betrokkenheid
+                  en converteert bezoekers effectiever naar kopers.
+                </p>
+              </div>
+              
+              <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
+                  🎨
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-cyan-300">Real-time 3D-visualisaties</h3>
+                <p className="text-slate-200 leading-relaxed text-sm">
+                  Ideaal voor datavisualisatie, architecturale presentaties, of het toegankelijk
+                  maken van complexe concepten. Wij maken abstract concreet door
+                  middel van interactieve 3D website ervaringen.
+                </p>
+              </div>
+              
+              <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                  📜
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-cyan-300">Scroll-gebaseerde Animaties</h3>
+                <p className="text-slate-200 leading-relaxed text-sm">
+                  Voor boeiende storytelling en merkbeleving die gebruikers meeneemt op een visuele
+                  reis. Deze animaties verbeteren de gebruikerservaring en zorgen voor
+                  langere sessietijden.
+                </p>
+              </div>
+              
+              <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
+                  ✨
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-cyan-300">Parallax & Diepte-effecten</h3>
+                <p className="text-slate-200 leading-relaxed text-sm">
+                  Creëer dimensie en beweging die uw content tot leven brengt, met subtiele effecten die
+                  professioneel ogen en technisch geoptimaliseerd zijn.
+                </p>
+              </div>
+            </div>
 
-        <h2>Onze Aanpak: Performance First</h2>
-        <p>
-          Performance optimalisatie staat centraal in onze
-          ontwikkelingsfilosofie. Wij gebruiken lichtgewicht 3D-modellen,
-          geavanceerde instancing technieken, slimme lazy loading strategieën en
-          robuuste fallbacks voor verschillende hardwareconfiguraties. Deze
-          aanpak garandeert dat uw interactieve 3D website soepel draait op alle
-          apparaten – van high-end desktops tot mobiele telefoons. Dit is
-          cruciaal voor SEO, gebruikersbehoud en conversie, omdat snelheid en
-          toegankelijkheid direct bijdragen aan uw ranking in Google en de
-          algehele gebruikerservaring.
-        </p>
-        <p>
-          <a href="/contact" className="inline-block mt-4">
-            Bespreek een 3D‑use‑case voor uw merk
-          </a>
-        </p>
+            <div className="glass p-8 rounded-xl text-center mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">Onze Aanpak: Performance First</h2>
+              <p className="text-slate-200 leading-relaxed max-w-3xl mx-auto">
+                Performance optimalisatie staat centraal in onze
+                ontwikkelingsfilosofie. Wij gebruiken lichtgewicht 3D-modellen,
+                geavanceerde instancing technieken, slimme lazy loading strategieën en
+                robuuste fallbacks voor verschillende hardwareconfiguraties. Deze
+                aanpak garandeert dat uw interactieve 3D website soepel draait op alle
+                apparaten – van high-end desktops tot mobiele telefoons. Dit is
+                cruciaal voor SEO, gebruikersbehoud en conversie, omdat snelheid en
+                toegankelijkheid direct bijdragen aan uw ranking in Google en de
+                algehele gebruikerservaring.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <a href="/contact" className="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25">
+                Bespreek een 3D‑use‑case voor uw merk
+              </a>
+            </div>
+          </article>
+        </div>
       </section>
     </main>
   );

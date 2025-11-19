@@ -3,6 +3,8 @@
  * Implements preconnect, dns-prefetch, and preload strategies for critical third-party resources
  */
 
+import type { NavigatorWithConnection } from '@/types/analytics';
+
 export interface PreconnectConfig {
   href: string;
   crossOrigin?: '' | 'anonymous' | 'use-credentials';
@@ -121,10 +123,9 @@ export function generateResourcePreconnects(pathname?: string): PreconnectConfig
 export function getAdaptiveResourceHints() {
   if (typeof window === 'undefined') return CRITICAL_PRECONNECTS;
   
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const connection = (navigator as any).connection;
-  if (connection) {
-    const { effectiveType, saveData } = connection;
+  const nav = navigator as NavigatorWithConnection;
+  if (nav.connection) {
+    const { effectiveType, saveData } = nav.connection;
     
     // Reduce preconnects for slow connections or data saver mode
     if (saveData || effectiveType === 'slow-2g' || effectiveType === '2g') {
@@ -135,7 +136,6 @@ export function getAdaptiveResourceHints() {
   return CRITICAL_PRECONNECTS;
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Advanced preconnect and resource hints optimization
  * Optimized for Dutch CDNs and hosting providers

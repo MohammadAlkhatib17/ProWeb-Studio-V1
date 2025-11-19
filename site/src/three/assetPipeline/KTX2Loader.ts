@@ -215,7 +215,7 @@ export async function loadCubeMap(
     textures.map(t => t.image)
   );
 
-  applyTextureOptions(cubeTexture as any, options);
+  applyTextureOptions(cubeTexture as THREE.Texture, options);
   
   return cubeTexture;
 }

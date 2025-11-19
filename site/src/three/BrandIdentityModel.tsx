@@ -1,5 +1,4 @@
 'use client'
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useRef, useMemo, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
@@ -15,8 +14,9 @@ import {
   Text,
   MeshDistortMaterial
 } from '@react-three/drei'
-import { Group } from 'three'
+
 import { motion } from 'framer-motion'
+import type { ThreeMeshRef, ThreeGroupRef, GPUTier } from '@/types/three'
 
 interface LogoElementProps {
   position?: [number, number, number]
@@ -26,7 +26,7 @@ interface LogoElementProps {
 }
 
 function LogoElement({ position = [0, 0, 0], color = '#3498db', type = 'sphere', delay = 0 }: LogoElementProps) {
-  const meshRef = useRef<any>(null)
+  const meshRef = useRef<ThreeMeshRef>(null)
   
   useFrame((state) => {
     if (meshRef.current) {
@@ -96,12 +96,12 @@ function LogoElement({ position = [0, 0, 0], color = '#3498db', type = 'sphere',
 }
 
 function BrandScene() {
-  const groupRef = useRef<Group>(null)
+  const groupRef = useRef<ThreeGroupRef>(null)
   const { gl } = useThree()
-  const gpu = useDetectGPU()
+  const gpu = useDetectGPU() as GPUTier | undefined
   
   const shadows = useMemo(() => {
-    return gpu?.tier >= 2
+    return (gpu?.tier ?? 0) >= 2
   }, [gpu])
   
   React.useEffect(() => {

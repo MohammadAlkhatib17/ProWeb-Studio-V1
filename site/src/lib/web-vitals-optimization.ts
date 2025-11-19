@@ -1,8 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Core Web Vitals optimization utilities
  * Specifically tuned for Dutch users and network conditions
  */
+
+import type { NavigatorWithConnection } from '@/types/analytics';
 
 interface FontPreload {
   rel: string;
@@ -58,9 +59,9 @@ export function getDutchOptimizedResourceHints() {
 export function shouldLoadAdvancedFeatures(): boolean {
   if (typeof window === 'undefined') return true;
   
-  const connection = (navigator as any).connection;
+  const nav = navigator as NavigatorWithConnection;
   const hardwareConcurrency = navigator.hardwareConcurrency || 4;
-  const deviceMemory = (navigator as any).deviceMemory || 4;
+  const deviceMemory = nav.deviceMemory || 4;
   
   // Conservative loading for lower-end devices
   if (deviceMemory < 2 || hardwareConcurrency < 2) {
@@ -68,8 +69,8 @@ export function shouldLoadAdvancedFeatures(): boolean {
   }
   
   // Network-aware loading
-  if (connection) {
-    const { effectiveType, saveData, downlink } = connection;
+  if (nav.connection) {
+    const { effectiveType, saveData, downlink } = nav.connection;
     
     // Skip advanced features on slow connections or data saver mode
     if (saveData || effectiveType === 'slow-2g' || effectiveType === '2g') {
@@ -77,7 +78,7 @@ export function shouldLoadAdvancedFeatures(): boolean {
     }
     
     // Load conditionally on 3G
-    if (effectiveType === '3g' && downlink < 1.5) {
+    if (effectiveType === '3g' && (downlink ?? 10) < 1.5) {
       return false;
     }
   }
@@ -97,8 +98,8 @@ export function getOptimalImageStrategy(isAboveFold: boolean = false) {
   
   if (typeof window === 'undefined') return baseStrategy;
   
-  const connection = (navigator as any).connection;
-  if (connection?.saveData) {
+  const nav = navigator as NavigatorWithConnection;
+  if (nav.connection?.saveData) {
     return {
       ...baseStrategy,
       // Use lower quality for data saver mode
@@ -257,5 +258,5 @@ interface LayoutShift extends PerformanceEntry {
 
 // Global gtag fallback
 declare global {
-  function gtag(...args: any[]): void;
+  function gtag(...args: unknown[]): void;
 }

@@ -3,10 +3,16 @@
  * Gracefully handles cases where GA4 is not configured
  */
 
+// Gtag function with queue property
+interface GtagFunction {
+  (...args: unknown[]): void;
+  q?: unknown[];
+}
+
 // Global gtag function declaration
 declare global {
   interface Window {
-    gtag: (...args: unknown[]) => void;
+    gtag: GtagFunction;
   }
 }
 
@@ -58,8 +64,7 @@ export const initGA4 = (): void => {
 
   // Initialize gtag
   window.gtag = window.gtag || function(...args: unknown[]) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((window.gtag as any).q = (window.gtag as any).q || []).push(args);
+    (window.gtag.q = window.gtag.q || []).push(args);
   };
 
   window.gtag('js', new Date());

@@ -120,7 +120,7 @@ export default function Diensten() {
 
       {/* Hero section with 3D elements */}
       <section className="relative min-h-[75svh] md:min-h-[70vh] overflow-hidden flex items-center content-safe-top">
-  <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-cosmic-900/20 to-cosmic-900/40" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-cosmic-900/20 to-cosmic-900/40" />
 
         <Suspense
           fallback={<div className="absolute inset-0 bg-cosmic-900/50" />}
@@ -135,7 +135,7 @@ export default function Diensten() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in">
               Meer dan Code. Oplossingen die Groeien.
             </h1>
-                        <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-4xl mx-auto leading-relaxed animate-slide-up">
+            <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-4xl mx-auto leading-relaxed animate-slide-up">
               Ontdek onze complete oplossingen voor professionele websites, 
               van moderne webdesign tot geavanceerde functionaliteiten.
             </p>
@@ -156,33 +156,44 @@ export default function Diensten() {
               <div
                 key={i}
                 id={serviceId}
-                className="glass p-6 sm:p-7 md:p-8 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden animate-fade-in"
+                className="glass p-6 sm:p-7 md:p-8 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden animate-fade-in text-center flex flex-col hover:scale-105"
                 style={{ animationDelay: `${i * 0.2}s` }}
               >
                 {/* Gradient overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
 
-                <div className="relative z-10">
-                  <div className="text-4xl mb-4">{service.icon}</div>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 group-hover:text-cyan-300 transition-colors duration-300">
+                <div className="relative z-10 flex flex-col h-full">
+                  {/* Icon centered with background */}
+                  <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
+                    {service.icon}
+                  </div>
+                  
+                  {/* Title centered */}
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 group-hover:text-cyan-300 transition-colors duration-300 text-center">
                     {service.title}
                   </h3>
-                  <p className="text-slate-200 mb-8 leading-relaxed">
+                  
+                  {/* Description centered */}
+                  <p className="text-slate-200 mb-8 leading-relaxed text-center flex-grow">
                     {service.description}
                   </p>
-                  <h4 className="font-semibold text-cyan-300 mb-4">
-                    Inclusief:
-                  </h4>
-                  <ul className="space-y-3">
-                    {service.features.map((feature, j) => (
-                      <li key={j} className="flex items-center text-sm">
-                        <span className="text-cyan-300 mr-3 font-bold text-lg">
-                          ✓
-                        </span>
-                        <span className="text-gray-200">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  
+                  {/* Features section */}
+                  <div className="mt-auto">
+                    <h4 className="font-semibold text-cyan-300 mb-4 text-center">
+                      Inclusief:
+                    </h4>
+                    <ul className="space-y-3">
+                      {service.features.map((feature, j) => (
+                        <li key={j} className="flex items-center justify-center text-sm">
+                          <span className="text-cyan-300 mr-3 font-bold text-lg">
+                            ✓
+                          </span>
+                          <span className="text-gray-200 text-center">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
               );
@@ -206,10 +217,13 @@ export default function Diensten() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 text-center">
-            <div className="glass p-6 rounded-lg">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+            <div className="glass p-6 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                ⚛️
+              </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">Frontend</h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-200 text-center">
                 <li>Next.js</li>
                 <li>React</li>
                 <li>TypeScript</li>
@@ -217,31 +231,40 @@ export default function Diensten() {
                 <li>GSAP</li>
               </ul>
             </div>
-            <div className="glass p-6 rounded-lg">
+            <div className="glass p-6 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
+                🎮
+              </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
                 3D & Animatie
               </h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-200 text-center">
                 <li>WebGL</li>
                 <li>Three.js</li>
                 <li>React Three Fiber</li>
               </ul>
             </div>
-            <div className="glass p-6 rounded-lg">
+            <div className="glass p-6 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                🔧
+              </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
                 Backend & CMS
               </h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-200 text-center">
                 <li>Headless CMS (o.a. Sanity, Contentful)</li>
                 <li>Node.js</li>
                 <li>Vercel Serverless Functions</li>
               </ul>
             </div>
-            <div className="glass p-6 rounded-lg">
+            <div className="glass p-6 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
+                🚀
+              </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
                 Deployment & Infrastructuur
               </h3>
-              <ul className="space-y-2 text-slate-200">
+              <ul className="space-y-2 text-slate-200 text-center">
                 <li>Vercel</li>
                 <li>Netlify</li>
                 <li>AWS</li>
@@ -259,9 +282,12 @@ export default function Diensten() {
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12">
-            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
+            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group text-center hover:scale-105">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                🏗️
+              </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
-                🏗️ Onze Werkwijze
+                Onze Werkwijze
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
                 Ontdek hoe wij van idee naar realisatie werken. Van strategische planning 
@@ -276,9 +302,12 @@ export default function Diensten() {
               </Link>
             </div>
 
-            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
+            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group text-center hover:scale-105">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
+                🎮
+              </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
-                🎮 3D Technologie Speeltuin
+                3D Technologie Speeltuin
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
                 Ervaar de kracht van moderne webtechnologie. Interactieve 3D-ervaringen, 
@@ -293,9 +322,12 @@ export default function Diensten() {
               </Link>
             </div>
 
-            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group">
+            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group text-center hover:scale-105">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
+                👥
+              </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
-                👥 Over ProWeb Studio
+                Over ProWeb Studio
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
                 Leer het team kennen achter de innovatieve weboplossingen. Onze missie, 
@@ -386,64 +418,89 @@ export default function Diensten() {
       {/* SEO Content Section */}
       <section
         id="seo-content"
-        className="prose prose-invert max-w-none px-6 md:px-8 lg:px-12 py-12 md:py-16"
+        className="py-12 md:py-16 px-4 sm:px-6 lg:px-8"
       >
-        <h1>Diensten die groei versnellen</h1>
-        <h2>Webdesign &amp; Development</h2>
-        <p>
-          Een professionele website laten maken begint bij een ijzersterk
-          fundament. Wij bouwen maatwerk websites met een scherp oog voor
-          snelheid, gebruiksvriendelijkheid en een conversiegericht ontwerp dat
-          bezoekers omzet in klanten. Of u nu ZZP&apos;er bent of een groeiend
-          MKB-bedrijf runt, uw online groei is onze prioriteit.
-        </p>
-        <h2>3D Web Experiences (WebGL/Three.js)</h2>
-        <p>
-          Onderscheid uw merk met interactieve 3D-ervaringen die uw producten en
-          diensten tot leven brengen. Door WebGL en Three.js technologie slim in
-          te zetten, creëren we meeslepende gebruikerservaringen die langer op
-          uw website blijven hangen. Perfect voor bedrijven die hun merkverhaal
-          op een unieke manier willen vertellen en een blijvende indruk willen
-          maken.
-        </p>
-        <h2>Performance Optimalisatie</h2>
-        <p>
-          Een snelle website is essentieel voor een hogere ranking in Google en
-          betere gebruikerservaring. Wij optimaliseren uw Core Web Vitals,
-          implementeren geavanceerde caching strategieën en gebruiken moderne
-          beeldformaten zoals AVIF en WebP. Het resultaat: een bliksemsnelle
-          website die zowel gebruikers als zoekmachines tevreden houdt.
-        </p>
-        <h2>SEO &amp; Content Strategie</h2>
-        <p>
-          Zichtbaarheid in Google begint met een solide SEO-strategie. Wij
-          voeren diepgaand zoekwoordenonderzoek uit, optimaliseren technische
-          aspecten en ontwikkelen een contentplan dat uw doelgroep aanspreekt.
-          Van lokale SEO voor Nederlandse bedrijven tot internationale groei –
-          wij zorgen ervoor dat uw website gevonden wordt door de juiste
-          klanten.
-        </p>
-        <h2>Headless CMS &amp; Integraties</h2>
-        <p>
-          Flexibel contentbeheer is de sleutel tot efficiënte online
-          communicatie. Met headless CMS-oplossingen zoals Sanity of Contentful
-          krijgt u volledige controle over uw content, zonder technische
-          beperkingen. Wij integreren naadloos met uw bestaande systemen en
-          zorgen voor een workflow die aansluit bij uw bedrijfsprocessen.
-        </p>
-        <h2>CRO (Conversion Rate Optimization)</h2>
-        <p>
-          Meer bezoekers is mooi, maar meer klanten is beter. Door systematische
-          A/B-testing, gebruikersanalyse en UX-verbeteringen transformeren we uw
-          website van een digitale brochure naar een krachtige verkoopmotor.
-          Elke aanpassing is data-gedreven en gericht op het verhogen van uw
-          conversie en omzet.
-        </p>
-        <p>
-          <a href="/contact" className="inline-block mt-4">
-            Vraag een groeiscan aan
-          </a>
-        </p>
+        <div className="max-w-4xl mx-auto">
+          <article className="prose prose-invert prose-lg max-w-none text-center">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-8 gradient-text">Diensten die groei versnellen</h2>
+            
+            <div className="text-left space-y-8">
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-cyan-300">Webdesign &amp; Development</h3>
+                <p className="text-slate-200 leading-relaxed">
+                  Een professionele website laten maken begint bij een ijzersterk
+                  fundament. Wij bouwen maatwerk websites met een scherp oog voor
+                  snelheid, gebruiksvriendelijkheid en een conversiegericht ontwerp dat
+                  bezoekers omzet in klanten. Of u nu ZZP&apos;er bent of een groeiend
+                  MKB-bedrijf runt, uw online groei is onze prioriteit.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-cyan-300">3D Web Experiences (WebGL/Three.js)</h3>
+                <p className="text-slate-200 leading-relaxed">
+                  Onderscheid uw merk met interactieve 3D-ervaringen die uw producten en
+                  diensten tot leven brengen. Door WebGL en Three.js technologie slim in
+                  te zetten, creëren we meeslepende gebruikerservaringen die langer op
+                  uw website blijven hangen. Perfect voor bedrijven die hun merkverhaal
+                  op een unieke manier willen vertellen en een blijvende indruk willen
+                  maken.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-cyan-300">Performance Optimalisatie</h3>
+                <p className="text-slate-200 leading-relaxed">
+                  Een snelle website is essentieel voor een hogere ranking in Google en
+                  betere gebruikerservaring. Wij optimaliseren uw Core Web Vitals,
+                  implementeren geavanceerde caching strategieën en gebruiken moderne
+                  beeldformaten zoals AVIF en WebP. Het resultaat: een bliksemsnelle
+                  website die zowel gebruikers als zoekmachines tevreden houdt.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-cyan-300">SEO &amp; Content Strategie</h3>
+                <p className="text-slate-200 leading-relaxed">
+                  Zichtbaarheid in Google begint met een solide SEO-strategie. Wij
+                  voeren diepgaand zoekwoordenonderzoek uit, optimaliseren technische
+                  aspecten en ontwikkelen een contentplan dat uw doelgroep aanspreekt.
+                  Van lokale SEO voor Nederlandse bedrijven tot internationale groei –
+                  wij zorgen ervoor dat uw website gevonden wordt door de juiste
+                  klanten.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-cyan-300">Headless CMS &amp; Integraties</h3>
+                <p className="text-slate-200 leading-relaxed">
+                  Flexibel contentbeheer is de sleutel tot efficiënte online
+                  communicatie. Met headless CMS-oplossingen zoals Sanity of Contentful
+                  krijgt u volledige controle over uw content, zonder technische
+                  beperkingen. Wij integreren naadloos met uw bestaande systemen en
+                  zorgen voor een workflow die aansluit bij uw bedrijfsprocessen.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-cyan-300">CRO (Conversion Rate Optimization)</h3>
+                <p className="text-slate-200 leading-relaxed">
+                  Meer bezoekers is mooi, maar meer klanten is beter. Door systematische
+                  A/B-testing, gebruikersanalyse en UX-verbeteringen transformeren we uw
+                  website van een digitale brochure naar een krachtige verkoopmotor.
+                  Elke aanpassing is data-gedreven en gericht op het verhogen van uw
+                  conversie en omzet.
+                </p>
+              </div>
+            </div>
+            
+            <div className="text-center mt-8">
+              <a href="/contact" className="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25">
+                Vraag een groeiscan aan
+              </a>
+            </div>
+          </article>
+        </div>
       </section>
 
       {/* Business Info Section - NAP for Local SEO */}

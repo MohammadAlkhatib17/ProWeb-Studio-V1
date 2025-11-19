@@ -61,8 +61,17 @@ jobs:
       - name: Prettier check
         run: npm --prefix site run format:check
 
-      - name: Run tests
-        run: npm --prefix site test
+      - name: Run tests with coverage
+        run: npm --prefix site run test:coverage
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          files: ./site/coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
 
       - name: Build project with analysis
         run: npm --prefix site run build:analyze

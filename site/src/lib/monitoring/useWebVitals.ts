@@ -87,7 +87,8 @@ function sendToAPI(metric: WebVitalMetric, endpoint: string) {
   if (typeof window === 'undefined') return;
 
   // Gather additional context
-  const connection = (navigator as any).connection;
+  const nav = navigator as import('@/types/analytics').NavigatorWithConnection;
+  const connection = nav.connection;
   const vitalEvent: VitalEvent = {
     timestamp: Date.now(),
     url: window.location.href,

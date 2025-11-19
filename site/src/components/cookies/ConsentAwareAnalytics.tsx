@@ -48,17 +48,13 @@ export default function ConsentAwareAnalytics({
         // Clean up analytics if consent is revoked
         if (typeof window !== 'undefined') {
           // Clean up Plausible
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          if ((window as any).plausible) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            delete (window as any).plausible;
+          if ('plausible' in window) {
+            delete (window as unknown as Record<string, unknown>).plausible;
           }
           
           // Clean up Vercel Analytics
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          if ((window as any).va) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            delete (window as any).va;
+          if ('va' in window) {
+            delete (window as unknown as Record<string, unknown>).va;
           }
         }
       }

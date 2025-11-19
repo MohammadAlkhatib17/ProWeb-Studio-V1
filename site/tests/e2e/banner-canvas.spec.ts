@@ -197,7 +197,7 @@ test.describe('Cookie Banner & 3D Canvas Independence', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     
     // Check both appear quickly and simultaneously
-    const [banner, canvas] = await Promise.all([
+    await Promise.all([
       page.locator('[data-testid="cookie-consent-banner"], [role="dialog"][aria-label*="cookie" i], .cookie-banner').first().waitFor({ state: 'visible', timeout: 500 }),
       page.locator('canvas').first().waitFor({ state: 'visible', timeout: 2000 })
     ]);

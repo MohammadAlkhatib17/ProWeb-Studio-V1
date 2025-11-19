@@ -1,10 +1,14 @@
 'use client'
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { Suspense, useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { AdaptiveDpr, AdaptiveEvents, Preload, PerformanceMonitor } from '@react-three/drei'
 import { motion } from 'framer-motion'
+
+interface LoadedAsset {
+  path: string
+  loaded: boolean
+}
 
 interface PerformanceCanvasProps {
   children: React.ReactNode
@@ -157,7 +161,7 @@ export function OptimizedMaterial({
 
 // Asset loading optimization
 export function useOptimizedAssets(assetPaths: string[]) {
-  const [loadedAssets, setLoadedAssets] = React.useState<Record<string, any>>({})
+  const [loadedAssets, setLoadedAssets] = React.useState<Record<string, LoadedAsset | null>>({})
   const [loading, setLoading] = React.useState(true)
   
   React.useEffect(() => {

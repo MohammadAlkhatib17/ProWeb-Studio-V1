@@ -4,6 +4,7 @@
  */
 
 import { Inter } from 'next/font/google';
+import type { NavigatorWithConnection } from '@/types/analytics';
 
 /**
  * Primary font configuration with optimal display strategy
@@ -59,7 +60,6 @@ export const fontFallbackCSS = `
   }
 `;
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Font optimization and loading strategies
  * Optimized for Dutch typography and reading patterns
@@ -88,9 +88,9 @@ export function getFontLoadingStrategy() {
   if (typeof window === 'undefined') return 'swap';
   
   // Use connection speed to determine strategy
-  const connection = (navigator as any).connection;
-  if (connection) {
-    const { effectiveType, saveData } = connection;
+  const nav = navigator as NavigatorWithConnection;
+  if (nav.connection) {
+    const { effectiveType, saveData } = nav.connection;
     
     // Use fallback for slow connections or data saver mode
     if (saveData || effectiveType === 'slow-2g' || effectiveType === '2g') {

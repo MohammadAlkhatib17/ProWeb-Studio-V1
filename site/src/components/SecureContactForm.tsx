@@ -126,6 +126,8 @@ export default function SecureContactForm() {
     // Perform validation in a non-blocking way
     startTransition(() => {
       try {
+        // Validate single field using pick - type assertion needed for dynamic key
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const fieldSchema = contactSchema.pick({ [name]: true } as any);
         fieldSchema.parse({ [name]: value });
         // Clear error if valid

@@ -1,17 +1,39 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Advanced performance monitoring for Dutch market optimization
  * Tracks Core Web Vitals, network conditions, and user interactions
  */
 
-// Types for Web Vitals metrics
-interface WebVitalsMetric {
+import type { WebVitalsMetric, WebVitalsMetricName, WebVitalsRating, NavigatorWithConnection } from '@/types/analytics';
+
+// Extended PerformanceEntry types for web vitals
+interface LayoutShiftEntry extends PerformanceEntry {
+  value: number;
+  hadRecentInput: boolean;
+}
+
+interface EventTimingEntry extends PerformanceEntry {
+  processingStart: number;
+  processingEnd: number;
+  cancelable: boolean;
+}
+
+interface NavigationTimingEntry extends PerformanceResourceTiming {
+  loadEventEnd: number;
+}
+
+interface LCPEntry extends PerformancePaintTiming {
+  element?: Element;
+  url?: string;
+}
+
+// Re-define with proper typing for internal use
+interface WebVitalsMetricInternal {
   id: string;
-  name: 'CLS' | 'FID' | 'FCP' | 'LCP' | 'TTFB' | 'INP';
+  name: WebVitalsMetricName;
   value: number;
   delta: number;
   entries: PerformanceEntry[];
-  rating: 'good' | 'needs-improvement' | 'poor';
+  rating: WebVitalsRating;
 }
 
 interface ImagePerformanceMetric {
@@ -27,7 +49,7 @@ interface ImagePerformanceMetric {
 interface PerformanceReport {
   timestamp: number;
   url: string;
-  webVitals: WebVitalsMetric[];
+  webVitals: WebVitalsMetricInternal[];
   images: ImagePerformanceMetric[];
   fontMetrics: {
     loadTime: number;
@@ -69,7 +91,7 @@ const IMAGE_OPTIMIZATION_RULES = {
  * Enhanced Web Vitals monitoring with Core Web Vitals library integration
  */
 export class WebVitalsMonitor {
-  private metrics: WebVitalsMetric[] = [];
+  private metrics: WebVitalsMetricInternal[] = [];
   private imageMetrics: ImagePerformanceMetric[] = [];
   private observers: PerformanceObserver[] = [];
   
@@ -115,8 +137,9 @@ export class WebVitalsMonitor {
       let clsValue = 0;
       
       for (const entry of list.getEntries()) {
-        if (entry.entryType === 'layout-shift' && !(entry as any).hadRecentInput) {
-          clsValue += (entry as any).value;
+        const layoutShift = entry as LayoutShiftEntry;
+        if (entry.entryType === 'layout-shift' && !layoutShift.hadRecentInput) {
+          clsValue += layoutShift.value;
         }
       }
       
@@ -128,6 +151,7 @@ export class WebVitalsMonitor {
           delta: clsValue,
           entries: Array.from(list.getEntries()),
           rating: this.getRating('CLS', clsValue),
+          navigationType: 'navigate',
         });
       }
     });
@@ -148,6 +172,7 @@ export class WebVitalsMonitor {
         delta: lastEntry.startTime,
         entries: [lastEntry],
         rating: this.getRating('LCP', lastEntry.startTime),
+        navigationType: 'navigate',
       });
       
       // Check if LCP element is an image and validate optimization
@@ -161,7 +186,7 @@ export class WebVitalsMonitor {
   private monitorInteraction() {
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const interactionEntry = entry as any;
+        const interactionEntry = entry as EventTimingEntry;
         
         this.recordMetric({
           id: `inp-${Date.now()}`,
@@ -170,6 +195,7 @@ export class WebVitalsMonitor {
           delta: interactionEntry.processingStart - interactionEntry.startTime,
           entries: [entry],
           rating: this.getRating('INP', interactionEntry.processingStart - interactionEntry.startTime),
+          navigationType: 'navigate',
         });
       }
     });
@@ -186,15 +212,18 @@ export class WebVitalsMonitor {
   private monitorFID() {
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const fidEntry = entry as any;
+        const fidEntry = entry as EventTimingEntry;
         
+        // Note: FID is deprecated in favor of INP, but we still track it for backwards compatibility
+        // We use INP name type since FID is no longer in the web-vitals library
         this.recordMetric({
           id: `fid-${Date.now()}`,
-          name: 'FID',
+          name: 'INP', // Use INP as FID is deprecated
           value: fidEntry.processingStart - fidEntry.startTime,
           delta: fidEntry.processingStart - fidEntry.startTime,
           entries: [entry],
           rating: this.getRating('FID', fidEntry.processingStart - fidEntry.startTime),
+          navigationType: 'navigate',
         });
       }
     });
@@ -223,7 +252,7 @@ export class WebVitalsMonitor {
         format: this.extractImageFormat(entry.name),
         isLCP: false, // Will be updated if this becomes LCP
         hasPriority: this.checkImagePriority(entry.name),
-        renderTime: (entry as any).loadEventEnd ? (entry as any).loadEventEnd - entry.responseEnd : undefined,
+        renderTime: 'loadEventEnd' in entry ? (entry as NavigationTimingEntry).loadEventEnd - entry.responseEnd : undefined,
       };
       
       this.imageMetrics.push(imageMetric);
@@ -233,9 +262,10 @@ export class WebVitalsMonitor {
   
   private validateLCPImage(lcpEntry: PerformancePaintTiming) {
     // Find the image that triggered LCP
-    const lcpElement = (lcpEntry as any).element;
+    const lcpElement = (lcpEntry as LCPEntry).element;
     if (lcpElement && lcpElement.tagName === 'IMG') {
-      const imageMetric = this.imageMetrics.find(m => m.src === lcpElement.src);
+      const imgElement = lcpElement as HTMLImageElement;
+      const imageMetric = this.imageMetrics.find(m => m.src === imgElement.src);
       if (imageMetric) {
         imageMetric.isLCP = true;
         
@@ -268,7 +298,7 @@ export class WebVitalsMonitor {
     }
     
     // Check format optimization
-    if (!IMAGE_OPTIMIZATION_RULES.preferredFormats.includes(metric.format as any)) {
+    if (!IMAGE_OPTIMIZATION_RULES.preferredFormats.includes(metric.format as 'webp' | 'avif')) {
       this.reportOptimizationIssue('Suboptimal image format', {
         src: metric.src,
         format: metric.format,
@@ -285,7 +315,7 @@ export class WebVitalsMonitor {
   private checkImagePriority(src: string): boolean {
     // Check if image has priority attribute (simplified check)
     const images = document.querySelectorAll('img[src*="' + src.split('/').pop() + '"]');
-    return Array.from(images).some(img => img.hasAttribute('fetchpriority') || (img as any).fetchPriority || (img as any).priority);
+    return Array.from(images).some(img => img.hasAttribute('fetchpriority') || 'fetchPriority' in img || 'priority' in img);
   }
   
   private recordMetric(metric: WebVitalsMetric) {
@@ -313,7 +343,7 @@ export class WebVitalsMonitor {
     return 'poor';
   }
   
-  private reportOptimizationIssue(message: string, details: any) {
+  private reportOptimizationIssue(message: string, details: Record<string, unknown>) {
     console.warn(`🚨 Performance Issue: ${message}`, details);
     
     // In production, send to analytics
@@ -322,10 +352,10 @@ export class WebVitalsMonitor {
     }
   }
   
-  private sendToAnalytics(event: string, data: any) {
+  private sendToAnalytics(event: string, data: Record<string, unknown>) {
     // Integration with analytics service
     if ('gtag' in window) {
-      (window as any).gtag('event', event, data);
+      window.gtag('event', event, data);
     }
   }
   
@@ -347,7 +377,8 @@ export class WebVitalsMonitor {
   }
   
   private getNetworkInfo() {
-    const connection = (navigator as any).connection;
+    const nav = navigator as NavigatorWithConnection;
+    const connection = nav.connection;
     return {
       effectiveType: connection?.effectiveType || 'unknown',
       saveData: connection?.saveData || false,

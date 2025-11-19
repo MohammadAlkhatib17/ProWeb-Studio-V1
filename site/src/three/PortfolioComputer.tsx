@@ -1,5 +1,4 @@
 'use client'
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useRef, useMemo, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
@@ -13,8 +12,9 @@ import {
   Preload,
   useDetectGPU
 } from '@react-three/drei'
-import { Mesh, Group } from 'three'
+import type { MeshStandardMaterial } from 'three'
 import { motion } from 'framer-motion'
+import type { ThreeMeshRef, ThreeGroupRef, GPUTier } from '@/types/three'
 
 interface LaptopModelProps {
   position?: [number, number, number]
@@ -23,8 +23,8 @@ interface LaptopModelProps {
 }
 
 function LaptopModel({ position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1] }: LaptopModelProps) {
-  const groupRef = useRef<Group>(null)
-  const screenRef = useRef<Mesh>(null)
+  const groupRef = useRef<ThreeGroupRef>(null)
+  const screenRef = useRef<ThreeMeshRef>(null)
   
   // Smooth rotation animation
   useFrame((state) => {
@@ -34,7 +34,7 @@ function LaptopModel({ position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1
     }
     
     if (screenRef.current) {
-      const material = screenRef.current.material as any
+      const material = screenRef.current.material as MeshStandardMaterial
       if (material.emissiveIntensity !== undefined) {
         material.emissiveIntensity = 0.1 + Math.sin(state.clock.elapsedTime * 2) * 0.05
       }
@@ -120,11 +120,11 @@ function LaptopModel({ position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1
 
 function Scene() {
   const { gl } = useThree()
-  const gpu = useDetectGPU()
+  const gpu = useDetectGPU() as GPUTier | undefined
   
   // Optimize based on device capabilities
   const shadows = useMemo(() => {
-    return gpu?.tier >= 2
+    return (gpu?.tier ?? 0) >= 2
   }, [gpu])
   
   React.useEffect(() => {
