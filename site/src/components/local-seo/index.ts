@@ -12,5 +12,5 @@ export type { DutchBusinessInfoProps } from './DutchBusinessInfo';
 export { default as CitySelector } from './CitySelector';
 export type { CitySelectorProps, City } from './CitySelector';
 
-export { default as LocalBusinessJSON, NAP_DATA } from './LocalBusinessJSON';
+export { default as LocalBusinessJSON } from './LocalBusinessJSON';
 export type { LocalBusinessJSONProps } from './LocalBusinessJSON';

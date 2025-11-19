@@ -6,41 +6,22 @@
  * visual components and structured data.
  * 
  * Size: ~1.5 KB gzipped
+ * 
+ * IMPORTANT:
+ * - All data comes from centralized companyInfo config
+ * - No hardcoded placeholder addresses or fake data
+ * - When address is missing, models business as online-only with serviceArea
+ * - Address is only emitted when ALL address env vars are present
  */
 
 import Script from 'next/script';
+import { companyInfo } from '@/config/company.config';
 import { siteConfig } from '@/config/site.config';
-
-/**
- * Centralized NAP data - MUST match DutchBusinessInfo component
- * This ensures consistency between visual display and structured data
- */
-export const NAP_DATA = {
-  name: 'ProWeb Studio',
-  legalName: 'ProWeb Studio',
-  // Placeholders - replace with actual registered values
-  kvk: process.env.NEXT_PUBLIC_KVK || undefined,
-  vat: process.env.NEXT_PUBLIC_BTW || undefined,
-  address: {
-    streetAddress: 'Voorbeeldstraat 123',
-    postalCode: '1234 AB',
-    addressLocality: 'Amsterdam',
-    addressRegion: 'Noord-Holland',
-    addressCountry: 'NL',
-  },
-  phone: siteConfig.phone,
-  email: siteConfig.email,
-  // Coordinates for Amsterdam (placeholder - update with actual location)
-  geo: {
-    latitude: '52.3676',
-    longitude: '4.9041',
-  },
-  openingHours: ['Mo-Fr 09:00-17:00'],
-} as const;
 
 export interface LocalBusinessJSONProps {
   /**
    * Override default address (for location-specific pages)
+   * Only used if base address exists in env vars
    */
   address?: {
     streetAddress?: string;
@@ -52,6 +33,7 @@ export interface LocalBusinessJSONProps {
   
   /**
    * Override geo coordinates (for location-specific pages)
+   * Only used if base address exists
    */
   geo?: {
     latitude: string;
@@ -59,7 +41,7 @@ export interface LocalBusinessJSONProps {
   };
   
   /**
-   * Service area/cities served
+   * Service area/cities served (for online businesses without physical address)
    */
   areaServed?: string[];
   
@@ -81,144 +63,157 @@ export default function LocalBusinessJSON({
   additionalProperties = {},
   nonce,
 }: LocalBusinessJSONProps) {
-  // Merge address data
-  const finalAddress = address 
-    ? { ...NAP_DATA.address, ...address }
-    : NAP_DATA.address;
+  // Check if we have a base address from env vars
+  const hasBaseAddress = !!companyInfo.address;
 
-  // Build structured data
-  const structuredData = {
+  // Build the base structured data
+  const structuredData: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': `${siteConfig.url}#localbusiness`,
-    name: NAP_DATA.name,
-    legalName: NAP_DATA.legalName,
+    name: companyInfo.name,
+    legalName: companyInfo.legalName,
     description: siteConfig.description,
     url: siteConfig.url,
-    telephone: NAP_DATA.phone,
-    email: NAP_DATA.email,
-    
-    // Address
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: finalAddress.streetAddress,
-      postalCode: finalAddress.postalCode,
-      addressLocality: finalAddress.addressLocality,
-      addressRegion: finalAddress.addressRegion,
-      addressCountry: finalAddress.addressCountry,
-    },
-    
-    // Geo coordinates
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: geo?.latitude || NAP_DATA.geo.latitude,
-      longitude: geo?.longitude || NAP_DATA.geo.longitude,
-    },
-    
-    // Opening hours
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-        ],
-        opens: '09:00',
-        closes: '17:00',
-      },
-    ],
-    
-    // Service area
-    ...(areaServed && {
-      areaServed: areaServed.map(area => ({
-        '@type': 'City',
-        name: area,
-        containedInPlace: {
-          '@type': 'Country',
-          name: 'Nederland',
-        },
-      })),
-    }),
-    
-    // Business identifiers
-    ...(NAP_DATA.kvk && {
-      identifier: {
-        '@type': 'PropertyValue',
-        propertyID: 'KVK',
-        value: NAP_DATA.kvk,
-      },
-    }),
-    ...(NAP_DATA.vat && {
-      vatID: NAP_DATA.vat,
-    }),
-    
-    // Language
+    telephone: companyInfo.phone,
+    email: companyInfo.email,
     inLanguage: 'nl-NL',
-    
-    // Currency
-    currenciesAccepted: 'EUR',
-    paymentAccepted: 'Cash, Credit Card, Bank Transfer, iDEAL, Bancontact',
-    
-    // Price range
-    priceRange: '$$',
-    
-    // Services offered
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name: 'Webdevelopment Diensten',
-      itemListElement: [
-        {
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: 'Website laten maken',
-            description: 'Professionele website ontwikkeling',
-            serviceType: 'Web Development',
-          },
-        },
-        {
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: 'Webshop laten maken',
-            description: 'E-commerce oplossingen',
-            serviceType: 'E-commerce Development',
-          },
-        },
-        {
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: 'SEO Optimalisatie',
-            description: 'Zoekmachine optimalisatie',
-            serviceType: 'Digital Marketing',
-          },
-        },
-        {
-          '@type': 'Offer',
-          itemOffered: {
-            '@type': 'Service',
-            name: '3D Website Ervaringen',
-            description: 'Interactieve 3D web experiences',
-            serviceType: 'Web Development',
-          },
-        },
-      ],
-    },
-    
-    // Social media
-    sameAs: [
-      siteConfig.social.linkedin,
-      siteConfig.social.github,
-      siteConfig.social.twitter,
-    ],
-    
-    // Additional properties
-    ...additionalProperties,
   };
+
+  // Add address and geo if we have complete address data
+  if (hasBaseAddress && companyInfo.address) {
+    // Use override address if provided, otherwise use company address
+    const baseAddr = companyInfo.address;
+    
+    structuredData.address = {
+      '@type': 'PostalAddress',
+      streetAddress: address?.streetAddress || baseAddr.street,
+      postalCode: address?.postalCode || baseAddr.zip,
+      addressLocality: address?.addressLocality || baseAddr.city,
+      addressRegion: address?.addressRegion || baseAddr.region,
+      addressCountry: address?.addressCountry || 'NL',
+    };
+
+    // Only add geo coordinates if we have an address
+    // Default to Netherlands center if no specific geo provided
+    structuredData.geo = {
+      '@type': 'GeoCoordinates',
+      latitude: geo?.latitude || '52.1326',
+      longitude: geo?.longitude || '5.2913',
+    };
+  } else {
+    // Online-only business: use serviceArea instead of address
+    // Model as serving the entire Netherlands
+    structuredData.areaServed = areaServed?.map(area => ({
+      '@type': 'City',
+      name: area,
+      containedInPlace: {
+        '@type': 'Country',
+        name: 'Nederland',
+      },
+    })) || [
+      {
+        '@type': 'Country',
+        name: 'Nederland',
+        sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+      },
+    ];
+
+    // Alternative format for broader service area
+    structuredData.serviceArea = {
+      '@type': 'Country',
+      name: 'Nederland',
+      sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+    };
+  }
+
+  // Add opening hours
+  structuredData.openingHoursSpecification = [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+      ],
+      opens: '09:00',
+      closes: '17:00',
+    },
+  ];
+
+  // Add business identifiers (only if present)
+  if (companyInfo.kvk) {
+    structuredData.identifier = {
+      '@type': 'PropertyValue',
+      propertyID: 'KVK',
+      value: companyInfo.kvk,
+    };
+  }
+
+  if (companyInfo.vat) {
+    structuredData.vatID = companyInfo.vat;
+  }
+
+  // Currency and payment info
+  structuredData.currenciesAccepted = 'EUR';
+  structuredData.paymentAccepted = 'Cash, Credit Card, Bank Transfer, iDEAL, Bancontact';
+  structuredData.priceRange = '$$';
+
+  // Services offered
+  structuredData.hasOfferCatalog = {
+    '@type': 'OfferCatalog',
+    name: 'Webdevelopment Diensten',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Website laten maken',
+          description: 'Professionele website ontwikkeling',
+          serviceType: 'Web Development',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Webshop laten maken',
+          description: 'E-commerce oplossingen',
+          serviceType: 'E-commerce Development',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'SEO Optimalisatie',
+          description: 'Zoekmachine optimalisatie',
+          serviceType: 'Digital Marketing',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: '3D Website Ervaringen',
+          description: 'Interactieve 3D web experiences',
+          serviceType: 'Web Development',
+        },
+      },
+    ],
+  };
+
+  // Social media
+  structuredData.sameAs = [
+    siteConfig.social.linkedin,
+    siteConfig.social.github,
+    siteConfig.social.twitter,
+  ];
+
+  // Merge any additional properties
+  Object.assign(structuredData, additionalProperties);
 
   return (
     <Script

@@ -1,4 +1,5 @@
 import Script from 'next/script';
+import { companyInfo } from '@/config/company.config';
 import { siteConfig } from '@/config/site.config';
 
 // Helper function to build absolute URLs safely
@@ -59,6 +60,11 @@ export default function LocalBusinessSchema({
   reviews,
   nonce,
 }: LocalBusinessSchemaProps) {
+  // Use centralized company info as defaults
+  const finalKvk = kvkNumber || companyInfo.kvk;
+  const finalVat = vatID || companyInfo.vat;
+  const hasAddress = !!address || !!companyInfo.address;
+
   // Build the structured data dynamically based on available props
   type StructuredData = Record<string, unknown> & {
     '@context': string;
@@ -97,54 +103,67 @@ export default function LocalBusinessSchema({
       '@type': 'Person',
       name: 'ProWeb Studio Team',
     },
-    areaServed: { '@type': 'AdministrativeArea', name: 'Netherlands' },
-    serviceArea: { '@type': 'Place', address: { '@type': 'PostalAddress', addressCountry: 'NL' } },
-    openingHours: openingHours.length > 0 ? openingHours : ['Mo-Fr 09:00-18:00'],
+    openingHours: openingHours.length > 0 ? openingHours : companyInfo.schema.openingHoursSpecification,
     priceRange: '$$',
   };
 
   // Add vatID if provided
-  if (vatID) {
-    structuredData.vatID = vatID;
+  if (finalVat) {
+    structuredData.vatID = finalVat;
+    structuredData.taxID = finalVat;
   }
 
   // Add KVK identifier if provided
-  if (kvkNumber) {
+  if (finalKvk) {
     structuredData.identifier = {
       '@type': 'PropertyValue',
       propertyID: 'KVK',
-      value: kvkNumber,
+      value: finalKvk,
     };
-    // Keep legacy field for backward compatibility
-    structuredData.kvkNumber = kvkNumber;
+    structuredData.globalLocationNumber = finalKvk;
   }
 
   // Handle address vs serviceArea logic
-  if (address) {
-    structuredData.address = {
-      '@type': 'PostalAddress',
-      streetAddress: address.streetAddress,
-      addressLocality: address.addressLocality,
-      postalCode: address.postalCode,
-      ...(address.addressRegion && { addressRegion: address.addressRegion }),
-      ...(address.addressCountry && { addressCountry: address.addressCountry }),
-    };
-    structuredData.geo = {
-      '@type': 'GeoCoordinates',
-      latitude: '52.3676',
-      longitude: '4.9041', // Amsterdam coordinates as default
-    };
+  if (hasAddress) {
+    const addr = address || companyInfo.address;
+    if (addr) {
+      structuredData.address = {
+        '@type': 'PostalAddress',
+        streetAddress: 'streetAddress' in addr ? addr.streetAddress : addr.street,
+        addressLocality: 'addressLocality' in addr ? addr.addressLocality : addr.city,
+        postalCode: 'postalCode' in addr ? addr.postalCode : addr.zip,
+        ...('addressRegion' in addr && addr.addressRegion && { addressRegion: addr.addressRegion }),
+        ...('region' in addr && addr.region && { addressRegion: addr.region }),
+        addressCountry: 'addressCountry' in addr ? addr.addressCountry : 'NL',
+      };
+      structuredData.geo = {
+        '@type': 'GeoCoordinates',
+        latitude: '52.3676',
+        longitude: '4.9041', // Amsterdam coordinates as default
+      };
+    }
   } else {
-    // Use extended serviceArea/areaServed for no-address mode if provided
+    // Online-only business: use serviceArea/areaServed
     const areas = areaServed || serviceArea;
     if (areas?.length) {
       const mappedAreas = areas.map((area) => ({
         '@type': 'AdministrativeArea',
         name: area,
       }));
-      // Override the default values with extended areas
       structuredData.areaServed = mappedAreas;
       structuredData.serviceArea = mappedAreas;
+    } else {
+      // Default to Netherlands for online-only
+      structuredData.areaServed = {
+        '@type': 'Country',
+        name: 'Nederland',
+        sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+      };
+      structuredData.serviceArea = {
+        '@type': 'Country',
+        name: 'Nederland',
+        sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+      };
     }
   }
 
@@ -322,13 +341,7 @@ export default function LocalBusinessSchema({
     ],
     naics: '541511', // Custom Computer Programming Services
     isicV4: '6201', // Computer programming activities
-    duns: process.env.NEXT_PUBLIC_DUNS || undefined,
-    legalName: 'ProWeb Studio',
-    taxID: process.env.NEXT_PUBLIC_BTW || undefined,
-    vatID: process.env.NEXT_PUBLIC_BTW || undefined,
-    ...(process.env.NEXT_PUBLIC_KVK && {
-      globalLocationNumber: process.env.NEXT_PUBLIC_KVK,
-    }),
+    legalName: companyInfo.legalName,
     knowsLanguage: [
       {
         '@type': 'Language',

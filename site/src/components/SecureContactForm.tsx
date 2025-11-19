@@ -276,16 +276,16 @@ export default function SecureContactForm() {
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
-        // Handle non-JSON responses (e.g., plain text error messages)
-        const text = await response.text();
-        data = { error: text };
+        // Handle non-JSON responses - don't expose raw HTML/text to user
+        await response.text(); // Consume the response body but don't use it
+        data = { error: 'Er is een onverwachte fout opgetreden. Probeer het later opnieuw.' };
       }
 
       if (!response.ok) {
         if (response.status === 429) {
           throw new Error('Te veel verzoeken. Probeer later opnieuw.');
         }
-        throw new Error(data.error || 'Server responded with an error');
+        throw new Error(data.error || 'Er is een onverwachte fout opgetreden. Probeer het later opnieuw.');
       }
 
       setStatus('success');
@@ -301,7 +301,7 @@ export default function SecureContactForm() {
     } catch (error) {
       console.error('Submission failed:', error);
       setErrors({ 
-        general: error instanceof Error ? error.message : 'Er is een fout opgetreden. Probeer opnieuw.' 
+        general: error instanceof Error ? error.message : 'Er is een onverwachte fout opgetreden. Probeer het later opnieuw.' 
       });
       setStatus('error');
     }

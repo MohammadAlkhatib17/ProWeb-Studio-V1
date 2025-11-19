@@ -152,10 +152,25 @@ export function generateMetadata(options: MetadataOptions = {}): Metadata {
           },
         },
     other: {
-      'google-site-verification':
-        process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
-        process.env.GOOGLE_SITE_VERIFICATION ||
-        '',
+      // Only include verification meta tags if tokens are available
+      ...((() => {
+        const googleVerification = 
+          process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || 
+          process.env.GOOGLE_SITE_VERIFICATION;
+        const bingVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
+        
+        const verificationMeta: Record<string, string> = {};
+        
+        if (googleVerification) {
+          verificationMeta['google-site-verification'] = googleVerification;
+        }
+        
+        if (bingVerification) {
+          verificationMeta['msvalidate.01'] = bingVerification;
+        }
+        
+        return verificationMeta;
+      })()),
       'revisit-after': '3 days',
       distribution: 'web',
       rating: 'general',

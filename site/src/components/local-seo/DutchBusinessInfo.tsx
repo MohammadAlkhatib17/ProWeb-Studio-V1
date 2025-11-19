@@ -2,15 +2,21 @@
  * DutchBusinessInfo Component
  * 
  * Displays NAP (Name, Address, Phone) information consistently
- * for local SEO purposes. Includes KVK/VAT placeholders, address,
+ * for local SEO purposes. Includes KVK/VAT, address (when available),
  * opening hours, and contact information.
  * 
  * All text is in Dutch for the Dutch market.
  * Size: ~3 KB gzipped
+ * 
+ * IMPORTANT:
+ * - All company data comes from centralized companyInfo config
+ * - Address is only shown when ALL address env vars are present
+ * - No hardcoded placeholder data - fields are hidden when data is missing
  */
 
 'use client';
 
+import { companyInfo } from '@/config/company.config';
 import { siteConfig } from '@/config/site.config';
 import Link from 'next/link';
 
@@ -25,6 +31,7 @@ export interface DutchBusinessInfoProps {
   
   /**
    * Show/hide specific sections
+   * Note: Address will only display when address data is available in env vars
    */
   showAddress?: boolean;
   showOpeningHours?: boolean;
@@ -37,30 +44,6 @@ export interface DutchBusinessInfoProps {
   className?: string;
 }
 
-/**
- * Business information constants
- * These should match the data in LocalBusinessSchema exactly (NAP consistency)
- */
-const BUSINESS_INFO = {
-  name: 'ProWeb Studio',
-  legalName: 'ProWeb Studio',
-  // Placeholders - replace with actual values
-  kvk: process.env.NEXT_PUBLIC_KVK || 'KVK: [In aanvraag]',
-  vat: process.env.NEXT_PUBLIC_BTW || 'BTW: NL[nummer]B01',
-  address: {
-    street: 'Voorbeeldstraat 123',
-    postalCode: '1234 AB',
-    city: 'Amsterdam',
-    country: 'Nederland',
-  },
-  phone: siteConfig.phone,
-  email: siteConfig.email,
-  openingHours: [
-    { days: 'Maandag - Vrijdag', hours: '09:00 - 17:00' },
-    { days: 'Weekend', hours: 'Op afspraak' },
-  ],
-} as const;
-
 export default function DutchBusinessInfo({
   variant = 'full',
   showAddress = true,
@@ -69,26 +52,30 @@ export default function DutchBusinessInfo({
   showRegistration = true,
   className = '',
 }: DutchBusinessInfoProps) {
+  // Determine if we have address data available
+  const hasAddress = !!companyInfo.address;
+  const shouldShowAddress = showAddress && hasAddress;
+
   // Inline variant - minimal single line
   if (variant === 'inline') {
     return (
       <div className={`flex items-center gap-4 text-sm ${className}`}>
-        <span className="font-semibold text-white">{BUSINESS_INFO.name}</span>
+        <span className="font-semibold text-white">{companyInfo.name}</span>
         <span className="text-slate-400">|</span>
         <a 
-          href={`tel:${BUSINESS_INFO.phone.replace(/\s/g, '')}`}
+          href={`tel:${companyInfo.phone.replace(/\s/g, '')}`}
           className="text-cyan-300 hover:text-cyan-200 transition-colors"
           aria-label="Bel ons"
         >
-          {BUSINESS_INFO.phone}
+          {companyInfo.phone}
         </a>
         <span className="text-slate-400">|</span>
         <a 
-          href={`mailto:${BUSINESS_INFO.email}`}
+          href={`mailto:${companyInfo.email}`}
           className="text-cyan-300 hover:text-cyan-200 transition-colors"
           aria-label="Email ons"
         >
-          {BUSINESS_INFO.email}
+          {companyInfo.email}
         </a>
       </div>
     );
@@ -100,17 +87,17 @@ export default function DutchBusinessInfo({
       <div className={`space-y-4 ${className}`}>
         <div>
           <h3 className="text-lg font-bold text-white mb-2">
-            {BUSINESS_INFO.name}
+            {companyInfo.name}
           </h3>
           <p className="text-sm text-slate-400">{siteConfig.tagline}</p>
         </div>
 
-        {showAddress && (
+        {shouldShowAddress && companyInfo.address && (
           <div className="text-sm text-slate-300">
             <p className="font-semibold text-white mb-1">Adres</p>
             <address className="not-italic leading-relaxed text-slate-400">
-              {BUSINESS_INFO.address.street}<br />
-              {BUSINESS_INFO.address.postalCode} {BUSINESS_INFO.address.city}
+              {companyInfo.address.street}<br />
+              {companyInfo.address.zip} {companyInfo.address.city}
             </address>
           </div>
         )}
@@ -120,24 +107,24 @@ export default function DutchBusinessInfo({
             <p className="font-semibold text-white">Contact</p>
             <div className="space-y-1 text-slate-400">
               <a 
-                href={`tel:${BUSINESS_INFO.phone.replace(/\s/g, '')}`}
+                href={`tel:${companyInfo.phone.replace(/\s/g, '')}`}
                 className="flex items-center gap-2 hover:text-cyan-300 transition-colors"
                 aria-label="Bel ons"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                {BUSINESS_INFO.phone}
+                {companyInfo.phone}
               </a>
               <a 
-                href={`mailto:${BUSINESS_INFO.email}`}
+                href={`mailto:${companyInfo.email}`}
                 className="flex items-center gap-2 hover:text-cyan-300 transition-colors"
                 aria-label="Email ons"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                {BUSINESS_INFO.email}
+                {companyInfo.email}
               </a>
             </div>
           </div>
@@ -147,7 +134,7 @@ export default function DutchBusinessInfo({
           <div className="text-sm">
             <p className="font-semibold text-white mb-2">Openingstijden</p>
             <div className="space-y-1 text-slate-400">
-              {BUSINESS_INFO.openingHours.map((schedule, index) => (
+              {companyInfo.openingHours.map((schedule, index) => (
                 <div key={index} className="flex justify-between gap-4">
                   <span>{schedule.days}</span>
                   <span className="text-slate-500">{schedule.hours}</span>
@@ -157,10 +144,10 @@ export default function DutchBusinessInfo({
           </div>
         )}
 
-        {showRegistration && (
+        {showRegistration && (companyInfo.kvk || companyInfo.vat) && (
           <div className="text-xs text-slate-500 space-y-1 pt-2 border-t border-slate-700">
-            <p>{BUSINESS_INFO.kvk}</p>
-            <p>{BUSINESS_INFO.vat}</p>
+            {companyInfo.kvk && <p>KVK: {companyInfo.kvk}</p>}
+            {companyInfo.vat && <p>BTW: {companyInfo.vat}</p>}
           </div>
         )}
       </div>
@@ -172,7 +159,7 @@ export default function DutchBusinessInfo({
     <div className={`bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-6 md:p-8 ${className}`}>
       <div className="mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-          {BUSINESS_INFO.name}
+          {companyInfo.name}
         </h2>
         <p className="text-slate-400">{siteConfig.tagline}</p>
       </div>
@@ -180,34 +167,38 @@ export default function DutchBusinessInfo({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         {/* Left Column */}
         <div className="space-y-6">
-          {showAddress && (
+          {shouldShowAddress && companyInfo.address && (
             <div>
               <h3 className="text-sm font-semibold text-cyan-300 uppercase tracking-wider mb-3">
                 Adres
               </h3>
               <address className="not-italic text-slate-300 leading-relaxed">
-                <span className="block font-semibold text-white">{BUSINESS_INFO.legalName}</span>
-                <span className="block mt-2">{BUSINESS_INFO.address.street}</span>
-                <span className="block">{BUSINESS_INFO.address.postalCode} {BUSINESS_INFO.address.city}</span>
-                <span className="block">{BUSINESS_INFO.address.country}</span>
+                <span className="block font-semibold text-white">{companyInfo.legalName}</span>
+                <span className="block mt-2">{companyInfo.address.street}</span>
+                <span className="block">{companyInfo.address.zip} {companyInfo.address.city}</span>
+                <span className="block">{companyInfo.address.country}</span>
               </address>
             </div>
           )}
 
-          {showRegistration && (
+          {showRegistration && (companyInfo.kvk || companyInfo.vat) && (
             <div>
               <h3 className="text-sm font-semibold text-cyan-300 uppercase tracking-wider mb-3">
                 Registratie
               </h3>
               <div className="text-slate-300 space-y-1">
-                <p className="flex items-start gap-2">
-                  <span className="text-slate-500 min-w-[60px]">KVK:</span>
-                  <span>{BUSINESS_INFO.kvk.replace('KVK: ', '')}</span>
-                </p>
-                <p className="flex items-start gap-2">
-                  <span className="text-slate-500 min-w-[60px]">BTW-ID:</span>
-                  <span>{BUSINESS_INFO.vat.replace('BTW: ', '')}</span>
-                </p>
+                {companyInfo.kvk && (
+                  <p className="flex items-start gap-2">
+                    <span className="text-slate-500 min-w-[60px]">KVK:</span>
+                    <span>{companyInfo.kvk}</span>
+                  </p>
+                )}
+                {companyInfo.vat && (
+                  <p className="flex items-start gap-2">
+                    <span className="text-slate-500 min-w-[60px]">BTW-ID:</span>
+                    <span>{companyInfo.vat}</span>
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -222,7 +213,7 @@ export default function DutchBusinessInfo({
               </h3>
               <div className="space-y-3">
                 <a 
-                  href={`tel:${BUSINESS_INFO.phone.replace(/\s/g, '')}`}
+                  href={`tel:${companyInfo.phone.replace(/\s/g, '')}`}
                   className="flex items-center gap-3 text-slate-300 hover:text-cyan-300 transition-colors group"
                   aria-label="Bel ons"
                 >
@@ -233,12 +224,12 @@ export default function DutchBusinessInfo({
                   </div>
                   <div>
                     <p className="text-xs text-slate-500">Telefoon</p>
-                    <p className="font-medium">{BUSINESS_INFO.phone}</p>
+                    <p className="font-medium">{companyInfo.phone}</p>
                   </div>
                 </a>
                 
                 <a 
-                  href={`mailto:${BUSINESS_INFO.email}`}
+                  href={`mailto:${companyInfo.email}`}
                   className="flex items-center gap-3 text-slate-300 hover:text-cyan-300 transition-colors group"
                   aria-label="Email ons"
                 >
@@ -249,7 +240,7 @@ export default function DutchBusinessInfo({
                   </div>
                   <div>
                     <p className="text-xs text-slate-500">Email</p>
-                    <p className="font-medium">{BUSINESS_INFO.email}</p>
+                    <p className="font-medium">{companyInfo.email}</p>
                   </div>
                 </a>
               </div>
@@ -262,7 +253,7 @@ export default function DutchBusinessInfo({
                 Openingstijden
               </h3>
               <div className="space-y-2 text-slate-300">
-                {BUSINESS_INFO.openingHours.map((schedule, index) => (
+                {companyInfo.openingHours.map((schedule, index) => (
                   <div key={index} className="flex justify-between items-center">
                     <span className="font-medium">{schedule.days}</span>
                     <span className="text-slate-400">{schedule.hours}</span>

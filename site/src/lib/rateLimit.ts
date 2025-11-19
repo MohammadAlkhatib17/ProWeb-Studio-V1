@@ -1,8 +1,37 @@
+/**
+ * Rate Limiting Service for ProWeb Studio
+ * 
+ * This module provides rate limiting functionality for API endpoints.
+ * 
+ * Required environment variables for production-grade rate limiting:
+ * - UPSTASH_REDIS_REST_URL: Upstash Redis REST API URL
+ * - UPSTASH_REDIS_REST_TOKEN: Upstash Redis REST API token
+ * 
+ * When these environment variables are not configured, the module falls back to
+ * an in-memory rate limiter. This fallback provides basic protection during development
+ * but is NOT RECOMMENDED for production environments because:
+ * - Rate limits are not shared across serverless function invocations
+ * - Rate limits are reset on each deployment or function cold start
+ * - Memory usage scales with the number of unique IP addresses
+ * 
+ * For production deployments, always configure Upstash Redis for reliable,
+ * distributed rate limiting across all application instances.
+ */
+
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 
 // Check if Redis environment variables are configured
 const hasRedisConfig = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN;
+
+// Production warning flag to ensure we only log the warning once
+let productionWarningLogged = false;
+
+// Log production warning if Redis config is missing
+if (!productionWarningLogged && process.env.NODE_ENV === 'production' && !hasRedisConfig) {
+  console.warn('[Rate Limit] Production environment without Upstash Redis config; using in-memory limiter only (not recommended for high-traffic or public forms).');
+  productionWarningLogged = true;
+}
 
 // Interface for rate limit result
 export interface RateLimitResult {
@@ -121,7 +150,8 @@ if (hasRedisConfig) {
     prefix: 'rl:default:',
   });
 } else {
-  // Create in-memory rate limiters for development
+  // Create in-memory rate limiters for development / low-trust environments
+  // WARNING: This provides limited protection in production environments
   contactRateLimiter = new InMemoryRateLimiter(rateLimitConfig.contact.requests, 60 * 1000);
   subscribeRateLimiter = new InMemoryRateLimiter(rateLimitConfig.subscribe.requests, 60 * 1000);
   defaultRateLimiter = new InMemoryRateLimiter(rateLimitConfig.default.requests, 60 * 1000);
