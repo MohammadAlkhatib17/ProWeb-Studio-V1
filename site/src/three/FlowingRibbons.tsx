@@ -1,8 +1,10 @@
 'use client';
 
-import * as THREE from 'three';
 import { useMemo, useRef, useEffect, useState } from 'react';
+
 import { Canvas, useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 // Custom shader for the glowing ribbon effect

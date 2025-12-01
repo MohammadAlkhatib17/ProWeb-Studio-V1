@@ -1,8 +1,9 @@
 'use client';
 // src/three/ParallaxRig.tsx
-import * as THREE from 'three';
 import { useRef } from 'react';
+
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
 type Props = { children: React.ReactNode; factor?: number };
 

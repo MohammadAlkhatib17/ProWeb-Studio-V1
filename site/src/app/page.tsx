@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+
 import { generatePageMetadata } from '@/lib/metadata';
 
 export const dynamic = 'force-static';
@@ -9,10 +10,11 @@ export const metadata: Metadata = generatePageMetadata('home');
 
 import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
-import SEOSchema from '@/components/SEOSchema';
-import FAQSection from '@/components/sections/FAQSection';
-import DutchMarketFAQ from '@/components/DutchMarketFAQ';
+
 import { Button } from '@/components/Button';
+import DutchMarketFAQ from '@/components/DutchMarketFAQ';
+import FAQSection from '@/components/sections/FAQSection';
+import SEOSchema from '@/components/SEOSchema';
 
 const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
   ssr: false,

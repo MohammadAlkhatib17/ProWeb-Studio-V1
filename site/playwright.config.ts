@@ -1,5 +1,21 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// Determine base URL based on environment
+const getBaseURL = () => {
+  // Vercel deployment URL
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  
+  // CI environment with explicit URL
+  if (process.env.PLAYWRIGHT_TEST_BASE_URL) {
+    return process.env.PLAYWRIGHT_TEST_BASE_URL;
+  }
+  
+  // Local development
+  return process.env.BASE_URL || 'http://localhost:3000';
+};
+
 /**
  * Playwright E2E Test Configuration
  * 
@@ -18,18 +34,18 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   
   /* Retry on CI only */
-  retries: process.env.CI ? 1 : 0,
+  retries: process.env.CI ? 2 : 0,
   
   /* Opt out of parallel tests on CI for stability */
   workers: process.env.CI ? 1 : undefined,
   
   /* Reporter to use */
-  reporter: process.env.CI ? 'list' : 'html',
+  reporter: 'html',
   
   /* Shared settings for all projects */
   use: {
     /* Base URL for navigation */
-    baseURL: 'http://localhost:3000',
+    baseURL: getBaseURL(),
     
     /* Collect trace on first retry */
     trace: 'on-first-retry',
@@ -59,14 +75,11 @@ export default defineConfig({
     },
   ],
 
-  /* Run local dev server before starting tests */
-  webServer: {
-    command: 'npm run build && npm run start',
+  // Only run dev server locally, not on Vercel
+  webServer: process.env.VERCEL ? undefined : {
+    command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000, // 2 minutes for build + start
-    stdout: 'pipe',
-    stderr: 'pipe',
   },
   
   /* Global timeout for each test */

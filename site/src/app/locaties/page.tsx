@@ -1,35 +1,33 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
-import { locations } from '@/config/internal-linking.config';
+
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { CitySelector, DutchBusinessInfo } from '@/components/local-seo';
 import type { City } from '@/components/local-seo';
+import { locations } from '@/config/internal-linking.config';
+import { generateMetadata as generateMetadataUtil } from '@/lib/metadata';
 
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
-export const metadata: Metadata = {
-  title: 'Webdesign Locaties Nederland | ProWeb Studio in alle grote steden',
-  description: 'ProWeb Studio biedt professionele webdesign diensten in heel Nederland. Van Amsterdam tot Rotterdam, Utrecht tot Den Haag - lokale expertise voor uw website project.',
-  alternates: {
-    canonical: '/locaties',
-    languages: { 
-      'nl-NL': '/locaties',
-      'x-default': '/locaties'
-    },
-  },
-  openGraph: {
-    title: 'Webdesign Locaties Nederland | ProWeb Studio',
-    description: 'Lokale webdesign expertise in alle grote Nederlandse steden. Maatwerk websites met persoonlijke service.',
-    url: `${SITE_URL}/locaties`,
-    type: 'website',
-    locale: 'nl_NL',
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return generateMetadataUtil({
+    title: 'Webdesign Locaties Nederland | ProWeb Studio in alle grote steden',
+    description: 'ProWeb Studio biedt professionele webdesign diensten in heel Nederland. Van Amsterdam tot Rotterdam, Utrecht tot Den Haag - lokale expertise voor uw website project.',
+    path: '/locaties',
+    keywords: [
+      'webdesign nederland',
+      'website laten maken amsterdam',
+      'webdesign rotterdam',
+      'website ontwikkeling utrecht',
+      'lokale webdesign',
+    ],
+  });
+}
 
 // Generate location schema
 const locationsSchema = {

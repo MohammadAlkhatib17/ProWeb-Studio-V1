@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+
 import { useDeviceCapabilities } from './useDeviceCapabilities';
 
 export interface PerformanceMetrics {

@@ -7,13 +7,15 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { ConsentState } from './types';
-import { DEFAULT_CONSENT } from './types';
+
 import {
   getStoredConsent,
   saveConsent,
   hasConsent,
 } from './cookie-utils';
+import { DEFAULT_CONSENT } from './types';
+
+import type { ConsentState } from './types';
 
 interface UseCookieConsentReturn {
   consent: ConsentState;

@@ -7,8 +7,10 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useCookieConsent } from './useCookieConsent';
+
 import { Button } from '@/components/Button';
+
+import { useCookieConsent } from './useCookieConsent';
 
 export default function CookieConsentBanner() {
   const {

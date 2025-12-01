@@ -1,6 +1,7 @@
-import { siteConfig } from '@/config/site.config';
 import { motion } from 'framer-motion';
+
 import { Button } from '@/components/Button';
+import { siteConfig } from '@/config/site.config';
 import { fadeInUp, staggerContainer, defaultViewport } from '@/lib/motion';
 
 // Component that showcases Dutch business culture integration and terminology

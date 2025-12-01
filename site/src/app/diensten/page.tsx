@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+
 import { generatePageMetadata } from '@/lib/metadata';
+
 import dynamicImport from 'next/dynamic';
 
 export const dynamic = 'force-static';
@@ -11,15 +13,16 @@ export const metadata: Metadata = generatePageMetadata('services');
 import { Suspense } from 'react';
 
 import Link from 'next/link';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Button } from '@/components/Button';
-import SEOSchema from '@/components/SEOSchema';
+
 import Breadcrumbs from '@/components/Breadcrumbs';
-import FAQSection from '@/components/sections/FAQSection';
-import DutchMarketFAQ from '@/components/DutchMarketFAQ';
-import RelatedServices from '@/components/RelatedServices';
+import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
+import DutchMarketFAQ from '@/components/DutchMarketFAQ';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { DutchBusinessInfo, LocalBusinessJSON } from '@/components/local-seo';
+import RelatedServices from '@/components/RelatedServices';
+import FAQSection from '@/components/sections/FAQSection';
+import SEOSchema from '@/components/SEOSchema';
 import { locations } from '@/config/internal-linking.config';
 
 // Get canonical URL from environment with fallback

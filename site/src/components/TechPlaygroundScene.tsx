@@ -4,7 +4,7 @@
 // ------------------------------------------------------------
 
 import * as React from 'react';
-import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
+
 import {
   OrbitControls,
   Float,
@@ -17,6 +17,7 @@ import {
   AdaptiveDpr,
   Line as DreiLine,
 } from '@react-three/drei';
+import { Canvas, useFrame, useThree, extend } from '@react-three/fiber';
 import {
   EffectComposer,
   Bloom,
@@ -27,6 +28,7 @@ import {
 import { BlendFunction, KernelSize } from 'postprocessing';
 import * as THREE from 'three';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 // Extend THREE to include TextGeometry

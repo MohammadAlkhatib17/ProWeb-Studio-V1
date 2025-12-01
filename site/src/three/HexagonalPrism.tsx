@@ -1,7 +1,9 @@
 'use client';
-import * as THREE from 'three';
 import { useRef, useMemo, useState } from 'react';
+
 import { useFrame, Canvas } from '@react-three/fiber';
+import * as THREE from 'three';
+
 import { useDeviceCapabilities, getOptimizedParticleCount } from '@/hooks/useDeviceCapabilities';
 
 function useReducedMotion() {

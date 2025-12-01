@@ -1,8 +1,9 @@
 'use client';
 // src/three/AuroraRibbon.tsx
-import * as THREE from 'three';
 import { useMemo, useRef } from 'react';
+
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
 type AuroraProps = {
   colorA?: string;

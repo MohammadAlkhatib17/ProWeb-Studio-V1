@@ -1,13 +1,15 @@
-import type { Metadata } from 'next';
-import { siteConfig } from '@/config/site.config';
-import PortfolioHero from '../../components/portfolio/PortfolioHero';
-import MobileShowcase from '../../components/portfolio/MobileShowcase';
-import PortfolioSchema from '../../components/portfolio/PortfolioSchema';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
-import SimplePortfolioComputer from '@/components/SimplePortfolioComputer';
-import SimpleEcommerceShowcase from '@/components/SimpleEcommerceShowcase';
 import SimpleBrandIdentityModel from '@/components/SimpleBrandIdentityModel';
+import SimpleEcommerceShowcase from '@/components/SimpleEcommerceShowcase';
+import SimplePortfolioComputer from '@/components/SimplePortfolioComputer';
+import { siteConfig } from '@/config/site.config';
+
+import MobileShowcase from '../../components/portfolio/MobileShowcase';
+import PortfolioHero from '../../components/portfolio/PortfolioHero';
+import PortfolioSchema from '../../components/portfolio/PortfolioSchema';
+
+import type { Metadata } from 'next';
 
 // ISR Configuration for portfolio page
 export const dynamic = 'force-static';

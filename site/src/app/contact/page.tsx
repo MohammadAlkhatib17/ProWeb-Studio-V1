@@ -1,42 +1,39 @@
-import type { Metadata } from 'next';
-import { BackgroundImage } from '@/components/ui/responsive-image';
 import SecureContactForm from '@/components/SecureContactForm';
 import SEOSchema from '@/components/SEOSchema';
+import { BackgroundImage } from '@/components/ui/responsive-image';
+import { generateMetadata as generateMetadataUtil } from '@/lib/metadata';
 
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
-export const metadata: Metadata = {
-  title: 'Contact ProWeb Studio | Website laten maken afspraak | Nederland',
-  description:
-    'Start uw website project vandaag. Gratis adviesgesprek over website laten maken, webshop bouwen of webdesign. Reactie binnen 1 werkdag. Video of op locatie in Nederland.',
-  alternates: {
-    canonical: '/contact',
-    languages: { 
-      'nl-NL': '/contact',
-      'x-default': '/contact'
-    },
-  },
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  return generateMetadataUtil({
     title: 'Contact ProWeb Studio | Website laten maken afspraak | Nederland',
     description:
       'Start uw website project vandaag. Gratis adviesgesprek over website laten maken, webshop bouwen of webdesign. Reactie binnen 1 werkdag. Video of op locatie in Nederland.',
-    url: `${SITE_URL}/contact`,
-    type: 'website',
-    locale: 'nl_NL',
-  },
-};
+    path: '/contact',
+    keywords: [
+      'contact proweb studio',
+      'website laten maken afspraak',
+      'webdesign consultatie',
+      'gratis adviesgesprek website',
+      'webontwikkeling nederland',
+    ],
+  });
+}
 
 export default function ContactPage() {
+  const pageTitle = 'Contact ProWeb Studio | Website laten maken afspraak | Nederland';
+  const pageDescription = 'Start uw website project vandaag. Gratis adviesgesprek over website laten maken, webshop bouwen of webdesign. Reactie binnen 1 werkdag. Video of op locatie in Nederland.';
+  
   return (
     <main className="content-safe-top pt-20 md:pt-24 relative overflow-hidden">
       <SEOSchema
         pageType="contact"
-        pageTitle={metadata.title as string}
-        pageDescription={metadata.description as string}
+        pageTitle={pageTitle}
+        pageDescription={pageDescription}
       />
       {/* Full-bleed background to avoid top seam */}
       <BackgroundImage

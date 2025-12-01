@@ -3,8 +3,8 @@
  * Centralizes types to eliminate 'any' usage in 3D components
  */
 
-import type { Mesh, Group, Object3D, Material, WebGLRenderer } from 'three';
 import type { ThreeEvent, RootState } from '@react-three/fiber';
+import type { Mesh, Group, Object3D, Material, WebGLRenderer } from 'three';
 
 /**
  * Three.js mesh ref type

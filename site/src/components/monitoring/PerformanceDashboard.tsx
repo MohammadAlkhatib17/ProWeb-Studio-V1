@@ -12,6 +12,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+
 import { initCoreWebVitalsMonitoring } from '@/lib/core-web-vitals-monitor';
 
 interface PerformanceMetrics {

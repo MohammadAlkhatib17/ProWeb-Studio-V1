@@ -1,59 +1,36 @@
-import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import Link from 'next/link';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Button } from '@/components/Button';
-import SEOSchema from '@/components/SEOSchema';
+
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { Button } from '@/components/Button';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import FAQSection from '@/components/sections/FAQSection';
+import SEOSchema from '@/components/SEOSchema';
+import { generateMetadata as generateMetadataUtil } from '@/lib/metadata';
+
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - service content is fairly stable
 export const fetchCache = 'force-cache';
 
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-
-export const metadata: Metadata = {
-  title: '3D Website Ervaringen | WebGL & Three.js Ontwikkeling Nederland – ProWeb Studio',
-  description:
-    'Interactieve 3D websites en WebGL ervaringen die onderscheidend zijn. Three.js development, 3D visualisaties en immersieve web experiences voor Nederlandse bedrijven.',
-  alternates: {
-    canonical: `${SITE_URL}/diensten/3d-website-ervaringen`,
-    languages: { 
-      'nl-NL': `${SITE_URL}/diensten/3d-website-ervaringen`,
-      'x-default': `${SITE_URL}/diensten/3d-website-ervaringen`
-    },
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  return generateMetadataUtil({
     title: '3D Website Ervaringen | WebGL & Three.js Ontwikkeling Nederland – ProWeb Studio',
-    description: 'Interactieve 3D websites en WebGL ervaringen die onderscheidend zijn. Three.js development, 3D visualisaties en immersieve web experiences.',
-    url: `${SITE_URL}/diensten/3d-website-ervaringen`,
-    type: 'website',
-    locale: 'nl_NL',
-    images: [{ url: `${SITE_URL}/og`, width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: '3D Website Ervaringen | WebGL & Three.js Ontwikkeling Nederland – ProWeb Studio',
-    description: 'Interactieve 3D websites en WebGL ervaringen die onderscheidend zijn.',
-    images: [`${SITE_URL}/og`],
-  },
-};
+    description:
+      'Interactieve 3D websites en WebGL ervaringen die onderscheidend zijn. Three.js development, 3D visualisaties en immersieve web experiences voor Nederlandse bedrijven.',
+    path: '/diensten/3d-website-ervaringen',
+    keywords: [
+      '3d website',
+      'webgl ontwikkeling',
+      'three.js development',
+      '3d visualisaties',
+      'interactieve website',
+      'immersive web',
+    ],
+  });
+}
 
 const threeDFeatures = [
   {

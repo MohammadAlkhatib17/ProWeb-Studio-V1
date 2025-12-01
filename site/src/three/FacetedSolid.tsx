@@ -1,7 +1,8 @@
 'use client';
-import * as THREE from 'three';
 import { useRef, useMemo, useState } from 'react';
+
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
 export default function FacetedSolid({
   base = '#8b5cf6',

@@ -1,6 +1,8 @@
-import type { Metadata } from 'next';
 import { SITE_URL, dutchMetadataDefaults } from '@/lib/metadata/defaults';
+
 import StedenClientPage from './client-page';
+
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const revalidate = 86400; // 24 hours ISR

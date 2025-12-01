@@ -4,6 +4,7 @@
  */
 
 import { Inter } from 'next/font/google';
+
 import type { NavigatorWithConnection } from '@/types/analytics';
 
 /**

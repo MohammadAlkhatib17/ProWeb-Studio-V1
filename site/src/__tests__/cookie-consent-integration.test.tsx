@@ -52,8 +52,8 @@ vi.mock('@react-three/drei', () => ({
 }));
 
 // Import components after mocks
-import CookieConsentBanner from '@/components/cookies/CookieConsentBanner';
 import ConsentAwareAnalytics from '@/components/cookies/ConsentAwareAnalytics';
+import CookieConsentBanner from '@/components/cookies/CookieConsentBanner';
 import BrandIdentityModel from '@/three/BrandIdentityModel';
 
 // Test wrapper component that simulates the app layout

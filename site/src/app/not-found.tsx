@@ -1,7 +1,9 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
+
 import Logo from '@/components/Logo';
 import { siteConfig } from '@/config/site.config';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Pagina niet gevonden',

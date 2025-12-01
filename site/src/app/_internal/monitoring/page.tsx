@@ -7,6 +7,7 @@
  */
 
 import type { Metadata } from 'next';
+
 import { useEffect, useState } from 'react';
 
 // Internal page - noindex

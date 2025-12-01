@@ -7,8 +7,9 @@
  * @module lib/content/generators
  */
 
-import type { City, Service, CityService } from '../../../cms/schema';
 import { formatCurrency, formatNumber } from './dutch-format';
+
+import type { City, Service, CityService } from '../../../cms/schema';
 
 /**
  * Content variation templates for generating unique text

@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+
 import { generateCompleteSitemap } from '@/lib/sitemap-advanced';
 
 // Edge runtime configuration for better performance and region distribution

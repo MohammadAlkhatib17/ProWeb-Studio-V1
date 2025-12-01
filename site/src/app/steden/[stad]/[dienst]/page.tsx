@@ -1,11 +1,10 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { 
-  getStadBySlug, 
-  getNearbySteden, 
-  getAllStadSlugs,
-} from '@/config/steden.config';
+import { notFound } from 'next/navigation';
+
+import Breadcrumbs from '@/components/Breadcrumbs';
+import { Button } from '@/components/Button';
+import ContentSuggestions from '@/components/ContentSuggestions';
+import { DutchBusinessInfo } from '@/components/local-seo';
 import { 
   getDienstBySlug, 
   getRelatedDiensten, 
@@ -13,13 +12,16 @@ import {
   isDienstAvailableInStad,
 } from '@/config/diensten.config';
 import { 
+  getStadBySlug, 
+  getNearbySteden, 
+  getAllStadSlugs,
+} from '@/config/steden.config';
+import { 
   generateStadDienstMetadata, 
   generateStadDienstSchema 
 } from '@/lib/seo/steden-metadata';
-import { Button } from '@/components/Button';
-import Breadcrumbs from '@/components/Breadcrumbs';
-import ContentSuggestions from '@/components/ContentSuggestions';
-import { DutchBusinessInfo } from '@/components/local-seo';
+
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const revalidate = 259200; // 72 hours ISR

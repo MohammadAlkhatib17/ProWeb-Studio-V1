@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { siteConfig } from '@/config/site.config';
+
 import { Button } from '@/components/Button';
+import { siteConfig } from '@/config/site.config';
 
 // Regional targeting component for major Dutch cities and regions
 export default function DutchRegionalTargeting() {

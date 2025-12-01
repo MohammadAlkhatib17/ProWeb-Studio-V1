@@ -1,8 +1,9 @@
 'use client'
 
 import React, { Suspense, useMemo } from 'react'
-import { Canvas } from '@react-three/fiber'
+
 import { AdaptiveDpr, AdaptiveEvents, Preload, PerformanceMonitor } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
 import { motion } from 'framer-motion'
 
 interface LoadedAsset {

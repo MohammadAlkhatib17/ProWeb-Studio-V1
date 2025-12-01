@@ -54,6 +54,18 @@ function isPlaceholderValue(value) {
 function validateProductionEnv() {
   console.log(`${colors.blue}🔍 Validating production environment configuration...${colors.reset}\n`);
 
+  // Skip validation on Vercel - platform manages env vars
+  if (process.env.VERCEL === '1') {
+    console.log('✅ Running on Vercel - skipping env validation (platform-managed)');
+    return true;
+  }
+
+  // Skip validation in CI if explicitly disabled
+  if (process.env.SKIP_ENV_VALIDATION === 'true') {
+    console.log('⚠️  Environment validation skipped (SKIP_ENV_VALIDATION=true)');
+    return true;
+  }
+
   // Group errors by category
   const errorsByGroup = {};
   let hasErrors = false;

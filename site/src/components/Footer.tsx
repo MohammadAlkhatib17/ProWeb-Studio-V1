@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+
 import Link from 'next/link';
-import { siteConfig } from '@/config/site.config';
-import { footerLinkGroups } from '@/config/internal-linking.config';
-import Logo from '@/components/Logo';
+
 import { Button } from '@/components/Button';
 import CookieSettingsButton from '@/components/cookies/CookieSettingsButton';
+import Logo from '@/components/Logo';
+import { footerLinkGroups } from '@/config/internal-linking.config';
+import { siteConfig } from '@/config/site.config';
 import { useDebounce } from '@/hooks/useDebounce';
 
 export default function Footer() {

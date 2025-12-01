@@ -10,15 +10,22 @@
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import CookieConsentBanner from '../CookieConsentBanner';
-import CookieSettingsButton from '../CookieSettingsButton';
+
 import ConsentAwareAnalytics from '../ConsentAwareAnalytics';
 import * as cookieUtils from '../cookie-utils';
+import CookieConsentBanner from '../CookieConsentBanner';
+import CookieSettingsButton from '../CookieSettingsButton';
 
 // Mock Next.js Script
 const mockScriptLoaded = vi.fn();
+
+interface MockScriptProps {
+  src: string;
+  [key: string]: unknown;
+}
+
 vi.mock('next/script', () => ({
-  default: ({ src, ...props }: any) => {
+  default: ({ src, ...props }: MockScriptProps) => {
     mockScriptLoaded(src);
     return <script src={src} data-testid="analytics-script" {...props} />;
   },
@@ -46,7 +53,9 @@ describe('Cookie Consent Integration Flow', () => {
     });
 
     // Clean up analytics globals
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((window as any).plausible) delete (window as any).plausible;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((window as any).va) delete (window as any).va;
   });
 

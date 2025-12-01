@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, ComponentType, ReactElement, createElement } from 'react';
-import { useIdleCallback } from './useIdleCallback';
+
 import { useFirstInput } from './useFirstInput';
+import { useIdleCallback } from './useIdleCallback';
 
 /**
  * Hook to lazy-load a component during browser idle time

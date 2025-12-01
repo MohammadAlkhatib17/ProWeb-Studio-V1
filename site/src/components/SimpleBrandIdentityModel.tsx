@@ -1,8 +1,9 @@
 'use client'
 
 import React, { Suspense, useRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+
 import { Cylinder, Sphere, Box, OrbitControls, Environment, Html } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Group } from 'three'
 
 function BrandLogo() {

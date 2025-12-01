@@ -1,7 +1,8 @@
 'use client';
 // src/three/StarfieldInstanced.tsx
-import * as THREE from 'three';
 import { useEffect, useMemo, useRef } from 'react';
+
+import * as THREE from 'three';
 
 type StarfieldProps = {
   count?: number;

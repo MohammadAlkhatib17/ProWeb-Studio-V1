@@ -3,8 +3,9 @@
  * Ensures all pages have correct nl-NL locale, canonical URLs, and hreflang tags
  */
 
-import type { Metadata } from 'next';
 import { SITE_URL, dutchMetadataDefaults } from './defaults';
+
+import type { Metadata } from 'next';
 
 export interface MetadataValidationResult {
   valid: boolean;

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useMemo, Suspense } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+
 import { 
   Box, 
   RoundedBox, 
@@ -12,9 +12,12 @@ import {
   Preload,
   useDetectGPU
 } from '@react-three/drei'
-import type { MeshStandardMaterial } from 'three'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { motion } from 'framer-motion'
+
 import type { ThreeMeshRef, ThreeGroupRef, GPUTier } from '@/types/three'
+
+import type { MeshStandardMaterial } from 'three'
 
 interface LaptopModelProps {
   position?: [number, number, number]

@@ -1,12 +1,14 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, useMemo } from 'react';
-import { steden, getPopularSteden, getstedenByRegion } from '@/config/steden.config';
+
+import Link from 'next/link';
+
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
+import { steden, getPopularSteden, getstedenByRegion } from '@/config/steden.config';
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 const canonicalUrl = `${SITE_URL}/steden`;

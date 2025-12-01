@@ -1,13 +1,15 @@
 'use client';
 
 import { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
+
 import { Preload } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+
+import { useDeviceCapabilities, getOptimizedParticleCount } from '@/hooks/useDeviceCapabilities';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import HelixKnot from '@/three/HelixKnot';
 import ParallaxRig from '@/three/ParallaxRig';
 import StarsShell from '@/three/StarsShell';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useDeviceCapabilities, getOptimizedParticleCount } from '@/hooks/useDeviceCapabilities';
 
 function Scene() {
   const reduced = useReducedMotion();

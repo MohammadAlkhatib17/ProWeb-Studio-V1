@@ -1,4 +1,5 @@
 import Script from 'next/script';
+
 import { siteConfig } from '@/config/site.config';
 
 interface FAQItem {

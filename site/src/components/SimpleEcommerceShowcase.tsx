@@ -1,8 +1,9 @@
 'use client'
 
 import React, { Suspense, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+
 import { Box, Sphere, Cylinder, OrbitControls, Environment, Html } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Group } from 'three'
 
 function ProductDisplay({ position, productType }: { position: [number, number, number], productType: 'phone' | 'watch' | 'headphones' }) {

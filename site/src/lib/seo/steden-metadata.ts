@@ -3,10 +3,12 @@
  * Ensures consistent metadata with proper canonical, hreflang, and og:locale
  */
 
-import type { Metadata } from 'next';
-import { SITE_URL, dutchMetadataDefaults } from '../metadata/defaults';
-import type { Stad } from '@/config/steden.config';
 import type { Dienst } from '@/config/diensten.config';
+import type { Stad } from '@/config/steden.config';
+
+import { SITE_URL, dutchMetadataDefaults } from '../metadata/defaults';
+
+import type { Metadata } from 'next';
 
 export interface StadMetadataOptions {
   stad: Stad;

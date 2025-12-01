@@ -1,8 +1,9 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+
 import { Preload, AdaptiveDpr, PerformanceMonitor } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 
 interface Scene3DProps {
   children: React.ReactNode;

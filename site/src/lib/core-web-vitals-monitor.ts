@@ -4,6 +4,7 @@
  */
 
 import { onCLS, onFCP, onLCP, onTTFB, onINP, type Metric } from 'web-vitals';
+
 import type { NavigatorWithConnection } from '@/types/analytics';
 
 interface VitalMetric {

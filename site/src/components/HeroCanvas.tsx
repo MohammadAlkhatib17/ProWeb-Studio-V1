@@ -1,8 +1,10 @@
 'use client';
-import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
+
 import { Preload } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
+
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
 
 type Props = { children: React.ReactNode; className?: string };

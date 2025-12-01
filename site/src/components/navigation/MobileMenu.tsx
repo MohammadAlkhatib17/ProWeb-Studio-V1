@@ -1,12 +1,15 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
+import { motion, AnimatePresence } from 'framer-motion';
+
+import AuroraBG from '@/components/decoration/AuroraBG';
+import Magnetic from '@/components/ui/Magnetic';
 import Portal from '@/components/ui/Portal';
 import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
-import Magnetic from '@/components/ui/Magnetic';
-import AuroraBG from '@/components/decoration/AuroraBG';
 
 type Item = { href: string; label: string };
 

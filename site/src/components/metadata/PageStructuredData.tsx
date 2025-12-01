@@ -4,7 +4,7 @@
  */
 
 import { headers } from 'next/headers';
-import { StructuredData } from './StructuredData';
+
 import {
   generateOrganizationSchema,
   generateWebSiteSchema,
@@ -12,6 +12,8 @@ import {
   generateBreadcrumbSchema,
   generateLocalBusinessSchema,
 } from '@/lib/metadata';
+
+import { StructuredData } from './StructuredData';
 
 interface PageStructuredDataProps {
   pageType: 'home' | 'services' | 'contact' | 'about' | 'generic';

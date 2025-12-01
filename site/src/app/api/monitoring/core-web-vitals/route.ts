@@ -5,9 +5,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+
 import { addVitalEvent, getVitalEvents, getAllVitalEvents } from '@/lib/monitoring/storage';
-import { calculateStats } from '@/lib/monitoring/utils';
 import type { VitalEvent } from '@/lib/monitoring/types';
+import { calculateStats } from '@/lib/monitoring/utils';
 
 // Node.js runtime for storage operations (see docs/ADR-runtime.md)
 export const runtime = 'nodejs';

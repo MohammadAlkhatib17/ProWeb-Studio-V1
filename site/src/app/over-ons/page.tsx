@@ -4,10 +4,11 @@ export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
 import Link from 'next/link';
+
+import Breadcrumbs from '@/components/Breadcrumbs';
+import DynamicFlowingRibbons from '@/components/dynamic/DynamicFlowingRibbons';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
-import DynamicFlowingRibbons from '@/components/dynamic/DynamicFlowingRibbons';
-import Breadcrumbs from '@/components/Breadcrumbs';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');

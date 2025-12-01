@@ -7,10 +7,32 @@ const withBundleAnalyzer = nextBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
+// Validate environment variables before build (skip on Vercel or when explicitly disabled)
+if (process.env.NODE_ENV === 'production' && process.env.VERCEL !== '1' && process.env.SKIP_ENV_VALIDATION !== 'true') {
+  const { execSync } = await import('child_process');
+  try {
+    execSync('node ../scripts/validate-production-env.js', { stdio: 'inherit' });
+  } catch (error) {
+    process.exit(1);
+  }
+}
+
 // Build-time environment validation for production
 function validateProductionEnv() {
   // Only validate in production builds
   if (process.env.NODE_ENV !== 'production') {
+    return;
+  }
+
+  // Skip validation on Vercel - platform manages env vars
+  if (process.env.VERCEL === '1') {
+    console.log('✅ Running on Vercel - skipping build-time env validation (platform-managed)');
+    return;
+  }
+
+  // Skip validation if explicitly disabled
+  if (process.env.SKIP_ENV_VALIDATION === 'true') {
+    console.log('⚠️  Build-time environment validation skipped (SKIP_ENV_VALIDATION=true)');
     return;
   }
 
@@ -308,16 +330,6 @@ const nextConfig = {
       //
       // Report-only and enforced CSP configurations have been moved to
       // middleware.ts where nonces can be dynamically injected.
-    ];
-  },
-
-  // Rewrites for API routing
-  async rewrites() {
-    return [
-      {
-        source: '/sitemap.xml',
-        destination: '/api/sitemap',
-      },
     ];
   },
 

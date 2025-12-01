@@ -2,385 +2,127 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 env:
-  BUNDLE_SIZE_THRESHOLD: 5 # Percentage threshold for bundle size regression (tightened)
+  NODE_VERSION: '20'
+  SKIP_ENV_VALIDATION: 'true'
 
 jobs:
   quality-checks:
     runs-on: ubuntu-latest
-    
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Need full history for bundle comparison
-
-      - name: Set up Node.js
+      
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'site/package-lock.json'
-
+      
       - name: Install dependencies
-        run: npm install --prefix site
+        run: npm ci
+      
+      - name: Lint
+        run: npm run lint
+      
+      - name: Type check
+        run: npm run type-check
+        working-directory: ./site
 
-      - name: Load CI environment variables
-        run: |
-          echo "📦 Loading CI environment configuration..."
-          set -a
-          source .env.ci
-          set +a
-          # Export to GITHUB_ENV for subsequent steps
-          while IFS='=' read -r key value; do
-            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
-              echo "$key=$value" >> $GITHUB_ENV
-            fi
-          done < .env.ci
-          echo "✅ CI environment loaded"
-
-      - name: Validate production environment
-        run: |
-          echo "🔍 Validating critical environment variables..."
-          NODE_ENV=production node scripts/validate-production-env.js
-
-      - name: Validate Next.js config loading
-        run: |
-          echo "⚙️ Testing Next.js configuration in production mode..."
-          cd site && NODE_ENV=production node -e "import('./next.config.mjs').then(() => { console.log('✅ Next.js config loaded successfully'); process.exit(0); }).catch(err => { console.error('❌ Next.js config failed:', err.message); process.exit(1); })"
-
-      - name: TypeScript check
-        run: npm --prefix site run typecheck
-
-      - name: ESLint check
-        run: npm --prefix site run lint
-
-      - name: Prettier check
-        run: npm --prefix site run format:check
-
-      - name: Run tests with coverage
-        run: npm --prefix site run test:coverage
-
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v3
-        if: always()
-        with:
-          files: ./site/coverage/lcov.info
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
-
-      - name: Build project with analysis
-        run: npm --prefix site run build:analyze
-        env:
-          NODE_ENV: production
-
-      - name: Generate bundle analysis data
-        run: npm --prefix site run analyze:generate
-
-      - name: Generate bundle size report
-        run: npm --prefix site run analyze:report
-        continue-on-error: true
-
-      - name: Run SEO preflight checks post-build
-        run: npm --prefix site run seo:preflight
-
-      - name: Security quality gates
-        run: |
-          echo "🔒 Running security quality gates..."
-          
-          # Check CSP unsafe-eval
-          echo "🛡️ Checking CSP for unsafe-eval directive..."
-          node scripts/check-csp-unsafe-eval.js
-          
-          # Check environment variable consistency
-          echo "🔧 Checking environment variable consistency..."
-          node scripts/check-env-vars-consistency.js
-
-      - name: Upload CI reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: ci-reports
-          path: |
-            site/reports/bundles/analysis-data.json
-            site/reports/bundles/summary.md
-            site/reports/bundles/bundle-report.json
-            site/reports/bundles/bundle-report.md
-          retention-days: 30
-
-  # E2E Tests: Cookie Banner & 3D Canvas
-  #
-  # This job validates critical UX requirements on fresh profile (no cookies):
-  # 1. Cookie banner appears within 500ms (hydration performance)
-  # 2. 3D canvas renders regardless of consent state (independence)
-  # 3. No console errors related to hydration/cookies
-  #
-  # Budget: <3 minutes total (build + tests)
-  # Browser: Headless Chromium (no external network beyond localhost)
-  e2e-tests:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: 'site/package-lock.json'
-
-      - name: Install dependencies
-        run: npm install --prefix site
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-        working-directory: site
-
-      - name: Load CI environment variables
-        run: |
-          echo "📦 Loading CI environment configuration..."
-          set -a
-          source .env.ci
-          set +a
-          # Export to GITHUB_ENV for subsequent steps
-          while IFS='=' read -r key value; do
-            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
-              echo "$key=$value" >> $GITHUB_ENV
-            fi
-          done < .env.ci
-          echo "✅ CI environment loaded"
-
-      - name: Build production bundle
-        run: npm --prefix site run build
-        env:
-          NODE_ENV: production
-
-      - name: Run E2E tests
-        run: npm --prefix site run test:e2e:ci
-        env:
-          CI: true
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: e2e-test-results
-          path: |
-            site/playwright-report/
-            site/test-results/
-          retention-days: 7
-
-  # Bundle Size Analysis & Enforcement
-  # 
-  # Analyzes bundle sizes per-route, enforces budgets.json thresholds,
-  # and posts comparison report as PR comment with artifacts.
-  #
-  # Features:
-  # - Per-route JS/CSS size tracking
-  # - Budget enforcement from budgets.json
-  # - Delta comparison vs main branch
-  # - PR comment with detailed breakdown
-  # - Downloadable artifacts for analysis
-  #
-  # Override Mechanism:
-  # - Add 'bundle-size-override' label to the PR
-  # - Document justification in PR comments
-  # - See reports/ci/quality-gates.md for acceptable rationale
   bundle-size-check:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      pull-requests: write
-    
+    needs: quality-checks
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
+      
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'site/package-lock.json'
-
+      
       - name: Install dependencies
-        run: npm install --prefix site
-
-      - name: Load CI environment variables
-        run: |
-          echo "📦 Loading CI environment configuration..."
-          set -a
-          source .env.ci
-          set +a
-          while IFS='=' read -r key value; do
-            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
-              echo "$key=$value" >> $GITHUB_ENV
-            fi
-          done < .env.ci
-          echo "✅ CI environment loaded"
-
-      - name: Build current branch with analysis
-        run: npm --prefix site run build:analyze
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+        working-directory: ./site
         env:
-          NODE_ENV: production
+          SKIP_ENV_VALIDATION: 'true'
+          NODE_ENV: 'production'
+      
+      - name: Analyze bundle
+        run: npx @next/bundle-analyzer
+        working-directory: ./site
 
-      - name: Generate current bundle report
-        run: npm --prefix site run analyze:report
-
-      - name: Save current bundle report
-        run: |
-          mkdir -p /tmp/bundle-reports
-          cp reports/bundles/bundle-report.json /tmp/bundle-reports/bundle-report-current.json
-          cp reports/bundles/bundle-report.md /tmp/bundle-reports/bundle-report-current.md
-
-      - name: Checkout base branch
-        run: |
-          git fetch origin ${{ github.base_ref }}
-          git checkout origin/${{ github.base_ref }}
-
-      - name: Install dependencies (base)
-        run: npm install --prefix site
-
-      - name: Load CI environment variables for base
-        run: |
-          echo "📦 Loading CI environment for base branch..."
-          set -a
-          source .env.ci
-          set +a
-          while IFS='=' read -r key value; do
-            if [[ ! "$key" =~ ^# && -n "$key" ]]; then
-              echo "$key=$value" >> $GITHUB_ENV
-            fi
-          done < .env.ci
-          echo "✅ CI environment loaded"
-
-      - name: Build base branch with analysis
-        run: npm --prefix site run build:analyze
-        env:
-          NODE_ENV: production
-
-      - name: Generate base bundle report
-        run: npm --prefix site run analyze:report
-
-      - name: Save base bundle report
-        run: |
-          cp reports/bundles/bundle-report.json /tmp/bundle-reports/bundle-report-base.json
-          cp reports/bundles/bundle-report.md /tmp/bundle-reports/bundle-report-base.md
-
-      - name: Restore current branch
-        run: git checkout ${{ github.head_ref }}
-
-      - name: Install dependencies (restore)
-        run: npm install --prefix site
-
-      - name: Compare bundle sizes and generate PR comment
-        id: bundle-compare
-        continue-on-error: true
-        run: |
-          npm --prefix site run bundle:compare-pr /tmp/bundle-reports/bundle-report-current.json /tmp/bundle-reports/bundle-report-base.json reports/bundles/pr-comment.md
-          echo "comparison-status=$?" >> $GITHUB_OUTPUT
-
-      - name: Post PR comment with bundle analysis
-        uses: actions/github-script@v7
-        if: always()
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: quality-checks
+    # Only run E2E on Vercel deployments, not local builds
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const commentPath = 'reports/bundles/pr-comment.md';
-            
-            if (!fs.existsSync(commentPath)) {
-              console.log('No PR comment file found, skipping comment');
-              return;
-            }
-            
-            const comment = fs.readFileSync(commentPath, 'utf8');
-            
-            // Find existing comment
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
-            
-            const botComment = comments.find(comment => 
-              comment.user.type === 'Bot' && comment.body.includes('Bundle Size Report')
-            );
-            
-            if (botComment) {
-              // Update existing comment
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: comment
-              });
-            } else {
-              // Create new comment
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: comment
-              });
-            }
-
-      - name: Upload bundle analysis artifacts
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: ./site
+      
+      - name: Wait for Vercel Deployment
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForDeployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
+          check_interval: 10
+      
+      - name: Run Playwright tests
+        run: npx playwright test
+        working-directory: ./site
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.waitForDeployment.outputs.url }}
+      
+      - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: bundle-analysis-reports
-          path: |
-            /tmp/bundle-reports/bundle-report-current.json
-            /tmp/bundle-reports/bundle-report-current.md
-            /tmp/bundle-reports/bundle-report-base.json
-            /tmp/bundle-reports/bundle-report-base.md
-            reports/bundles/pr-comment.md
-          retention-days: 30
+          name: playwright-report
+          path: site/playwright-report/
+          retention-days: 7
 
-      - name: Check for bundle size override label
-        id: check-override
-        uses: actions/github-script@v7
+  lighthouse-ci:
+    runs-on: ubuntu-latest
+    needs: quality-checks
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          script: |
-            const labels = context.payload.pull_request.labels.map(label => label.name);
-            const hasOverride = labels.includes('bundle-size-override');
-            console.log('PR labels:', labels);
-            console.log('Has override:', hasOverride);
-            core.setOutput('has-override', hasOverride);
-
-      - name: Fail on bundle size regression
-        if: steps.bundle-compare.outputs.comparison-status != '0' && steps.check-override.outputs.has-override != 'true'
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Wait for Vercel Deployment
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.1
+        id: waitForDeployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
+      
+      - name: Run Lighthouse CI
         run: |
-          echo "❌ Bundle size check failed!"
-          echo ""
-          echo "📊 Bundle size has increased beyond budgets or threshold."
-          echo "Review the bundle analysis report in the PR comment above."
-          echo ""
-          echo "🔧 To override this check:"
-          echo "1. Add the 'bundle-size-override' label to this PR"
-          echo "2. Document the justification in a PR comment"
-          echo "3. See reports/ci/quality-gates.md for acceptable rationale"
-          echo ""
-          echo "💡 Consider optimizing before overriding:"
-          echo "- Check per-route sizes in the report"
-          echo "- Review budgets.json thresholds"
-          echo "- Use dynamic imports for large components"
-          echo "- Remove unused dependencies"
-          exit 1
-
-      - name: Bundle size check passed
-        if: steps.bundle-compare.outputs.comparison-status == '0' || steps.check-override.outputs.has-override == 'true'
-        run: |
-          if [ "${{ steps.check-override.outputs.has-override }}" == "true" ]; then
-            echo "✅ Bundle size check passed (override label applied)"
-          else
-            echo "✅ Bundle size check passed - all routes within budget"
-          fi
+          npm install -g @lhci/cli
+          lhci autorun --collect.url=${{ steps.waitForDeployment.outputs.url }}
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}

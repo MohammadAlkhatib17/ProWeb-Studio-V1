@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useMemo, Suspense } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+
 import { 
   Sphere, 
   Torus,
@@ -14,8 +14,9 @@ import {
   Text,
   MeshDistortMaterial
 } from '@react-three/drei'
-
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { motion } from 'framer-motion'
+
 import type { ThreeMeshRef, ThreeGroupRef, GPUTier } from '@/types/three'
 
 interface LogoElementProps {

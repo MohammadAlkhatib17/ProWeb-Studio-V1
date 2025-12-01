@@ -16,9 +16,10 @@
 
 'use client';
 
+import Link from 'next/link';
+
 import { companyInfo } from '@/config/company.config';
 import { siteConfig } from '@/config/site.config';
-import Link from 'next/link';
 
 export interface DutchBusinessInfoProps {
   /**

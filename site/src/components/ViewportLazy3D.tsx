@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, ComponentType, lazy } from 'react';
+
 import { useInView } from '@/hooks/useInView';
 
 interface ViewportLazy3DProps {

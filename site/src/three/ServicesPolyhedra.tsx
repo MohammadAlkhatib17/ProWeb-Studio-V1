@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+
 import {
   Octahedron,
   Dodecahedron,
@@ -9,7 +9,9 @@ import {
   MeshDistortMaterial,
   PerspectiveCamera,
 } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+
 import Scene3D from '@/components/Scene3D';
 
 interface FloatingShapeProps {

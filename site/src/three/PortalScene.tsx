@@ -1,9 +1,10 @@
 // /src/three/PortalScene.tsx
 'use client';
 
-import * as THREE from 'three';
 import React, { useMemo, useRef } from 'react';
+
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import * as THREE from 'three';
 
 type Props = { scale?: number; effects?: boolean };
 

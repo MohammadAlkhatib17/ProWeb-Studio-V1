@@ -1,21 +1,23 @@
 import type { Metadata } from 'next';
+
 import './globals.css';
-import { headers } from 'next/headers';
 import dynamic from 'next/dynamic';
-import { siteConfig } from '@/config/site.config';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import SEOSchema from '@/components/SEOSchema';
-import { initProductionEnvValidation } from '@/lib/env.server';
-import BackgroundLayer from '@/components/layout/BackgroundLayer';
-import HeroBackground from '@/components/HeroBackground';
-import TopVignetteOverlay from '@/components/layout/TopVignetteOverlay';
-import PWAServiceWorker from '@/components/PWAServiceWorker';
-import { primaryFont } from '@/lib/fonts';
-import { generateResourcePreconnects } from '@/lib/preconnect';
+import { headers } from 'next/headers';
+
+import ConsentAwareAnalytics from '@/components/cookies/ConsentAwareAnalytics';
 import CookieConsentBanner from '@/components/cookies/CookieConsentBanner';
 import CookieSettingsModal from '@/components/cookies/CookieSettingsModal';
-import ConsentAwareAnalytics from '@/components/cookies/ConsentAwareAnalytics';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+import HeroBackground from '@/components/HeroBackground';
+import BackgroundLayer from '@/components/layout/BackgroundLayer';
+import TopVignetteOverlay from '@/components/layout/TopVignetteOverlay';
+import PWAServiceWorker from '@/components/PWAServiceWorker';
+import SEOSchema from '@/components/SEOSchema';
+import { siteConfig } from '@/config/site.config';
+import { initProductionEnvValidation } from '@/lib/env.server';
+import { primaryFont } from '@/lib/fonts';
+import { generateResourcePreconnects } from '@/lib/preconnect';
 
 // Lazy load heavy visual components to avoid delaying cookie banner hydration
 const CursorTrail = dynamic(() => import('@/components/CursorTrail'), { 

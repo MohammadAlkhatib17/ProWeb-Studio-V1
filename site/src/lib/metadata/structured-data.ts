@@ -4,6 +4,7 @@
  */
 
 import { siteConfig } from '@/config/site.config';
+
 import { SITE_URL, dutchMetadataDefaults } from './defaults';
 
 interface BaseSchema {

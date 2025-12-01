@@ -1,13 +1,15 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { locations, services, getNearbyLocations } from '@/config/internal-linking.config';
-import { Button } from '@/components/Button';
+import { notFound } from 'next/navigation';
+
 import Breadcrumbs from '@/components/Breadcrumbs';
-import RelatedServices from '@/components/RelatedServices';
+import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo, LocalBusinessJSON, CitySelector } from '@/components/local-seo';
 import type { City } from '@/components/local-seo';
+import RelatedServices from '@/components/RelatedServices';
+import { locations, services, getNearbyLocations } from '@/config/internal-linking.config';
+
+import type { Metadata } from 'next';
 
 
 export const dynamic = 'force-static';

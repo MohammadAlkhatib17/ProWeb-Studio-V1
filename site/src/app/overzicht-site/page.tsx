@@ -1,7 +1,9 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
-import SEOSchema from '@/components/SEOSchema';
+
 import Breadcrumbs from '@/components/Breadcrumbs';
+import SEOSchema from '@/components/SEOSchema';
+
+import type { Metadata } from 'next';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');

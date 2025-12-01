@@ -1,8 +1,9 @@
 'use client';
 
 import { useReportWebVitals } from 'next/web-vitals';
-import { reportWebVitals } from '@/reportWebVitals';
+
 import { useWebVitals } from '@/lib/monitoring/useWebVitals';
+import { reportWebVitals } from '@/reportWebVitals';
 
 export function WebVitalsReporter() {
   const isProd = process.env.NODE_ENV === 'production';

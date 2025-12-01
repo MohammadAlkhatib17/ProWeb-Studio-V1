@@ -1,9 +1,10 @@
 'use client';
 
-import { siteConfig } from '@/config/site.config';
-import { Button } from '@/components/Button';
 import { ArrowRight } from 'lucide-react';
+
+import { Button } from '@/components/Button';
 import { Accordion, AccordionItem } from '@/components/faq';
+import { siteConfig } from '@/config/site.config';
 
 /**
  * Dutch Market FAQ Component with Regional and Business-Specific Content

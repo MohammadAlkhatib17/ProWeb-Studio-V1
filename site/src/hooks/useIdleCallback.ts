@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 
 /**
  * Hook that schedules a callback to run during browser idle time
@@ -156,6 +156,3 @@ export function useIdleValue<T>(value: T, timeout: number = 1000): T {
 
   return deferredValue;
 }
-
-// Import React for useIdleValue
-import React from 'react';

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
 import { getContentSuggestions } from '@/config/internal-linking.config';
 
 interface ContentSuggestionsProps {

@@ -4,6 +4,7 @@
  */
 
 import { ReactNode, useEffect } from 'react';
+
 import { initDutchPerformanceMonitoring } from '@/lib/web-vitals-optimization';
 
 interface DutchCoreWebVitalsProps {

@@ -1,6 +1,7 @@
 'use client';
 
-import { Canvas } from '@react-three/fiber';
+import { Suspense, useRef } from 'react';
+
 import { 
   OrbitControls, 
   Float, 
@@ -8,7 +9,7 @@ import {
   Stars,
   Sparkles 
 } from '@react-three/drei';
-import { Suspense, useRef } from 'react';
+import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
 
 function FloatingElements() {

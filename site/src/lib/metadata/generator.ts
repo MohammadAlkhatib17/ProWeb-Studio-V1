@@ -2,8 +2,8 @@
  * Centralized metadata generator for consistent Dutch metadata across all pages
  */
 
-import type { Metadata } from 'next';
 import { siteConfig } from '@/config/site.config';
+
 import {
   SITE_URL,
   dutchMetadataDefaults,
@@ -11,6 +11,8 @@ import {
   getPageMetadata,
   dutchPageMetadata,
 } from './defaults';
+
+import type { Metadata } from 'next';
 
 export interface MetadataOptions {
   title?: string;

@@ -32,6 +32,18 @@ function isPlaceholderValue(value) {
  * Validate critical environment variables
  */
 function validateEnvironment() {
+  // Skip validation on Vercel - platform manages env vars
+  if (process.env.VERCEL === '1') {
+    console.log('✅ Running on Vercel - skipping env validation (platform-managed)\n');
+    return;
+  }
+
+  // Skip validation if explicitly disabled
+  if (process.env.SKIP_ENV_VALIDATION === 'true') {
+    console.log('⚠️  Environment validation skipped (SKIP_ENV_VALIDATION=true)\n');
+    return;
+  }
+
   const errors = [];
   const warnings = [];
   

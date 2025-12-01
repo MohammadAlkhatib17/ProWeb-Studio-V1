@@ -1,0 +1,89 @@
+# ============================================================================
+# VERCEL ENVIRONMENT VARIABLES - ProWeb Studio
+# ============================================================================
+# Copy and paste these variables into Vercel Dashboard
+# Project Settings → Environment Variables
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# CRITICAL VARIABLES (Required for Build)
+# ----------------------------------------------------------------------------
+
+SITE_NAME=ProWeb Studio
+SITE_URL=https://prowebstudio.nl
+NEXT_PUBLIC_PLAUSIBLE_DOMAIN=prowebstudio.nl
+CONTACT_INBOX=contact@prowebstudio.nl
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=6LeEacMrAAAAAP2vl4u2Jri6l2ueTdKOjYlldFP6
+RECAPTCHA_SECRET_KEY=6LeEacMrAAAAAEfZcnLV-Dds9FEevmpsnJTNddxa
+
+# ----------------------------------------------------------------------------
+# PUBLIC VARIABLES (Client-Side)
+# ----------------------------------------------------------------------------
+
+NEXT_PUBLIC_SITE_NAME=ProWeb Studio
+NEXT_PUBLIC_SITE_URL=https://prowebstudio.nl
+NEXT_PUBLIC_CONTACT_INBOX=contact@prowebstudio.nl
+NEXT_PUBLIC_CALCOM_URL=https://cal.com/prowebstudio
+NEXT_PUBLIC_PHONE=+31686412430
+
+# ----------------------------------------------------------------------------
+# BUSINESS REGISTRATION (Dutch KVK/BTW)
+# ----------------------------------------------------------------------------
+
+NEXT_PUBLIC_KVK=93769865
+NEXT_PUBLIC_BTW=NL005041113B60
+PHONE=+31686412430
+
+# ----------------------------------------------------------------------------
+# EMAIL SERVICE (Brevo/Sendinblue)
+# ----------------------------------------------------------------------------
+
+BREVO_SMTP_USER=96686c002@smtp-brevo.com
+BREVO_SMTP_PASS=xsmtpsib-7bbc8fd32db17da89be08127c5f8015bafe60c5f5777554bbe35fc4ade89670e-F2xBt80ZJ4g9GfXY
+BREVO_LIST_ID=3
+BREVO_API_KEY=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
+
+# ----------------------------------------------------------------------------
+# PERFORMANCE SETTINGS
+# ----------------------------------------------------------------------------
+
+NEXT_PUBLIC_ENABLE_WEB_VITALS=false
+
+# ============================================================================
+# INSTRUCTIONS FOR VERCEL DASHBOARD
+# ============================================================================
+#
+# 1. Go to: https://vercel.com/prowebstudio/pro-web-studio/settings/environment-variables
+#
+# 2. For each variable above, click "Add Environment Variable"
+#
+# 3. Select environments:
+#    - Production: ☑ (for SITE_URL, all RECAPTCHA keys, BREVO credentials)
+#    - Preview: ☑ (for all NEXT_PUBLIC_ variables)
+#    - Development: ☑ (optional, for local Vercel CLI testing)
+#
+# 4. IMPORTANT: Paste each variable in the format:
+#    Key: VARIABLE_NAME
+#    Value: variable_value
+#
+# 5. Click "Save" after each variable
+#
+# ============================================================================
+# RECOMMENDED ENVIRONMENT CONFIGURATION
+# ============================================================================
+#
+# PRODUCTION ONLY (sensitive data):
+# - SITE_URL
+# - RECAPTCHA_SECRET_KEY
+# - BREVO_SMTP_PASS
+# - BREVO_API_KEY
+#
+# ALL ENVIRONMENTS (public/non-sensitive):
+# - All NEXT_PUBLIC_* variables
+# - BREVO_SMTP_USER
+# - BREVO_LIST_ID
+# - NEXT_PUBLIC_KVK
+# - NEXT_PUBLIC_BTW
+# - PHONE
+#
+# ============================================================================

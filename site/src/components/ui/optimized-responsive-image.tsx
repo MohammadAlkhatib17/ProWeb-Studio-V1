@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Image, { ImageProps } from 'next/image';
+
 import { getOptimalImageStrategy, getResponsiveImageSizes } from '@/lib/web-vitals-optimization';
 
 // Simple className utility function

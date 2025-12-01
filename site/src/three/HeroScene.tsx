@@ -1,12 +1,14 @@
 'use client';
-import * as THREE from 'three';
 import { useRef, useMemo } from 'react';
+
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
+
+import { useDeviceCapabilities, getOptimizedParticleCount } from '@/hooks/useDeviceCapabilities';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import FacetedSolid from '@/three/FacetedSolid';
 import ParallaxRig from '@/three/ParallaxRig';
 import StarsShell from '@/three/StarsShell';
-import FacetedSolid from '@/three/FacetedSolid';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useDeviceCapabilities, getOptimizedParticleCount } from '@/hooks/useDeviceCapabilities';
 
 // Floating light particles
 function LightParticles({

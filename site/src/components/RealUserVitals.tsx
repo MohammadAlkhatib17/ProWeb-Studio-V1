@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import type { Metric } from 'web-vitals';
 
 interface MetricAttribution {

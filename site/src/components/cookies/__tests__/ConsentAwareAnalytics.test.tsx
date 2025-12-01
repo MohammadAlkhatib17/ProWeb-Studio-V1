@@ -5,6 +5,7 @@
 
 import { render, waitFor, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import ConsentAwareAnalytics from '../ConsentAwareAnalytics';
 
 // Mock Next.js Script component

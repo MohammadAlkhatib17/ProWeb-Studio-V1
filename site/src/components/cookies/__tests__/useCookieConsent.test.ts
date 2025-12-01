@@ -4,9 +4,10 @@
  */
 
 import { renderHook, act } from '@testing-library/react';
-import { useCookieConsent } from '@/components/cookies/useCookieConsent';
-import * as cookieUtils from '@/components/cookies/cookie-utils';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+import * as cookieUtils from '@/components/cookies/cookie-utils';
+import { useCookieConsent } from '@/components/cookies/useCookieConsent';
 
 // Mock cookie utils
 vi.mock('@/components/cookies/cookie-utils', () => ({

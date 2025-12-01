@@ -1,7 +1,8 @@
 'use client';
 // src/three/HaloPlane.tsx
-import * as THREE from 'three';
 import { useMemo } from 'react';
+
+import * as THREE from 'three';
 
 export default function HaloPlane() {
   const geom = useMemo(() => new THREE.PlaneGeometry(8, 8, 2, 2), []);

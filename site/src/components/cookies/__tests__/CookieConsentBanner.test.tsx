@@ -5,6 +5,7 @@
 
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import CookieConsentBanner from '../CookieConsentBanner';
 
 // Mock the useCookieConsent hook

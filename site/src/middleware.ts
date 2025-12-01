@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { rateLimiter } from '@/lib/rateLimit';
 
 // Bot detection patterns

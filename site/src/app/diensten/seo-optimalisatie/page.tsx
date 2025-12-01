@@ -1,59 +1,36 @@
-import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import Link from 'next/link';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Button } from '@/components/Button';
-import SEOSchema from '@/components/SEOSchema';
+
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { Button } from '@/components/Button';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import FAQSection from '@/components/sections/FAQSection';
+import SEOSchema from '@/components/SEOSchema';
+import { generateMetadata as generateMetadataUtil } from '@/lib/metadata';
+
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - service content is fairly stable
 export const fetchCache = 'force-cache';
 
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-
-export const metadata: Metadata = {
-  title: 'SEO Optimalisatie | Technische SEO & Zoekmachineoptimalisatie Nederland – ProWeb Studio',
-  description:
-    'Professionele SEO optimalisatie en technische SEO diensten. Verhoog uw Google ranking met datagedreven SEO strategieën, Core Web Vitals optimalisatie en complete zoekmachine optimalisatie.',
-  alternates: {
-    canonical: `${SITE_URL}/diensten/seo-optimalisatie`,
-    languages: { 
-      'nl-NL': `${SITE_URL}/diensten/seo-optimalisatie`,
-      'x-default': `${SITE_URL}/diensten/seo-optimalisatie`
-    },
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  return generateMetadataUtil({
     title: 'SEO Optimalisatie | Technische SEO & Zoekmachineoptimalisatie Nederland – ProWeb Studio',
-    description: 'Professionele SEO optimalisatie en technische SEO diensten. Verhoog uw Google ranking met datagedreven SEO strategieën.',
-    url: `${SITE_URL}/diensten/seo-optimalisatie`,
-    type: 'website',
-    locale: 'nl_NL',
-    images: [{ url: `${SITE_URL}/og`, width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'SEO Optimalisatie | Technische SEO & Zoekmachineoptimalisatie Nederland – ProWeb Studio',
-    description: 'Professionele SEO optimalisatie en technische SEO diensten. Verhoog uw Google ranking met datagedreven strategieën.',
-    images: [`${SITE_URL}/og`],
-  },
-};
+    description:
+      'Professionele SEO optimalisatie en technische SEO diensten. Verhoog uw Google ranking met datagedreven SEO strategieën, Core Web Vitals optimalisatie en complete zoekmachine optimalisatie.',
+    path: '/diensten/seo-optimalisatie',
+    keywords: [
+      'seo optimalisatie',
+      'technische seo',
+      'zoekmachineoptimalisatie',
+      'google ranking verbeteren',
+      'core web vitals',
+      'seo diensten nederland',
+    ],
+  });
+}
 
 const seoFeatures = [
   {

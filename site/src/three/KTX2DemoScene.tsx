@@ -5,13 +5,15 @@
 
 'use client';
 
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stats } from '@react-three/drei';
 import { Suspense, useEffect, useState } from 'react';
+
+import { OrbitControls, Stats } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
+
+import { textureMemoryMonitor } from './assetPipeline';
 import { EnvironmentMap } from './components/EnvironmentMap';
 import { TexturedMesh } from './components/TexturedMesh';
-import { textureMemoryMonitor } from './assetPipeline';
 
 /**
  * Performance stats overlay

@@ -1,59 +1,36 @@
-import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import Link from 'next/link';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { Button } from '@/components/Button';
-import SEOSchema from '@/components/SEOSchema';
+
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { Button } from '@/components/Button';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import FAQSection from '@/components/sections/FAQSection';
+import SEOSchema from '@/components/SEOSchema';
+import { generateMetadata as generateMetadataUtil } from '@/lib/metadata';
+
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const revalidate = 7200; // 2 hours - service content is fairly stable
 export const fetchCache = 'force-cache';
 
-// Get canonical URL from environment with fallback
-const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-
-export const metadata: Metadata = {
-  title: 'Webshop Laten Maken Nederland | E-commerce Ontwikkeling & iDEAL Integratie – ProWeb Studio',
-  description:
-    'Webshop laten maken met iDEAL betaling, voorraadbeheer en Nederlandse e-commerce functionaliteiten. Responsive webshops die verkopen - van productcatalogus tot checkout.',
-  alternates: {
-    canonical: `${SITE_URL}/diensten/webshop-laten-maken`,
-    languages: { 
-      'nl-NL': `${SITE_URL}/diensten/webshop-laten-maken`,
-      'x-default': `${SITE_URL}/diensten/webshop-laten-maken`
-    },
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  return generateMetadataUtil({
     title: 'Webshop Laten Maken Nederland | E-commerce Ontwikkeling & iDEAL Integratie – ProWeb Studio',
-    description: 'Webshop laten maken met iDEAL betaling, voorraadbeheer en Nederlandse e-commerce functionaliteiten. Responsive webshops die verkopen - van productcatalogus tot checkout.',
-    url: `${SITE_URL}/diensten/webshop-laten-maken`,
-    type: 'website',
-    locale: 'nl_NL',
-    images: [{ url: `${SITE_URL}/og`, width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Webshop Laten Maken Nederland | E-commerce Ontwikkeling & iDEAL Integratie – ProWeb Studio',
-    description: 'Webshop laten maken met iDEAL betaling, voorraadbeheer en Nederlandse e-commerce functionaliteiten.',
-    images: [`${SITE_URL}/og`],
-  },
-};
+    description:
+      'Webshop laten maken met iDEAL betaling, voorraadbeheer en Nederlandse e-commerce functionaliteiten. Responsive webshops die verkopen - van productcatalogus tot checkout.',
+    path: '/diensten/webshop-laten-maken',
+    keywords: [
+      'webshop laten maken',
+      'e-commerce ontwikkeling',
+      'ideal integratie',
+      'online winkel bouwen',
+      'webshop nederland',
+      'e-commerce platform',
+    ],
+  });
+}
 
 const ecommerceFeatures = [
   {

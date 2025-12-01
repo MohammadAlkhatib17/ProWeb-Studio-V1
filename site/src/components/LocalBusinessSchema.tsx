@@ -1,4 +1,5 @@
 import Script from 'next/script';
+
 import { companyInfo } from '@/config/company.config';
 import { siteConfig } from '@/config/site.config';
 

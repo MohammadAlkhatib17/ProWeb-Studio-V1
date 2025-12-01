@@ -4,6 +4,7 @@
  */
 
 import React, { Suspense, ComponentType, ReactNode } from 'react';
+
 import dynamic from 'next/dynamic';
 
 interface Progressive3DLoaderProps {

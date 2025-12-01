@@ -1,10 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { useState, useCallback, useEffect } from 'react';
+
 import dynamic from 'next/dynamic';
-import SceneHUD from '@/components/overlay/SceneHUD';
+import Link from 'next/link';
+
 import { LiveBadge, FooterLeft, FooterRight } from '@/components/overlay/HUDCopy';
+import SceneHUD from '@/components/overlay/SceneHUD';
 
 // Dynamically import the 3D component with loading fallback
 const TechPlaygroundScene = dynamic(() => import('@/components/TechPlaygroundScene'), {

@@ -7,8 +7,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useCookieConsent } from './useCookieConsent';
+
 import { Button } from '@/components/Button';
+
+import { useCookieConsent } from './useCookieConsent';
+
 import type { ConsentState } from './types';
 
 interface CategoryConfig {

@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef, useTransition } from 'react';
+
 import { z } from 'zod';
-import { siteConfig } from '@/config/site.config';
+
 import CalEmbed from '@/components/CalEmbed';
+import { siteConfig } from '@/config/site.config';
 import { useDebouncedCallback } from '@/hooks/useDebounce';
 import { useIdleCallback } from '@/hooks/useIdleCallback';
 

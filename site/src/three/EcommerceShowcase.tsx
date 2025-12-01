@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useState, useMemo, Suspense } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+
 import { 
   Box, 
   Sphere, 
@@ -15,8 +15,9 @@ import {
   useDetectGPU,
   Text
 } from '@react-three/drei'
-import { Group } from 'three'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { motion } from 'framer-motion'
+import { Group } from 'three'
 
 interface ProductDisplayProps {
   position?: [number, number, number]

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { z } from 'zod';
+
 import { subscribeRateLimiter, getClientIP, checkRateLimit } from '@/lib/rateLimit';
 
 // Edge runtime for simple subscription API (see docs/ADR-runtime.md)

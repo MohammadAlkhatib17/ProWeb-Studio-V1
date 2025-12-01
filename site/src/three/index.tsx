@@ -1,9 +1,10 @@
 'use client'
 
 import React from 'react'
-import PortfolioComputer from './PortfolioComputer'
-import EcommerceShowcase from './EcommerceShowcase'
+
 import BrandIdentityModel from './BrandIdentityModel'
+import EcommerceShowcase from './EcommerceShowcase'
+import PortfolioComputer from './PortfolioComputer'
 
 // Enhanced components with performance optimizations
 export { PerformanceCanvas, useLOD, OptimizedMaterial, useOptimizedAssets } from './PerformanceOptimizations'

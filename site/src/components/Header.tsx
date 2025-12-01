@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import dynamic from 'next/dynamic';
-import { siteConfig } from '@/config/site.config';
+
 import Logo from '@/components/Logo';
+import { siteConfig } from '@/config/site.config';
 import { useRAFThrottle } from '@/hooks/useThrottle';
 
 const MobileMenu = dynamic(() => import('@/components/navigation/MobileMenu'), {

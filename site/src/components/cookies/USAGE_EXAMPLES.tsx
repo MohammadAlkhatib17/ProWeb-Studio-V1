@@ -10,7 +10,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useCookieConsent } from '@/components/cookies';
+
+import { useCookieConsent , hasConsent , CONSENT_COOKIE_NAME } from '@/components/cookies';
 
 export function SocialMediaWidget() {
   const { hasConsentFor } = useCookieConsent();
@@ -113,7 +114,6 @@ export function ConsentDebugPanel() {
 // Example 4: Conditional component rendering
 // ============================================================================
 
-import { hasConsent } from '@/components/cookies';
 
 export function MarketingBanner() {
   // Check consent synchronously (for SSR-safe initial render)
@@ -181,7 +181,6 @@ export function CustomAnalytics() {
 
 // middleware.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { CONSENT_COOKIE_NAME } from '@/components/cookies';
 
 export function middleware(request: NextRequest) {
   const consentCookie = request.cookies.get(CONSENT_COOKIE_NAME);

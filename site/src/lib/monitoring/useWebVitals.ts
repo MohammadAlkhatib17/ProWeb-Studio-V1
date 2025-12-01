@@ -6,9 +6,12 @@
  */
 
 import { useEffect, useRef } from 'react';
+
 import { onCLS, onLCP, onINP, type Metric } from 'web-vitals';
-import type { WebVitalMetric, VitalEvent } from './types';
+
 import { isMonitoringEnabled } from './utils';
+
+import type { WebVitalMetric, VitalEvent } from './types';
 
 interface UseWebVitalsOptions {
   /**

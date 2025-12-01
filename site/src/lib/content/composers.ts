@@ -8,7 +8,7 @@
  * @module lib/content/composers
  */
 
-import type { City, Service, CityService } from '../../../cms/schema';
+import { generateCityServiceContent, calculateWordCount, validateContent } from './generators';
 import {
   cityFixtures,
   serviceFixtures,
@@ -17,7 +17,8 @@ import {
   getServiceBySlug,
   getCityServiceBySlug,
 } from '../../../cms/fixtures';
-import { generateCityServiceContent, calculateWordCount, validateContent } from './generators';
+
+import type { City, Service, CityService } from '../../../cms/schema';
 
 /**
  * Compose complete page content for a city-service combination

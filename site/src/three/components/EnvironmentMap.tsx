@@ -6,7 +6,9 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import { useThree } from '@react-three/fiber';
+
 import { useKTX2Environment } from '../assetPipeline';
 
 interface EnvironmentMapProps {

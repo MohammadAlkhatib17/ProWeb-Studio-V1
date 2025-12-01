@@ -1,8 +1,9 @@
 'use client';
 // src/three/OrbitRings.tsx
-import * as THREE from 'three';
 import { useMemo, useRef } from 'react';
+
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
 type Props = { rings?: number; min?: number; max?: number; speed?: number };
 

@@ -5,13 +5,13 @@
  * for a services detail page.
  */
 
-import type { Metadata } from 'next';
-import { generateMetadata, SITE_URL } from '@/lib/metadata';
 import { PageStructuredData } from '@/components/metadata';
-import { 
+import { generateMetadata, SITE_URL , 
   generateServiceSchema, 
   generateFAQSchema,
 } from '@/lib/metadata';
+
+import type { Metadata } from 'next';
 
 // Generate metadata using the centralized system
 export const metadata: Metadata = generateMetadata({

@@ -11,6 +11,7 @@
  */
 
 import { MetadataRoute } from 'next';
+
 import { services, locations } from '@/config/internal-linking.config';
 
 // Performance: Edge runtime for faster cold starts

@@ -3,12 +3,13 @@ import type { Metadata } from 'next';
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
 
-import { ResponsiveImage } from '@/components/ui/responsive-image';
 import Link from 'next/link';
+
+import Breadcrumbs from '@/components/Breadcrumbs';
+import DynamicOrbitSystem from '@/components/dynamic/DynamicOrbitSystem';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
-import DynamicOrbitSystem from '@/components/dynamic/DynamicOrbitSystem';
-import Breadcrumbs from '@/components/Breadcrumbs';
+import { ResponsiveImage } from '@/components/ui/responsive-image';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');

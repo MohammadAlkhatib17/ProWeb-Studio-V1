@@ -1,8 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run build:prod",
   "framework": "nextjs",
-  "regions": ["cdg1", "lhr1", "fra1"],
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci",
+  "regions": ["fra1"],
   "headers": [
     {
       "source": "/:path*",
@@ -74,7 +75,7 @@
   "crons": [
     {
       "path": "/api/health",
-      "schedule": "0 */6 * * *"
+      "schedule": "0 0 * * *"
     }
   ]
 }

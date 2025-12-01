@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { getOptimizedFontPreloads, getDutchOptimizedResourceHints, getCriticalCSS } from '@/lib/web-vitals-optimization';
 
 interface CoreWebVitalsLayoutProps {

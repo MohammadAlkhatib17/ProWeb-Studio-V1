@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import Link from 'next/link';
+
 import Logo from '@/components/Logo';
 import { siteConfig } from '@/config/site.config';
 

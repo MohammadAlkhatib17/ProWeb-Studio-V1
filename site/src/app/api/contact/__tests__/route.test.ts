@@ -1,6 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { POST } from '@/app/api/contact/route';
 import { NextRequest } from 'next/server';
+
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+import { POST } from '@/app/api/contact/route';
 
 // Mock nodemailer to provide createTransport
 vi.mock('nodemailer', () => ({

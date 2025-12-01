@@ -6,6 +6,7 @@
  */
 
 import DOMPurify from 'isomorphic-dompurify';
+
 import type { Config } from 'dompurify';
 
 // Default configuration for sanitization

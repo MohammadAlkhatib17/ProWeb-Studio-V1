@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
+
 import { useDeferredInit } from '@/hooks/useFirstInput';
 
 // Utility function to detect low-end devices

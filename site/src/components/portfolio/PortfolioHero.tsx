@@ -1,8 +1,11 @@
 'use client';
 
 import { Suspense } from 'react';
+
 import dynamic from 'next/dynamic';
+
 import { motion } from 'framer-motion';
+
 import { Button } from '@/components/Button';
 
 const PortfolioScene = dynamic(() => import('../../three/PortfolioScene'), {

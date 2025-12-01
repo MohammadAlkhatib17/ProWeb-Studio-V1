@@ -4,8 +4,10 @@
  */
 
 import { useEffect, useState } from 'react';
+
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+
 import { loadTexture, loadPMREMEnvironment, type TextureLoadOptions } from './KTX2Loader';
 import { textureMemoryMonitor } from './textureUtils';
 

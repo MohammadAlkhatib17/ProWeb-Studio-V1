@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+
 import { services, getRelatedServices, type ServiceLink } from '@/config/internal-linking.config';
 
 interface RelatedServicesProps {

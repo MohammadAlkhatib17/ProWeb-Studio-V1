@@ -1,8 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Button } from '@/components/Button';
 import { useState } from 'react';
+
+import { motion } from 'framer-motion';
+
+import { Button } from '@/components/Button';
 
 interface CaseStudy {
   id: string;

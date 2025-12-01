@@ -3,13 +3,14 @@
  * Secure cookie management functions with SameSite and HttpOnly best practices
  */
 
-import type { ConsentData, ConsentState } from './types';
 import {
   CONSENT_COOKIE_NAME,
   CONSENT_VERSION,
   CONSENT_EXPIRY_DAYS,
   DEFAULT_CONSENT,
 } from './types';
+
+import type { ConsentData, ConsentState } from './types';
 
 /**
  * Get cookie value by name

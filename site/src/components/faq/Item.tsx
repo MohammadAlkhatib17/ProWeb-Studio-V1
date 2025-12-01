@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
+
 import { Plus, Minus } from 'lucide-react';
+
 import { useAccordion } from './Accordion';
 
 /**
