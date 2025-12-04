@@ -16,7 +16,7 @@ import PWAServiceWorker from '@/components/PWAServiceWorker';
 import SEOSchema from '@/components/SEOSchema';
 import { siteConfig } from '@/config/site.config';
 import { initProductionEnvValidation } from '@/lib/env.server';
-import { primaryFont } from '@/lib/fonts-optimized';
+import { primaryFont } from '@/lib/fonts';
 import { generateResourcePreconnects } from '@/lib/preconnect';
 
 // Lazy load heavy visual components to avoid delaying cookie banner hydration
@@ -25,7 +25,7 @@ const CursorTrail = dynamic(() => import('@/components/CursorTrail'), {
   loading: () => null 
 });
 
-const DutchPerformanceMonitor = dynamic(() => import('@/components/DutchPerformanceMonitorOptimized'), { 
+const DutchPerformanceMonitor = dynamic(() => import('@/components/DutchPerformanceMonitor'), { 
   ssr: false,
   loading: () => null 
 });
@@ -62,14 +62,27 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: [
     'website laten maken nederland',
-    'webdesign nederland', 
+    'website bouwen',
+    'webdesign nederland',
     'webshop laten maken',
-    'seo optimalisatie nederland',
-    '3d websites',
-    'nederlandse webdevelopment',
+    'professionele website laten maken',
     'responsive webdesign',
-    'mkb website',
-    'professionele website',
+    'bedrijfswebsite laten maken',
+    'website ontwikkeling',
+    'seo geoptimaliseerde website',
+    'mkb-vriendelijk',
+    'ondernemers',
+    'nederlands webdesign bureau',
+    'betrouwbare webdesign partner',
+    'transparante communicatie',
+    'no-nonsense aanpak',
+    'iDEAL integratie',
+    'nederlandse kwaliteit',
+    'website laten maken amsterdam',
+    'webdesign rotterdam',
+    'website ontwikkeling den haag',
+    'professionele website utrecht',
+    'toekomstbestendig',
     'digital agency nederland',
   ],
   authors: [
@@ -189,10 +202,21 @@ export const metadata: Metadata = {
     'identifier-URL': SITE_URL,
     pagename: siteConfig.name,
     category: 'internet',
-    // Core business metadata for Dutch market
-    'business-sector': 'webdevelopment',
-    'service-area': 'netherlands',
-    'target-market': 'mkb-nederland',
+    'dc.title': siteConfig.name,
+    'dc.creator': siteConfig.name,
+    'dc.subject': 'Website Development, Web Design, 3D Websites',
+    'dc.description': siteConfig.description,
+    'dc.publisher': siteConfig.name,
+    'dc.contributor': siteConfig.name,
+    'dc.date': new Date().toISOString(),
+    'dc.type': 'text',
+    'dc.format': 'text/html',
+    'dc.identifier': SITE_URL,
+    'dc.source': SITE_URL,
+    'dc.language': 'nl-NL',
+    'dc.relation': SITE_URL,
+    'dc.coverage': 'Netherlands',
+    'dc.rights': `© ${new Date().getFullYear()} ${siteConfig.name}`,
     'geo.region': 'NL',
     'geo.placename': 'Netherlands',
     'geo.position': '52.3676;4.9041',
@@ -268,6 +292,17 @@ export default function RootLayout({
         />
 
         <BackgroundLayer />
+        {/**
+         * Global cosmic background placed at the root, behind all content.
+         * Why: Some routes add a safe top padding for the sticky header. When
+         * the first section provides its own background (e.g. hero/canvas),
+         * that padding area could expose a different root color/gradient,
+         * creating a visible dark band beneath the header. Rendering the
+         * nebula/star background globally ensures a single, consistent
+         * backdrop from the very top across all pages while keeping header
+         * wrappers fully transparent.
+         */}
+        <HeroBackground />
         {/* Global top vignette to unify luminance behind the header across routes */}
         <TopVignetteOverlay />
         <a href="#main" className="skip-to-content">
@@ -275,12 +310,6 @@ export default function RootLayout({
         </a>
         <Header />
         <main id="main">{children}</main>
-        
-        {/**
-         * Deferred visual components - loaded after main content to optimize FCP
-         * HeroBackground moved here to prevent blocking critical path rendering
-         */}
-        <HeroBackground />
         <Footer />
         
         {/* Heavy visual components - lazy loaded to avoid blocking cookie banner */}

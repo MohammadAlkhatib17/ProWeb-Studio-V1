@@ -8,7 +8,8 @@ export default function HeroBackground() {
         src="/assets/hero/nebula_helix.avif"
         alt=""
         fill
-        quality={85}
+        priority={true}
+        quality={90}
         className="object-cover"
         sizes="100vw"
       />
