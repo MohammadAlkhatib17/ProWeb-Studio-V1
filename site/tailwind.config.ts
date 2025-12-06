@@ -127,6 +127,7 @@ const config: Config = {
         float: 'float 6s ease-in-out infinite',
         glow: 'glow 2s ease-in-out infinite',
         bloom: 'bloom 4s ease-in-out infinite',
+        'gradient-shift': 'gradient-shift 8s ease-in-out infinite',
       },
       keyframes: {
         float: {
@@ -145,6 +146,14 @@ const config: Config = {
           '50%': {
             filter:
               'drop-shadow(0 0 12px rgba(0, 255, 255, 0.6)) drop-shadow(0 0 30px rgba(0, 255, 255, 0.4))',
+          },
+        },
+        'gradient-shift': {
+          '0%, 100%': {
+            backgroundPosition: '0% 50%',
+          },
+          '50%': {
+            backgroundPosition: '100% 50%',
           },
         },
       },
