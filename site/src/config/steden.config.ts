@@ -3,6 +3,8 @@
  * Used for /steden/[stad] and /steden/[stad]/[dienst] routes
  */
 
+import { getAllDienstSlugs } from './diensten.config';
+
 export interface Stad {
   name: string;
   slug: string;
@@ -11,7 +13,7 @@ export interface Stad {
   population: number;
   description: string;
   shortDescription: string;
-  relatedServices: string[]; // slugs of available services
+  // relatedServices REMOVED - now dynamically generated
   nearbySteden: string[]; // slugs of nearby cities
   keywords: string[];
   coordinates?: {
@@ -33,7 +35,6 @@ export const steden: Stad[] = [
     population: 872680,
     description: 'Website laten maken in Amsterdam door lokale webdesign experts. Professionele websites, webshops en 3D ervaringen voor Amsterdamse bedrijven. Van de Jordaan tot Zuid, van startups tot gevestigde ondernemingen - wij realiseren digitale oplossingen die werken.',
     shortDescription: 'Professionele webdesign en ontwikkeling in Amsterdam voor lokale ondernemers en bedrijven.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen', 'onderhoud-support'],
     nearbySteden: ['haarlem', 'almere', 'zaanstad', 'hoofddorp'],
     keywords: ['website laten maken amsterdam', 'webdesign amsterdam', 'website amsterdam', 'webshop amsterdam', 'seo amsterdam'],
     coordinates: { lat: 52.3676, lng: 4.9041 },
@@ -46,7 +47,6 @@ export const steden: Stad[] = [
     population: 651446,
     description: 'Website laten maken Rotterdam - moderne webdesign voor bedrijven in de havenstad. Van corporate websites tot innovatieve webshops, wij bouwen digitale platforms die impact maken in Rotterdam en omstreken. Lokale expertise met internationale allure.',
     shortDescription: 'Webdesign Rotterdam - moderne websites voor bedrijven in de havenstad.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen', 'onderhoud-support'],
     nearbySteden: ['den-haag', 'schiedam', 'capelle-aan-den-ijssel', 'barendrecht'],
     keywords: ['website laten maken rotterdam', 'webdesign rotterdam', 'website rotterdam', 'webshop rotterdam', 'seo rotterdam'],
     coordinates: { lat: 51.9244, lng: 4.4777 },
@@ -59,7 +59,6 @@ export const steden: Stad[] = [
     population: 361924,
     description: 'Website laten maken Utrecht - centraal gelegen webdesign expertise. Professionele websites voor Utrechtse ondernemers en bedrijven. Van het stadscentrum tot Leidsche Rijn, wij realiseren weboplossingen die bezoekers omzetten in klanten.',
     shortDescription: 'Website ontwikkeling Utrecht - centraal gelegen webdesign expertise.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen', 'onderhoud-support'],
     nearbySteden: ['amersfoort', 'nieuwegein', 'zeist', 'houten'],
     keywords: ['website laten maken utrecht', 'webdesign utrecht', 'website utrecht', 'webshop utrecht', 'seo utrecht'],
     coordinates: { lat: 52.0907, lng: 5.1214 },
@@ -72,7 +71,6 @@ export const steden: Stad[] = [
     population: 548320,
     description: 'Website laten maken Den Haag - professionele webdesign voor overheid en bedrijfsleven. Van ministeries tot internationale organisaties en MKB-bedrijven, wij bouwen betrouwbare, veilige websites die voldoen aan de hoogste standaarden.',
     shortDescription: 'Webdesign Den Haag - professionele websites voor overheid en bedrijfsleven.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['rotterdam', 'delft', 'zoetermeer', 'leiden'],
     keywords: ['website laten maken den haag', 'webdesign den haag', 'website den haag', 'webshop den haag', 'seo den haag'],
     coordinates: { lat: 52.0705, lng: 4.3007 },
@@ -85,7 +83,6 @@ export const steden: Stad[] = [
     population: 238326,
     description: 'Website laten maken Eindhoven - innovatieve weboplossingen in Brainport regio. Technologie en design komen samen voor Eindhovense tech bedrijven, startups en scale-ups. Van Strijp-S tot High Tech Campus, wij spreken de taal van innovatie.',
     shortDescription: 'Website ontwikkeling Eindhoven - innovatieve weboplossingen in Brainport.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen', 'onderhoud-support'],
     nearbySteden: ['tilburg', 'helmond', 'veldhoven', 'best'],
     keywords: ['website laten maken eindhoven', 'webdesign eindhoven', 'website eindhoven', 'webshop eindhoven', 'seo eindhoven'],
     coordinates: { lat: 51.4416, lng: 5.4697 },
@@ -98,7 +95,6 @@ export const steden: Stad[] = [
     population: 223578,
     description: 'Website laten maken Tilburg - kwaliteitswebsites voor bedrijven in Noord-Brabant. Van lokale ondernemers tot internationale bedrijven, wij bouwen websites die conversie en groei stimuleren voor Tilburgse organisaties.',
     shortDescription: 'Webdesign Tilburg - kwaliteitswebsites voor Noord-Brabantse bedrijven.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['eindhoven', 'breda', 'den-bosch', 'waalwijk'],
     keywords: ['website laten maken tilburg', 'webdesign tilburg', 'website tilburg', 'webshop tilburg', 'seo tilburg'],
     coordinates: { lat: 51.5555, lng: 5.0913 },
@@ -111,7 +107,6 @@ export const steden: Stad[] = [
     population: 235287,
     description: 'Website laten maken Groningen - noordelijke webdesign expertise. Professionele websites voor Groningse ondernemers, studenten-startups en gevestigde bedrijven. Van de binnenstad tot Zernike, digitale oplossingen met noordelijk nuchterheid.',
     shortDescription: 'Website laten maken Groningen - noordelijke expertise in webdesign.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['assen', 'leeuwarden', 'emmen', 'hoogezand'],
     keywords: ['website laten maken groningen', 'webdesign groningen', 'website groningen', 'webshop groningen', 'seo groningen'],
     coordinates: { lat: 53.2194, lng: 6.5665 },
@@ -124,7 +119,6 @@ export const steden: Stad[] = [
     population: 218096,
     description: 'Website laten maken Almere - moderne webdesign voor de snelstgroeiende stad van Nederland. Van Almere Stad tot Poort, wij helpen jonge ondernemers en groeiende bedrijven met professionele websites die impact maken.',
     shortDescription: 'Webdesign Almere - moderne websites voor snelgroeiende ondernemers.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['amsterdam', 'lelystad', 'hilversum', 'huizen'],
     keywords: ['website laten maken almere', 'webdesign almere', 'website almere', 'webshop almere', 'seo almere'],
     coordinates: { lat: 52.3508, lng: 5.2647 },
@@ -137,7 +131,6 @@ export const steden: Stad[] = [
     population: 184403,
     description: 'Website laten maken Breda - professionele weboplossingen in West-Brabant. Voor Bredase ondernemers en bedrijven bouwen wij websites die onderscheidend zijn en resultaten opleveren. Van centrum tot randgemeenten.',
     shortDescription: 'Website ontwikkeling Breda - professionele weboplossingen West-Brabant.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['tilburg', 'roosendaal', 'etten-leur', 'oosterhout'],
     keywords: ['website laten maken breda', 'webdesign breda', 'website breda', 'webshop breda', 'seo breda'],
     coordinates: { lat: 51.5719, lng: 4.7683 },
@@ -150,7 +143,6 @@ export const steden: Stad[] = [
     population: 179073,
     description: 'Website laten maken Nijmegen - historische stad, moderne websites. Voor Nijmeegse ondernemers, universiteiten en culturele instellingen realiseren wij weboplossingen die traditie en innovatie verbinden.',
     shortDescription: 'Webdesign Nijmegen - historische stad, moderne websites.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['arnhem', 'den-bosch', 'oss', 'tiel'],
     keywords: ['website laten maken nijmegen', 'webdesign nijmegen', 'website nijmegen', 'webshop nijmegen', 'seo nijmegen'],
     coordinates: { lat: 51.8126, lng: 5.8372 },
@@ -163,7 +155,6 @@ export const steden: Stad[] = [
     population: 162543,
     description: 'Website laten maken Haarlem - webdesign voor de bloemenstad. Professionele websites voor Haarlemse ondernemers en creatieve bedrijven. Van historisch centrum tot Schalkwijk, digitale oplossingen met karakter.',
     shortDescription: 'Webdesign Haarlem - professionele websites met karakter.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['amsterdam', 'heemstede', 'zandvoort', 'bloemendaal'],
     keywords: ['website laten maken haarlem', 'webdesign haarlem', 'website haarlem', 'webshop haarlem', 'seo haarlem'],
     coordinates: { lat: 52.3874, lng: 4.6462 },
@@ -176,7 +167,6 @@ export const steden: Stad[] = [
     population: 161368,
     description: 'Website laten maken Arnhem - webdesign expertise in Gelderland. Voor Arnhemse bedrijven, mode-ondernemers en tech-startups bouwen wij websites die aandacht trekken en conversie verhogen.',
     shortDescription: 'Website ontwikkeling Arnhem - webdesign expertise in Gelderland.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen', 'onderhoud-support'],
     nearbySteden: ['nijmegen', 'apeldoorn', 'ede', 'wageningen'],
     keywords: ['website laten maken arnhem', 'webdesign arnhem', 'website arnhem', 'webshop arnhem', 'seo arnhem'],
     coordinates: { lat: 51.9851, lng: 5.8987 },
@@ -189,7 +179,6 @@ export const steden: Stad[] = [
     population: 159896,
     description: 'Website laten maken Amersfoort - strategisch gelegen webdesign diensten. Voor ondernemers tussen Randstad en Veluwe bouwen wij professionele websites die zakelijk succes ondersteunen.',
     shortDescription: 'Webdesign Amersfoort - strategisch gelegen webdesign diensten.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['utrecht', 'hilversum', 'apeldoorn', 'barneveld'],
     keywords: ['website laten maken amersfoort', 'webdesign amersfoort', 'website amersfoort', 'webshop amersfoort', 'seo amersfoort'],
     coordinates: { lat: 52.1561, lng: 5.3878 },
@@ -202,7 +191,6 @@ export const steden: Stad[] = [
     population: 156711,
     description: 'Website laten maken Zaanstad - webdesign voor industrie en handel. Van Zaandam tot Wormerveer, professionele websites voor lokale ondernemers in de historische industrieregio.',
     shortDescription: 'Webdesign Zaanstad - professionele websites voor industrie en handel.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['amsterdam', 'alkmaar', 'purmerend', 'hoorn'],
     keywords: ['website laten maken zaanstad', 'webdesign zaanstad', 'website zaandam', 'webshop zaanstad', 'seo zaanstad'],
     coordinates: { lat: 52.4389, lng: 4.8258 },
@@ -215,12 +203,22 @@ export const steden: Stad[] = [
     population: 157486,
     description: 'Website laten maken Den Bosch (\'s-Hertogenbosch) - webdesign in de Brabantse hoofdstad. Voor lokale ondernemers en regionale bedrijven realiseren wij professionele websites die Bourgondische gastvrijheid combineren met digitale innovatie.',
     shortDescription: 'Webdesign Den Bosch - Brabantse webdesign met digitale innovatie.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', 'onderhoud-support'],
     nearbySteden: ['tilburg', 'eindhoven', 'nijmegen', 'oss'],
     keywords: ['website laten maken den bosch', 'webdesign den bosch', 'website s-hertogenbosch', 'webshop den bosch', 'seo den bosch'],
     coordinates: { lat: 51.6978, lng: 5.3037 },
   },
 ];
+
+/**
+ * Get all available services for any city
+ * ALL services are available in ALL cities (universal availability)
+ * 
+ * @param _stadSlug - City slug (unused, kept for API consistency)
+ * @returns Array of all service slugs from diensten.config.ts
+ */
+export function getServicesForStad(_stadSlug?: string): string[] {
+  return getAllDienstSlugs();
+}
 
 /**
  * Get city by slug

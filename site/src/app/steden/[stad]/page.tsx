@@ -5,11 +5,12 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
-import { diensten } from '@/config/diensten.config';
+import { getDienstBySlug } from '@/config/diensten.config';
 import { 
   getStadBySlug, 
   getNearbySteden, 
-  getAllStadSlugs 
+  getAllStadSlugs,
+  getServicesForStad,
 } from '@/config/steden.config';
 import { generateStadMetadata, generateStadSchema } from '@/lib/seo/steden-metadata';
 
@@ -53,9 +54,12 @@ export default function StadPage({ params }: StadPageProps) {
   }
 
   const nearbySteden = getNearbySteden(stad.slug);
-  const availableDiensten = diensten.filter(dienst => 
-    stad.relatedServices.includes(dienst.slug)
-  );
+  
+  // Get all available services for this city (now returns all services)
+  const availableServiceSlugs = getServicesForStad(stad.slug);
+  const availableDiensten = availableServiceSlugs
+    .map(slug => getDienstBySlug(slug))
+    .filter((dienst): dienst is NonNullable<typeof dienst> => dienst !== undefined);
 
   const stadSchema = generateStadSchema(stad);
 

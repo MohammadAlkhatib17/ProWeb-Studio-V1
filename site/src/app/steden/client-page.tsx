@@ -224,7 +224,7 @@ export default function StedenClientPage() {
                     {stad.shortDescription}
                   </p>
                   <div className="mt-4 flex items-center text-cyan-300 text-xs font-medium">
-                    {stad.relatedServices.length} diensten beschikbaar
+                    5 diensten beschikbaar
                     <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
                       →
                     </span>

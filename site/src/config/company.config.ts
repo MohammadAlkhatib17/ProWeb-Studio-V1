@@ -10,6 +10,7 @@
  * - Address fields are only populated when ALL address env vars are present
  * - Missing env vars result in undefined/null values, NOT placeholder strings
  * - Components should handle missing data gracefully (hide fields vs show placeholders)
+ * - For remote/online businesses: ServiceArea (Netherlands) is prioritized in Schema
  */
 
 import { siteConfig } from '@/config/site.config';
@@ -105,11 +106,12 @@ export const companyInfo = {
   /**
    * Service area for online/remote businesses
    * Used when no physical address is present
+   * IMPORTANT: This is the primary geographic indicator for fully remote operations
    */
   serviceArea: {
     country: 'Nederland',
     countryCode: 'NL',
-    description: 'Diensten beschikbaar in heel Nederland',
+    description: 'Wij bedienen klanten in heel Nederland - van Amsterdam tot Maastricht, van Groningen tot Breda. Als volledig remote digitaal bureau zijn onze diensten overal in Nederland beschikbaar.',
   } as const,
 
   /**
@@ -122,7 +124,10 @@ export const companyInfo = {
     openingHoursSpecification: ['Mo-Fr 09:00-17:00'] as const,
 
     /**
-     * Get PostalAddress schema object (only when address exists)
+     * Get PostalAddress schema object (only when complete address exists)
+     * Returns null for remote/online-only businesses
+     * 
+     * @returns PostalAddress schema or null
      */
     getPostalAddress() {
       const addr = companyInfo.address;
@@ -139,7 +144,11 @@ export const companyInfo = {
     },
 
     /**
-     * Get service area schema (used for online-only businesses)
+     * Get service area schema for remote/online businesses
+     * This is the PRIMARY geographic indicator when no physical address exists
+     * Google uses this to understand that the business serves the entire country
+     * 
+     * @returns Country schema for Netherlands
      */
     getServiceArea() {
       return {
@@ -151,12 +160,31 @@ export const companyInfo = {
 
     /**
      * Get area served schema (alternative format)
+     * Can be used alongside or instead of getServiceArea()
+     * 
+     * @returns AdministrativeArea schema
      */
     getAreaServed() {
       return {
         '@type': 'AdministrativeArea' as const,
         name: 'Netherlands',
       };
+    },
+
+    /**
+     * Get multiple service areas for comprehensive coverage
+     * Use this for explicit multi-region Schema markup
+     * 
+     * @returns Array of service area schemas
+     */
+    getServiceAreas() {
+      return [
+        {
+          '@type': 'Country' as const,
+          name: 'Nederland',
+          sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+        },
+      ];
     },
   },
 } as const;
