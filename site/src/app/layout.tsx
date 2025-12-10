@@ -20,19 +20,19 @@ import { primaryFont } from '@/lib/fonts';
 import { generateResourcePreconnects } from '@/lib/preconnect';
 
 // Lazy load heavy visual components to avoid delaying cookie banner hydration
-const CursorTrail = dynamic(() => import('@/components/CursorTrail'), { 
+const CursorTrail = dynamic(() => import('@/components/CursorTrail'), {
   ssr: false,
-  loading: () => null 
+  loading: () => null
 });
 
-const DutchPerformanceMonitor = dynamic(() => import('@/components/DutchPerformanceMonitor'), { 
+const DutchPerformanceMonitor = dynamic(() => import('@/components/DutchPerformanceMonitor'), {
   ssr: false,
-  loading: () => null 
+  loading: () => null
 });
 
-const WebVitalsReporter = dynamic(() => import('@/components/WebVitalsReporter').then(mod => ({ default: mod.WebVitalsReporter })), { 
+const WebVitalsReporter = dynamic(() => import('@/components/WebVitalsReporter').then(mod => ({ default: mod.WebVitalsReporter })), {
   ssr: false,
-  loading: () => null 
+  loading: () => null
 });
 
 // Initialize environment validation for production deployments
@@ -40,8 +40,8 @@ initProductionEnvValidation();
 
 // Get canonical URL from environment with safe fallback
 const SITE_URL = (
-  process.env.SITE_URL ?? 
-  process.env.NEXT_PUBLIC_SITE_URL ?? 
+  process.env.SITE_URL ??
+  process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000')
 ).replace(/\/+$/, '');
 
@@ -144,31 +144,31 @@ export const metadata: Metadata = {
   },
   robots: process.env.VERCEL_ENV === 'preview'
     ? {
+      index: false,
+      follow: false,
+      nocache: true,
+      googleBot: {
         index: false,
         follow: false,
-        nocache: true,
-        googleBot: {
-          index: false,
-          follow: false,
-          noimageindex: true,
-          'max-video-preview': 0,
-          'max-image-preview': 'none',
-          'max-snippet': 0,
-        },
-      }
+        noimageindex: true,
+        'max-video-preview': 0,
+        'max-image-preview': 'none',
+        'max-snippet': 0,
+      },
+    }
     : {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
         index: true,
         follow: true,
-        nocache: false,
-        googleBot: {
-          index: true,
-          follow: true,
-          noimageindex: false,
-          'max-video-preview': -1,
-          'max-image-preview': 'large',
-          'max-snippet': -1,
-        },
+        noimageindex: false,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
       },
+    },
   category: 'technology',
   classification: 'Business',
   referrer: 'strict-origin-when-cross-origin',
@@ -231,18 +231,18 @@ export default function RootLayout({
 }) {
   const headersList = headers();
   const nonce = headersList.get('x-nonce') || '';
-  
+
   return (
-    <html lang="nl">
+    <html lang="nl-NL">
       <head>
         {/* CSP nonce meta tag - Next.js will auto-apply to internal scripts */}
         {nonce && <meta property="csp-nonce" content={nonce} />}
-        
+
         {/* Hreflang tags for Dutch market targeting */}
         <link rel="alternate" hrefLang="nl" href={`${SITE_URL}/`} />
         <link rel="alternate" hrefLang="nl-NL" href={`${SITE_URL}/`} />
         <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}/`} />
-        
+
         <link rel="preconnect" href="https://plausible.io" crossOrigin="" />
         {/* Critical third-party resource preconnections */}
         {generateResourcePreconnects().map((resource, index) => {
@@ -266,13 +266,13 @@ export default function RootLayout({
           }
           return null;
         })}
-        
+
         <link rel="dns-prefetch" href="https://plausible.io" />
         <link rel="preconnect" href="https://cal.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://cal.com" />
-        
+
         {/* Font preloads are handled automatically by Next.js */}
-        
+
         {/* Critical image preloads are handled by Next.js Image component */}
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png" />
@@ -311,13 +311,13 @@ export default function RootLayout({
         <Header />
         <main id="main">{children}</main>
         <Footer />
-        
+
         {/* Heavy visual components - lazy loaded to avoid blocking cookie banner */}
         <CursorTrail />
 
         <SEOSchema nonce={nonce} pageType="generic" />
         <PWAServiceWorker />
-        
+
         {/* Performance monitors - lazy loaded */}
         <DutchPerformanceMonitor />
         <WebVitalsReporter />

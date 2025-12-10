@@ -12,53 +12,59 @@ interface Progressive3DLoaderProps {
    * Component to load dynamically
    */
   component: () => Promise<{ default: ComponentType<Record<string, unknown>> }>;
-  
+
   /**
    * Fallback component while loading
    */
   fallback?: ReactNode;
-  
+
   /**
    * Props to pass to the 3D component
    */
   componentProps?: Record<string, unknown>;
-  
+
   /**
    * Whether to enable client-side only rendering
    */
   ssr?: boolean;
-  
+
   /**
    * Loading priority (affects when the component loads)
    */
   priority?: 'immediate' | 'viewport' | 'interaction';
-  
+
   /**
    * Performance threshold in milliseconds
    */
   performanceThreshold?: number;
-  
+
   /**
    * Enable WebGL capability detection
    */
   requireWebGL?: boolean;
-  
+
   /**
    * Reduced motion fallback
    */
   reducedMotionFallback?: ReactNode;
-  
+
   /**
    * Custom class names
    */
   className?: string;
+
+  /**
+   * Static image to show before 3D loads (improves LCP)
+   */
+  staticImage?: string;
+  staticImageAlt?: string;
 }
 
 /**
  * Default fallback component for 3D elements
  */
 const Default3DFallback = ({ className }: { className?: string }) => (
-  <div 
+  <div
     className={`animate-pulse bg-gradient-to-br from-cosmic-800/40 to-cosmic-900/60 rounded-lg ${className || 'w-full h-full'}`}
     role="img"
     aria-label="3D content loading..."
@@ -76,7 +82,7 @@ const Default3DFallback = ({ className }: { className?: string }) => (
  * Reduced motion fallback component
  */
 const ReducedMotionFallback = ({ className }: { className?: string }) => (
-  <div 
+  <div
     className={`bg-gradient-to-br from-cosmic-800/60 to-cosmic-900/80 rounded-lg border border-cosmic-700/40 ${className || 'w-full h-full'}`}
     role="img"
     aria-label="Static content (reduced motion enabled)"
@@ -98,7 +104,7 @@ const ReducedMotionFallback = ({ className }: { className?: string }) => (
  */
 function detectWebGLSupport(): boolean {
   if (typeof window === 'undefined') return true; // Assume support on server
-  
+
   try {
     const canvas = document.createElement('canvas');
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -122,34 +128,34 @@ function detectReducedMotion(): boolean {
 function usePerformanceMonitor(threshold: number = 16.67) { // 60fps threshold
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     let frameCount = 0;
     let lastTime = performance.now();
     let rafId: number;
-    
+
     function monitor() {
       const currentTime = performance.now();
       const deltaTime = currentTime - lastTime;
-      
+
       frameCount++;
-      
+
       // Check every 60 frames (approximately 1 second)
       if (frameCount >= 60) {
         const avgFrameTime = deltaTime / frameCount;
-        
+
         if (avgFrameTime > threshold) {
           console.warn(`3D Performance Warning: Average frame time ${avgFrameTime.toFixed(2)}ms (> ${threshold}ms)`);
         }
-        
+
         frameCount = 0;
         lastTime = currentTime;
       }
-      
+
       rafId = requestAnimationFrame(monitor);
     }
-    
+
     rafId = requestAnimationFrame(monitor);
-    
+
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
     };
@@ -163,10 +169,10 @@ function useIntersectionLoader(priority: string, enabled: boolean = true) {
   const [isVisible, setIsVisible] = React.useState(priority === 'immediate');
   const [hasLoaded, setHasLoaded] = React.useState(priority === 'immediate');
   const ref = React.useRef<HTMLDivElement>(null);
-  
+
   React.useEffect(() => {
     if (!enabled || priority === 'immediate' || hasLoaded) return;
-    
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -174,19 +180,19 @@ function useIntersectionLoader(priority: string, enabled: boolean = true) {
           setHasLoaded(true);
         }
       },
-      { 
+      {
         threshold: 0.1,
         rootMargin: '100px' // Start loading before fully visible
       }
     );
-    
+
     if (ref.current) {
       observer.observe(ref.current);
     }
-    
+
     return () => observer.disconnect();
   }, [priority, hasLoaded, enabled]);
-  
+
   return { ref, shouldLoad: hasLoaded, isVisible };
 }
 
@@ -203,20 +209,51 @@ export function Progressive3DLoader({
   requireWebGL = true,
   reducedMotionFallback,
   className,
+  staticImage,
+  staticImageAlt = '3D Preview',
 }: Progressive3DLoaderProps) {
   const [webGLSupported, setWebGLSupported] = React.useState(true);
   const [reducedMotion, setReducedMotion] = React.useState(false);
+  const [showStatic, setShowStatic] = React.useState(!!staticImage);
   const { ref, shouldLoad } = useIntersectionLoader(priority, true);
-  
+
   // Performance monitoring
   usePerformanceMonitor(performanceThreshold);
-  
+
   // Client-side capability detection
   React.useEffect(() => {
     setWebGLSupported(!requireWebGL || detectWebGLSupport());
     setReducedMotion(detectReducedMotion());
   }, [requireWebGL]);
-  
+
+  // Hybrid Rendering Strategy:
+  // If staticImage is present, we show it first.
+  // We only switch to 3D when:
+  // 1. Component should load (in viewport)
+  // 2. Browser is idle (to avoid blocking main thread during initial page load)
+  React.useEffect(() => {
+    if (!staticImage || !shouldLoad) return;
+
+    // If priority is immediate, swap ASAP
+    if (priority === 'immediate') {
+      setShowStatic(false);
+      return;
+    }
+
+    // Otherwise wait for idle
+    const idleCallback = (window as any).requestIdleCallback
+      ? (window as any).requestIdleCallback(() => setShowStatic(false))
+      : setTimeout(() => setShowStatic(false), 1000);
+
+    return () => {
+      if ((window as any).cancelIdleCallback) {
+        (window as any).cancelIdleCallback(idleCallback);
+      } else {
+        clearTimeout(idleCallback as number);
+      }
+    };
+  }, [shouldLoad, staticImage, priority]);
+
   // Create dynamic component with optimizations
   const DynamicComponent = React.useMemo(() => {
     return dynamic(component, {
@@ -224,12 +261,12 @@ export function Progressive3DLoader({
       loading: () => (fallback as React.ReactElement) || <Default3DFallback className={className} />,
     });
   }, [component, ssr, fallback, className]);
-  
+
   // Handle reduced motion preference
   if (reducedMotion && reducedMotionFallback) {
     return <div ref={ref} className={className}>{reducedMotionFallback}</div>;
   }
-  
+
   if (reducedMotion) {
     return (
       <div ref={ref} className={className}>
@@ -237,7 +274,25 @@ export function Progressive3DLoader({
       </div>
     );
   }
-  
+
+  // Static Image Mode (Hybrid)
+  if (showStatic && staticImage) {
+    return (
+      <div ref={ref} className={`relative ${className}`}>
+        {/* Render static image for LCP */}
+        <img
+          src={staticImage}
+          alt={staticImageAlt}
+          className="w-full h-full object-cover transition-opacity duration-500"
+          width={800} // Reasonable default
+          height={600}
+          fetchPriority={priority === 'immediate' ? 'high' : 'auto'}
+        />
+        {/* Optional: Add a "Interact to load" badge if desired, but auto-swap is smoother */}
+      </div>
+    );
+  }
+
   // Handle WebGL requirement
   if (requireWebGL && !webGLSupported) {
     return (
@@ -254,16 +309,24 @@ export function Progressive3DLoader({
       </div>
     );
   }
-  
+
   // Don't load until conditions are met
   if (!shouldLoad) {
     return (
       <div ref={ref} className={className}>
-        {fallback || <Default3DFallback className="w-full h-full" />}
+        {staticImage ? (
+          <img
+            src={staticImage}
+            alt={staticImageAlt}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          fallback || <Default3DFallback className="w-full h-full" />
+        )}
       </div>
     );
   }
-  
+
   return (
     <div ref={ref} className={className}>
       <Suspense fallback={fallback || <Default3DFallback className="w-full h-full" />}>
@@ -284,7 +347,7 @@ export function use3DLoader(
     () => import(componentPath),
     [componentPath]
   );
-  
+
   return React.useCallback(
     (props: Record<string, unknown> = {}) => (
       <Progressive3DLoader
@@ -310,7 +373,7 @@ export const Optimized3DLoaders = {
       performanceThreshold={16.67}
     />
   ),
-  
+
   HexagonalPrism: (props: Record<string, unknown> = {}) => (
     <Progressive3DLoader
       component={() => import('@/three/HexagonalPrism')}
