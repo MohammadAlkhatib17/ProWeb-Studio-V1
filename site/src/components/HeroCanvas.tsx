@@ -15,7 +15,13 @@ export default function HeroCanvas({ children, className }: Props) {
   return (
     <div
       className={className ?? ''}
-      style={{ position: 'relative', width: '100%', height: '100%' }}
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        display: 'block', // Ensure container never collapses to inline-block 0px
+        minHeight: '1px'  // Prevent absolute separate context collapse
+      }}
     >
       <Canvas
         frameloop="always"
@@ -27,15 +33,15 @@ export default function HeroCanvas({ children, className }: Props) {
           stencil: false,
           depth: true,
         }}
-        camera={{ 
-          position: [0, 0, 6], 
-          fov: optimizedSettings.cameraFov 
+        camera={{
+          position: [0, 0, 6],
+          fov: optimizedSettings.cameraFov
         }}
         performance={{ min: 0.5 }}
         shadows={optimizedSettings.enableShadows}
         onCreated={({ gl }) => {
           gl.setClearColor(0x000000, 0); // Fully transparent background
-          
+
           // Optimize shadow map settings for mobile
           if (optimizedSettings.enableShadows) {
             gl.shadowMap.enabled = true;

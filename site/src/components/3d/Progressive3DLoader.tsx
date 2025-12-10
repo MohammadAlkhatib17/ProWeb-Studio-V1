@@ -231,6 +231,12 @@ export function Progressive3DLoader({
   // We only switch to 3D when:
   // 1. Component should load (in viewport)
   // 2. Browser is idle (to avoid blocking main thread during initial page load)
+  // Hybrid Rendering Strategy:
+  // If staticImage is present, we show it first.
+  // We only switch to 3D when:
+  // 1. Component should load (in viewport)
+  // 2. Browser is idle (to avoid blocking main thread during initial page load)
+  // 3. OR a safety timeout triggers (guaranteeing visibility)
   React.useEffect(() => {
     if (!staticImage || !shouldLoad) return;
 
@@ -240,16 +246,37 @@ export function Progressive3DLoader({
       return;
     }
 
-    // Otherwise wait for idle
-    const idleCallback = (window as any).requestIdleCallback
-      ? (window as any).requestIdleCallback(() => setShowStatic(false))
-      : setTimeout(() => setShowStatic(false), 1000);
+    let idleId: number | undefined;
+    let timeoutId: NodeJS.Timeout | undefined;
+
+    const forceLoad = () => {
+      setShowStatic(false);
+      if (idleId && (window as any).cancelIdleCallback) {
+        (window as any).cancelIdleCallback(idleId);
+      }
+    };
+
+    // Otherwise wait for idle OR timeout
+    if ((window as any).requestIdleCallback) {
+      // Race condition: trigger as soon as idle...
+      idleId = (window as any).requestIdleCallback(() => {
+        setShowStatic(false);
+        if (timeoutId) clearTimeout(timeoutId);
+      });
+
+      // ...OR force it after 50ms if main thread is choked
+      timeoutId = setTimeout(forceLoad, 50);
+    } else {
+      // Fallback for no RIC support
+      timeoutId = setTimeout(() => setShowStatic(false), 50); // Short timeout for fallback
+    }
 
     return () => {
-      if ((window as any).cancelIdleCallback) {
-        (window as any).cancelIdleCallback(idleCallback);
-      } else {
-        clearTimeout(idleCallback as number);
+      if (idleId && (window as any).cancelIdleCallback) {
+        (window as any).cancelIdleCallback(idleId);
+      }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
       }
     };
   }, [shouldLoad, staticImage, priority]);

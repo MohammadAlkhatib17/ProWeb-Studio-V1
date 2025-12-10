@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, lazy, useEffect, useState, useRef, createContext, useContext } from 'react';
+import { usePathname } from 'next/navigation';
 
 import LoadingSkeleton from './LoadingSkeleton';
 import ThreeErrorBoundary from './ThreeErrorBoundary';
@@ -139,21 +140,27 @@ export default function Dynamic3DWrapper({
   enablePerformanceMonitoring = true,
   onDeviceCapabilities
 }: Dynamic3DWrapperProps) {
-  // STRICT CLIENT BOUNDARY FIX:
-  // Initialize to false to ensure no server rendering or early hydration mismatch
-  const [hasMounted, setHasMounted] = useState(false);
+  // STRICT CLIENT BOUNDARY FIX: Use strict isClient check
+  const [isClient, setIsClient] = useState(false);
+  const pathname = usePathname();
+
+  // State for capabilities and enhancements
   const [hasWebGL, setHasWebGL] = useState(true);
   const [deviceCapabilities, setDeviceCapabilities] = useState<DeviceCapabilities | null>(null);
   const [progressiveEnhancement, setProgressiveEnhancement] = useState(false);
 
   // Initialize performance monitoring
   const performanceState = usePerformanceMonitor(enablePerformanceMonitoring, 30, 60);
-
   const enhancementTimeoutRef = useRef<NodeJS.Timeout>();
 
+  // 1. Strict hydration check
   useEffect(() => {
-    // ONLY set mounted to true after the component has actually mounted in the browser
-    setHasMounted(true);
+    setIsClient(true);
+  }, []);
+
+  // 2. Capability detection (only runs once client is ready)
+  useEffect(() => {
+    if (!isClient) return;
 
     async function detectCapabilities() {
       // Check WebGL support
@@ -198,9 +205,9 @@ export default function Dynamic3DWrapper({
     }
 
     detectCapabilities();
-  }, [onDeviceCapabilities]);
+  }, [isClient, onDeviceCapabilities]);
 
-  // Progressive enhancement: start with basic scene, add effects based on performance
+  // 3. Progressive enhancement logic
   useEffect(() => {
     if (!deviceCapabilities) return;
 
@@ -237,7 +244,7 @@ export default function Dynamic3DWrapper({
     };
   }, [deviceCapabilities, performanceState.metrics.fps]);
 
-  // Monitor performance and adjust progressive enhancement
+  // 4. Performance monitoring adjustments
   useEffect(() => {
     if (!enablePerformanceMonitoring) return;
 
@@ -254,29 +261,38 @@ export default function Dynamic3DWrapper({
     }
   }, [performanceState.metrics.fps, performanceState.qualityLevel, progressiveEnhancement, enablePerformanceMonitoring]);
 
-  // Performance monitoring
+  // 5. Performance Observer logging
   useEffect(() => {
-    if (!enablePerformanceMonitoring) return;
+    if (!enablePerformanceMonitoring || typeof PerformanceObserver === 'undefined') return;
 
-    const observer = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        if (entry.entryType === 'measure' && entry.name.includes('three')) {
-          console.log(`3D Performance: ${entry.name} took ${entry.duration}ms`);
+    let observer: PerformanceObserver | undefined;
+
+    try {
+      observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.entryType === 'measure' && entry.name.includes('three')) {
+            console.log(`3D Performance: ${entry.name} took ${entry.duration}ms`);
+          }
         }
-      }
-    });
+      });
 
-    observer.observe({ entryTypes: ['measure'] });
+      observer.observe({ entryTypes: ['measure'] });
+    } catch (e) {
+      // Ignore errors if PerformanceObserver is not supported/fails
+      console.warn('PerformanceObserver failed:', e);
+    }
 
-    return () => observer.disconnect();
+    return () => {
+      if (observer) observer.disconnect();
+    };
   }, [enablePerformanceMonitoring]);
 
-  // CRITICAL FIX: Return loading skeleton if not mounted.
-  // This prevents the 3D context from attempting to initialize during SSR or early hydration.
-  if (!hasMounted) {
+  // CRITICAL: SSR / Hydration Mismatch barrier
+  if (!isClient) {
     return <LoadingSkeleton variant={variant} className={className} />;
   }
 
+  // Handle WebGL missing
   if (!hasWebGL) {
     return (
       <div className={`${className} flex items-center justify-center bg-gradient-to-br from-gray-900 to-black`}>
@@ -293,11 +309,17 @@ export default function Dynamic3DWrapper({
   return (
     <PerformanceContext.Provider value={performanceState}>
       <ThreeErrorBoundary variant={variant}>
-        <Suspense fallback={<LoadingSkeleton variant={variant} className={className} />}>
-          <Scene3D>
-            {children}
-          </Scene3D>
-        </Suspense>
+        {/* 
+          Force a fresh react component tree when client-side 
+          AND when the pathname changes (fixing stale context on navigation).
+        */}
+        <div key={`3d-scene-${pathname}`} className="w-full h-full">
+          <Suspense fallback={<LoadingSkeleton variant={variant} className={className} />}>
+            <Scene3D>
+              {children}
+            </Scene3D>
+          </Suspense>
+        </div>
       </ThreeErrorBoundary>
     </PerformanceContext.Provider>
   );
