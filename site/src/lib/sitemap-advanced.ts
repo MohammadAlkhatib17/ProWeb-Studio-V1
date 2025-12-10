@@ -12,7 +12,8 @@
 
 import { MetadataRoute } from 'next';
 
-import { services, locations } from '@/config/internal-linking.config';
+import { steden } from '@/config/steden.config';
+import { diensten } from '@/config/diensten.config';
 
 // Performance: Edge runtime for faster cold starts
 export const runtime = 'edge';
@@ -22,8 +23,8 @@ export const runtime = 'edge';
  */
 export function getSiteUrl(): string {
   return (
-    process.env.SITE_URL ?? 
-    process.env.NEXT_PUBLIC_SITE_URL ?? 
+    process.env.SITE_URL ??
+    process.env.NEXT_PUBLIC_SITE_URL ??
     'https://prowebstudio.nl'
   ).replace(/\/+$/, '');
 }
@@ -155,85 +156,82 @@ export function generatePagesSegment(): SitemapEntry[] {
 }
 
 /**
- * Services sitemap segment
- * Generated from internal-linking.config services
- * High priority for Dutch business services
- */
-export function generateServicesSegment(): SitemapEntry[] {
-  const baseUrl = getSiteUrl();
-  const serviceUpdateDate = new Date('2025-09-24');
-
-  // Map services from config to sitemap entries
-  return services.map((service) => {
-    // Extract slug from href (e.g., '/diensten/website-laten-maken' -> 'website-laten-maken')
-    const slug = service.href.split('/').pop() || '';
-    
-    // Determine priority based on service importance
-    let priority = 0.8;
-    if (slug === 'website-laten-maken' || slug === 'webshop-laten-maken' || slug === 'seo-optimalisatie') {
-      priority = 0.8; // Core services
-    } else {
-      priority = 0.7; // Specialized services
-    }
-
-    return {
-      url: `${baseUrl}${service.href}`,
-      lastModified: serviceUpdateDate,
-      changeFrequency: 'weekly' as const,
-      priority,
-      alternates: {
-        languages: {
-          'nl-NL': `${baseUrl}${service.href}`,
-        },
-      },
-    };
-  });
-}
-
-/**
  * Locations sitemap segment
- * Generated from internal-linking.config locations
+ * Generated from steden.config.ts
  * Critical for local Dutch SEO
  */
 export function generateLocationsSegment(): SitemapEntry[] {
   const baseUrl = getSiteUrl();
-  const locationUpdateDate = new Date('2025-09-24');
+  const locationUpdateDate = new Date(); // Use current date or file mtime if available
 
   // Add main locations index page
   const locationsIndex: SitemapEntry = {
-    url: `${baseUrl}/locaties`,
+    url: `${baseUrl}/steden`, // Updated to /steden
     lastModified: locationUpdateDate,
     changeFrequency: 'monthly',
     priority: 0.8,
     alternates: {
       languages: {
-        'nl-NL': `${baseUrl}/locaties`,
+        'nl-NL': `${baseUrl}/steden`,
       },
     },
   };
 
-  // Map locations from config to sitemap entries
-  const locationPages = locations.map((location) => {
-    // Determine priority based on population/importance
+  // Map locations from steden.config to sitemap entries
+  const locationPages = steden.map((stad) => {
+    // Determine priority based on population
     let priority = 0.6;
-    if (location.population && location.population > 500000) {
-      priority = 0.7; // Major cities (Amsterdam, Rotterdam, Den Haag)
+    if (stad.population > 200000) {
+      priority = 0.8; // Major cities
+    } else if (stad.population > 100000) {
+      priority = 0.7; // Medium cities
     }
 
     return {
-      url: `${baseUrl}/locaties/${location.slug}`,
+      url: `${baseUrl}/steden/${stad.slug}`, // Updated to /steden
       lastModified: locationUpdateDate,
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'weekly' as const, // City pages are dynamic now
       priority,
       alternates: {
         languages: {
-          'nl-NL': `${baseUrl}/locaties/${location.slug}`,
+          'nl-NL': `${baseUrl}/steden/${stad.slug}`,
         },
       },
     };
   });
 
   return [locationsIndex, ...locationPages];
+}
+
+/**
+ * Services sitemap segment
+ * Generated from diensten.config.ts
+ * High priority for Dutch business services
+ */
+export function generateServicesSegment(): SitemapEntry[] {
+  const baseUrl = getSiteUrl();
+  const serviceUpdateDate = new Date();
+
+  // Map services from config to sitemap entries
+  return diensten.map((dienst) => {
+    // Determine priority based on business value
+    let priority = 0.8;
+    if (['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'].includes(dienst.slug)) {
+      priority = 0.9; // Core services
+    }
+
+    return {
+      url: `${baseUrl}/diensten/${dienst.slug}`,
+      lastModified: serviceUpdateDate,
+      changeFrequency: 'weekly' as const,
+      priority,
+      alternates: {
+        languages: {
+          'nl-NL': `${baseUrl}/diensten/${dienst.slug}`,
+        },
+      },
+    };
+  });
 }
 
 /**

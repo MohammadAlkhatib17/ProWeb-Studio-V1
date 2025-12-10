@@ -27,27 +27,27 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
     case 'homepage':
       // Homepage only has itself
       return breadcrumbs;
-    
+
     case 'services':
       breadcrumbs.push({ name: 'Diensten', url: abs('/diensten'), position: 2 });
       break;
-    
+
     case 'werkwijze':
       breadcrumbs.push({ name: 'Werkwijze', url: abs('/werkwijze'), position: 2 });
       break;
-    
+
     case 'over-ons':
       breadcrumbs.push({ name: 'Over Ons', url: abs('/over-ons'), position: 2 });
       break;
-    
+
     case 'contact':
       breadcrumbs.push({ name: 'Contact', url: abs('/contact'), position: 2 });
       break;
-    
+
     case 'privacy':
       breadcrumbs.push({ name: 'Privacybeleid', url: abs('/privacy'), position: 2 });
       break;
-    
+
     case 'voorwaarden':
       breadcrumbs.push({ name: 'Algemene Voorwaarden', url: abs('/voorwaarden'), position: 2 });
       break;
@@ -120,13 +120,13 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
     case 'tools':
       breadcrumbs.push({ name: 'Tools', url: abs('/tools'), position: 2 });
       break;
-    
+
     default:
       // Enhanced dynamic breadcrumb generation for generic pages
       if (typeof window !== 'undefined') {
         const pathname = window.location.pathname;
         const segments = pathname.split('/').filter(Boolean);
-        
+
         // Enhanced Dutch route translations with categories
         const routeTranslations: Record<string, { name: string; category?: string }> = {
           'blog': { name: 'Blog', category: 'content' },
@@ -156,11 +156,11 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
         let currentPosition = 2;
         segments.forEach((segment, index) => {
           const segmentInfo = routeTranslations[segment];
-          const segmentName = segmentInfo?.name || 
+          const segmentName = segmentInfo?.name ||
             segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
-          
-          breadcrumbs.push({ 
-            name: segmentName, 
+
+          breadcrumbs.push({
+            name: segmentName,
             url: abs('/' + segments.slice(0, index + 1).join('/')),
             position: currentPosition++,
           });
@@ -173,9 +173,10 @@ function generateBreadcrumbs(pageType: string): Array<{ name: string; url: strin
 }
 
 interface SEOSchemaProps {
-  pageType?: "homepage" | "services" | "werkwijze" | "contact" | "over-ons" | "privacy" | "voorwaarden" | "generic";
+  pageType?: "homepage" | "services" | "werkwijze" | "contact" | "over-ons" | "privacy" | "voorwaarden" | "generic" | "local";
   pageTitle?: string;
   pageDescription?: string;
+  cityName?: string;
   breadcrumbs?: Array<{
     name: string;
     url: string;
@@ -222,7 +223,7 @@ export default function SEOSchema({
   // Helper function to get page title based on pageType
   function getPageTitle(pageType: string, pageTitle?: string): string {
     if (pageTitle) return pageTitle;
-    
+
     switch (pageType) {
       case 'homepage':
         return `${siteConfig.name} - ${siteConfig.tagline}`;
@@ -300,7 +301,7 @@ export default function SEOSchema({
   function getSocialProfiles(): string[] {
     const profiles = [
       siteConfig.social.linkedin,
-      siteConfig.social.github, 
+      siteConfig.social.github,
       siteConfig.social.twitter,
       // Add environment-based social profiles if they exist
       process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN,
@@ -312,913 +313,769 @@ export default function SEOSchema({
       process.env.NEXT_PUBLIC_SOCIAL_FACEBOOK,
       process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM,
     ];
-    
+
     // Filter out falsy values and ensure unique URLs
-  return [...new Set(profiles.filter((profile): profile is string => Boolean(profile)))];
-}
+    return [...new Set(profiles.filter((profile): profile is string => Boolean(profile)))];
+  }
 
-// Helper function to generate Dutch Chamber of Commerce (KVK) schema
-function generateKVKSchema(kvkNumber: string, kvkPlace?: string): Record<string, unknown> | null {
-  if (!kvkNumber) return null;
-  
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'GovernmentOrganization',
-    '@id': `https://www.kvk.nl/orderstraat/product-kiezen/?kvknummer=${kvkNumber}#kvk`,
-    name: 'Kamer van Koophandel',
-    alternateName: 'KVK',
-    description: 'Nederlandse Kamer van Koophandel bedrijfsregistratie',
-    url: `https://www.kvk.nl/orderstraat/product-kiezen/?kvknummer=${kvkNumber}`,
-    areaServed: {
-      '@type': 'Country',
-      name: 'Netherlands',
-      identifier: 'NL',
-    },
-    contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'Customer Service',
-      telephone: '088-585-2222',
-      url: 'https://www.kvk.nl/contact',
-      availableLanguage: ['nl', 'en'],
-    },
-    identifier: {
-      '@type': 'PropertyValue',
-      name: 'KVK-nummer',
-      value: kvkNumber,
-      ...(kvkPlace && { description: `Geregistreerd in ${kvkPlace}` }),
-    },
-  };
-}
+  // Helper function to generate Dutch Chamber of Commerce (KVK) schema
+  function generateKVKSchema(kvkNumber: string, kvkPlace?: string): Record<string, unknown> | null {
+    if (!kvkNumber) return null;
 
-// Helper function to generate Dutch compliance certifications schema
-function generateComplianceSchema(): Record<string, unknown> {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Certification',
-    '@id': `${SITE_URL}#dutch-compliance`,
-    name: 'Nederlandse compliance certificering',
-    description: 'Certificering voor Nederlandse wetgeving en standaarden',
-    certificationIdentification: [
-      {
-        '@type': 'DefinedTerm',
-        name: 'AVG/GDPR Compliance',
-        description: 'Algemene Verordening Gegevensbescherming compliance',
-        inDefinedTermSet: 'https://autoriteitpersoonsgegevens.nl/',
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'GovernmentOrganization',
+      '@id': `https://www.kvk.nl/orderstraat/product-kiezen/?kvknummer=${kvkNumber}#kvk`,
+      name: 'Kamer van Koophandel',
+      alternateName: 'KVK',
+      description: 'Nederlandse Kamer van Koophandel bedrijfsregistratie',
+      url: `https://www.kvk.nl/orderstraat/product-kiezen/?kvknummer=${kvkNumber}`,
+      areaServed: {
+        '@type': 'Country',
+        name: 'Netherlands',
+        identifier: 'NL',
       },
-      {
-        '@type': 'DefinedTerm',
-        name: 'Nederlandse Toegankelijkheidsstandaard',
-        description: 'EN 301 549 / WCAG 2.1 AA compliance voor Nederlandse overheid',
-        inDefinedTermSet: 'https://www.digitaleoverheid.nl/overzicht-van-alle-onderwerpen/digitale-inclusie/digitaal-toegankelijk/',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'Customer Service',
+        telephone: '088-585-2222',
+        url: 'https://www.kvk.nl/contact',
+        availableLanguage: ['nl', 'en'],
       },
-      {
-        '@type': 'DefinedTerm',
-        name: 'Nederlandse Web Guidelines',
-        description: 'Best practices voor Nederlandse websites',
-        inDefinedTermSet: 'https://www.voorhoede.nl/nl/blog/dutch-web-guidelines/',
-      },
-    ],
-    issuedBy: {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}#organization`,
-    },
-    validIn: {
-      '@type': 'Country',
-      name: 'Netherlands',
-      identifier: 'NL',
-    },
-  };
-}
-
-// Helper function to generate professional accreditation schema
-function generateProfessionalAccreditationSchema(): Record<string, unknown> {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
-    '@id': `${SITE_URL}#professional-accreditation`,
-    name: 'Nederlandse IT Professional Services',
-    description: 'Professionele IT-dienstverlening conform Nederlandse standaarden',
-    serviceType: 'Professional Web Development Services',
-    provider: {
-      '@id': `${SITE_URL}#organization`,
-    },
-    areaServed: {
-      '@type': 'Country',
-      name: 'Netherlands',
-      identifier: 'NL',
-    },
-    hasCredential: [
-      {
-        '@type': 'EducationalOccupationalCredential',
-        name: 'Nederlandse IT Vakbekwaamheid',
-        description: 'Certificering voor professionele webdevelopment diensten',
-        credentialCategory: 'Professional Certification',
-        recognizedBy: {
-          '@type': 'Organization',
-          name: 'Nederlandse IT brancheverenigingen',
-        },
-      },
-    ],
-    compliance: [
-      {
-        '@type': 'DefinedTerm',
-        name: 'Kwaliteit van IT-dienstverlening',
-        description: 'Kwaliteitsstandaarden voor Nederlandse IT-dienstverlening',
-      },
-      {
-        '@type': 'DefinedTerm',
-        name: 'Nederlandse aansprakelijkheidsverzekering',
-        description: 'Beroepsaansprakelijkheidsverzekering conform Nederlandse eisen',
-      },
-    ],
-  };
-}// Helper function to generate comprehensive Dutch service areas
-function generateDutchServiceAreas() {
-  return [
-    // Provinces with major cities
-    {
-      '@type': 'State',
-      name: 'Drenthe',
-      identifier: 'DR',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Assen' },
-        { '@type': 'City', name: 'Emmen' },
-        { '@type': 'City', name: 'Hoogeveen' },
-        { '@type': 'City', name: 'Meppel' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Flevoland',
-      identifier: 'FL',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Lelystad' },
-        { '@type': 'City', name: 'Almere' },
-        { '@type': 'City', name: 'Dronten' },
-        { '@type': 'City', name: 'Urk' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Friesland',
-      identifier: 'FR',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Leeuwarden' },
-        { '@type': 'City', name: 'Sneek' },
-        { '@type': 'City', name: 'Heerenveen' },
-        { '@type': 'City', name: 'Drachten' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Gelderland',
-      identifier: 'GE',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Arnhem' },
-        { '@type': 'City', name: 'Nijmegen' },
-        { '@type': 'City', name: 'Apeldoorn' },
-        { '@type': 'City', name: 'Ede' },
-        { '@type': 'City', name: 'Zutphen' },
-        { '@type': 'City', name: 'Doetinchem' },
-        { '@type': 'City', name: 'Harderwijk' },
-        { '@type': 'City', name: 'Wageningen' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Groningen',
-      identifier: 'GR',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Groningen' },
-        { '@type': 'City', name: 'Stadskanaal' },
-        { '@type': 'City', name: 'Veendam' },
-        { '@type': 'City', name: 'Hoogezand' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Limburg',
-      identifier: 'LI',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Maastricht' },
-        { '@type': 'City', name: 'Venlo' },
-        { '@type': 'City', name: 'Heerlen' },
-        { '@type': 'City', name: 'Sittard-Geleen' },
-        { '@type': 'City', name: 'Roermond' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Noord-Brabant',
-      identifier: 'NB',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Eindhoven' },
-        { '@type': 'City', name: 'Tilburg' },
-        { '@type': 'City', name: 'Breda' },
-        { '@type': 'City', name: 's-Hertogenbosch' },
-        { '@type': 'City', name: 'Helmond' },
-        { '@type': 'City', name: 'Oss' },
-        { '@type': 'City', name: 'Bergen op Zoom' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Noord-Holland',
-      identifier: 'NH',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Amsterdam' },
-        { '@type': 'City', name: 'Haarlem' },
-        { '@type': 'City', name: 'Zaanstad' },
-        { '@type': 'City', name: 'Haarlemmermeer' },
-        { '@type': 'City', name: 'Alkmaar' },
-        { '@type': 'City', name: 'Hilversum' },
-        { '@type': 'City', name: 'Hoorn' },
-        { '@type': 'City', name: 'Purmerend' },
-        { '@type': 'City', name: 'Den Helder' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Overijssel',
-      identifier: 'OV',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Zwolle' },
-        { '@type': 'City', name: 'Enschede' },
-        { '@type': 'City', name: 'Deventer' },
-        { '@type': 'City', name: 'Hengelo' },
-        { '@type': 'City', name: 'Almelo' },
-        { '@type': 'City', name: 'Kampen' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Utrecht',
-      identifier: 'UT',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Utrecht' },
-        { '@type': 'City', name: 'Amersfoort' },
-        { '@type': 'City', name: 'Nieuwegein' },
-        { '@type': 'City', name: 'Veenendaal' },
-        { '@type': 'City', name: 'Zeist' },
-        { '@type': 'City', name: 'IJsselstein' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Zeeland',
-      identifier: 'ZE',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Middelburg' },
-        { '@type': 'City', name: 'Vlissingen' },
-        { '@type': 'City', name: 'Goes' },
-        { '@type': 'City', name: 'Terneuzen' },
-      ],
-    },
-    {
-      '@type': 'State',
-      name: 'Zuid-Holland',
-      identifier: 'ZH',
-      addressCountry: 'NL',
-      containsPlace: [
-        { '@type': 'City', name: 'Rotterdam' },
-        { '@type': 'City', name: 'Den Haag' },
-        { '@type': 'City', name: 'Leiden' },
-        { '@type': 'City', name: 'Dordrecht' },
-        { '@type': 'City', name: 'Zoetermeer' },
-        { '@type': 'City', name: 'Delft' },
-        { '@type': 'City', name: 'Gouda' },
-        { '@type': 'City', name: 'Alphen aan den Rijn' },
-        { '@type': 'City', name: 'Spijkenisse' },
-        { '@type': 'City', name: 'Capelle aan den IJssel' },
-      ],
-    },
-  ];
-}
-
-// Helper function to generate postal code regions for targeted service areas
-function generatePostalCodeRegions() {
-  return [
-    // Major metropolitan areas by postal code
-    {
-      '@type': 'PostalCodeArea',
-      name: 'Amsterdam Regio',
-      postalCode: '10**',
-      addressCountry: 'NL',
-      description: 'Amsterdam en directe omgeving',
-    },
-    {
-      '@type': 'PostalCodeArea',
-      name: 'Rotterdam Regio',
-      postalCode: '30**',
-      addressCountry: 'NL',
-      description: 'Rotterdam en Rijnmond gebied',
-    },
-    {
-      '@type': 'PostalCodeArea',
-      name: 'Den Haag Regio',
-      postalCode: '25**',
-      addressCountry: 'NL',
-      description: 'Den Haag en Westland',
-    },
-    {
-      '@type': 'PostalCodeArea',
-      name: 'Utrecht Regio',
-      postalCode: '35**',
-      addressCountry: 'NL',
-      description: 'Utrecht en directe omgeving',
-    },
-    {
-      '@type': 'PostalCodeArea',
-      name: 'Eindhoven Regio',
-      postalCode: '56**',
-      addressCountry: 'NL',
-      description: 'Eindhoven en Brainport regio',
-    },
-    {
-      '@type': 'PostalCodeArea',
-      name: 'Groningen Regio',
-      postalCode: '97**',
-      addressCountry: 'NL',
-      description: 'Groningen en Noord-Nederland',
-    },
-  ];
-}
-
-// Helper function to generate Dutch review and rating schema
-function generateDutchReviewSchema() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    '@id': `${SITE_URL}#organization-reviews`,
-    name: siteConfig.name,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      '@id': `${SITE_URL}#aggregate-rating`,
-      ratingValue: '4.8',
-      bestRating: '5',
-      worstRating: '1',
-      ratingCount: '127',
-      reviewCount: '89',
-      description: 'Gemiddelde beoordeling van Nederlandse klanten voor onze webdevelopment diensten',
-    },
-    review: [
-      {
-        '@type': 'Review',
-        '@id': `${SITE_URL}#review-1`,
-        reviewRating: {
-          '@type': 'Rating',
-          ratingValue: '5',
-          bestRating: '5',
-          worstRating: '1',
-        },
-        author: {
-          '@type': 'Person',
-          name: 'Marcel van den Berg',
-          nationality: 'Dutch',
-        },
-        datePublished: '2024-09-15',
-        reviewBody: 'Uitstekende service! ProWeb Studio heeft onze bedrijfswebsite volledig volgens Nederlandse standaarden ontwikkeld. GDPR compliance was perfect geregeld en de performance scores zijn fantastisch. Aanrader voor Nederlandse ondernemers!',
-        inLanguage: 'nl-NL',
-        itemReviewed: {
-          '@type': 'Service',
-          name: 'Website laten maken Nederland',
-          provider: {
-            '@id': `${SITE_URL}#organization`,
-          },
-        },
-        publisher: {
-          '@type': 'Organization',
-          name: 'Google Mijn Bedrijf',
-          url: 'https://business.google.com/',
-        },
-      },
-      {
-        '@type': 'Review',
-        '@id': `${SITE_URL}#review-2`,
-        reviewRating: {
-          '@type': 'Rating',
-          ratingValue: '5',
-          bestRating: '5',
-          worstRating: '1',
-        },
-        author: {
-          '@type': 'Person',
-          name: 'Sarah Jansen',
-          nationality: 'Dutch',
-        },
-        datePublished: '2024-08-22',
-        reviewBody: 'Professionele webshop ontwikkeling met alle Nederlandse betaalmethoden. iDEAL integratie werkt perfect en de BTW berekeningen zijn automatisch geregeld. Zeer tevreden met het resultaat!',
-        inLanguage: 'nl-NL',
-        itemReviewed: {
-          '@type': 'Service',
-          name: 'Webshop laten maken Nederland',
-          provider: {
-            '@id': `${SITE_URL}#organization`,
-          },
-        },
-        publisher: {
-          '@type': 'Organization',
-          name: 'Trustpilot',
-          url: 'https://www.trustpilot.com/',
-        },
-      },
-      {
-        '@type': 'Review',
-        '@id': `${SITE_URL}#review-3`,
-        reviewRating: {
-          '@type': 'Rating',
-          ratingValue: '4',
-          bestRating: '5',
-          worstRating: '1',
-        },
-        author: {
-          '@type': 'Person',
-          name: 'Peter de Vries',
-          nationality: 'Dutch',
-        },
-        datePublished: '2024-07-10',
-        reviewBody: 'Goede SEO resultaten voor onze Nederlandse zoektermen. Lokale vindbaarheid is sterk verbeterd en we staan nu hoger in Google voor relevante business zoekwoorden. Communicatie verliep soepel.',
-        inLanguage: 'nl-NL',
-        itemReviewed: {
-          '@type': 'Service',
-          name: 'SEO optimalisatie Nederland',
-          provider: {
-            '@id': `${SITE_URL}#organization`,
-          },
-        },
-        publisher: {
-          '@type': 'Organization',
-          name: 'Google Reviews',
-          url: 'https://www.google.com/business/',
-        },
-      },
-    ],
-    // Dutch review platform integrations
-    sameAs: [
-      'https://www.google.com/business/',
-      'https://www.trustpilot.com/review/prowebstudio.nl',
-      'https://www.klantenvertellen.nl/prowebstudio',
-      'https://www.webwinkel.keurmerk.nl/prowebstudio',
-    ],
-    // Quality indicators for Dutch market
-    additionalProperty: [
-      {
-        '@type': 'PropertyValue',
-        name: 'Nederlandse Klanttevredenheid',
-        value: '9.2/10',
-        description: 'Gemiddelde score Nederlandse klantbeoordelingen',
-      },
-      {
-        '@type': 'PropertyValue',
-        name: 'Projectsucces Nederland',
-        value: '98%',
-        description: 'Percentage succesvol opgeleverde Nederlandse projecten',
-      },
-      {
-        '@type': 'PropertyValue',
-        name: 'GDPR Compliance Rate',
-        value: '100%',
-        description: 'Alle Nederlandse projecten volledig GDPR/AVG compliant',
-      },
-    ],
-  };
-}
-
-// Helper function to generate Dutch Google Business Profile schema
-function generateGoogleBusinessProfileSchema() {
-  const gmb_place_id = process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID;
-  const gmb_url = process.env.NEXT_PUBLIC_GOOGLE_BUSINESS_URL;
-  
-  if (!gmb_place_id && !gmb_url) return null;
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    '@id': `${SITE_URL}#google-business-profile`,
-    name: `${siteConfig.name} - Google Mijn Bedrijf`,
-    description: 'Officieel Google Mijn Bedrijf profiel voor Nederlandse webdevelopment diensten',
-    ...(gmb_url && { url: gmb_url }),
-    ...(gmb_place_id && {
       identifier: {
         '@type': 'PropertyValue',
-        name: 'Google Place ID',
-        value: gmb_place_id,
-        description: 'Unieke Google Places identificatie',
+        name: 'KVK-nummer',
+        value: kvkNumber,
+        ...(kvkPlace && { description: `Geregistreerd in ${kvkPlace}` }),
       },
-    }),
-    sameAs: gmb_url,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      bestRating: '5',
-      worstRating: '1',
-      ratingCount: '47',
-      reviewCount: '32',
-      description: 'Google Mijn Bedrijf beoordelingen van Nederlandse klanten',
-    },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': gmb_url,
-      name: 'ProWeb Studio Google Mijn Bedrijf',
-      description: 'Google Business profiel met Nederlandse klantbeoordelingen',
-    },
-  };
-}
+    };
+  }
 
-// Helper function to generate Dutch industry awards and certifications
-function generateDutchAwardsSchema() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    '@id': `${SITE_URL}#awards-certifications`,
-    name: `${siteConfig.name} - Nederlandse Awards & Certificeringen`,
-    description: 'Erkende kwaliteit in Nederlandse webdevelopment industry',
-    award: [
-      {
-        '@type': 'Award',
-        name: 'Nederlandse Web Excellence Awards - Beste 3D Website 2024',
-        description: 'Winnaar categorie Innovatieve 3D Web Experiences Nederland',
-        dateReceived: '2024-03-15',
-        issuer: {
-          '@type': 'Organization',
-          name: 'Nederlandse Web Excellence Foundation',
-          url: 'https://webexcellence.nl/',
+  // Helper function to generate Dutch compliance certifications schema
+  function generateComplianceSchema(): Record<string, unknown> {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Certification',
+      '@id': `${SITE_URL}#dutch-compliance`,
+      name: 'Nederlandse compliance certificering',
+      description: 'Certificering voor Nederlandse wetgeving en standaarden',
+      certificationIdentification: [
+        {
+          '@type': 'DefinedTerm',
+          name: 'AVG/GDPR Compliance',
+          description: 'Algemene Verordening Gegevensbescherming compliance',
+          inDefinedTermSet: 'https://autoriteitpersoonsgegevens.nl/',
         },
-      },
-      {
-        '@type': 'Award',
-        name: 'Top 100 Nederlandse Webdevelopment Bureaus 2024',
-        description: 'Gerangschikt in top 100 beste Nederlandse web agencies',
-        dateReceived: '2024-01-20',
-        issuer: {
-          '@type': 'Organization',
-          name: 'Webdesign Magazine Nederland',
-          url: 'https://webdesignmagazine.nl/',
+        {
+          '@type': 'DefinedTerm',
+          name: 'Nederlandse Toegankelijkheidsstandaard',
+          description: 'EN 301 549 / WCAG 2.1 AA compliance voor Nederlandse overheid',
+          inDefinedTermSet: 'https://www.digitaleoverheid.nl/overzicht-van-alle-onderwerpen/digitale-inclusie/digitaal-toegankelijk/',
         },
-      },
-    ],
-    hasCredential: [
-      {
-        '@type': 'EducationalOccupationalCredential',
-        name: 'Google Partner Certificering Nederland',
-        description: 'Officiële Google Partner status voor Nederlandse markt',
-        credentialCategory: 'Professional Certification',
-        recognizedBy: {
-          '@type': 'Organization',
-          name: 'Google Nederland',
-          url: 'https://www.google.nl/',
+        {
+          '@type': 'DefinedTerm',
+          name: 'Nederlandse Web Guidelines',
+          description: 'Best practices voor Nederlandse websites',
+          inDefinedTermSet: 'https://www.voorhoede.nl/nl/blog/dutch-web-guidelines/',
         },
-        validFrom: '2023-01-01',
-        validThrough: '2024-12-31',
-      },
-    ],
-    memberOf: [
-      {
+      ],
+      issuedBy: {
         '@type': 'Organization',
-        name: 'Nederlandse Vereniging van Webdevelopers (NVW)',
-        description: 'Professionele vereniging Nederlandse web developers',
-        url: 'https://www.nvw.nl/',
+        '@id': `${SITE_URL}#organization`,
       },
-    ],
-  };
-}
-
-// Helper function to generate Dutch business classification schema
-function generateDutchBusinessClassification(sbiCode: string) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'CategoryCode',
-    '@id': `${SITE_URL}#business-classification`,
-    name: 'Nederlandse Bedrijfsclassificatie',
-    description: 'Standaard Bedrijfsindeling (SBI) en internationale classificaties',
-    codeValue: sbiCode,
-    inCodeSet: {
-      '@type': 'CategoryCodeSet',
-      name: 'Standaard Bedrijfsindeling (SBI) 2008',
-      description: 'Nederlandse standaard voor het classificeren van economische activiteiten',
-      url: 'https://www.cbs.nl/nl-nl/onze-diensten/methoden/classificaties/activiteiten/standaard-bedrijfsindeling--sbi--',
-      identifier: 'SBI2008',
-      inDefinedTermSet: 'https://www.cbs.nl/sbi/',
-    },
-    additionalType: [
-      {
-        '@type': 'DefinedTerm',
-        name: 'NACE Rev. 2',
-        identifier: '62.01',
-        description: 'Computer programming activities (European classification)',
-        inDefinedTermSet: 'https://ec.europa.eu/eurostat/web/nace-rev2',
-      },
-      {
-        '@type': 'DefinedTerm',
-        name: 'ISIC Rev. 4',
-        identifier: '6201',
-        description: 'Computer programming activities (UN classification)',
-        inDefinedTermSet: 'https://unstats.un.org/unsd/publication/seriesm/seriesm_4rev4e.pdf',
-      },
-    ],
-    hasDefinedTerm: [
-      {
-        '@type': 'DefinedTerm',
-        name: 'Webdevelopment',
-        description: 'Ontwikkeling van websites en webapplicaties',
-        termCode: '62010-1',
-      },
-      {
-        '@type': 'DefinedTerm',
-        name: 'E-commerce development',
-        description: 'Ontwikkeling van online webshops en e-commerce platforms',
-        termCode: '62010-2',
-      },
-      {
-        '@type': 'DefinedTerm',
-        name: 'SEO dienstverlening',
-        description: 'Zoekmachine optimalisatie en online marketing',
-        termCode: '62010-3',
-      },
-      {
-        '@type': 'DefinedTerm',
-        name: '3D web experiences',
-        description: 'Ontwikkeling van interactieve 3D webapplicaties',
-        termCode: '62010-4',
-      },
-    ],
-    about: {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}#organization`,
-    },
-  };
-}
-
-// Helper function to generate Dutch industry certification schema
-function generateDutchIndustryCompliance() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Certification',
-    '@id': `${SITE_URL}#industry-compliance`,
-    name: 'Nederlandse IT Branche Compliance',
-    description: 'Compliance met Nederlandse IT branche standaarden en regelgeving',
-    certificationIdentification: [
-      {
-        '@type': 'DefinedTerm',
-        name: 'Nederlandse Beroepsaansprakelijkheid IT',
-        description: 'Beroepsaansprakelijkheidsverzekering voor IT-dienstverlening',
-        inDefinedTermSet: 'https://www.verbondvanzekeraars.nl/',
-      },
-      {
-        '@type': 'DefinedTerm',
-        name: 'KVK Handelsregistratie',
-        description: 'Officiële bedrijfsregistratie bij Nederlandse Kamer van Koophandel',
-        inDefinedTermSet: 'https://www.kvk.nl/',
-      },
-      {
-        '@type': 'DefinedTerm',
-        name: 'BTW-plichtig Nederland',
-        description: 'Geregistreerd voor Nederlandse BTW administratie',
-        inDefinedTermSet: 'https://www.belastingdienst.nl/',
-      },
-      {
-        '@type': 'DefinedTerm',
-        name: 'Nederlandse Arbeidsrecht Compliance',
-        description: 'Compliance met Nederlandse arbeidsrecht en CAO-afspraken',
-        inDefinedTermSet: 'https://www.government.nl/topics/labour-law',
-      },
-    ],
-    validFor: {
-      '@type': 'Duration',
-      value: 'P1Y',
-      description: 'Jaarlijks vernieuwd en gevalideerd',
-    },
-    recognizedBy: [
-      {
-        '@type': 'GovernmentOrganization',
-        name: 'Nederlandse Belastingdienst',
-        url: 'https://www.belastingdienst.nl/',
-      },
-      {
-        '@type': 'GovernmentOrganization',
-        name: 'Kamer van Koophandel Nederland',
-        url: 'https://www.kvk.nl/',
-      },
-    ],
-  };
-}
-
-// Helper function to generate Dutch business article schema
-function generateDutchBusinessArticleSchema(
-  articleTitle?: string, 
-  articleDescription?: string, 
-  publishedDate?: string,
-  category: 'guide' | 'news' | 'tutorial' | 'case-study' = 'guide'
-) {
-  const baseUrl = abs('/kennisbank');
-  const articleUrl = articleTitle 
-    ? abs(`/kennisbank/${articleTitle.toLowerCase().replace(/\s+/g, '-')}`)
-    : baseUrl;
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    '@id': `${articleUrl}#article`,
-    headline: articleTitle || 'Nederlandse Webdevelopment Gids',
-    description: articleDescription || 'Praktische gids voor webdevelopment en digitale marketing in Nederland',
-    url: articleUrl,
-    inLanguage: 'nl-NL',
-    author: {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}#organization`,
-      name: siteConfig.name,
-      url: abs('/'),
-      sameAs: getSocialProfiles(),
-    },
-    publisher: {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}#organization`,
-      name: siteConfig.name,
-      logo: {
-        '@type': 'ImageObject',
-        url: abs('/assets/logo/logo-proweb-lockup.svg'),
-        width: 600,
-        height: 60,
-      },
-    },
-    datePublished: publishedDate || new Date().toISOString(),
-    dateModified: new Date().toISOString(),
-    articleSection: category === 'guide' ? 'Business Gidsen' :
-                   category === 'news' ? 'Nieuws' :
-                   category === 'tutorial' ? 'Tutorials' : 'Case Studies',
-    keywords: [
-      'Nederlandse webdevelopment',
-      'website laten maken Nederland',
-      'Nederlandse webstandaarden',
-      'GDPR compliance Nederland',
-      'Nederlandse SEO',
-      'lokale SEO Nederland',
-      'Nederlandse betaalmethoden',
-      'KVK registratie',
-      'Nederlandse hosting',
-      'Dutch web guidelines',
-    ],
-    about: [
-      {
-        '@type': 'Thing',
-        name: 'Nederlandse Webdevelopment',
-        description: 'Webdevelopment diensten specifiek voor de Nederlandse markt',
-      },
-      {
-        '@type': 'Place',
+      validIn: {
+        '@type': 'Country',
         name: 'Netherlands',
-        address: {
-          '@type': 'PostalAddress',
-          addressCountry: 'NL',
+        identifier: 'NL',
+      },
+    };
+  }
+
+  // Helper function to generate professional accreditation schema
+  function generateProfessionalAccreditationSchema(): Record<string, unknown> {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      '@id': `${SITE_URL}#professional-accreditation`,
+      name: 'Nederlandse IT Professional Services',
+      description: 'Professionele IT-dienstverlening conform Nederlandse standaarden',
+      serviceType: 'Professional Web Development Services',
+      provider: {
+        '@id': `${SITE_URL}#organization`,
+      },
+      areaServed: {
+        '@type': 'Country',
+        name: 'Netherlands',
+        identifier: 'NL',
+      },
+      hasCredential: [
+        {
+          '@type': 'EducationalOccupationalCredential',
+          name: 'Nederlandse IT Vakbekwaamheid',
+          description: 'Certificering voor professionele webdevelopment diensten',
+          credentialCategory: 'Professional Certification',
+          recognizedBy: {
+            '@type': 'Organization',
+            name: 'Nederlandse IT brancheverenigingen',
+          },
+        },
+      ],
+      compliance: [
+        {
+          '@type': 'DefinedTerm',
+          name: 'Kwaliteit van IT-dienstverlening',
+          description: 'Kwaliteitsstandaarden voor Nederlandse IT-dienstverlening',
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'Nederlandse aansprakelijkheidsverzekering',
+          description: 'Beroepsaansprakelijkheidsverzekering conform Nederlandse eisen',
+        },
+      ],
+    };
+  }// Helper function to generate comprehensive Dutch service areas
+  function generateDutchServiceAreas() {
+    return [
+      // Provinces with major cities
+      {
+        '@type': 'State',
+        name: 'Drenthe',
+        identifier: 'DR',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Assen' },
+          { '@type': 'City', name: 'Emmen' },
+          { '@type': 'City', name: 'Hoogeveen' },
+          { '@type': 'City', name: 'Meppel' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Flevoland',
+        identifier: 'FL',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Lelystad' },
+          { '@type': 'City', name: 'Almere' },
+          { '@type': 'City', name: 'Dronten' },
+          { '@type': 'City', name: 'Urk' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Friesland',
+        identifier: 'FR',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Leeuwarden' },
+          { '@type': 'City', name: 'Sneek' },
+          { '@type': 'City', name: 'Heerenveen' },
+          { '@type': 'City', name: 'Drachten' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Gelderland',
+        identifier: 'GE',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Arnhem' },
+          { '@type': 'City', name: 'Nijmegen' },
+          { '@type': 'City', name: 'Apeldoorn' },
+          { '@type': 'City', name: 'Ede' },
+          { '@type': 'City', name: 'Zutphen' },
+          { '@type': 'City', name: 'Doetinchem' },
+          { '@type': 'City', name: 'Harderwijk' },
+          { '@type': 'City', name: 'Wageningen' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Groningen',
+        identifier: 'GR',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Groningen' },
+          { '@type': 'City', name: 'Stadskanaal' },
+          { '@type': 'City', name: 'Veendam' },
+          { '@type': 'City', name: 'Hoogezand' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Limburg',
+        identifier: 'LI',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Maastricht' },
+          { '@type': 'City', name: 'Venlo' },
+          { '@type': 'City', name: 'Heerlen' },
+          { '@type': 'City', name: 'Sittard-Geleen' },
+          { '@type': 'City', name: 'Roermond' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Noord-Brabant',
+        identifier: 'NB',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Eindhoven' },
+          { '@type': 'City', name: 'Tilburg' },
+          { '@type': 'City', name: 'Breda' },
+          { '@type': 'City', name: 's-Hertogenbosch' },
+          { '@type': 'City', name: 'Helmond' },
+          { '@type': 'City', name: 'Oss' },
+          { '@type': 'City', name: 'Bergen op Zoom' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Noord-Holland',
+        identifier: 'NH',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Amsterdam' },
+          { '@type': 'City', name: 'Haarlem' },
+          { '@type': 'City', name: 'Zaanstad' },
+          { '@type': 'City', name: 'Haarlemmermeer' },
+          { '@type': 'City', name: 'Alkmaar' },
+          { '@type': 'City', name: 'Hilversum' },
+          { '@type': 'City', name: 'Hoorn' },
+          { '@type': 'City', name: 'Purmerend' },
+          { '@type': 'City', name: 'Den Helder' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Overijssel',
+        identifier: 'OV',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Zwolle' },
+          { '@type': 'City', name: 'Enschede' },
+          { '@type': 'City', name: 'Deventer' },
+          { '@type': 'City', name: 'Hengelo' },
+          { '@type': 'City', name: 'Almelo' },
+          { '@type': 'City', name: 'Kampen' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Utrecht',
+        identifier: 'UT',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Utrecht' },
+          { '@type': 'City', name: 'Amersfoort' },
+          { '@type': 'City', name: 'Nieuwegein' },
+          { '@type': 'City', name: 'Veenendaal' },
+          { '@type': 'City', name: 'Zeist' },
+          { '@type': 'City', name: 'IJsselstein' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Zeeland',
+        identifier: 'ZE',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Middelburg' },
+          { '@type': 'City', name: 'Vlissingen' },
+          { '@type': 'City', name: 'Goes' },
+          { '@type': 'City', name: 'Terneuzen' },
+        ],
+      },
+      {
+        '@type': 'State',
+        name: 'Zuid-Holland',
+        identifier: 'ZH',
+        addressCountry: 'NL',
+        containsPlace: [
+          { '@type': 'City', name: 'Rotterdam' },
+          { '@type': 'City', name: 'Den Haag' },
+          { '@type': 'City', name: 'Leiden' },
+          { '@type': 'City', name: 'Dordrecht' },
+          { '@type': 'City', name: 'Zoetermeer' },
+          { '@type': 'City', name: 'Delft' },
+          { '@type': 'City', name: 'Gouda' },
+          { '@type': 'City', name: 'Alphen aan den Rijn' },
+          { '@type': 'City', name: 'Spijkenisse' },
+          { '@type': 'City', name: 'Capelle aan den IJssel' },
+        ],
+      },
+    ];
+  }
+
+  // Helper function to generate postal code regions for targeted service areas
+  function generatePostalCodeRegions() {
+    return [
+      // Major metropolitan areas by postal code
+      {
+        '@type': 'PostalCodeArea',
+        name: 'Amsterdam Regio',
+        postalCode: '10**',
+        addressCountry: 'NL',
+        description: 'Amsterdam en directe omgeving',
+      },
+      {
+        '@type': 'PostalCodeArea',
+        name: 'Rotterdam Regio',
+        postalCode: '30**',
+        addressCountry: 'NL',
+        description: 'Rotterdam en Rijnmond gebied',
+      },
+      {
+        '@type': 'PostalCodeArea',
+        name: 'Den Haag Regio',
+        postalCode: '25**',
+        addressCountry: 'NL',
+        description: 'Den Haag en Westland',
+      },
+      {
+        '@type': 'PostalCodeArea',
+        name: 'Utrecht Regio',
+        postalCode: '35**',
+        addressCountry: 'NL',
+        description: 'Utrecht en directe omgeving',
+      },
+      {
+        '@type': 'PostalCodeArea',
+        name: 'Eindhoven Regio',
+        postalCode: '56**',
+        addressCountry: 'NL',
+        description: 'Eindhoven en Brainport regio',
+      },
+      {
+        '@type': 'PostalCodeArea',
+        name: 'Groningen Regio',
+        postalCode: '97**',
+        addressCountry: 'NL',
+        description: 'Groningen en Noord-Nederland',
+      },
+    ];
+  }
+
+  // Helper function to generate Dutch review and rating schema
+  function generateDutchReviewSchema() {
+    return null;
+  }
+
+  // Helper function to generate Dutch Google Business Profile schema
+  function generateGoogleBusinessProfileSchema() {
+    const gmb_place_id = process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID;
+    const gmb_url = process.env.NEXT_PUBLIC_GOOGLE_BUSINESS_URL;
+
+    if (!gmb_place_id && !gmb_url) return null;
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      '@id': `${SITE_URL}#google-business-profile`,
+      name: `${siteConfig.name} - Google Mijn Bedrijf`,
+      description: 'Officieel Google Mijn Bedrijf profiel voor Nederlandse webdevelopment diensten',
+      ...(gmb_url && { url: gmb_url }),
+      ...(gmb_place_id && {
+        identifier: {
+          '@type': 'PropertyValue',
+          name: 'Google Place ID',
+          value: gmb_place_id,
+          description: 'Unieke Google Places identificatie',
+        },
+      }),
+      ...(gmb_url && { sameAs: gmb_url }),
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': gmb_url,
+        name: 'ProWeb Studio Google Mijn Bedrijf',
+        description: 'Google Business profiel',
+      },
+    };
+  }
+
+  // Helper function to generate Dutch industry awards and certifications
+  function generateDutchAwardsSchema() {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#awards-certifications`,
+      name: `${siteConfig.name} - Nederlandse Awards & Certificeringen`,
+      description: 'Erkende kwaliteit in Nederlandse webdevelopment industry',
+      award: [
+        {
+          '@type': 'Award',
+          name: 'Nederlandse Web Excellence Awards - Beste 3D Website 2024',
+          description: 'Winnaar categorie Innovatieve 3D Web Experiences Nederland',
+          dateReceived: '2024-03-15',
+          issuer: {
+            '@type': 'Organization',
+            name: 'Nederlandse Web Excellence Foundation',
+            url: 'https://webexcellence.nl/',
+          },
+        },
+        {
+          '@type': 'Award',
+          name: 'Top 100 Nederlandse Webdevelopment Bureaus 2024',
+          description: 'Gerangschikt in top 100 beste Nederlandse web agencies',
+          dateReceived: '2024-01-20',
+          issuer: {
+            '@type': 'Organization',
+            name: 'Webdesign Magazine Nederland',
+            url: 'https://webdesignmagazine.nl/',
+          },
+        },
+      ],
+      hasCredential: [
+        {
+          '@type': 'EducationalOccupationalCredential',
+          name: 'Google Partner Certificering Nederland',
+          description: 'Officiële Google Partner status voor Nederlandse markt',
+          credentialCategory: 'Professional Certification',
+          recognizedBy: {
+            '@type': 'Organization',
+            name: 'Google Nederland',
+            url: 'https://www.google.nl/',
+          },
+          validFrom: '2023-01-01',
+          validThrough: '2024-12-31',
+        },
+      ],
+      memberOf: [
+        {
+          '@type': 'Organization',
+          name: 'Nederlandse Vereniging van Webdevelopers (NVW)',
+          description: 'Professionele vereniging Nederlandse web developers',
+          url: 'https://www.nvw.nl/',
+        },
+      ],
+    };
+  }
+
+  // Helper function to generate Dutch business classification schema
+  function generateDutchBusinessClassification(sbiCode: string) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'CategoryCode',
+      '@id': `${SITE_URL}#business-classification`,
+      name: 'Nederlandse Bedrijfsclassificatie',
+      description: 'Standaard Bedrijfsindeling (SBI) en internationale classificaties',
+      codeValue: sbiCode,
+      inCodeSet: {
+        '@type': 'CategoryCodeSet',
+        name: 'Standaard Bedrijfsindeling (SBI) 2008',
+        description: 'Nederlandse standaard voor het classificeren van economische activiteiten',
+        url: 'https://www.cbs.nl/nl-nl/onze-diensten/methoden/classificaties/activiteiten/standaard-bedrijfsindeling--sbi--',
+        identifier: 'SBI2008',
+        inDefinedTermSet: 'https://www.cbs.nl/sbi/',
+      },
+      additionalType: [
+        {
+          '@type': 'DefinedTerm',
+          name: 'NACE Rev. 2',
+          identifier: '62.01',
+          description: 'Computer programming activities (European classification)',
+          inDefinedTermSet: 'https://ec.europa.eu/eurostat/web/nace-rev2',
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'ISIC Rev. 4',
+          identifier: '6201',
+          description: 'Computer programming activities (UN classification)',
+          inDefinedTermSet: 'https://unstats.un.org/unsd/publication/seriesm/seriesm_4rev4e.pdf',
+        },
+      ],
+      hasDefinedTerm: [
+        {
+          '@type': 'DefinedTerm',
+          name: 'Webdevelopment',
+          description: 'Ontwikkeling van websites en webapplicaties',
+          termCode: '62010-1',
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'E-commerce development',
+          description: 'Ontwikkeling van online webshops en e-commerce platforms',
+          termCode: '62010-2',
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'SEO dienstverlening',
+          description: 'Zoekmachine optimalisatie en online marketing',
+          termCode: '62010-3',
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: '3D web experiences',
+          description: 'Ontwikkeling van interactieve 3D webapplicaties',
+          termCode: '62010-4',
+        },
+      ],
+      about: {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}#organization`,
+      },
+    };
+  }
+
+  // Helper function to generate Dutch industry certification schema
+  function generateDutchIndustryCompliance() {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Certification',
+      '@id': `${SITE_URL}#industry-compliance`,
+      name: 'Nederlandse IT Branche Compliance',
+      description: 'Compliance met Nederlandse IT branche standaarden en regelgeving',
+      certificationIdentification: [
+        {
+          '@type': 'DefinedTerm',
+          name: 'Nederlandse Beroepsaansprakelijkheid IT',
+          description: 'Beroepsaansprakelijkheidsverzekering voor IT-dienstverlening',
+          inDefinedTermSet: 'https://www.verbondvanzekeraars.nl/',
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'KVK Handelsregistratie',
+          description: 'Officiële bedrijfsregistratie bij Nederlandse Kamer van Koophandel',
+          inDefinedTermSet: 'https://www.kvk.nl/',
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'BTW-plichtig Nederland',
+          description: 'Geregistreerd voor Nederlandse BTW administratie',
+          inDefinedTermSet: 'https://www.belastingdienst.nl/',
+        },
+        {
+          '@type': 'DefinedTerm',
+          name: 'Nederlandse Arbeidsrecht Compliance',
+          description: 'Compliance met Nederlandse arbeidsrecht en CAO-afspraken',
+          inDefinedTermSet: 'https://www.government.nl/topics/labour-law',
+        },
+      ],
+      validFor: {
+        '@type': 'Duration',
+        value: 'P1Y',
+        description: 'Jaarlijks vernieuwd en gevalideerd',
+      },
+      recognizedBy: [
+        {
+          '@type': 'GovernmentOrganization',
+          name: 'Nederlandse Belastingdienst',
+          url: 'https://www.belastingdienst.nl/',
+        },
+        {
+          '@type': 'GovernmentOrganization',
+          name: 'Kamer van Koophandel Nederland',
+          url: 'https://www.kvk.nl/',
+        },
+      ],
+    };
+  }
+
+  // Helper function to generate Dutch business article schema
+  function generateDutchBusinessArticleSchema(
+    articleTitle?: string,
+    articleDescription?: string,
+    publishedDate?: string,
+    category: 'guide' | 'news' | 'tutorial' | 'case-study' = 'guide'
+  ) {
+    const baseUrl = abs('/kennisbank');
+    const articleUrl = articleTitle
+      ? abs(`/kennisbank/${articleTitle.toLowerCase().replace(/\s+/g, '-')}`)
+      : baseUrl;
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      '@id': `${articleUrl}#article`,
+      headline: articleTitle || 'Nederlandse Webdevelopment Gids',
+      description: articleDescription || 'Praktische gids voor webdevelopment en digitale marketing in Nederland',
+      url: articleUrl,
+      inLanguage: 'nl-NL',
+      author: {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}#organization`,
+        name: siteConfig.name,
+        url: abs('/'),
+        sameAs: getSocialProfiles(),
+      },
+      publisher: {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}#organization`,
+        name: siteConfig.name,
+        logo: {
+          '@type': 'ImageObject',
+          url: abs('/assets/logo/logo-proweb-lockup.svg'),
+          width: 600,
+          height: 60,
         },
       },
-    ],
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': articleUrl,
-    },
-    isPartOf: {
-      '@type': 'WebSite',
-      '@id': `${SITE_URL}#website`,
-    },
-  };
-}
+      datePublished: publishedDate || new Date().toISOString(),
+      dateModified: new Date().toISOString(),
+      articleSection: category === 'guide' ? 'Business Gidsen' :
+        category === 'news' ? 'Nieuws' :
+          category === 'tutorial' ? 'Tutorials' : 'Case Studies',
+      keywords: [
+        'Nederlandse webdevelopment',
+        'website laten maken Nederland',
+        'Nederlandse webstandaarden',
+        'GDPR compliance Nederland',
+        'Nederlandse SEO',
+        'lokale SEO Nederland',
+        'Nederlandse betaalmethoden',
+        'KVK registratie',
+        'Nederlandse hosting',
+        'Dutch web guidelines',
+      ],
+      about: [
+        {
+          '@type': 'Thing',
+          name: 'Nederlandse Webdevelopment',
+          description: 'Webdevelopment diensten specifiek voor de Nederlandse markt',
+        },
+        {
+          '@type': 'Place',
+          name: 'Netherlands',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'NL',
+          },
+        },
+      ],
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': articleUrl,
+      },
+      isPartOf: {
+        '@type': 'WebSite',
+        '@id': `${SITE_URL}#website`,
+      },
+    };
+  }
 
-// Helper function to generate Dutch HowTo guide schema
-function generateDutchHowToGuideSchema(
-  guideTitle?: string,
-  guideDescription?: string,
-  steps?: Array<{ name: string; description: string }>,
-  category: 'website' | 'seo' | 'compliance' | 'marketing' = 'website'
-) {
-  const baseUrl = abs('/handleidingen');
-  const guideUrl = guideTitle 
-    ? abs(`/handleidingen/${guideTitle.toLowerCase().replace(/\s+/g, '-')}`)
-    : baseUrl;
+  // Helper function to generate Dutch HowTo guide schema
+  function generateDutchHowToGuideSchema(
+    guideTitle?: string,
+    guideDescription?: string,
+    steps?: Array<{ name: string; description: string }>,
+    category: 'website' | 'seo' | 'compliance' | 'marketing' = 'website'
+  ) {
+    const baseUrl = abs('/handleidingen');
+    const guideUrl = guideTitle
+      ? abs(`/handleidingen/${guideTitle.toLowerCase().replace(/\s+/g, '-')}`)
+      : baseUrl;
 
-  const defaultSteps = [
-    {
-      name: 'Plan uw Nederlandse website',
-      description: 'Bepaal doelgroep, functionaliteiten en Nederlandse compliance vereisten voor uw website.',
-    },
-    {
-      name: 'Kies Nederlandse hosting en domein',
-      description: 'Selecteer betrouwbare Nederlandse hosting provider en registreer .nl domein bij SIDN.',
-    },
-    {
-      name: 'Implementeer GDPR/AVG compliance',
-      description: 'Zorg voor juiste privacy statements, cookie consent en data processing volgens Nederlandse wetgeving.',
-    },
-    {
-      name: 'Optimaliseer voor Nederlandse SEO',
-      description: 'Gebruik Nederlandse zoektermen, lokale SEO en Google Mijn Bedrijf optimalisatie.',
-    },
-    {
-      name: 'Integreer Nederlandse betaalmethoden',
-      description: 'Implementeer iDEAL, Nederlandse banken en populaire payment providers zoals Mollie.',
-    },
-    {
-      name: 'Test en valideer volgens Nederlandse standaarden',
-      description: 'Controleer toegankelijkheid (WCAG), performance en Nederlandse gebruikerservaring.',
-    },
-  ];
+    const defaultSteps = [
+      {
+        name: 'Plan uw Nederlandse website',
+        description: 'Bepaal doelgroep, functionaliteiten en Nederlandse compliance vereisten voor uw website.',
+      },
+      {
+        name: 'Kies Nederlandse hosting en domein',
+        description: 'Selecteer betrouwbare Nederlandse hosting provider en registreer .nl domein bij SIDN.',
+      },
+      {
+        name: 'Implementeer GDPR/AVG compliance',
+        description: 'Zorg voor juiste privacy statements, cookie consent en data processing volgens Nederlandse wetgeving.',
+      },
+      {
+        name: 'Optimaliseer voor Nederlandse SEO',
+        description: 'Gebruik Nederlandse zoektermen, lokale SEO en Google Mijn Bedrijf optimalisatie.',
+      },
+      {
+        name: 'Integreer Nederlandse betaalmethoden',
+        description: 'Implementeer iDEAL, Nederlandse banken en populaire payment providers zoals Mollie.',
+      },
+      {
+        name: 'Test en valideer volgens Nederlandse standaarden',
+        description: 'Controleer toegankelijkheid (WCAG), performance en Nederlandse gebruikerservaring.',
+      },
+    ];
 
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
-    '@id': `${guideUrl}#howto`,
-    name: guideTitle || 'Stap-voor-stap gids: Website laten maken in Nederland',
-    description: guideDescription || 'Complete handleiding voor het ontwikkelen van een professionele website conform Nederlandse standaarden',
-    url: guideUrl,
-    inLanguage: 'nl-NL',
-    image: {
-      '@type': 'ImageObject',
-      url: abs('/assets/guides/dutch-website-guide.webp'),
-      width: 1200,
-      height: 630,
-      caption: guideTitle || 'Nederlandse Website Ontwikkeling Gids',
-    },
-    author: {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}#organization`,
-    },
-    publisher: {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}#organization`,
-    },
-    datePublished: new Date().toISOString(),
-    dateModified: new Date().toISOString(),
-    step: (steps || defaultSteps).map((step, index) => ({
-      '@type': 'HowToStep',
-      name: step.name,
-      text: step.description,
-      position: index + 1,
-      url: `${guideUrl}#stap-${index + 1}`,
-    })),
-    totalTime: 'PT4W', // 4 weeks typical timeline
-    estimatedCost: {
-      '@type': 'MonetaryAmount',
-      currency: 'EUR',
-      value: category === 'website' ? '3500' :
-             category === 'seo' ? '1500' :
-             category === 'compliance' ? '2000' : '2500',
-    },
-    supply: [
-      {
-        '@type': 'HowToSupply',
-        name: 'Nederlandse KVK registratie',
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      '@id': `${guideUrl}#howto`,
+      name: guideTitle || 'Stap-voor-stap gids: Website laten maken in Nederland',
+      description: guideDescription || 'Complete handleiding voor het ontwikkelen van een professionele website conform Nederlandse standaarden',
+      url: guideUrl,
+      inLanguage: 'nl-NL',
+      image: {
+        '@type': 'ImageObject',
+        url: abs('/assets/guides/dutch-website-guide.webp'),
+        width: 1200,
+        height: 630,
+        caption: guideTitle || 'Nederlandse Website Ontwikkeling Gids',
       },
-      {
-        '@type': 'HowToSupply',
-        name: 'BTW nummer',
+      author: {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}#organization`,
       },
-      {
-        '@type': 'HowToSupply',
-        name: 'Nederlandse bankrekening',
+      publisher: {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}#organization`,
       },
-      {
-        '@type': 'HowToSupply',
-        name: 'Bedrijfslogo en content',
+      datePublished: new Date().toISOString(),
+      dateModified: new Date().toISOString(),
+      step: (steps || defaultSteps).map((step, index) => ({
+        '@type': 'HowToStep',
+        name: step.name,
+        text: step.description,
+        position: index + 1,
+        url: `${guideUrl}#stap-${index + 1}`,
+      })),
+      totalTime: 'PT4W', // 4 weeks typical timeline
+      estimatedCost: {
+        '@type': 'MonetaryAmount',
+        currency: 'EUR',
+        value: category === 'website' ? '3500' :
+          category === 'seo' ? '1500' :
+            category === 'compliance' ? '2000' : '2500',
       },
-    ],
-    tool: [
-      {
-        '@type': 'HowToTool',
-        name: 'Next.js Development Framework',
-      },
-      {
-        '@type': 'HowToTool',
-        name: 'Nederlandse hosting provider',
-      },
-      {
-        '@type': 'HowToTool',
-        name: 'GDPR compliance tools',
-      },
-      {
-        '@type': 'HowToTool',
-        name: 'Nederlandse SEO tools',
-      },
-    ],
-    about: [
-      {
-        '@type': 'Thing',
-        name: 'Nederlandse Website Ontwikkeling',
-        description: 'Complete gids voor professionele website ontwikkeling in Nederland',
-      },
-    ],
-  };
-}
+      supply: [
+        {
+          '@type': 'HowToSupply',
+          name: 'Nederlandse KVK registratie',
+        },
+        {
+          '@type': 'HowToSupply',
+          name: 'BTW nummer',
+        },
+        {
+          '@type': 'HowToSupply',
+          name: 'Nederlandse bankrekening',
+        },
+        {
+          '@type': 'HowToSupply',
+          name: 'Bedrijfslogo en content',
+        },
+      ],
+      tool: [
+        {
+          '@type': 'HowToTool',
+          name: 'Next.js Development Framework',
+        },
+        {
+          '@type': 'HowToTool',
+          name: 'Nederlandse hosting provider',
+        },
+        {
+          '@type': 'HowToTool',
+          name: 'GDPR compliance tools',
+        },
+        {
+          '@type': 'HowToTool',
+          name: 'Nederlandse SEO tools',
+        },
+      ],
+      about: [
+        {
+          '@type': 'Thing',
+          name: 'Nederlandse Website Ontwikkeling',
+          description: 'Complete gids voor professionele website ontwikkeling in Nederland',
+        },
+      ],
+    };
+  }
 
   const socialProfiles = getSocialProfiles();
 
@@ -1321,7 +1178,7 @@ function generateDutchHowToGuideSchema(
   const addrZip = process.env.NEXT_PUBLIC_ADDR_ZIP;
   const addrRegion = process.env.NEXT_PUBLIC_ADDR_REGION || 'NH'; // Default to Noord-Holland
   const hasAddress = Boolean(addrStreet && addrCity && addrZip);
-  
+
   // Dutch business identifiers
   const kvkNumber = process.env.NEXT_PUBLIC_KVK;
   const btwNumber = process.env.NEXT_PUBLIC_BTW;
@@ -1644,46 +1501,46 @@ function generateDutchHowToGuideSchema(
   const pageBreadcrumbs = breadcrumbs.length > 0 ? breadcrumbs : generateBreadcrumbs(pageType);
   const breadcrumbSchema = pageBreadcrumbs.length > 0
     ? {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        '@id': `${currentUrl}#breadcrumb`,
-        inLanguage: 'nl-NL',
-        name: 'Navigatie breadcrumbs',
-        description: `Navigatiepad voor ${currentTitle}`,
-        itemListElement: pageBreadcrumbs.map((crumb, index) => ({
-          '@type': 'ListItem',
-          position: crumb.position || (index + 1),
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      '@id': `${currentUrl}#breadcrumb`,
+      inLanguage: 'nl-NL',
+      name: 'Navigatie breadcrumbs',
+      description: `Navigatiepad voor ${currentTitle}`,
+      itemListElement: pageBreadcrumbs.map((crumb, index) => ({
+        '@type': 'ListItem',
+        position: crumb.position || (index + 1),
+        name: crumb.name,
+        item: {
+          '@type': 'WebPage',
+          '@id': crumb.url,
           name: crumb.name,
-          item: {
-            '@type': 'WebPage',
-            '@id': crumb.url,
-            name: crumb.name,
-            url: crumb.url,
-            ...(index === 0 && {
-              // Mark the first item (home) as the website
-              isPartOf: {
-                '@id': `${SITE_URL}#website`,
-              },
-            }),
-            ...(index === pageBreadcrumbs.length - 1 && {
-              // Mark the current page
-              mainEntity: {
-                '@id': `${currentUrl}#webpage`,
-              },
-            }),
-          },
+          url: crumb.url,
+          ...(index === 0 && {
+            // Mark the first item (home) as the website
+            isPartOf: {
+              '@id': `${SITE_URL}#website`,
+            },
+          }),
+          ...(index === pageBreadcrumbs.length - 1 && {
+            // Mark the current page
+            mainEntity: {
+              '@id': `${currentUrl}#webpage`,
+            },
+          }),
+        },
+      })),
+      numberOfItems: pageBreadcrumbs.length,
+      // Add hierarchical parent-child relationships
+      ...(pageBreadcrumbs.length > 1 && {
+        hasPart: pageBreadcrumbs.slice(1).map((crumb, index) => ({
+          '@type': 'ListItem',
+          position: crumb.position || (index + 2),
+          name: crumb.name,
+          url: crumb.url,
         })),
-        numberOfItems: pageBreadcrumbs.length,
-        // Add hierarchical parent-child relationships
-        ...(pageBreadcrumbs.length > 1 && {
-          hasPart: pageBreadcrumbs.slice(1).map((crumb, index) => ({
-            '@type': 'ListItem',
-            position: crumb.position || (index + 2),
-            name: crumb.name,
-            url: crumb.url,
-          })),
-        }),
-      }
+      }),
+    }
     : null;
 
   // WebPage schema with proper per-page configuration

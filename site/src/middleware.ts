@@ -27,14 +27,14 @@ function getGeographicHint(ip: string, countryHeader?: string): string {
   if (DUTCH_IP_RANGES.some(range => ip.startsWith(range))) {
     return 'nl';
   }
-  
+
   // Check country header from CDN
   if (countryHeader) {
     const country = countryHeader.toLowerCase();
     if (country === 'nl' || country === 'netherlands') return 'nl';
     if (['de', 'be', 'fr', 'uk', 'gb'].includes(country)) return 'eu';
   }
-  
+
   return 'global';
 }
 
@@ -43,13 +43,13 @@ function getClientIP(req: NextRequest): string {
   const xForwardedFor = req.headers.get('x-forwarded-for');
   const xRealIp = req.headers.get('x-real-ip');
   const cfConnectingIp = req.headers.get('cf-connecting-ip');
-  
+
   if (xForwardedFor) {
     return xForwardedFor.split(',')[0].trim();
   }
   if (xRealIp) return xRealIp;
   if (cfConnectingIp) return cfConnectingIp;
-  
+
   return req.ip || 'unknown';
 }
 
@@ -61,7 +61,7 @@ async function isRateLimitedEdge(ip: string, path: string) {
 
 function detectBot(userAgent: string): boolean {
   if (!userAgent) return true; // No user agent is suspicious
-  
+
   const ua = userAgent.toLowerCase();
   return BOT_USER_AGENTS.some(bot => ua.includes(bot));
 }
@@ -69,23 +69,23 @@ function detectBot(userAgent: string): boolean {
 function detectSuspiciousContent(req: NextRequest): boolean {
   const url = req.nextUrl.toString();
   const userAgent = req.headers.get('user-agent') || '';
-  
+
   // Check URL for suspicious patterns
   if (SUSPICIOUS_PATTERNS.some(pattern => pattern.test(url))) {
     return true;
   }
-  
+
   // Check User-Agent for suspicious patterns
   if (SUSPICIOUS_PATTERNS.some(pattern => pattern.test(userAgent))) {
     return true;
   }
-  
+
   // Check for common attack vectors
   const searchParams = req.nextUrl.searchParams.toString();
   if (SUSPICIOUS_PATTERNS.some(pattern => pattern.test(searchParams))) {
     return true;
   }
-  
+
   return false;
 }
 
@@ -93,13 +93,13 @@ function validateRequest(req: NextRequest): { valid: boolean; reason?: string } 
   const userAgent = req.headers.get('user-agent') || '';
   const referer = req.headers.get('referer');
   const origin = req.headers.get('origin');
-  
+
   // Check for missing critical headers on POST requests
   if (req.method === 'POST') {
     if (!origin && !referer) {
       return { valid: false, reason: 'Missing origin and referer headers' };
     }
-    
+
     // Validate origin for API requests
     if (req.nextUrl.pathname.startsWith('/api/')) {
       const siteUrl = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/+$/, '');
@@ -110,18 +110,18 @@ function validateRequest(req: NextRequest): { valid: boolean; reason?: string } 
       const isVercelPreview = origin?.endsWith('.vercel.app');
       // Allow localhost on any port for development
       const isLocalhost = origin?.startsWith('http://localhost:') || origin?.startsWith('https://localhost:');
-      
+
       if (origin && !isVercelPreview && !isLocalhost && !allowedOrigins.includes(origin)) {
         return { valid: false, reason: 'Invalid origin' };
       }
     }
   }
-  
+
   // Check User-Agent length (too short or too long is suspicious)
   if (userAgent.length < 10 || userAgent.length > 500) {
     return { valid: false, reason: 'Suspicious user agent length' };
   }
-  
+
   return { valid: true };
 }
 
@@ -132,7 +132,13 @@ export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const userAgent = req.headers.get('user-agent') || '';
   const country = req.headers.get('x-vercel-ip-country') || req.headers.get('cf-ipcountry');
-  
+
+  // Redirect legacy /locaties/* to /steden/*
+  if (path.startsWith('/locaties')) {
+    const newPath = path.replace('/locaties', '/steden');
+    return NextResponse.redirect(new URL(newPath, req.url), 301);
+  }
+
   // Skip middleware for static files and Next.js internals
   if (
     path.startsWith('/_next/') ||
@@ -144,7 +150,7 @@ export async function middleware(req: NextRequest) {
 
   // Geographic optimization hints
   const geoHint = getGeographicHint(ip, country || undefined);
-  
+
   // 1. Bot Detection
   if (detectBot(userAgent) && !path.startsWith('/api/')) {
     // Allow bots for SEO but block from sensitive areas
@@ -158,7 +164,7 @@ export async function middleware(req: NextRequest) {
       return new NextResponse('Access Denied', { status: 403 });
     }
   }
-  
+
   // 2. Suspicious Content Detection
   if (detectSuspiciousContent(req)) {
     if (process.env.NODE_ENV !== 'production') {
@@ -166,7 +172,7 @@ export async function middleware(req: NextRequest) {
     } else {
       console.warn('Suspicious request blocked');
     }
-    
+
     if (path.startsWith('/api/')) {
       return NextResponse.json(
         { ok: false, error: 'Bad Request' },
@@ -175,7 +181,7 @@ export async function middleware(req: NextRequest) {
     }
     return new NextResponse('Bad Request', { status: 400 });
   }
-  
+
   // 3. Request Validation
   const validation = validateRequest(req);
   if (!validation.valid) {
@@ -184,7 +190,7 @@ export async function middleware(req: NextRequest) {
     } else {
       console.warn('Invalid request blocked');
     }
-    
+
     if (path.startsWith('/api/')) {
       return NextResponse.json(
         { ok: false, error: 'Unauthorized' },
@@ -193,7 +199,7 @@ export async function middleware(req: NextRequest) {
     }
     return new NextResponse('Unauthorized', { status: 401 });
   }
-  
+
   // 4. Rate Limiting
   if (await isRateLimitedEdge(ip, path)) {
     if (process.env.NODE_ENV !== 'production') {
@@ -201,49 +207,49 @@ export async function middleware(req: NextRequest) {
     } else {
       console.warn('Rate limit exceeded');
     }
-    
+
     const headers = {
       'Retry-After': '10', // 10 seconds
       'X-RateLimit-Limit': '100',
       'X-RateLimit-Remaining': '0',
       'X-RateLimit-Reset': (Date.now() + 10000).toString()
     };
-    
+
     if (path.startsWith('/api/')) {
       return NextResponse.json(
         { ok: false, error: 'Too Many Requests' },
         { status: 429, headers }
       );
     }
-    
-    return new NextResponse('Too Many Requests', { 
+
+    return new NextResponse('Too Many Requests', {
       status: 429,
       headers
     });
   }
-  
+
   // 5. Generate cryptographically secure nonce for CSP
   const nonceBytes = new Uint8Array(16);
   globalThis.crypto.getRandomValues(nonceBytes);
   const nonce = btoa(String.fromCharCode(...nonceBytes));
-  
+
   // 6. Set nonce on request headers for components to access
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set('x-nonce', nonce);
   requestHeaders.set('X-Geographic-Hint', geoHint);
   requestHeaders.set('X-Client-IP', ip);
-  
+
   // 7. Build strict CSP with nonce + strict-dynamic
   const isDev = process.env.NODE_ENV === 'development';
   const siteUrl = process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
-  
+
   // CSP Report-Only Mode: Oct 19-26, 2025 (7 days monitoring)
   // After validation, switch to enforcement by changing header name
   const cspMonitoringStart = new Date('2025-10-19T00:00:00Z');
   const cspMonitoringEnd = new Date('2025-10-26T00:00:00Z');
   const now = new Date();
   const isMonitoringPhase = now >= cspMonitoringStart && now <= cspMonitoringEnd;
-  
+
   const cspDirectives = [
     "default-src 'self'",
     // script-src: nonce + strict-dynamic; minimal whitelisted domains
@@ -265,17 +271,17 @@ export async function middleware(req: NextRequest) {
     "form-action 'self'",
     "upgrade-insecure-requests",
   ];
-  
+
   // Add CSP reporting endpoint
   if (siteUrl) {
     cspDirectives.push(`report-uri ${siteUrl}/api/csp-report`);
   }
-  
+
   const cspValue = cspDirectives.join('; ');
-  
+
   // 8. Apply Security Headers with CSP
   const response = NextResponse.next({ request: { headers: requestHeaders } });
-  
+
   // CSP Mode Selection: Report-Only for 7 days, then Enforce
   // CHANGE THIS LINE after monitoring period to enforce:
   // response.headers.set('Content-Security-Policy', cspValue);
@@ -285,7 +291,7 @@ export async function middleware(req: NextRequest) {
     // After Oct 26, 2025: switch to enforcement
     response.headers.set('Content-Security-Policy', cspValue);
   }
-  
+
   response.headers.set('x-nonce', nonce);
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('X-Frame-Options', 'DENY');
@@ -295,35 +301,35 @@ export async function middleware(req: NextRequest) {
   // Add geographic and performance headers
   response.headers.set('X-Geographic-Hint', geoHint);
   response.headers.set('X-Edge-Region', geoHint === 'nl' ? 'lhr1' : geoHint === 'eu' ? 'fra1' : 'cdg1');
-  
+
   // Enhanced caching for Dutch users
   if (geoHint === 'nl' && !path.startsWith('/api/')) {
     response.headers.set('Cache-Control', 'public, max-age=7200, s-maxage=86400, stale-while-revalidate=3600');
     response.headers.set('X-Cache-Strategy', 'dutch-optimized');
   }
-  
+
   // 8. Apply X-Robots-Tag for speeltuin route and error pages
   if (path === '/speeltuin' || path.startsWith('/speeltuin/')) {
     response.headers.set('X-Robots-Tag', 'noindex, follow');
   }
-  
+
   // Apply X-Robots-Tag for error pages (404, 500, etc.)
-  if (path === '/not-found' || path === '/error' || path.includes('/_error') || 
-      (req.nextUrl.searchParams.has('error') && req.nextUrl.searchParams.get('error'))) {
+  if (path === '/not-found' || path === '/error' || path.includes('/_error') ||
+    (req.nextUrl.searchParams.has('error') && req.nextUrl.searchParams.get('error'))) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow, nocache, nosnippet, noarchive, noimageindex');
   }
-  
+
   // Apply X-Robots-Tag for preview deployments
   const host = req.headers.get('host') || '';
   const isProdHost = /(^|\.)prowebstudio\.nl$/i.test(host);
   if (process.env.VERCEL_ENV === 'preview' && !isProdHost) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
   }
-  
+
   // Note: API headers (X-API-Version, Cache-Control, Pragma, Expires) are now
   // exclusively handled in next.config.mjs under async headers() for /api/:path*
   // to avoid duplication and ensure single source of truth
-  
+
   return response;
 }
 

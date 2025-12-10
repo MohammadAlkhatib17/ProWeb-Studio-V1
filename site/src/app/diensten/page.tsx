@@ -23,7 +23,7 @@ import { DutchBusinessInfo, LocalBusinessJSON } from '@/components/local-seo';
 import RelatedServices from '@/components/RelatedServices';
 import FAQSection from '@/components/sections/FAQSection';
 import SEOSchema from '@/components/SEOSchema';
-import { locations } from '@/config/internal-linking.config';
+import { steden } from '@/config/steden.config';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -113,7 +113,7 @@ export default function Diensten() {
     <main className="pt-20 md:pt-24 relative overflow-hidden">
       {/* Breadcrumbs */}
       <Breadcrumbs />
-      
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -139,7 +139,7 @@ export default function Diensten() {
               Meer dan Code. Oplossingen die Groeien.
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-4xl mx-auto leading-relaxed animate-slide-up">
-              Ontdek onze complete oplossingen voor professionele websites, 
+              Ontdek onze complete oplossingen voor professionele websites,
               van moderne webdesign tot geavanceerde functionaliteiten.
             </p>
           </div>
@@ -154,51 +154,51 @@ export default function Diensten() {
               // Map service indices to semantic IDs
               const serviceIds = ['website', 'webshop', 'seo'];
               const serviceId = serviceIds[i] || `service-${i + 1}`;
-              
-              return (
-              <div
-                key={i}
-                id={serviceId}
-                className="glass p-6 sm:p-7 md:p-8 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden animate-fade-in text-center flex flex-col hover:scale-105"
-                style={{ animationDelay: `${i * 0.2}s` }}
-              >
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
 
-                <div className="relative z-10 flex flex-col h-full">
-                  {/* Icon centered with background */}
-                  <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                    {service.icon}
-                  </div>
-                  
-                  {/* Title centered */}
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 group-hover:text-cyan-300 transition-colors duration-300 text-center">
-                    {service.title}
-                  </h3>
-                  
-                  {/* Description centered */}
-                  <p className="text-slate-200 mb-8 leading-relaxed text-center flex-grow">
-                    {service.description}
-                  </p>
-                  
-                  {/* Features section */}
-                  <div className="mt-auto">
-                    <h4 className="font-semibold text-cyan-300 mb-4 text-center">
-                      Inclusief:
-                    </h4>
-                    <ul className="space-y-3">
-                      {service.features.map((feature, j) => (
-                        <li key={j} className="flex items-center justify-center text-sm">
-                          <span className="text-cyan-300 mr-3 font-bold text-lg">
-                            ✓
-                          </span>
-                          <span className="text-gray-200 text-center">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+              return (
+                <div
+                  key={i}
+                  id={serviceId}
+                  className="glass p-6 sm:p-7 md:p-8 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden animate-fade-in text-center flex flex-col hover:scale-105"
+                  style={{ animationDelay: `${i * 0.2}s` }}
+                >
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+
+                  <div className="relative z-10 flex flex-col h-full">
+                    {/* Icon centered with background */}
+                    <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
+                      {service.icon}
+                    </div>
+
+                    {/* Title centered */}
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 group-hover:text-cyan-300 transition-colors duration-300 text-center">
+                      {service.title}
+                    </h3>
+
+                    {/* Description centered */}
+                    <p className="text-slate-200 mb-8 leading-relaxed text-center flex-grow">
+                      {service.description}
+                    </p>
+
+                    {/* Features section */}
+                    <div className="mt-auto">
+                      <h4 className="font-semibold text-cyan-300 mb-4 text-center">
+                        Inclusief:
+                      </h4>
+                      <ul className="space-y-3">
+                        {service.features.map((feature, j) => (
+                          <li key={j} className="flex items-center justify-center text-sm">
+                            <span className="text-cyan-300 mr-3 font-bold text-lg">
+                              ✓
+                            </span>
+                            <span className="text-gray-200 text-center">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
               );
             })}
           </div>
@@ -283,7 +283,7 @@ export default function Diensten() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-12 text-center gradient-text">
             Ontdek Meer van ProWeb Studio
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12">
             <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group text-center hover:scale-105">
               <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
@@ -293,11 +293,11 @@ export default function Diensten() {
                 Onze Werkwijze
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
-                Ontdek hoe wij van idee naar realisatie werken. Van strategische planning 
+                Ontdek hoe wij van idee naar realisatie werken. Van strategische planning
                 tot technische implementatie en doorlopende optimalisatie.
               </p>
-              <Link 
-                href="/werkwijze" 
+              <Link
+                href="/werkwijze"
                 className="inline-flex items-center text-cyan-300 hover:text-cyan-300 transition-colors text-sm font-medium"
               >
                 Bekijk onze projectaanpak
@@ -313,11 +313,11 @@ export default function Diensten() {
                 3D Technologie Speeltuin
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
-                Ervaar de kracht van moderne webtechnologie. Interactieve 3D-ervaringen, 
+                Ervaar de kracht van moderne webtechnologie. Interactieve 3D-ervaringen,
                 WebGL-experimenten en innovatieve gebruikersinterfaces.
               </p>
-              <Link 
-                href="/speeltuin" 
+              <Link
+                href="/speeltuin"
                 className="inline-flex items-center text-cyan-300 hover:text-cyan-300 transition-colors text-sm font-medium"
               >
                 Ontdek onze 3D showcases
@@ -333,11 +333,11 @@ export default function Diensten() {
                 Over ProWeb Studio
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
-                Leer het team kennen achter de innovatieve weboplossingen. Onze missie, 
+                Leer het team kennen achter de innovatieve weboplossingen. Onze missie,
                 visie en de expertise die we inzetten voor uw digitale succes.
               </p>
-              <Link 
-                href="/over-ons" 
+              <Link
+                href="/over-ons"
                 className="inline-flex items-center text-cyan-300 hover:text-cyan-300 transition-colors text-sm font-medium"
               >
                 Ontmoet het team
@@ -352,7 +352,7 @@ export default function Diensten() {
               Klaar voor een Website die Indruk Maakt?
             </h3>
             <p className="text-slate-200 mb-6 max-w-2xl mx-auto">
-              Van concept tot conversie - wij realiseren digitale oplossingen die uw bedrijf 
+              Van concept tot conversie - wij realiseren digitale oplossingen die uw bedrijf
               naar het volgende niveau tillen. Plan een gratis strategiesessie en ontdek de mogelijkheden.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -426,7 +426,7 @@ export default function Diensten() {
         <div className="max-w-4xl mx-auto">
           <article className="prose prose-invert prose-lg max-w-none text-center">
             <h2 className="text-3xl sm:text-4xl font-bold mb-8 gradient-text">Diensten die groei versnellen</h2>
-            
+
             <div className="text-left space-y-8">
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-cyan-300">Webdesign &amp; Development</h3>
@@ -438,7 +438,7 @@ export default function Diensten() {
                   MKB-bedrijf runt, uw online groei is onze prioriteit.
                 </p>
               </div>
-              
+
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-cyan-300">3D Web Experiences (WebGL/Three.js)</h3>
                 <p className="text-slate-200 leading-relaxed">
@@ -450,7 +450,7 @@ export default function Diensten() {
                   maken.
                 </p>
               </div>
-              
+
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-cyan-300">Performance Optimalisatie</h3>
                 <p className="text-slate-200 leading-relaxed">
@@ -461,7 +461,7 @@ export default function Diensten() {
                   website die zowel gebruikers als zoekmachines tevreden houdt.
                 </p>
               </div>
-              
+
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-cyan-300">SEO &amp; Content Strategie</h3>
                 <p className="text-slate-200 leading-relaxed">
@@ -473,7 +473,7 @@ export default function Diensten() {
                   klanten.
                 </p>
               </div>
-              
+
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-cyan-300">Headless CMS &amp; Integraties</h3>
                 <p className="text-slate-200 leading-relaxed">
@@ -484,7 +484,7 @@ export default function Diensten() {
                   zorgen voor een workflow die aansluit bij uw bedrijfsprocessen.
                 </p>
               </div>
-              
+
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-cyan-300">CRO (Conversion Rate Optimization)</h3>
                 <p className="text-slate-200 leading-relaxed">
@@ -496,7 +496,7 @@ export default function Diensten() {
                 </p>
               </div>
             </div>
-            
+
             <div className="text-center mt-8">
               <a href="/contact" className="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25">
                 Vraag een groeiscan aan
@@ -514,12 +514,12 @@ export default function Diensten() {
               Contact & Bedrijfsinformatie
             </h2>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-              Professionele webdevelopment diensten voor Nederlandse bedrijven. 
+              Professionele webdevelopment diensten voor Nederlandse bedrijven.
               Neem contact op voor een vrijblijvend gesprek.
             </p>
           </div>
-          
-          <DutchBusinessInfo 
+
+          <DutchBusinessInfo
             variant="full"
             showAddress={true}
             showOpeningHours={true}
@@ -532,18 +532,18 @@ export default function Diensten() {
       <FAQSection title="Vragen over onze Diensten">
         <DutchMarketFAQ />
       </FAQSection>
-      
+
       <RelatedServices showAll={true} />
-      
+
       <ContentSuggestions />
-      
+
       {/* LocalBusiness JSON-LD Schema */}
-      <LocalBusinessJSON 
-        areaServed={locations.map(loc => loc.name)}
+      <LocalBusinessJSON
+        areaServed={steden.map(stad => stad.name)}
       />
-      
-      <SEOSchema 
-        pageType="services" 
+
+      <SEOSchema
+        pageType="services"
         includeFAQ={true}
       />
     </main>

@@ -201,8 +201,8 @@ export const steden: Stad[] = [
     region: 'Brabant',
     province: 'Noord-Brabant',
     population: 157486,
-    description: 'Website laten maken Den Bosch (\'s-Hertogenbosch) - webdesign in de Brabantse hoofdstad. Voor lokale ondernemers en regionale bedrijven realiseren wij professionele websites die Bourgondische gastvrijheid combineren met digitale innovatie.',
-    shortDescription: 'Webdesign Den Bosch - Brabantse webdesign met digitale innovatie.',
+    description: 'Bourgondische gastvrijheid, digitale innovatie. Van de Sint-Janskathedraal tot het Paleisquartier, van de Tramkade tot de binnenstad - Den Bosch combineert historie met data-driven ondernemerschap. Wij bouwen websites, webshops en 3D-ervaringen die net zo karaktervol zijn als de stad zelf. Voor horeca-iconen, zakelijke dienstverleners en creatieve startups. Razendsnelle techniek verpakt in sfeervol design. Omdat een Bossche bol ook niet alleen maar lucht is.',
+    shortDescription: 'Websites, webshops en 3D-ervaringen voor Den Bosch - karaktervol en innovatief.',
     nearbySteden: ['tilburg', 'eindhoven', 'nijmegen', 'oss'],
     keywords: ['website laten maken den bosch', 'webdesign den bosch', 'website s-hertogenbosch', 'webshop den bosch', 'seo den bosch'],
     coordinates: { lat: 51.6978, lng: 5.3037 },
@@ -233,8 +233,8 @@ export function getStadBySlug(slug: string): Stad | undefined {
 export function getNearbySteden(stadSlug: string): Stad[] {
   const currentStad = getStadBySlug(stadSlug);
   if (!currentStad) return [];
-  
-  return steden.filter(stad => 
+
+  return steden.filter(stad =>
     currentStad.nearbySteden.includes(stad.slug)
   );
 }
@@ -267,7 +267,7 @@ export function getPopularSteden(limit: number = 5): Stad[] {
  */
 export function searchSteden(query: string): Stad[] {
   const lowerQuery = query.toLowerCase();
-  return steden.filter(stad => 
+  return steden.filter(stad =>
     stad.name.toLowerCase().includes(lowerQuery) ||
     stad.slug.includes(lowerQuery) ||
     stad.keywords.some(kw => kw.includes(lowerQuery))

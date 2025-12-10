@@ -5,20 +5,20 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
-import { 
-  getDienstBySlug, 
-  getRelatedDiensten, 
+import {
+  getDienstBySlug,
+  getRelatedDiensten,
   getAllDienstSlugs,
   isDienstAvailableInStad,
 } from '@/config/diensten.config';
-import { 
-  getStadBySlug, 
-  getNearbySteden, 
+import {
+  getStadBySlug,
+  getNearbySteden,
   getAllStadSlugs,
 } from '@/config/steden.config';
-import { 
-  generateStadDienstMetadata, 
-  generateStadDienstSchema 
+import {
+  generateStadDienstMetadata,
+  generateStadDienstSchema
 } from '@/lib/seo/steden-metadata';
 
 import type { Metadata } from 'next';
@@ -37,9 +37,9 @@ interface StadDienstPageProps {
 export async function generateStaticParams() {
   const stadSlugs = getAllStadSlugs();
   const dienstSlugs = getAllDienstSlugs();
-  
+
   const combinations = [];
-  
+
   for (const stadSlug of stadSlugs) {
     for (const dienstSlug of dienstSlugs) {
       // Only generate pages for valid combinations
@@ -51,7 +51,7 @@ export async function generateStaticParams() {
       }
     }
   }
-  
+
   return combinations;
 }
 
@@ -59,7 +59,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: StadDienstPageProps): Promise<Metadata> {
   const stad = getStadBySlug(params.stad);
   const dienst = getDienstBySlug(params.dienst);
-  
+
   if (!stad || !dienst) {
     return {
       title: 'Pagina niet gevonden | ProWeb Studio',
@@ -73,7 +73,7 @@ export async function generateMetadata({ params }: StadDienstPageProps): Promise
 export default function StadDienstPage({ params }: StadDienstPageProps) {
   const stad = getStadBySlug(params.stad);
   const dienst = getDienstBySlug(params.dienst);
-  
+
   // 404 if either stad or dienst not found, or if service not available in city
   if (!stad || !dienst || !isDienstAvailableInStad(dienst.slug, stad.slug)) {
     notFound();
@@ -81,13 +81,13 @@ export default function StadDienstPage({ params }: StadDienstPageProps) {
 
   const nearbySteden = getNearbySteden(stad.slug).slice(0, 3);
   const relatedDiensten = getRelatedDiensten(dienst.slug).slice(0, 3);
-  
+
   const stadDienstSchema = generateStadDienstSchema(stad, dienst);
 
   return (
     <main className="pt-20 md:pt-24 relative overflow-hidden">
       <Breadcrumbs />
-      
+
       {/* Schema */}
       <script
         type="application/ld+json"
@@ -112,23 +112,23 @@ export default function StadDienstPage({ params }: StadDienstPageProps) {
               <span className="text-slate-400">→</span>
               <span className="text-slate-400">{dienst.name}</span>
             </div>
-            
+
             <div className="flex items-center gap-3 mb-6">
               <span className="text-3xl">{dienst.icon}</span>
               <span className="text-cyan-300 font-medium">{stad.name} • {stad.province}</span>
             </div>
-            
+
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 {dienst.name}
               </span>
               {' '}in {stad.name}
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-slate-200 mb-8 leading-relaxed">
               {dienst.description} Speciaal voor ondernemers en bedrijven in {stad.name} en omgeving.
             </p>
-            
+
             <div className="flex items-center gap-6 mb-8 text-slate-400">
               <span className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
@@ -139,7 +139,7 @@ export default function StadDienstPage({ params }: StadDienstPageProps) {
                 {dienst.deliveryTime}
               </span>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 href="/contact"
@@ -160,50 +160,182 @@ export default function StadDienstPage({ params }: StadDienstPageProps) {
         </div>
       </section>
 
-      {/* Service Details */}
+      {/* Service Details - Uses Rich Features if available, else standard list */}
       <section className="py-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Features */}
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-6">
-                Wat is Inbegrepen?
-              </h2>
-              <p className="text-slate-400 mb-8 leading-relaxed">
-                Bij {dienst.name} in {stad.name} krijgt u een complete oplossing 
-                die is afgestemd op uw specifieke behoeften en doelen.
-              </p>
-              <ul className="space-y-4">
-                {dienst.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="text-cyan-300 text-xl mt-1 flex-shrink-0">✓</span>
-                    <span className="text-slate-200">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+          {dienst.featuresDetail ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+              {dienst.featuresDetail.map((feature, index) => (
+                <div
+                  key={index}
+                  className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300"
+                >
+                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
+                  <p className="text-slate-200 mb-6">{feature.description}</p>
+                  <ul className="space-y-2">
+                    {feature.details.map((detail, detailIndex) => (
+                      <li key={detailIndex} className="text-sm text-slate-400 flex items-center">
+                        <span className="text-cyan-300 mr-2">✓</span>
+                        {detail}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Features */}
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-6">
+                  Wat is Inbegrepen?
+                </h2>
+                <p className="text-slate-400 mb-8 leading-relaxed">
+                  Bij {dienst.name} in {stad.name} krijgt u een complete oplossing
+                  die is afgestemd op uw specifieke behoeften en doelen.
+                </p>
+                <ul className="space-y-4">
+                  {dienst.features.map((feature, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="text-cyan-300 text-xl mt-1 flex-shrink-0">✓</span>
+                      <span className="text-slate-200">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-            {/* Benefits */}
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-6">
-                Voordelen voor Uw Bedrijf
-              </h2>
-              <p className="text-slate-400 mb-8 leading-relaxed">
-                Ontdek hoe {dienst.name} uw bedrijf in {stad.name} naar 
-                een hoger niveau kan tillen.
-              </p>
-              <ul className="space-y-4">
-                {dienst.benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="text-blue-300 text-xl mt-1 flex-shrink-0">★</span>
-                    <span className="text-slate-200">{benefit}</span>
-                  </li>
-                ))}
-              </ul>
+              {/* Benefits */}
+              <div>
+                <h2 className="text-3xl font-bold text-white mb-6">
+                  Voordelen voor Uw Bedrijf
+                </h2>
+                <p className="text-slate-400 mb-8 leading-relaxed">
+                  Ontdek hoe {dienst.name} uw bedrijf in {stad.name} naar
+                  een hoger niveau kan tillen.
+                </p>
+                <ul className="space-y-4">
+                  {dienst.benefits.map((benefit, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="text-blue-300 text-xl mt-1 flex-shrink-0">★</span>
+                      <span className="text-slate-200">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
+
+      {/* Packages / Pricing Models - Render if available */}
+      {dienst.packages && (
+        <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                Pakketten &{' '}
+                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  Prijzen
+                </span>
+              </h2>
+              <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+                Transparante tarieven voor {stad.name}. Kies het pakket dat bij u past.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {dienst.packages.map((pkg, index) => (
+                <div
+                  key={index}
+                  className="bg-cosmic-800/40 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6 hover:border-primary-500/50 transition-all duration-300 hover:scale-105"
+                >
+                  <div className="text-center">
+                    <h3 className="text-xl font-semibold text-white mb-3">{pkg.name}</h3>
+                    <p className="text-slate-200 text-sm mb-4">{pkg.description}</p>
+                    <div className="text-2xl font-bold text-cyan-300 mb-4">
+                      Vanaf {pkg.price}
+                    </div>
+                    <ul className="space-y-2 mb-6 text-left">
+                      {pkg.features.map((feature, featureIndex) => (
+                        <li key={featureIndex} className="text-xs text-slate-400 flex items-center">
+                          <span className="text-cyan-300 mr-2">✓</span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <Button
+                      href="/contact"
+                      variant="secondary"
+                      size="normal"
+                      className="w-full"
+                    >
+                      Kies Pakket
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Process Section - Render if available */}
+      {dienst.process && (
+        <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                Ons{' '}
+                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  Ontwikkelproces
+                </span>
+              </h2>
+              <p className="text-lg text-slate-200 max-w-3xl mx-auto">
+                Van eerste gesprek tot succesvolle lancering in {stad.name}.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {dienst.process.map((phase, index) => (
+                <div
+                  key={index}
+                  className="relative bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 text-center"
+                >
+                  <div className="text-4xl font-bold text-cyan-400 mb-4">{phase.step}</div>
+                  <h3 className="text-xl font-semibold text-white mb-4">{phase.title}</h3>
+                  <p className="text-slate-200 mb-4">{phase.description}</p>
+                  <div className="text-sm text-cyan-300 font-medium">{phase.duration}</div>
+                  {index < (dienst.process?.length || 0) - 1 && (
+                    <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-0.5 bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQ Section - Render if available */}
+      {dienst.faq && (
+        <section className="py-section bg-cosmic-800/20">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-white mb-6">
+                Veelgestelde Vragen
+              </h2>
+            </div>
+            <div className="space-y-6">
+              {dienst.faq.map((item, index) => (
+                <div key={index} className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-white mb-3">{item.question}</h3>
+                  <p className="text-slate-200 leading-relaxed">{item.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Target Audience & Use Cases */}
       <section className="py-section bg-cosmic-800/20">
@@ -382,12 +514,12 @@ export default function StadDienstPage({ params }: StadDienstPageProps) {
               Start Vandaag Nog
             </h2>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-              Klaar om te beginnen met {dienst.name} in {stad.name}? 
+              Klaar om te beginnen met {dienst.name} in {stad.name}?
               Neem contact op voor een vrijblijvend gesprek.
             </p>
           </div>
-          
-          <DutchBusinessInfo 
+
+          <DutchBusinessInfo
             variant="full"
             showAddress={true}
             showOpeningHours={true}
@@ -397,22 +529,22 @@ export default function StadDienstPage({ params }: StadDienstPageProps) {
         </div>
       </section>
 
-      <ContentSuggestions 
+      <ContentSuggestions
         customSuggestions={[
-          { 
-            title: 'Vraag Offerte Aan', 
-            href: '/contact', 
-            description: `Plan een gesprek over ${dienst.name} in ${stad.name}` 
+          {
+            title: 'Vraag Offerte Aan',
+            href: '/contact',
+            description: `Plan een gesprek over ${dienst.name} in ${stad.name}`
           },
-          { 
-            title: `Andere Diensten in ${stad.name}`, 
-            href: `/steden/${stad.slug}`, 
-            description: 'Bekijk alle beschikbare diensten' 
+          {
+            title: `Andere Diensten in ${stad.name}`,
+            href: `/steden/${stad.slug}`,
+            description: 'Bekijk alle beschikbare diensten'
           },
-          { 
-            title: 'Onze Werkwijze', 
-            href: '/werkwijze', 
-            description: 'Hoe wij samen tot resultaat komen' 
+          {
+            title: 'Onze Werkwijze',
+            href: '/werkwijze',
+            description: 'Hoe wij samen tot resultaat komen'
           }
         ]}
       />

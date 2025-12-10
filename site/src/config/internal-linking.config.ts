@@ -67,98 +67,7 @@ export const services: ServiceLink[] = [
 ];
 
 // Dutch locations for local SEO and internal linking
-export const locations: LocationPage[] = [
-  {
-    name: 'Amsterdam',
-    slug: 'amsterdam',
-    region: 'Noord-Holland',
-    population: 872680,
-    description: 'Professionele webdesign en ontwikkeling in Amsterdam. Lokale expertise voor Nederlandse bedrijven.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen'],
-    nearbyLocations: ['haarlem', 'almere', 'utrecht']
-  },
-  {
-    name: 'Rotterdam',
-    slug: 'rotterdam',
-    region: 'Zuid-Holland',
-    population: 651446,
-    description: 'Webdesign Rotterdam - moderne websites voor bedrijven in de havenstad.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['den-haag', 'dordrecht', 'breda']
-  },
-  {
-    name: 'Utrecht',
-    slug: 'utrecht',
-    region: 'Utrecht',
-    population: 361924,
-    description: 'Website laten maken Utrecht - centraal gelegen webdesign expertise.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen'],
-    nearbyLocations: ['amsterdam', 'hilversum', 'amersfoort']
-  },
-  {
-    name: 'Den Haag',
-    slug: 'den-haag',
-    region: 'Zuid-Holland',
-    population: 548320,
-    description: 'Webdesign Den Haag - professionele websites voor overheid en bedrijfsleven.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['rotterdam', 'leiden', 'delft']
-  },
-  {
-    name: 'Eindhoven',
-    slug: 'eindhoven',
-    region: 'Noord-Brabant',
-    population: 238326,
-    description: 'Website ontwikkeling Eindhoven - innovatieve weboplossingen in Brainport.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['tilburg', 'breda', 'helmond']
-  },
-  {
-    name: 'Tilburg',
-    slug: 'tilburg',
-    region: 'Noord-Brabant',
-    population: 223578,
-    description: 'Webdesign Tilburg - kwaliteitswebsites voor bedrijven in Noord-Brabant.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['eindhoven', 'breda', 'den-bosch']
-  },
-  {
-    name: 'Groningen',
-    slug: 'groningen',
-    region: 'Groningen',
-    population: 235287,
-    description: 'Website laten maken Groningen - noordelijke expertise in webdesign.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['assen', 'leeuwarden', 'emmen']
-  },
-  {
-    name: 'Almere',
-    slug: 'almere',
-    region: 'Flevoland',
-    population: 218096,
-    description: 'Webdesign Almere - moderne websites voor de snelstgroeiende stad.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['amsterdam', 'lelystad', 'hilversum']
-  },
-  {
-    name: 'Breda',
-    slug: 'breda',
-    region: 'Noord-Brabant',
-    population: 184403,
-    description: 'Website ontwikkeling Breda - professionele weboplossingen in West-Brabant.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['tilburg', 'rotterdam', 'bergen-op-zoom']
-  },
-  {
-    name: 'Nijmegen',
-    slug: 'nijmegen',
-    region: 'Gelderland',
-    population: 179073,
-    description: 'Webdesign Nijmegen - historische stad, moderne websites.',
-    relatedServices: ['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'],
-    nearbyLocations: ['arnhem', 'den-bosch', 'venlo']
-  }
-];
+// locations data removed - replaced by steden.config.ts
 
 // Strategic footer link groups for better organization
 export const footerLinkGroups: LinkGroup[] = [
@@ -176,12 +85,12 @@ export const footerLinkGroups: LinkGroup[] = [
   {
     title: 'Locaties',
     links: [
-      { title: 'Website Laten Maken Amsterdam', href: '/locaties/amsterdam', priority: 'high' },
-      { title: 'Webdesign Rotterdam', href: '/locaties/rotterdam', priority: 'high' },
-      { title: 'Website Ontwikkeling Utrecht', href: '/locaties/utrecht', priority: 'high' },
-      { title: 'Webdesign Den Haag', href: '/locaties/den-haag', priority: 'medium' },
-      { title: 'Website Laten Maken Eindhoven', href: '/locaties/eindhoven', priority: 'medium' },
-      { title: 'Alle Locaties', href: '/locaties', priority: 'low' }
+      { title: 'Website Laten Maken Amsterdam', href: '/steden/amsterdam', priority: 'high' },
+      { title: 'Webdesign Rotterdam', href: '/steden/rotterdam', priority: 'high' },
+      { title: 'Website Ontwikkeling Utrecht', href: '/steden/utrecht', priority: 'high' },
+      { title: 'Webdesign Den Haag', href: '/steden/den-haag', priority: 'medium' },
+      { title: 'Website Laten Maken Eindhoven', href: '/steden/eindhoven', priority: 'medium' },
+      { title: 'Alle Locaties', href: '/steden', priority: 'low' }
     ]
   },
   {
@@ -207,7 +116,7 @@ export const footerLinkGroups: LinkGroup[] = [
 ];
 
 // Content suggestions based on current page
-export const contentSuggestions: Record<string, Array<{title: string; href: string; description: string}>> = {
+export const contentSuggestions: Record<string, Array<{ title: string; href: string; description: string }>> = {
   '/diensten': [
     { title: 'Bekijk Ons Portfolio', href: '/portfolio', description: 'Ontdek voorbeelden van onze professionele websites' },
     { title: 'Onze Werkwijze', href: '/werkwijze', description: 'Leer meer over ons transparante ontwikkelproces' },
@@ -239,24 +148,16 @@ export const contentSuggestions: Record<string, Array<{title: string; href: stri
 export function getRelatedServices(currentService: string): ServiceLink[] {
   const current = services.find(s => s.href.includes(currentService));
   if (!current) return [];
-  
-  return services.filter(s => 
-    current.relatedServices.some(related => s.href.includes(related)) && 
+
+  return services.filter(s =>
+    current.relatedServices.some(related => s.href.includes(related)) &&
     s.href !== current.href
   ).slice(0, 3);
 }
 
-// Get nearby locations for a specific location
-export function getNearbyLocations(currentLocation: string): LocationPage[] {
-  const current = locations.find(l => l.slug === currentLocation);
-  if (!current) return [];
-  
-  return locations.filter(l => 
-    current.nearbyLocations.includes(l.slug)
-  ).slice(0, 3);
-}
+// getNearbyLocations removed - use steden.config.ts functions
 
 // Get content suggestions for current page
-export function getContentSuggestions(pathname: string): Array<{title: string; href: string; description: string}> {
+export function getContentSuggestions(pathname: string): Array<{ title: string; href: string; description: string }> {
   return contentSuggestions[pathname] || [];
 }

@@ -5,11 +5,15 @@ export const siteConfig = {
     'Wij ontwerpen en bouwen snelle, veilige en schaalbare 3D‑websites die scoren in Google en converteren.',
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, ''),
   email: process.env.NEXT_PUBLIC_CONTACT_INBOX || process.env.CONTACT_INBOX || 'contact@prowebstudio.nl',
-  phone: process.env.NEXT_PUBLIC_PHONE || process.env.PHONE || '+31000000000',
+  phone: process.env.NEXT_PUBLIC_PHONE || process.env.PHONE || '', // Set via environment variable
+  company: {
+    kvk: process.env.NEXT_PUBLIC_KVK || '93769865',
+    btw: process.env.NEXT_PUBLIC_BTW || 'NL005041113B60',
+  },
   social: {
-    linkedin: 'https://linkedin.com/company/proweb-studio',
-    github: 'https://github.com/proweb-studio',
-    twitter: 'https://twitter.com/prowebstudio_nl',
+    linkedin: process.env.NEXT_PUBLIC_SOCIAL_LINKEDIN || 'https://linkedin.com/company/proweb-studio',
+    github: process.env.NEXT_PUBLIC_SOCIAL_GITHUB || 'https://github.com/proweb-studio',
+    twitter: process.env.NEXT_PUBLIC_SOCIAL_TWITTER || 'https://twitter.com/prowebstudio_nl',
   },
   navigation: [
     { name: 'Home', href: '/' },
@@ -21,7 +25,7 @@ export const siteConfig = {
     { name: 'Contact', href: '/contact' },
   ],
   links: {
-    calcom: process.env.NEXT_PUBLIC_CALCOM_URL || 'https://cal.com/your-handle',
+    calcom: process.env.NEXT_PUBLIC_CALCOM_URL || 'https://cal.com/prowebstudio',
   },
   analytics: {
     plausibleDomain:

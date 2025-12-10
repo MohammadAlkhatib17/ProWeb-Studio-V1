@@ -20,9 +20,9 @@ export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
 export async function POST(request: NextRequest) {
   try {
     // Only accept monitoring data if enabled
-    const isEnabled = process.env.NEXT_PUBLIC_ENABLE_MONITORING === 'true' || 
-                     process.env.NODE_ENV === 'development';
-    
+    const isEnabled = process.env.NEXT_PUBLIC_ENABLE_MONITORING === 'true' ||
+      process.env.NODE_ENV === 'development';
+
     if (!isEnabled) {
       return NextResponse.json(
         { success: false, error: 'Monitoring not enabled' },
@@ -30,8 +30,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const event: VitalEvent = await request.json();
-    
+    // Read body as text first to handle empty bodies safely
+    const bodyText = await request.text();
+    if (!bodyText) {
+      return NextResponse.json(
+        { success: false, error: 'Empty request body' },
+        { status: 400 }
+      );
+    }
+
+    const event: VitalEvent = JSON.parse(bodyText);
+
     // Basic validation
     if (!event.metric || !event.timestamp || !event.url) {
       return NextResponse.json(
@@ -45,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { success: true, timestamp: event.timestamp },
-      { 
+      {
         status: 200,
         headers: { 'Cache-Control': 'no-store' }
       }
@@ -68,10 +77,10 @@ export async function GET(request: NextRequest) {
     const isDevMode = process.env.NODE_ENV === 'development';
     const authToken = request.headers.get('authorization');
     const expectedToken = process.env.MONITORING_AUTH_TOKEN;
-    
-    const isAuthorized = isDevMode || 
-                        (expectedToken && authToken === `Bearer ${expectedToken}`);
-    
+
+    const isAuthorized = isDevMode ||
+      (expectedToken && authToken === `Bearer ${expectedToken}`);
+
     if (!isAuthorized) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
@@ -96,7 +105,7 @@ export async function GET(request: NextRequest) {
 
     // Return recent events
     const events = getVitalEvents(limit);
-    
+
     return NextResponse.json(
       { success: true, events, count: events.length },
       { headers: { 'Cache-Control': 'no-store' } }

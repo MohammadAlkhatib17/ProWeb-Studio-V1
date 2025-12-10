@@ -30,7 +30,7 @@ const cityThemes: Record<string, { primary: string; secondary: string; accent: s
 
 export default function CityHeroScene({ citySlug }: CityHeroSceneProps) {
   const reduced = useReducedMotion();
-  const { optimizedSettings, capabilities } = useDeviceCapabilities();
+  const { capabilities } = useDeviceCapabilities();
 
   // Get city theme or fallback to Amsterdam theme
   const theme = cityThemes[citySlug] || cityThemes.amsterdam;

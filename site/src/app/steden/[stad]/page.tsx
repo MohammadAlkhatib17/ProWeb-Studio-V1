@@ -1,20 +1,32 @@
+import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
 import { getDienstBySlug } from '@/config/diensten.config';
-import { 
-  getStadBySlug, 
-  getNearbySteden, 
+import {
+  getStadBySlug,
+  getNearbySteden,
   getAllStadSlugs,
   getServicesForStad,
 } from '@/config/steden.config';
+import SEOSchema from '@/components/SEOSchema';
 import { generateStadMetadata, generateStadSchema } from '@/lib/seo/steden-metadata';
 
-import type { Metadata } from 'next';
+// Dynamic imports for 3D elements to avoid SSR issues
+const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
+  ssr: false,
+  loading: () => null,
+});
+
+const CityHeroScene = dynamicImport(() => import('@/three/CityHeroScene'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export const dynamic = 'force-static';
 export const revalidate = 172800; // 48 hours ISR
@@ -35,7 +47,7 @@ export async function generateStaticParams() {
 // Generate metadata for each city
 export async function generateMetadata({ params }: StadPageProps): Promise<Metadata> {
   const stad = getStadBySlug(params.stad);
-  
+
   if (!stad) {
     return {
       title: 'Stad niet gevonden | ProWeb Studio',
@@ -47,26 +59,30 @@ export async function generateMetadata({ params }: StadPageProps): Promise<Metad
 }
 
 export default function StadPage({ params }: StadPageProps) {
-  const stad = getStadBySlug(params.stad);
-  
+  const { stad: stadSlug } = params;
+  const stad = getStadBySlug(stadSlug);
+
   if (!stad) {
     notFound();
   }
 
-  const nearbySteden = getNearbySteden(stad.slug);
-  
-  // Get all available services for this city (now returns all services)
-  const availableServiceSlugs = getServicesForStad(stad.slug);
-  const availableDiensten = availableServiceSlugs
+  // Get all available services for this city
+  const availableDiensten = getServicesForStad(stadSlug)
     .map(slug => getDienstBySlug(slug))
     .filter((dienst): dienst is NonNullable<typeof dienst> => dienst !== undefined);
 
+  const nearbySteden = getNearbySteden(stadSlug);
   const stadSchema = generateStadSchema(stad);
 
   return (
-    <main className="pt-20 md:pt-24 relative overflow-hidden">
-      <Breadcrumbs />
-      
+    <main className="relative content-safe-top pt-20 md:pt-24 overflow-hidden">
+      <SEOSchema
+        pageType="local"
+        pageTitle={`Website Laten Maken ${stad.name}`}
+        pageDescription={stad.description}
+        cityName={stad.name}
+      />
+
       {/* Schema */}
       <script
         type="application/ld+json"
@@ -75,194 +91,165 @@ export default function StadPage({ params }: StadPageProps) {
         }}
       />
 
-      {/* Hero Section */}
-      <section className="relative py-section-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="text-2xl">📍</span>
-              <span className="text-cyan-300 font-medium">{stad.province} • {stad.region}</span>
+      <Breadcrumbs />
+
+      {/* Hero Section with 3D Background */}
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-section-lg">
+        {/* 3D Scene Layer */}
+        <div className="absolute inset-0 z-0">
+          <HeroCanvas>
+            <CityHeroScene citySlug={stad.slug} />
+          </HeroCanvas>
+          {/* Overlay to ensure text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-cosmic-900/40 via-cosmic-900/60 to-cosmic-900 pointer-events-none" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/20 text-cyan-300 text-sm font-medium mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(34,211,238,0.2)] animate-fade-in">
+            <span className="text-base">📍</span>
+            <span className="uppercase tracking-wide text-xs">{stad.province} • {stad.region}</span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-tight tracking-tight drop-shadow-2xl">
+            Website laten maken{' '}
+            <span className="block mt-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-gradient-x p-2">
+              {stad.name}
+            </span>
+          </h1>
+
+          <p className="text-xl md:text-2xl text-slate-100 mb-10 leading-relaxed max-w-3xl mx-auto drop-shadow-lg font-light">
+            {stad.description}
+          </p>
+
+          <div className="flex flex-wrap justify-center items-center gap-4 mb-12">
+            <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-black/40 border border-white/10 backdrop-blur-lg hover:border-cyan-500/50 transition-colors duration-300">
+              <div className="w-2.5 h-2.5 bg-cyan-400 rounded-full shadow-[0_0_10px_#22d3ee] animate-pulse"></div>
+              <span className="text-slate-200 font-medium">{stad.population.toLocaleString('nl-NL')} inwoners</span>
             </div>
-            
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
-              Website laten maken{' '}
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                {stad.name}
-              </span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-slate-200 mb-8 leading-relaxed">
-              {stad.description}
-            </p>
-            
-            <div className="flex items-center gap-6 mb-8 text-slate-400">
-              <span className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
-                {stad.population.toLocaleString('nl-NL')} inwoners
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
-                {availableDiensten.length} diensten beschikbaar
-              </span>
+            <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-black/40 border border-white/10 backdrop-blur-lg hover:border-purple-500/50 transition-colors duration-300">
+              <div className="w-2.5 h-2.5 bg-purple-400 rounded-full shadow-[0_0_10px_#c084fc]"></div>
+              <span className="text-slate-200 font-medium">{availableDiensten.length} premium diensten</span>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                href="/contact"
-                variant="primary"
-                size="large"
-              >
-                Start Uw Project in {stad.name} →
-              </Button>
-              <Button
-                href="/portfolio"
-                variant="secondary"
-                size="large"
-              >
-                Bekijk Portfolio
-              </Button>
-            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+            <Button
+              href="/contact"
+              variant="primary"
+              size="large"
+              className="shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] transform hover:-translate-y-1 transition-all duration-300"
+            >
+              Start Project in {stad.name}
+            </Button>
+            <Button
+              href="#diensten"
+              variant="secondary"
+              size="large"
+              className="backdrop-blur-xl bg-white/5 border-white/10 hover:bg-white/10"
+            >
+              Ontdek Onze Diensten
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Available Services */}
-      <section className="py-section">
+      {/* Available Services - Genius Grid */}
+      <section id="diensten" className="py-section relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Onze Diensten in {stad.name}
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Digitale Oplossingen voor <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">{stad.name}</span>
             </h2>
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-              Professionele webdiensten speciaal afgestemd op de behoeften 
-              van bedrijven in {stad.name} en omgeving.
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+              Wij leveren geen websites, wij leveren groei. Kies uw dienst.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {availableDiensten.map((dienst) => (
               <Link
                 key={dienst.slug}
                 href={`/steden/${stad.slug}/${dienst.slug}`}
-                className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:bg-cosmic-800/50"
+                className="group relative flex flex-col bg-cosmic-900/40 border border-white/5 rounded-3xl p-8 hover:border-cyan-500/50 transition-all duration-500 hover:bg-cosmic-800/60 hover:shadow-[0_10px_40px_-10px_rgba(6,182,212,0.2)] hover:-translate-y-2 overflow-hidden"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <span className="text-3xl">{dienst.icon}</span>
-                  <span className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded">
-                    {dienst.deliveryTime}
-                  </span>
+                {/* Hover Gradient Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div className="relative z-10 mb-8 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-800 to-black border border-gray-700 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 group-hover:border-cyan-500/30">
+                  <span className="text-4xl filter drop-shadow-md">{dienst.icon}</span>
                 </div>
-                
-                <h3 className="text-xl font-semibold text-white mb-4 group-hover:text-cyan-300 transition-colors">
+
+                <h3 className="relative z-10 text-2xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors duration-300">
                   {dienst.name}
                 </h3>
-                
-                <p className="text-slate-400 text-sm leading-relaxed mb-4">
+
+                <p className="relative z-10 text-slate-400 text-base leading-relaxed mb-8 flex-grow group-hover:text-slate-300 transition-colors">
                   {dienst.shortDescription}
                 </p>
-                
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-cyan-300 font-medium">
-                    Vanaf {dienst.pricing.from}
-                  </span>
-                  <span className="text-cyan-300 group-hover:translate-x-1 transition-transform duration-200">
-                    →
-                  </span>
+
+                <div className="relative z-10 pt-6 border-t border-white/5 flex items-center justify-between mt-auto">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Investering vanaf</span>
+                    <span className="text-cyan-300 font-bold font-mono text-lg shadow-cyan-900/50 text-shadow-sm">
+                      {dienst.pricing.from}
+                    </span>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-white/5 border border-white/5 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-black group-hover:border-cyan-400 transition-all duration-300 shadow-lg">
+                    <span className="transform group-hover:translate-x-1 transition-transform font-bold">→</span>
+                  </div>
                 </div>
               </Link>
             ))}
           </div>
-
-          {availableDiensten.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-slate-400 mb-6">
-                Alle onze diensten zijn beschikbaar in {stad.name}.
-              </p>
-              <Link
-                href="/diensten"
-                className="inline-flex items-center px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-cosmic-900 font-semibold rounded-lg transition-colors duration-200"
-              >
-                Bekijk Alle Diensten
-                <span className="ml-2">→</span>
-              </Link>
-            </div>
-          )}
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-section bg-cosmic-800/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Waarom Kiezen voor ProWeb Studio in {stad.name}?
+      {/* Why Choose Us Section - Modernized */}
+      <section className="py-section bg-cosmic-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Waarom ProWeb Studio in {stad.name}?
             </h2>
+            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+              Landelijke expertise, lokaal hart. Wij kennen de markt in {stad.region}.
+            </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-cyan-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <span className="text-cosmic-900 font-bold text-lg">1</span>
+            {[
+              {
+                title: 'Lokale Marktkennis',
+                desc: `Wij spreken de taal van ${stad.name}. Uw website voelt vertrouwd voor uw klanten.`,
+                icon: '🏙️'
+              },
+              {
+                title: 'Nummer 1 in Google',
+                desc: `Onze SEO-strategieën zijn getuned op de concurrentie in ${stad.region}.`,
+                icon: '🚀'
+              },
+              {
+                title: 'Geen Uurtje-Factuurtje',
+                desc: 'Transparante vaste prijzen. U weet vooraf precies waar u aan toe bent.',
+                icon: '💎'
+              },
+              {
+                title: 'Bewezen Track Record',
+                desc: `Sluit u aan bij succesvolle ondernemers in ${stad.province} die voor kwaliteit kozen.`,
+                icon: '⭐'
+              }
+            ].map((item, i) => (
+              <div key={i} className="group flex gap-6 p-8 rounded-3xl bg-cosmic-800/40 border border-white/5 backdrop-blur-sm hover:bg-cosmic-800/80 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-900/20">
+                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-900/20 to-blue-900/20 flex items-center justify-center text-3xl border border-white/10 text-cyan-400 group-hover:scale-110 transition-transform duration-300">
+                  {item.icon}
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">{item.title}</h3>
+                  <p className="text-slate-400 leading-relaxed font-light group-hover:text-slate-300 transition-colors">{item.desc}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  Lokale Kennis, Nationale Expertise
-                </h3>
-                <p className="text-slate-400 leading-relaxed">
-                  We begrijpen de unieke karakteristieken van {stad.name} 
-                  en combineren dit met onze landelijke ervaring in webdesign. 
-                  Van lokale bedrijven tot nationale merken.
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-cyan-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <span className="text-cosmic-900 font-bold text-lg">2</span>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  SEO voor {stad.name}
-                </h3>
-                <p className="text-slate-400 leading-relaxed">
-                  Lokale SEO-optimalisatie zorgt ervoor dat uw website 
-                  goed vindbaar is voor klanten in {stad.name} en omgeving. 
-                  Word gevonden door de juiste doelgroep.
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-cyan-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <span className="text-cosmic-900 font-bold text-lg">3</span>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  Persoonlijke Service
-                </h3>
-                <p className="text-slate-400 leading-relaxed">
-                  Directe communicatie in het Nederlands en persoonlijke aandacht. 
-                  We zijn altijd bereikbaar voor vragen of aanpassingen. 
-                  Geen grote corporate afstand.
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-cyan-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <span className="text-cosmic-900 font-bold text-lg">4</span>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  Bewezen Resultaten
-                </h3>
-                <p className="text-slate-400 leading-relaxed">
-                  Tevreden klanten door heel Nederland, waaronder succesvolle 
-                  projecten voor bedrijven in en rond {stad.name}. 
-                  Van startup tot enterprise.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -328,12 +315,12 @@ export default function StadPage({ params }: StadPageProps) {
               Neem Contact Op voor Website Project in {stad.name}
             </h2>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-              Klaar om uw online aanwezigheid in {stad.name} te versterken? 
+              Klaar om uw online aanwezigheid in {stad.name} te versterken?
               Neem contact op voor een vrijblijvend gesprek.
             </p>
           </div>
-          
-          <DutchBusinessInfo 
+
+          <DutchBusinessInfo
             variant="full"
             showAddress={true}
             showOpeningHours={true}
@@ -343,22 +330,22 @@ export default function StadPage({ params }: StadPageProps) {
         </div>
       </section>
 
-      <ContentSuggestions 
+      <ContentSuggestions
         customSuggestions={[
-          { 
-            title: 'Plan Een Gesprek', 
-            href: '/contact', 
-            description: `Bespreek uw website project voor ${stad.name}` 
+          {
+            title: 'Plan Een Gesprek',
+            href: '/contact',
+            description: `Bespreek uw website project voor ${stad.name}`
           },
-          { 
-            title: 'Bekijk Onze Werkwijze', 
-            href: '/werkwijze', 
-            description: 'Ontdek hoe wij samen tot het beste resultaat komen' 
+          {
+            title: 'Bekijk Onze Werkwijze',
+            href: '/werkwijze',
+            description: 'Ontdek hoe wij samen tot het beste resultaat komen'
           },
-          { 
-            title: 'Portfolio Inzien', 
-            href: '/portfolio', 
-            description: 'Zie voorbeelden van onze professionele websites' 
+          {
+            title: 'Portfolio Inzien',
+            href: '/portfolio',
+            description: 'Zie voorbeelden van onze professionele websites'
           }
         ]}
       />
