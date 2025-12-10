@@ -44,13 +44,13 @@ const Scene3D = lazy(() => import('./Scene3D'));
 // Device detection utilities
 function detectMobileDevice(): { isMobile: boolean; isIOS: boolean; isAndroid: boolean } {
   if (typeof window === 'undefined') return { isMobile: false, isIOS: false, isAndroid: false };
-  
+
   const userAgent = navigator.userAgent;
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) ||
-                   window.innerWidth <= 768;
+    window.innerWidth <= 768;
   const isIOS = /iPad|iPhone|iPod/.test(userAgent);
   const isAndroid = /Android/.test(userAgent);
-  
+
   return { isMobile, isIOS, isAndroid };
 }
 
@@ -58,39 +58,39 @@ function detectGPUCapabilities(): Promise<{ gpuTier: 'low' | 'medium' | 'high'; 
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl') as WebGLRenderingContext | null;
-    
+
     if (!gl) {
       resolve({ gpuTier: 'low', maxTextureSize: 512 });
       return;
     }
-    
+
     const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
     const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) as string : '';
     const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
-    
+
     // GPU tier detection based on renderer and capabilities
     let gpuTier: 'low' | 'medium' | 'high' = 'medium';
-    
+
     const lowEndGPUs = [
       'PowerVR', 'Mali-400', 'Mali-450', 'Adreno 200', 'Adreno 203', 'Adreno 205',
       'Intel HD Graphics 3000', 'Intel HD Graphics 4000'
     ];
-    
+
     const highEndGPUs = [
       'Adreno 6', 'Adreno 7', 'Mali-G7', 'Mali-G5', 'Apple A15', 'Apple A14', 'Apple A13',
       'GeForce RTX', 'GeForce GTX 1060', 'Radeon RX 5', 'Radeon RX 6'
     ];
-    
+
     if (lowEndGPUs.some(gpu => renderer.includes(gpu))) {
       gpuTier = 'low';
     } else if (highEndGPUs.some(gpu => renderer.includes(gpu))) {
       gpuTier = 'high';
     }
-    
+
     // Additional checks
     if (maxTextureSize < 2048) gpuTier = 'low';
     if (maxTextureSize >= 8192) gpuTier = 'high';
-    
+
     resolve({ gpuTier, maxTextureSize });
   });
 }
@@ -100,7 +100,7 @@ async function getBatteryInfo(): Promise<{ batteryLevel?: number; thermalState?:
     // @ts-expect-error - Battery API is experimental
     const battery = await navigator.getBattery?.();
     const batteryLevel = battery?.level ? Math.round(battery.level * 100) : undefined;
-    
+
     // Thermal state detection (iOS only)
     let thermalState: 'nominal' | 'fair' | 'serious' | 'critical' | undefined;
     // @ts-expect-error - Thermal API is iOS only
@@ -108,7 +108,7 @@ async function getBatteryInfo(): Promise<{ batteryLevel?: number; thermalState?:
       // @ts-expect-error - thermalState API is iOS only, type definitions not available
       thermalState = navigator.thermalState;
     }
-    
+
     return { batteryLevel, thermalState };
   } catch {
     return {};
@@ -126,58 +126,60 @@ function getPerformanceTier(
     if (gpuTier === 'high' && hardwareConcurrency >= 6 && deviceMemory >= 6) return 'high';
     return 'medium';
   }
-  
+
   if (gpuTier === 'low' || hardwareConcurrency < 4 || deviceMemory < 8) return 'low';
   if (gpuTier === 'high' && hardwareConcurrency >= 8 && deviceMemory >= 16) return 'high';
   return 'medium';
 }
 
-export default function Dynamic3DWrapper({ 
-  children, 
+export default function Dynamic3DWrapper({
+  children,
   variant = 'scene',
   className = '',
   enablePerformanceMonitoring = true,
   onDeviceCapabilities
 }: Dynamic3DWrapperProps) {
-  const [isMounted, setIsMounted] = useState(false);
+  // STRICT CLIENT BOUNDARY FIX:
+  // Initialize to false to ensure no server rendering or early hydration mismatch
+  const [hasMounted, setHasMounted] = useState(false);
   const [hasWebGL, setHasWebGL] = useState(true);
   const [deviceCapabilities, setDeviceCapabilities] = useState<DeviceCapabilities | null>(null);
   const [progressiveEnhancement, setProgressiveEnhancement] = useState(false);
-  
+
   // Initialize performance monitoring
   const performanceState = usePerformanceMonitor(enablePerformanceMonitoring, 30, 60);
-  
+
   const enhancementTimeoutRef = useRef<NodeJS.Timeout>();
 
-  // Enhanced device detection
   useEffect(() => {
-    setIsMounted(true);
-    
+    // ONLY set mounted to true after the component has actually mounted in the browser
+    setHasMounted(true);
+
     async function detectCapabilities() {
       // Check WebGL support
       const canvas = document.createElement('canvas');
       const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl') as WebGLRenderingContext;
       const hasWebGLSupport = !!gl;
       setHasWebGL(hasWebGLSupport);
-      
+
       if (!hasWebGLSupport) return;
-      
+
       // Device detection
       const { isMobile, isIOS, isAndroid } = detectMobileDevice();
-      
+
       // GPU capabilities
       const { gpuTier, maxTextureSize } = await detectGPUCapabilities();
-      
+
       // System info
       const hardwareConcurrency = navigator.hardwareConcurrency || 4;
       const deviceMemory = navigator.deviceMemory || 4;
-      
+
       // Battery and thermal info
       const { batteryLevel, thermalState } = await getBatteryInfo();
-      
+
       // Performance tier
       const performanceTier = getPerformanceTier(hardwareConcurrency, deviceMemory, gpuTier, isMobile);
-      
+
       const capabilities: DeviceCapabilities = {
         isMobile,
         isIOS,
@@ -190,21 +192,21 @@ export default function Dynamic3DWrapper({
         batteryLevel,
         thermalState
       };
-      
+
       setDeviceCapabilities(capabilities);
       onDeviceCapabilities?.(capabilities);
     }
-    
+
     detectCapabilities();
   }, [onDeviceCapabilities]);
 
   // Progressive enhancement: start with basic scene, add effects based on performance
   useEffect(() => {
     if (!deviceCapabilities) return;
-    
+
     // Start with basic scene immediately
     setProgressiveEnhancement(false);
-    
+
     // Use requestIdleCallback for non-critical enhancements
     const scheduleEnhancement = () => {
       if ('requestIdleCallback' in window) {
@@ -223,10 +225,10 @@ export default function Dynamic3DWrapper({
         }, 1000);
       }
     };
-    
+
     // Delay enhancement to let basic scene stabilize
     const initialDelay = setTimeout(scheduleEnhancement, 500);
-    
+
     return () => {
       clearTimeout(initialDelay);
       if (enhancementTimeoutRef.current) {
@@ -238,13 +240,13 @@ export default function Dynamic3DWrapper({
   // Monitor performance and adjust progressive enhancement
   useEffect(() => {
     if (!enablePerformanceMonitoring) return;
-    
+
     // If performance drops significantly, disable enhancements
     if (performanceState.metrics.fps < 25 && progressiveEnhancement) {
       console.log('Performance degraded, disabling enhancements');
       setProgressiveEnhancement(false);
     }
-    
+
     // Re-enable enhancements if performance improves and stabilizes
     if (performanceState.metrics.fps > 40 && !progressiveEnhancement && performanceState.qualityLevel !== 'low') {
       console.log('Performance improved, re-enabling enhancements');
@@ -269,7 +271,9 @@ export default function Dynamic3DWrapper({
     return () => observer.disconnect();
   }, [enablePerformanceMonitoring]);
 
-  if (!isMounted) {
+  // CRITICAL FIX: Return loading skeleton if not mounted.
+  // This prevents the 3D context from attempting to initialize during SSR or early hydration.
+  if (!hasMounted) {
     return <LoadingSkeleton variant={variant} className={className} />;
   }
 
