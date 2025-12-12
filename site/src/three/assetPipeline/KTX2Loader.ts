@@ -21,21 +21,21 @@ export function isKTX2Supported(): boolean {
 
   const canvas = document.createElement('canvas');
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-  
+
   if (!gl || !(gl instanceof WebGLRenderingContext || gl instanceof WebGL2RenderingContext)) {
     ktx2Supported = false;
     return false;
   }
 
   // Check for required extensions
-  const hasETC = !!gl.getExtension('WEBGL_compressed_texture_etc1') || 
-                 !!gl.getExtension('WEBGL_compressed_texture_etc');
+  const hasETC = !!gl.getExtension('WEBGL_compressed_texture_etc1') ||
+    !!gl.getExtension('WEBGL_compressed_texture_etc');
   const hasS3TC = !!gl.getExtension('WEBGL_compressed_texture_s3tc');
   const hasASTC = !!gl.getExtension('WEBGL_compressed_texture_astc');
   const hasPVRTC = !!gl.getExtension('WEBGL_compressed_texture_pvrtc');
 
   ktx2Supported = hasETC || hasS3TC || hasASTC || hasPVRTC;
-  
+
   return ktx2Supported;
 }
 
@@ -47,14 +47,14 @@ let ktx2LoaderInstance: ThreeKTX2Loader | null = null;
 export function getKTX2Loader(renderer: THREE.WebGLRenderer): ThreeKTX2Loader {
   if (!ktx2LoaderInstance) {
     ktx2LoaderInstance = new ThreeKTX2Loader();
-    
+
     // Set transcoder path (served from public directory)
     ktx2LoaderInstance.setTranscoderPath('/basis/');
-    
+
     // Detect backend automatically
     ktx2LoaderInstance.detectSupport(renderer);
   }
-  
+
   return ktx2LoaderInstance;
 }
 
@@ -96,7 +96,7 @@ export async function loadTexture(
   options: TextureLoadOptions = {}
 ): Promise<THREE.Texture> {
   const cacheKey = `${basePath}-${JSON.stringify(options)}`;
-  
+
   // Return cached texture if available
   if (textureCache.has(cacheKey)) {
     return textureCache.get(cacheKey)!;
@@ -104,13 +104,13 @@ export async function loadTexture(
 
   const loadPromise = (async () => {
     const supported = isKTX2Supported();
-    
+
     // Try KTX2 first if supported
     if (supported) {
       try {
         const ktx2Path = `${basePath}.ktx2`;
         const loader = getKTX2Loader(renderer);
-        
+
         const texture = await new Promise<THREE.Texture>((resolve, reject) => {
           loader.load(
             ktx2Path,
@@ -119,9 +119,9 @@ export async function loadTexture(
             (error) => reject(error)
           );
         });
-        
+
         applyTextureOptions(texture, options);
-        
+
         console.log(`✓ KTX2 texture loaded: ${ktx2Path}`);
         return texture;
       } catch (error) {
@@ -132,11 +132,11 @@ export async function loadTexture(
     // Fallback to WebP, then PNG
     const fallbackExtensions = ['webp', 'png'];
     const loader = new THREE.TextureLoader();
-    
+
     for (const ext of fallbackExtensions) {
       try {
         const fallbackPath = `${basePath}.${ext}`;
-        
+
         const texture = await new Promise<THREE.Texture>((resolve, reject) => {
           loader.load(
             fallbackPath,
@@ -145,18 +145,19 @@ export async function loadTexture(
             (error) => reject(error)
           );
         });
-        
+
         applyTextureOptions(texture, options);
-        
+
         console.log(`✓ Fallback texture loaded: ${fallbackPath}`);
         return texture;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         if (ext === fallbackExtensions[fallbackExtensions.length - 1]) {
           throw new Error(`Failed to load texture: ${basePath}`);
         }
       }
     }
-    
+
     throw new Error(`No valid texture found for: ${basePath}`);
   })();
 
@@ -206,7 +207,7 @@ export async function loadCubeMap(
   options: TextureLoadOptions = {}
 ): Promise<THREE.CubeTexture> {
   const faces = ['px', 'nx', 'py', 'ny', 'pz', 'nz'];
-  
+
   const textures = await Promise.all(
     faces.map(face => loadTexture(`${basePath}_${face}`, renderer, options))
   );
@@ -216,7 +217,7 @@ export async function loadCubeMap(
   );
 
   applyTextureOptions(cubeTexture as THREE.Texture, options);
-  
+
   return cubeTexture;
 }
 
@@ -238,9 +239,9 @@ export async function loadPMREMEnvironment(
 
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
   pmremGenerator.compileEquirectangularShader();
-  
+
   const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-  
+
   texture.dispose();
   pmremGenerator.dispose();
 
@@ -259,7 +260,7 @@ export async function preloadTextures(
   await Promise.all(
     paths.map(path => loadTexture(path, renderer))
   );
-  
+
   console.log(`✓ Preloaded ${paths.length} textures`);
 }
 

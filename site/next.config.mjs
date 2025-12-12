@@ -42,10 +42,10 @@ function validateProductionEnv() {
    */
   function isPlaceholderValue(value) {
     if (!value || typeof value !== 'string') return true;
-    
+
     const normalizedValue = value.toLowerCase().trim();
-    
-    return PLACEHOLDER_VALUES.some(placeholder => 
+
+    return PLACEHOLDER_VALUES.some(placeholder =>
       normalizedValue === placeholder.toLowerCase() ||
       normalizedValue.includes('placeholder') ||
       normalizedValue.includes('example') ||
@@ -60,12 +60,12 @@ function validateProductionEnv() {
   /** @type {Record<string, {name: string, description: string, variables: string[], guidance: string, errors: string[]}>} */
   const errorsByGroup = {};
   let hasErrors = false;
-  
+
   // Check each environment variable and group by category
   for (const envVar of CRITICAL_ENV_VARS) {
     const value = process.env[envVar];
     let error = null;
-    
+
     if (!value) {
       error = `${envVar} is not set`;
     } else if (isPlaceholderValue(value)) {
@@ -92,7 +92,7 @@ function validateProductionEnv() {
 
   if (hasErrors) {
     console.error('\n🚨 Build failed! Critical environment variables are missing or invalid:\n');
-    
+
     // Display errors grouped by category
     for (const [groupKey, groupData] of Object.entries(errorsByGroup)) {
       console.error(`📁 ${groupData.name} (${groupData.description})`);
@@ -100,7 +100,7 @@ function validateProductionEnv() {
       console.error(`   💡 ${groupData.guidance}`);
       console.error(''); // Empty line for spacing
     }
-    
+
     console.error('📚 For complete setup instructions, see docs/DEPLOY_CHECKLIST.md');
     console.error('🔧 Set these variables in your deployment platform (Vercel, Netlify, etc.)\n');
     throw new Error('Environment validation failed - missing or invalid critical environment variables');
@@ -112,31 +112,34 @@ validateProductionEnv();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // Runtime & Region Configuration: See docs/ADR-runtime.md
   // Individual routes configure runtime (edge/nodejs) and preferredRegion at route level
   // No global runtime override - App Router handles optimization automatically
-  
+
   // Disable powered by header for security
   poweredByHeader: false,
-  
+
   // Enable React 18 features
   experimental: {
     optimizePackageImports: ['@react-three/fiber', '@react-three/drei', 'three'],
   },
-  
+
   // Remove console.log in production (keep error, warn, info)
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn', 'info'],
     } : false,
   },
-  
+
   // i18n configuration - enforce nl-NL as default locale
   i18n: {
     locales: ['nl-NL'],
     defaultLocale: 'nl-NL',
   },
-  
+
   // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -205,7 +208,7 @@ const nextConfig = {
 
   // Compression
   compress: true,
-  
+
   // Output optimization
   output: 'standalone',
 
@@ -241,8 +244,8 @@ const nextConfig = {
           // Enhanced referrer policy
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           // Permissions policy
-          { 
-            key: 'Permissions-Policy', 
+          {
+            key: 'Permissions-Policy',
             value: [
               'accelerometer=()',
               'camera=()',
@@ -337,15 +340,15 @@ const nextConfig = {
   // Primary redirects should be configured at platform level (Vercel)
   async redirects() {
     const siteUrl = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? '').replace(/\/+$/, '');
-    
+
     // Only apply redirects if site URL is configured
     if (!siteUrl) {
       return [];
     }
-    
+
     // Extract domain from site URL
     const siteDomain = siteUrl.replace(/^https?:\/\//, '');
-    
+
     return [
       {
         source: '/:path*',

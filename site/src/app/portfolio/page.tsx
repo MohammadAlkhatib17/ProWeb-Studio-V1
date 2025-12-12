@@ -1,13 +1,17 @@
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
-import SimpleBrandIdentityModel from '@/components/SimpleBrandIdentityModel';
-import SimpleEcommerceShowcase from '@/components/SimpleEcommerceShowcase';
-import SimplePortfolioComputer from '@/components/SimplePortfolioComputer';
 import { siteConfig } from '@/config/site.config';
-
-import MobileShowcase from '../../components/portfolio/MobileShowcase';
 import PortfolioHero from '../../components/portfolio/PortfolioHero';
 import PortfolioSchema from '../../components/portfolio/PortfolioSchema';
+import SimplePortfolioComputer from '@/components/SimplePortfolioComputer';
+import SimpleEcommerceShowcase from '@/components/SimpleEcommerceShowcase';
+import SimpleBrandIdentityModel from '@/components/SimpleBrandIdentityModel';
+import {
+  Code2, ShoppingBag, Palette,
+  Layers, Globe,
+  CheckCircle2
+} from 'lucide-react';
+import MobileShowcase from '../../components/portfolio/MobileShowcase';
 
 import type { Metadata } from 'next';
 
@@ -80,104 +84,197 @@ export default function PortfolioPage() {
         <PortfolioHero />
 
         {/* Capabilities Showcase Sections */}
-        <section id="capabilities" className="relative py-16 lg:py-24">
-          {/* Section 1: Interactive 3D Web Development */}
-          <section className="py-12 md:py-16 px-4">
+        {/* Immersive Showcase Sections - Zig Zag Layout */}
+        <section id="capabilities" className="relative py-16 lg:py-24 space-y-24 lg:space-y-32">
+
+          {/* Section 1: The 3D Web (Laptop) */}
+          <section className="relative px-4 sm:px-6">
             <div className="container mx-auto">
-              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-                <div className="order-2 lg:order-1">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-cyan-300">Webontwikkeling met een Extra Dimensie</h2>
-                  <p className="text-base md:text-lg text-slate-200 mb-6 leading-relaxed">
-                    Wij creëren websites die verder gaan dan platte schermen. Met technologie zoals Three.js en React Three Fiber bouwen we interactieve 3D-ervaringen die uw digitale visie tot leven brengen. Dit is geen template; dit is cutting-edge technologie, op maat gemaakt voor uw merk.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    <span className="px-3 py-1 text-xs font-medium bg-blue-500/20 text-blue-300 rounded-full">Three.js</span>
-                    <span className="px-3 py-1 text-xs font-medium bg-purple-500/20 text-purple-300 rounded-full">React Three Fiber</span>
-                    <span className="px-3 py-1 text-xs font-medium bg-green-500/20 text-green-300 rounded-full">WebGL</span>
-                    <span className="px-3 py-1 text-xs font-medium bg-cyan-500/20 text-cyan-300 rounded-full">Responsive</span>
+              <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                {/* Text Side */}
+                <div className="lg:w-1/2 order-2 lg:order-1">
+                  <div className="space-y-6">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium">
+                      <Globe className="w-4 h-4" />
+                      <span>3D Web Development</span>
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-bold leading-tight text-white">
+                      Websites die de<br />
+                      <span className="gradient-text">Schermgrens Doorbreken</span>
+                    </h2>
+                    <p className="text-lg text-slate-300 leading-relaxed">
+                      Wij bouwen geen platte websites; wij creëren digitale werelden. Met geavanceerde 3D-technologie transformeren we uw online aanwezigheid van een statische pagina naar een interactieve bestemming.
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-4 pt-4">
+                      <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-colors">
+                        <Code2 className="w-8 h-8 text-cyan-400 mb-2" />
+                        <h3 className="font-semibold text-white mb-1">WebGL Native</h3>
+                        <p className="text-sm text-slate-400">Directe GPU acceleratie voor soepele 60fps animaties.</p>
+                      </div>
+                      <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-colors">
+                        <Layers className="w-8 h-8 text-cyan-400 mb-2" />
+                        <h3 className="font-semibold text-white mb-1">React Fiber</h3>
+                        <p className="text-sm text-slate-400">Component-based 3D architectuur voor schaalbaarheid.</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="order-1 lg:order-2">
-                  <SimplePortfolioComputer />
+
+                {/* 3D Side */}
+                <div className="lg:w-1/2 w-full order-1 lg:order-2">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/20 border border-cyan-500/20 group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 z-0" />
+                    <div className="relative z-10 w-full h-full">
+                      <SimplePortfolioComputer />
+                    </div>
+                    <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs text-cyan-300 border border-cyan-500/30">
+                      Probeer te roteren 360°
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Section 2: Immersive E-commerce Platforms */}
-          <section className="py-12 md:py-16 px-4 bg-cosmic-900/30">
+          {/* Section 2: E-commerce Revolution (Product Configurator) */}
+          <section className="relative px-4 sm:px-6">
+            <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[600px] h-[600px] bg-magenta-500/10 rounded-full blur-[100px] pointer-events-none opacity-40" />
+
             <div className="container mx-auto">
-              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-                <div className="order-2">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-cyan-300">E-commerce Platforms die Converteren</h2>
-                  <p className="text-base md:text-lg text-slate-200 mb-6 leading-relaxed">
-                    Voor webshops, van kleine boetieks tot grootschalige marktplaatsen, bouwen wij e-commerce oplossingen die niet alleen verkopen, maar ook een unieke winkelervaring bieden. Visualiseer uw producten in 3D, laat klanten ermee interacteren en verhoog de conversie significant.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    <span className="px-3 py-1 text-xs font-medium bg-purple-500/20 text-purple-300 rounded-full">3D Product Viewer</span>
-                    <span className="px-3 py-1 text-xs font-medium bg-pink-500/20 text-pink-300 rounded-full">Interactive UX</span>
-                    <span className="px-3 py-1 text-xs font-medium bg-orange-500/20 text-orange-300 rounded-full">Conversie Optimalisatie</span>
+              <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                {/* 3D Side (Left) */}
+                <div className="lg:w-1/2 w-full order-1">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-magenta-500/20 border border-magenta-500/20">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-magenta-500/10 to-purple-500/10 z-0" />
+                    <div className="relative z-10 w-full h-full">
+                      <SimpleEcommerceShowcase />
+                    </div>
                   </div>
                 </div>
-                <div className="order-1">
-                  <SimpleEcommerceShowcase />
+
+                {/* Text Side (Right) */}
+                <div className="lg:w-1/2 order-2">
+                  <div className="space-y-6">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-magenta-500/10 border border-magenta-500/20 text-magenta-400 text-sm font-medium">
+                      <ShoppingBag className="w-4 h-4" />
+                      <span>Next-Gen E-commerce</span>
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-bold leading-tight text-white">
+                      Verkoop Producten,<br />
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-magenta-400 to-purple-400">Geen Plaatjes</span>
+                    </h2>
+                    <p className="text-lg text-slate-300 leading-relaxed">
+                      Geef uw klanten de controle. Met onze interactieve 3D-configurators kunnen bezoekers producten van alle kanten bekijken, aanpassen en ervaren voordat ze kopen. Dit verhoogt niet alleen de conversie, maar verlaagt ook het retourpercentage.
+                    </p>
+
+                    <ul className="space-y-4">
+                      {[
+                        "Interactieve Product visualisatie",
+                        "Real-time Customization & Filtering",
+                        "Seamless integratie met Shopify & WooCommerce",
+                        "Laadtijden < 2 seconden, zelfs met 3D"
+                      ].map((item, i) => (
+                        <li key={i} className="flex items-center gap-3 text-slate-300">
+                          <CheckCircle2 className="w-5 h-5 text-magenta-500 shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Section 3: Dynamic Brand Identity */}
-          <section className="py-12 md:py-16 px-4">
+          {/* Section 3: Brand Identity (Living Logo) */}
+          <section className="relative px-4 sm:px-6">
             <div className="container mx-auto">
-              <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-                <div className="order-2 lg:order-1">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-cyan-300">Brand Identity met Impact</h2>
-                  <p className="text-base md:text-lg text-slate-200 mb-6 leading-relaxed">
-                    Van logo-ontwerp tot complete huisstijl, wij creëren brand identities die resoneren met de Nederlandse markt en uw doelgroep aanspreken. We visualiseren uw merkidentiteit in dynamische 3D-modellen die authenticiteit, herkenbaarheid en tijdloosheid uitstralen.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    <span className="px-3 py-1 text-xs font-medium bg-green-500/20 text-green-300 rounded-full">Logo Design</span>
-                    <span className="px-3 py-1 text-xs font-medium bg-blue-500/20 text-blue-300 rounded-full">3D Branding</span>
-                    <span className="px-3 py-1 text-xs font-medium bg-yellow-500/20 text-yellow-300 rounded-full">Nederlandse Markt</span>
-                    <span className="px-3 py-1 text-xs font-medium bg-red-500/20 text-red-300 rounded-full">Visual Identity</span>
+              <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                {/* Text Side */}
+                <div className="lg:w-1/2 order-2 lg:order-1">
+                  <div className="space-y-6">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium">
+                      <Palette className="w-4 h-4" />
+                      <span>Dynamische Branding</span>
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-bold leading-tight text-white">
+                      Identiteit die<br />
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">Leeft en Ademt</span>
+                    </h2>
+                    <p className="text-lg text-slate-300 leading-relaxed">
+                      Een logo hoeft niet stil te staan. Wij creëren dynamische merkidentiteiten die reageren op interactie, omgeving en context. Uw merk wordt een levend organisme dat de aandacht grijpt en vasthoudt.
+                    </p>
+
+                    <div className="flex flex-wrap gap-3 pt-4">
+                      <span className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm">Motion Design</span>
+                      <span className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm">Sound Design</span>
+                      <span className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm">Interactive Logo's</span>
+                      <span className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm">Digital Art Direction</span>
+                    </div>
                   </div>
                 </div>
-                <div className="order-1 lg:order-2">
-                  <SimpleBrandIdentityModel />
+
+                {/* 3D Side */}
+                <div className="lg:w-1/2 w-full order-1 lg:order-2">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-green-500/20 border border-green-500/20">
+                    <div className="absolute inset-0 bg-gradient-to-bl from-green-500/10 to-emerald-500/10 z-0" />
+                    <div className="relative z-10 w-full h-full">
+                      <SimpleBrandIdentityModel />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
-          
+
           {/* Mobile-Responsive Design Showcase */}
           <MobileShowcase />
         </section>
 
         {/* Call to Action */}
-        <section className="relative py-16 lg:py-24 bg-gradient-to-br from-cosmic-900 via-cosmic-800 to-stellar-900">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="container relative mx-auto px-4 md:px-safe text-center">
-            <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold text-white mb-6">
-              Klaar voor een Project met Extra Dimensie?
+        {/* Premium Call to Action */}
+        {/* Premium Call to Action */}
+        <section className="relative py-24 lg:py-32 overflow-hidden">
+          {/* Background Gradients */}
+          <div className="absolute inset-0 bg-gradient-to-t from-blue-900/30 via-transparent to-purple-900/20 pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none opacity-40" />
+
+          <div className="container relative mx-auto px-4 md:px-safe text-center z-10">
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tight gradient-text leading-tight">
+              Klaar voor een Project<br />met Extra Dimensie?
             </h2>
-            <p className="text-lg md:text-xl text-cosmic-200 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
               Laat ons uw visie tot leven brengen met cutting-edge 3D technologie, authentieke Nederlandse vakmanschap en bewezen expertise.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Button
                 href="/contact"
                 variant="primary"
-                className="text-base md:text-lg px-6 md:px-8 py-3 md:py-4"
+                size="large"
+                className="text-lg px-10 py-5 !bg-gradient-to-r !from-indigo-600 !to-cyan-500 !shadow-xl hover:!shadow-cyan-500/30 hover:!scale-105 transition-transform duration-300 !text-white"
               >
                 Start Uw 3D Project
               </Button>
               <Button
                 href="/diensten"
                 variant="secondary"
-                className="text-base md:text-lg px-6 md:px-8 py-3 md:py-4"
+                size="large"
+                className="text-lg px-10 py-5 hover:!scale-105 transition-transform duration-300 !bg-white/5 !border-white/10 hover:!bg-white/10 !text-white"
               >
                 Ontdek Onze Diensten
               </Button>
+            </div>
+
+            <div className="mt-16 flex justify-center gap-8 text-slate-500 items-center opacity-70">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-cyan-500" />
+                <span>Vrijblijvend advies</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-cyan-500" />
+                <span>Directe prijsopgave</span>
+              </div>
             </div>
           </div>
         </section>

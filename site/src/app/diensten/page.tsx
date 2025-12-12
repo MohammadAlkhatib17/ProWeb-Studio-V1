@@ -24,6 +24,12 @@ import RelatedServices from '@/components/RelatedServices';
 import FAQSection from '@/components/sections/FAQSection';
 import SEOSchema from '@/components/SEOSchema';
 import { steden } from '@/config/steden.config';
+import { BentoGrid, BentoGridItem } from '@/components/ui/BentoGrid';
+import {
+  Rocket, Target, TrendingUp, Code2, Cpu, Server,
+  Zap, Search, Layout, Database,
+  CheckCircle2, ArrowRight, Laptop
+} from 'lucide-react';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -39,38 +45,44 @@ const services = [
   {
     title: 'Fundamenten voor Digitale Dominantie',
     description:
-      'Uw website is het hart van uw digitale ecosysteem. Wij bouwen razendsnelle, veilige en schaalbare platformen die niet alleen vandaag indruk maken, maar ook klaar zijn voor de ambities van morgen. Dit is de technologische ruggengraat voor uw online groei. Ontdek meer over onze strategische aanpak in onze werkwijze.',
+      'Uw website is het hart van uw digitale ecosysteem. Wij bouwen razendsnelle, veilige en schaalbare platformen die niet alleen vandaag indruk maken, maar ook klaar zijn voor de ambities van morgen.',
     features: [
       'Next.js & React Ontwikkeling',
       'Headless CMS Integratie',
       'Core Web Vitals Optimalisatie',
       'Responsive Design',
     ],
-    icon: '🚀',
+    icon: <Rocket className="w-8 h-8 text-cyan-400" />,
+    iconBg: "bg-cyan-500/20",
+    id: "website"
   },
   {
-    title: 'Meeslepende Ervaringen die Onderscheiden',
+    title: 'Meeslepende 3D Ervaringen',
     description:
-      'In een overvolle markt is differentiatie cruciaal. Wij gebruiken interactieve 3D-technologie niet als gimmick, maar als een krachtig middel om uw producten tot leven te brengen, uw merkverhaal te vertellen en een onvergetelijke, diepe connectie met uw publiek te smeden. Bekijk voorbeelden in onze speeltuin.',
+      'Differentieer uw merk met interactieve 3D-technologie. Wij gebruiken WebGL om producten tot leven te brengen en een onvergetelijke connectie met uw publiek te smeden.',
     features: [
       'WebGL & Three.js Experiences',
       'Interactieve Product Configurators',
       'Real-time 3D Visualisaties',
       'Performance Optimalisatie',
     ],
-    icon: '🎯',
+    icon: <Target className="w-8 h-8 text-magenta-400" />,
+    iconBg: "bg-magenta-500/20",
+    id: "3d-web"
   },
   {
-    title: 'Data-gedreven Groei en Optimalisatie',
+    title: 'Data-gedreven Groei',
     description:
-      'Een prachtige website is slechts het begin. Wij zetten data om in actie. Door continu te analyseren, te testen en te optimaliseren, transformeren we uw bezoekers in klanten en maximaliseren we de return on investment (ROI) van uw digitale platform. Leer meer over ons team en onze missie.',
+      'Een prachtige website is slechts het begin. Wij analyseren, testen en optimaliseren continu om bezoekers in klanten te transformeren en uw ROI te maximaliseren.',
     features: [
       'Gebruikersdata Analyse',
-      'A/B Testing & Conversie Optimalisatie',
+      'A/B Testing & Conversie',
       'SEO & Content Strategie',
       'Analytics & Tracking',
     ],
-    icon: '📈',
+    icon: <TrendingUp className="w-8 h-8 text-green-400" />,
+    iconBg: "bg-green-500/20",
+    id: "growth"
   },
 ];
 
@@ -146,131 +158,117 @@ export default function Diensten() {
         </div>
       </section>
 
-      {/* Services grid */}
-      <section className="py-section px-4 sm:px-6">
+      {/* Services grid - Premium Cards */}
+      <section className="py-section px-4 sm:px-6 relative">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            {services.map((service, i) => {
-              // Map service indices to semantic IDs
-              const serviceIds = ['website', 'webshop', 'seo'];
-              const serviceId = serviceIds[i] || `service-${i + 1}`;
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {services.map((service, i) => (
+              <div
+                key={i}
+                id={service.id}
+                className="group relative overflow-hidden rounded-2xl bg-cosmic-800/40 border border-cosmic-700/60 p-8 hover:border-cyan-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/10 flex flex-col hover:-translate-y-1"
+              >
+                {/* Hover Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-              return (
-                <div
-                  key={i}
-                  id={serviceId}
-                  className="glass p-6 sm:p-7 md:p-8 rounded-xl hover:border-cyan-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden animate-fade-in text-center flex flex-col hover:scale-105"
-                  style={{ animationDelay: `${i * 0.2}s` }}
-                >
-                  {/* Gradient overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className={`w-16 h-16 rounded-2xl ${service.iconBg} flex items-center justify-center mb-6 border border-white/5 group-hover:scale-110 transition-transform duration-300`}>
+                    {service.icon}
+                  </div>
 
-                  <div className="relative z-10 flex flex-col h-full">
-                    {/* Icon centered with background */}
-                    <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
-                      {service.icon}
-                    </div>
+                  <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-cyan-300 transition-colors">
+                    {service.title}
+                  </h3>
 
-                    {/* Title centered */}
-                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 group-hover:text-cyan-300 transition-colors duration-300 text-center">
-                      {service.title}
-                    </h3>
+                  <p className="text-slate-300 mb-8 leading-relaxed flex-grow">
+                    {service.description}
+                  </p>
 
-                    {/* Description centered */}
-                    <p className="text-slate-200 mb-8 leading-relaxed text-center flex-grow">
-                      {service.description}
-                    </p>
+                  <div className="space-y-3 mt-auto">
+                    {service.features.map((feature, j) => (
+                      <div key={j} className="flex items-center gap-3 text-sm text-slate-300">
+                        <div className="w-5 h-5 rounded-full bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle2 className="w-3 h-3 text-cyan-400" />
+                        </div>
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
 
-                    {/* Features section */}
-                    <div className="mt-auto">
-                      <h4 className="font-semibold text-cyan-300 mb-4 text-center">
-                        Inclusief:
-                      </h4>
-                      <ul className="space-y-3">
-                        {service.features.map((feature, j) => (
-                          <li key={j} className="flex items-center justify-center text-sm">
-                            <span className="text-cyan-300 mr-3 font-bold text-lg">
-                              ✓
-                            </span>
-                            <span className="text-gray-200 text-center">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  <div className="mt-8 pt-6 border-t border-white/5 flex items-center text-cyan-400 font-medium group/link">
+                    Ontdek meer
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover/link:translate-x-1 transition-transform" />
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Tech Stack Section */}
-      <section className="py-section px-4 sm:px-6 bg-cosmic-800/20 border-t border-cosmic-700/60">
+      {/* Tech Stack Section with Bento Grid */}
+      <section className="py-section px-4 sm:px-6 bg-cosmic-800/10 border-y border-cosmic-700/30">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight gradient-text">
               Onze Technologische Kern
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed">
-              Wij geloven in het kiezen van het juiste gereedschap voor elke
-              uitdaging. Onze expertise ligt in een moderne, performante en
-              schaalbare technologiestack, ontworpen om u een
-              concurrentievoordeel te geven.
+            <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+              Wij kiezen compromisloos voor de beste tools. Een moderne, performante en schaalbare stack die u een oneerlijk voordeel geeft.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-            <div className="glass p-6 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
-                ⚛️
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-cyan-500/30 transition-all duration-300 group">
+              <div className="w-12 h-12 bg-cyan-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500/20 transition-colors">
+                <Code2 className="w-6 h-6 text-cyan-400" />
               </div>
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">Frontend</h3>
-              <ul className="space-y-2 text-slate-200 text-center">
-                <li>Next.js</li>
-                <li>React</li>
-                <li>TypeScript</li>
-                <li>Tailwind CSS</li>
-                <li>GSAP</li>
+              <h3 className="text-xl font-bold text-white mb-4">Frontend</h3>
+              <ul className="space-y-2 text-slate-400 text-sm">
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> Next.js 14+</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> React</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TypeScript</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> Tailwind CSS</li>
               </ul>
             </div>
-            <div className="glass p-6 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
-                🎮
+
+            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-magenta-500/30 transition-all duration-300 group">
+              <div className="w-12 h-12 bg-magenta-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-magenta-500/20 transition-colors">
+                <Layout className="w-6 h-6 text-magenta-400" />
               </div>
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
-                3D & Animatie
-              </h3>
-              <ul className="space-y-2 text-slate-200 text-center">
-                <li>WebGL</li>
-                <li>Three.js</li>
-                <li>React Three Fiber</li>
+              <h3 className="text-xl font-bold text-white mb-4">3D & Animatie</h3>
+              <ul className="space-y-2 text-slate-400 text-sm">
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> WebGL / R3F</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> Three.js</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> GSAP</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> Framer Motion</li>
               </ul>
             </div>
-            <div className="glass p-6 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
-                🔧
+
+            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-blue-500/30 transition-all duration-300 group">
+              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
+                <Database className="w-6 h-6 text-blue-400" />
               </div>
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
-                Backend & CMS
-              </h3>
-              <ul className="space-y-2 text-slate-200 text-center">
-                <li>Headless CMS (o.a. Sanity, Contentful)</li>
-                <li>Node.js</li>
-                <li>Vercel Serverless Functions</li>
+              <h3 className="text-xl font-bold text-white mb-4">Backend & CMS</h3>
+              <ul className="space-y-2 text-slate-400 text-sm">
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Headless CMS</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Node.js</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Postgres / Edge</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> GraphQL</li>
               </ul>
             </div>
-            <div className="glass p-6 rounded-lg text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
-                🚀
+
+            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-green-500/30 transition-all duration-300 group">
+              <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
+                <Server className="w-6 h-6 text-green-400" />
               </div>
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-300 mb-4">
-                Deployment & Infrastructuur
-              </h3>
-              <ul className="space-y-2 text-slate-200 text-center">
-                <li>Vercel</li>
-                <li>Netlify</li>
-                <li>AWS</li>
+              <h3 className="text-xl font-bold text-white mb-4">Infra</h3>
+              <ul className="space-y-2 text-slate-400 text-sm">
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> Vercel Edge</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> AWS Cloud</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> CDN Global</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> CI/CD Pipelines</li>
               </ul>
             </div>
           </div>
@@ -418,91 +416,90 @@ export default function Diensten() {
         </div>
       </section>
 
-      {/* SEO Content Section */}
+      {/* SEO Content Section - Replaced with Bento Grid */}
       <section
         id="seo-content"
-        className="py-12 md:py-16 px-4 sm:px-6 lg:px-8"
+        className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-cosmic-900/30 relative"
       >
-        <div className="max-w-4xl mx-auto">
-          <article className="prose prose-invert prose-lg max-w-none text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-8 gradient-text">Diensten die groei versnellen</h2>
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
 
-            <div className="text-left space-y-8">
-              <div>
-                <h3 className="text-2xl font-bold mb-4 text-cyan-300">Webdesign &amp; Development</h3>
-                <p className="text-slate-200 leading-relaxed">
-                  Een professionele website laten maken begint bij een ijzersterk
-                  fundament. Wij bouwen maatwerk websites met een scherp oog voor
-                  snelheid, gebruiksvriendelijkheid en een conversiegericht ontwerp dat
-                  bezoekers omzet in klanten. Of u nu ZZP&apos;er bent of een groeiend
-                  MKB-bedrijf runt, uw online groei is onze prioriteit.
-                </p>
-              </div>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 max-w-4xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 gradient-text leading-tight">
+              Diensten die Groei Versnellen
+            </h2>
+            <p className="text-xl text-slate-300 mb-8 leading-relaxed">
+              Een professionele website laten maken is slechts het begin.
+              Wij transformeren uw digitale aanwezigheid met een complete suite van premium services.
+            </p>
+          </div>
 
-              <div>
-                <h3 className="text-2xl font-bold mb-4 text-cyan-300">3D Web Experiences (WebGL/Three.js)</h3>
-                <p className="text-slate-200 leading-relaxed">
-                  Onderscheid uw merk met interactieve 3D-ervaringen die uw producten en
-                  diensten tot leven brengen. Door WebGL en Three.js technologie slim in
-                  te zetten, creëren we meeslepende gebruikerservaringen die langer op
-                  uw website blijven hangen. Perfect voor bedrijven die hun merkverhaal
-                  op een unieke manier willen vertellen en een blijvende indruk willen
-                  maken.
-                </p>
-              </div>
+          <BentoGrid className="mb-12">
+            <BentoGridItem
+              title="Webdesign & Development"
+              description="Maatwerk websites met een scherp oog voor snelheid, UX en conversie. Gebouwd op Next.js voor maximale prestaties."
+              header={<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20" />}
+              icon={<Laptop className="h-8 w-8 text-cyan-400" />}
+              className="md:col-span-2"
+            />
+            <BentoGridItem
+              title="3D Experiences"
+              description="Interactieve WebGL elementen die uw merk onvergetelijk maken. Van productconfigurators tot scrollytelling."
+              header={<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-magenta-500/10 to-purple-500/10 border border-magenta-500/20" />}
+              icon={<Cpu className="h-8 w-8 text-magenta-400" />}
+              className="md:col-span-1"
+            />
+            <BentoGridItem
+              title="Performance First"
+              description="Core Web Vitals optimalisatie, edge-caching en next-gen image formats (AVIF/WebP) voor bliksemsnelle laadtijden."
+              header={<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20" />}
+              icon={<Zap className="h-8 w-8 text-green-400" />}
+              className="md:col-span-1"
+            />
+            <BentoGridItem
+              title="SEO & Content Strategie"
+              description="Diepgaand zoekwoordenonderzoek en technische SEO zorgen dat uw website domineert in Nederlandse zoekresultaten."
+              header={<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20" />}
+              icon={<Search className="h-8 w-8 text-amber-400" />}
+              className="md:col-span-2"
+            />
+          </BentoGrid>
 
-              <div>
-                <h3 className="text-2xl font-bold mb-4 text-cyan-300">Performance Optimalisatie</h3>
-                <p className="text-slate-200 leading-relaxed">
-                  Een snelle website is essentieel voor een hogere ranking in Google en
-                  betere gebruikerservaring. Wij optimaliseren uw Core Web Vitals,
-                  implementeren geavanceerde caching strategieën en gebruiken moderne
-                  beeldformaten zoals AVIF en WebP. Het resultaat: een bliksemsnelle
-                  website die zowel gebruikers als zoekmachines tevreden houdt.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-bold mb-4 text-cyan-300">SEO &amp; Content Strategie</h3>
-                <p className="text-slate-200 leading-relaxed">
-                  Zichtbaarheid in Google begint met een solide SEO-strategie. Wij
-                  voeren diepgaand zoekwoordenonderzoek uit, optimaliseren technische
-                  aspecten en ontwikkelen een contentplan dat uw doelgroep aanspreekt.
-                  Van lokale SEO voor Nederlandse bedrijven tot internationale groei –
-                  wij zorgen ervoor dat uw website gevonden wordt door de juiste
-                  klanten.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-bold mb-4 text-cyan-300">Headless CMS &amp; Integraties</h3>
-                <p className="text-slate-200 leading-relaxed">
-                  Flexibel contentbeheer is de sleutel tot efficiënte online
-                  communicatie. Met headless CMS-oplossingen zoals Sanity of Contentful
-                  krijgt u volledige controle over uw content, zonder technische
-                  beperkingen. Wij integreren naadloos met uw bestaande systemen en
-                  zorgen voor een workflow die aansluit bij uw bedrijfsprocessen.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-bold mb-4 text-cyan-300">CRO (Conversion Rate Optimization)</h3>
-                <p className="text-slate-200 leading-relaxed">
-                  Meer bezoekers is mooi, maar meer klanten is beter. Door systematische
-                  A/B-testing, gebruikersanalyse en UX-verbeteringen transformeren we uw
-                  website van een digitale brochure naar een krachtige verkoopmotor.
-                  Elke aanpassing is data-gedreven en gericht op het verhogen van uw
-                  conversie en omzet.
-                </p>
-              </div>
+          <div className="grid md:grid-cols-2 gap-8 my-12">
+            <div className="bg-cosmic-800/40 p-8 rounded-2xl border border-cosmic-700/60">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-3 text-white">
+                <Database className="w-6 h-6 text-blue-400" />
+                Headless CMS
+              </h3>
+              <p className="text-slate-300 leading-relaxed">
+                Volledige vrijheid over uw content met Sanity of Contentful.
+                Geen technische kennis nodig om uw website actueel te houden.
+                Naadloze integratie met uw bestaande systemen.
+              </p>
             </div>
-
-            <div className="text-center mt-8">
-              <a href="/contact" className="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25">
-                Vraag een groeiscan aan
-              </a>
+            <div className="bg-cosmic-800/40 p-8 rounded-2xl border border-cosmic-700/60">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-3 text-white">
+                <TrendingUp className="w-6 h-6 text-green-400" />
+                Conversie Optimalisatie (CRO)
+              </h3>
+              <p className="text-slate-300 leading-relaxed">
+                Systematische A/B-testing en gebruikersanalyse. Wij transformeren
+                uw website van een digitale folder naar een 24/7 verkoopmachine.
+                Data-gedreven beslissingen voor maximaal rendement.
+              </p>
             </div>
-          </article>
+          </div>
+
+          <div className="text-center mt-12">
+            <Button
+              href="/contact"
+              variant="primary"
+              size="large"
+              className="shadow-lg shadow-cyan-500/20"
+            >
+              Vraag een gratis groeiscan aan
+            </Button>
+          </div>
         </div>
       </section>
 

@@ -1,30 +1,38 @@
 // Advanced Service Worker for ProWeb Studio
-// Version 2.0.0 - Optimized for Dutch users
+// Version 2.1.0 - Robust caching with error handling
 
-const CACHE_NAME = 'proweb-studio-v2.0';
-const STATIC_CACHE_NAME = 'proweb-static-v2.0';
-const DYNAMIC_CACHE_NAME = 'proweb-dynamic-v2.0';
-const API_CACHE_NAME = 'proweb-api-v2.0';
+const CACHE_NAME = 'proweb-studio-v2.1';
+const STATIC_CACHE_NAME = 'proweb-static-v2.1';
+const DYNAMIC_CACHE_NAME = 'proweb-dynamic-v2.1';
+const API_CACHE_NAME = 'proweb-api-v2.1';
 
-// Static assets to cache immediately
+// Static assets to cache - only essential files that definitely exist
 const STATIC_ASSETS = [
   '/',
-  '/diensten',
-  '/portfolio',
-  '/contact',
-  '/over-ons',
-  '/manifest.json',
-  '/favicon.ico'
+  '/manifest.json'
 ];
 
-// Install event
+// Install event with robust error handling
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing service worker v2.0');
-  
+  console.log('[SW] Installing service worker v2.1');
+
   event.waitUntil(
-    caches.open(STATIC_CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
-    }).then(() => {
+    caches.open(STATIC_CACHE_NAME).then(async (cache) => {
+      // Cache each asset individually to handle failures gracefully
+      const cachePromises = STATIC_ASSETS.map(async (url) => {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            await cache.put(url, response);
+            console.log('[SW] Cached:', url);
+          }
+        } catch (error) {
+          console.warn('[SW] Failed to cache:', url, error.message);
+          // Don't throw - continue caching other assets
+        }
+      });
+
+      await Promise.all(cachePromises);
       return self.skipWaiting();
     })
   );
@@ -32,16 +40,14 @@ self.addEventListener('install', (event) => {
 
 // Activate event
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating service worker v2.0');
-  
+  console.log('[SW] Activating service worker v2.1');
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME && 
-              cacheName !== STATIC_CACHE_NAME && 
-              cacheName !== DYNAMIC_CACHE_NAME &&
-              cacheName !== API_CACHE_NAME) {
+          // Delete old version caches
+          if (!cacheName.includes('v2.1')) {
             console.log('[SW] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
@@ -57,8 +63,20 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
-  
+
+  // Only handle GET requests
   if (request.method !== 'GET') {
+    return;
+  }
+
+  // Skip third-party requests (Vercel, Plausible, etc.)
+  if (!url.origin.includes('prowebstudio.nl') && !url.origin.includes('localhost')) {
+    return;
+  }
+
+  // Skip API requests that shouldn't be cached
+  if (url.pathname.startsWith('/api/csp-report') ||
+    url.pathname.startsWith('/api/monitoring')) {
     return;
   }
 
@@ -81,7 +99,10 @@ async function handleApiRequest(request) {
     return networkResponse;
   } catch (error) {
     const cachedResponse = await caches.match(request);
-    return cachedResponse || fetch(request);
+    return cachedResponse || new Response(JSON.stringify({ error: 'Offline' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
 
@@ -90,7 +111,7 @@ async function handleStaticAsset(request) {
   if (cachedResponse) {
     return cachedResponse;
   }
-  
+
   try {
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
@@ -99,27 +120,33 @@ async function handleStaticAsset(request) {
     }
     return networkResponse;
   } catch (error) {
+    console.warn('[SW] Static asset fetch failed:', request.url);
     throw error;
   }
 }
 
 async function handlePageRequest(request) {
-  const cachedResponse = await caches.match(request);
-  
-  const fetchPromise = fetch(request).then(async (networkResponse) => {
+  // Network-first strategy for pages
+  try {
+    const networkResponse = await fetch(request);
     if (networkResponse.ok) {
       const cache = await caches.open(DYNAMIC_CACHE_NAME);
       await cache.put(request, networkResponse.clone());
     }
     return networkResponse;
-  }).catch(() => null);
-  
-  if (cachedResponse) {
-    fetchPromise;
-    return cachedResponse;
+  } catch (error) {
+    // Fallback to cache if network fails
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    // Return offline page or error
+    return new Response('Offline - Probeer later opnieuw', {
+      status: 503,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+    });
   }
-  
-  return fetchPromise || new Response('Offline', { status: 503 });
 }
 
 function isStaticAsset(url) {
@@ -127,8 +154,8 @@ function isStaticAsset(url) {
     '.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.svg',
     '.css', '.js', '.mjs', '.woff', '.woff2', '.ttf', '.eot', '.ico'
   ];
-  
+
   return staticExtensions.some(ext => url.pathname.endsWith(ext));
 }
 
-console.log('[SW] ProWeb Studio Service Worker v2.0 loaded');
+console.log('[SW] ProWeb Studio Service Worker v2.1 loaded');

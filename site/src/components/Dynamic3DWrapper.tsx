@@ -153,7 +153,7 @@ export default function Dynamic3DWrapper({
   const performanceState = usePerformanceMonitor(enablePerformanceMonitoring, 30, 60);
   const enhancementTimeoutRef = useRef<NodeJS.Timeout>();
 
-  // 1. Strict hydration check
+  // 1. Strict hydration check - IMMEDIATE on mount
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -207,37 +207,21 @@ export default function Dynamic3DWrapper({
     detectCapabilities();
   }, [isClient, onDeviceCapabilities]);
 
-  // 3. Progressive enhancement logic
+  // 3. Progressive enhancement logic (simplified - no requestIdleCallback)
   useEffect(() => {
     if (!deviceCapabilities) return;
 
     // Start with basic scene immediately
     setProgressiveEnhancement(false);
 
-    // Use requestIdleCallback for non-critical enhancements
-    const scheduleEnhancement = () => {
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => {
-          // Wait for initial performance stabilization
-          if (performanceState.metrics.fps > 35) {
-            setProgressiveEnhancement(true);
-          }
-        }, { timeout: 2000 });
-      } else {
-        // Fallback for browsers without requestIdleCallback
-        enhancementTimeoutRef.current = setTimeout(() => {
-          if (performanceState.metrics.fps > 35) {
-            setProgressiveEnhancement(true);
-          }
-        }, 1000);
+    // Simple timeout-based enhancement
+    enhancementTimeoutRef.current = setTimeout(() => {
+      if (performanceState.metrics.fps > 35) {
+        setProgressiveEnhancement(true);
       }
-    };
-
-    // Delay enhancement to let basic scene stabilize
-    const initialDelay = setTimeout(scheduleEnhancement, 500);
+    }, 1000);
 
     return () => {
-      clearTimeout(initialDelay);
       if (enhancementTimeoutRef.current) {
         clearTimeout(enhancementTimeoutRef.current);
       }
@@ -295,7 +279,7 @@ export default function Dynamic3DWrapper({
   // Handle WebGL missing
   if (!hasWebGL) {
     return (
-      <div className={`${className} flex items-center justify-center bg-gradient-to-br from-gray-900 to-black`}>
+      <div className={`${className} w-full h-full min-h-[500px] flex items-center justify-center bg-gradient-to-br from-gray-900 to-black`}>
         <div className="text-center p-6 sm:p-7 md:p-8">
           <p className="text-slate-400">
             WebGL is not supported on this device
@@ -310,11 +294,29 @@ export default function Dynamic3DWrapper({
     <PerformanceContext.Provider value={performanceState}>
       <ThreeErrorBoundary variant={variant}>
         {/* 
-          Force a fresh react component tree when client-side 
-          AND when the pathname changes (fixing stale context on navigation).
+          CRITICAL CSS ENFORCEMENT:
+          - w-full h-full: Fill parent container
+          - min-h-[500px]: Force minimum height to PROVE visibility (prevents 0px collapse)
+          - relative: Establish positioning context
+          - block: Ensure block-level display
+          - z-10: Ensure proper stacking above backgrounds
+          
+          Using pathname as key forces complete remount on navigation,
+          creating fresh WebGL context and preventing stale state.
         */}
-        <div key={`3d-scene-${pathname}`} className="w-full h-full">
-          <Suspense fallback={<LoadingSkeleton variant={variant} className={className} />}>
+        <div
+          key={`3d-scene-${pathname}`}
+          className="w-full h-full min-h-[500px] relative block"
+          style={{
+            zIndex: 10,
+            display: 'block',
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            minHeight: '500px',
+          }}
+        >
+          <Suspense fallback={<LoadingSkeleton variant={variant} className={`${className} min-h-[500px]`} />}>
             <Scene3D>
               {children}
             </Scene3D>

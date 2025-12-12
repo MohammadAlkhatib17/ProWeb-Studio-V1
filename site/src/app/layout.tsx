@@ -121,7 +121,6 @@ export const metadata: Metadata = {
       },
     ],
     locale: 'nl_NL',
-    alternateLocale: ['en_US', 'de_DE', 'fr_FR'],
     type: 'website',
     countryName: 'Netherlands',
     emails: [siteConfig.email],
@@ -284,11 +283,12 @@ export default function RootLayout({
         <CookieSettingsModal />
 
         {/* Consent-aware analytics - only loads after user consent */}
+        {/* NOTE: Vercel Analytics disabled - enable in Vercel Dashboard first, then set to true */}
         <ConsentAwareAnalytics
           plausibleDomain={siteConfig.analytics.plausibleDomain}
           nonce={nonce}
-          enableVercelAnalytics={true}
-          enableSpeedInsights={true}
+          enableVercelAnalytics={false}
+          enableSpeedInsights={false}
         />
 
         <BackgroundLayer />

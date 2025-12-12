@@ -1,10 +1,11 @@
 /**
- * Optimized 3D component loader with progressive enhancement
- * Implements lazy loading, suspense boundaries, and performance monitoring for 3D elements
+ * Simplified 3D component loader with guaranteed rendering
+ * Removes complex requestIdleCallback logic in favor of immediate, reliable rendering
  */
 
-import React, { Suspense, ComponentType, ReactNode } from 'react';
+'use client';
 
+import React, { Suspense, ComponentType, ReactNode, useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
 interface Progressive3DLoaderProps {
@@ -29,26 +30,6 @@ interface Progressive3DLoaderProps {
   ssr?: boolean;
 
   /**
-   * Loading priority (affects when the component loads)
-   */
-  priority?: 'immediate' | 'viewport' | 'interaction';
-
-  /**
-   * Performance threshold in milliseconds
-   */
-  performanceThreshold?: number;
-
-  /**
-   * Enable WebGL capability detection
-   */
-  requireWebGL?: boolean;
-
-  /**
-   * Reduced motion fallback
-   */
-  reducedMotionFallback?: ReactNode;
-
-  /**
    * Custom class names
    */
   className?: string;
@@ -58,6 +39,11 @@ interface Progressive3DLoaderProps {
    */
   staticImage?: string;
   staticImageAlt?: string;
+
+  /**
+   * Timeout in ms before forcing 3D display (handles cached asset race)
+   */
+  forceTimeout?: number;
 }
 
 /**
@@ -65,11 +51,11 @@ interface Progressive3DLoaderProps {
  */
 const Default3DFallback = ({ className }: { className?: string }) => (
   <div
-    className={`animate-pulse bg-gradient-to-br from-cosmic-800/40 to-cosmic-900/60 rounded-lg ${className || 'w-full h-full'}`}
+    className={`animate-pulse bg-gradient-to-br from-cosmic-800/40 to-cosmic-900/60 rounded-lg ${className || 'w-full h-full min-h-[300px]'}`}
     role="img"
     aria-label="3D content loading..."
   >
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full h-full flex items-center justify-center min-h-[300px]">
       <div className="space-y-2 text-center">
         <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto" />
         <p className="text-sm text-cosmic-400">Loading 3D content...</p>
@@ -79,31 +65,10 @@ const Default3DFallback = ({ className }: { className?: string }) => (
 );
 
 /**
- * Reduced motion fallback component
- */
-const ReducedMotionFallback = ({ className }: { className?: string }) => (
-  <div
-    className={`bg-gradient-to-br from-cosmic-800/60 to-cosmic-900/80 rounded-lg border border-cosmic-700/40 ${className || 'w-full h-full'}`}
-    role="img"
-    aria-label="Static content (reduced motion enabled)"
-  >
-    <div className="w-full h-full flex items-center justify-center p-8">
-      <div className="text-center space-y-4">
-        <div className="text-4xl">✨</div>
-        <p className="text-cosmic-300 text-sm">
-          3D visualization available<br />
-          <span className="text-cosmic-500">(Motion reduced)</span>
-        </p>
-      </div>
-    </div>
-  </div>
-);
-
-/**
  * WebGL capability detector
  */
 function detectWebGLSupport(): boolean {
-  if (typeof window === 'undefined') return true; // Assume support on server
+  if (typeof window === 'undefined') return true;
 
   try {
     const canvas = document.createElement('canvas');
@@ -123,165 +88,70 @@ function detectReducedMotion(): boolean {
 }
 
 /**
- * Performance monitor for 3D components
+ * Reduced motion fallback component
  */
-function usePerformanceMonitor(threshold: number = 16.67) { // 60fps threshold
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    let frameCount = 0;
-    let lastTime = performance.now();
-    let rafId: number;
-
-    function monitor() {
-      const currentTime = performance.now();
-      const deltaTime = currentTime - lastTime;
-
-      frameCount++;
-
-      // Check every 60 frames (approximately 1 second)
-      if (frameCount >= 60) {
-        const avgFrameTime = deltaTime / frameCount;
-
-        if (avgFrameTime > threshold) {
-          console.warn(`3D Performance Warning: Average frame time ${avgFrameTime.toFixed(2)}ms (> ${threshold}ms)`);
-        }
-
-        frameCount = 0;
-        lastTime = currentTime;
-      }
-
-      rafId = requestAnimationFrame(monitor);
-    }
-
-    rafId = requestAnimationFrame(monitor);
-
-    return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-    };
-  }, [threshold]);
-}
+const ReducedMotionFallback = ({ className }: { className?: string }) => (
+  <div
+    className={`bg-gradient-to-br from-cosmic-800/60 to-cosmic-900/80 rounded-lg border border-cosmic-700/40 ${className || 'w-full h-full min-h-[300px]'}`}
+    role="img"
+    aria-label="Static content (reduced motion enabled)"
+  >
+    <div className="w-full h-full flex items-center justify-center p-8 min-h-[300px]">
+      <div className="text-center space-y-4">
+        <div className="text-4xl">✨</div>
+        <p className="text-cosmic-300 text-sm">
+          3D visualization available<br />
+          <span className="text-cosmic-500">(Motion reduced)</span>
+        </p>
+      </div>
+    </div>
+  </div>
+);
 
 /**
- * Intersection observer hook for viewport-based loading
+ * WebGL not supported fallback
  */
-function useIntersectionLoader(priority: string, enabled: boolean = true) {
-  const [isVisible, setIsVisible] = React.useState(priority === 'immediate');
-  const [hasLoaded, setHasLoaded] = React.useState(priority === 'immediate');
-  const ref = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (!enabled || priority === 'immediate' || hasLoaded) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          setHasLoaded(true);
-        }
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '100px' // Start loading before fully visible
-      }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, [priority, hasLoaded, enabled]);
-
-  return { ref, shouldLoad: hasLoaded, isVisible };
-}
+const NoWebGLFallback = ({ className }: { className?: string }) => (
+  <div
+    className={`w-full h-full flex items-center justify-center p-8 bg-cosmic-900/40 rounded-lg border border-cosmic-700/40 min-h-[300px] ${className || ''}`}
+  >
+    <div className="text-center space-y-4">
+      <div className="text-4xl">🖥️</div>
+      <p className="text-cosmic-300 text-sm">
+        WebGL not supported<br />
+        <span className="text-cosmic-500">Static content shown</span>
+      </p>
+    </div>
+  </div>
+);
 
 /**
- * Progressive 3D component loader with all optimizations
+ * Simplified Progressive 3D Loader
+ * 
+ * Strategy:
+ * 1. Render the <Canvas> wrapper IMMEDIATELY on mount (hidden with opacity-0)
+ * 2. Set isLoaded=true immediately when document is ready
+ * 3. Fade in the 3D content with CSS transition
+ * 4. No complex requestIdleCallback - prioritize guaranteed visibility
  */
 export function Progressive3DLoader({
   component,
   fallback,
   componentProps = {},
   ssr = false,
-  priority = 'viewport',
-  performanceThreshold = 16.67,
-  requireWebGL = true,
-  reducedMotionFallback,
   className,
   staticImage,
   staticImageAlt = '3D Preview',
+  forceTimeout = 100, // Short timeout to handle cached assets
 }: Progressive3DLoaderProps) {
-  const [webGLSupported, setWebGLSupported] = React.useState(true);
-  const [reducedMotion, setReducedMotion] = React.useState(false);
-  const [showStatic, setShowStatic] = React.useState(!!staticImage);
-  const { ref, shouldLoad } = useIntersectionLoader(priority, true);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+  const [webGLSupported, setWebGLSupported] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const mountedRef = useRef(true);
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
-  // Performance monitoring
-  usePerformanceMonitor(performanceThreshold);
-
-  // Client-side capability detection
-  React.useEffect(() => {
-    setWebGLSupported(!requireWebGL || detectWebGLSupport());
-    setReducedMotion(detectReducedMotion());
-  }, [requireWebGL]);
-
-  // Hybrid Rendering Strategy:
-  // If staticImage is present, we show it first.
-  // We only switch to 3D when:
-  // 1. Component should load (in viewport)
-  // 2. Browser is idle (to avoid blocking main thread during initial page load)
-  // Hybrid Rendering Strategy:
-  // If staticImage is present, we show it first.
-  // We only switch to 3D when:
-  // 1. Component should load (in viewport)
-  // 2. Browser is idle (to avoid blocking main thread during initial page load)
-  // 3. OR a safety timeout triggers (guaranteeing visibility)
-  React.useEffect(() => {
-    if (!staticImage || !shouldLoad) return;
-
-    // If priority is immediate, swap ASAP
-    if (priority === 'immediate') {
-      setShowStatic(false);
-      return;
-    }
-
-    let idleId: number | undefined;
-    let timeoutId: NodeJS.Timeout | undefined;
-
-    const forceLoad = () => {
-      setShowStatic(false);
-      if (idleId && (window as any).cancelIdleCallback) {
-        (window as any).cancelIdleCallback(idleId);
-      }
-    };
-
-    // Otherwise wait for idle OR timeout
-    if ((window as any).requestIdleCallback) {
-      // Race condition: trigger as soon as idle...
-      idleId = (window as any).requestIdleCallback(() => {
-        setShowStatic(false);
-        if (timeoutId) clearTimeout(timeoutId);
-      });
-
-      // ...OR force it after 50ms if main thread is choked
-      timeoutId = setTimeout(forceLoad, 50);
-    } else {
-      // Fallback for no RIC support
-      timeoutId = setTimeout(() => setShowStatic(false), 50); // Short timeout for fallback
-    }
-
-    return () => {
-      if (idleId && (window as any).cancelIdleCallback) {
-        (window as any).cancelIdleCallback(idleId);
-      }
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [shouldLoad, staticImage, priority]);
-
-  // Create dynamic component with optimizations
+  // Create dynamic component with next/dynamic
   const DynamicComponent = React.useMemo(() => {
     return dynamic(component, {
       ssr,
@@ -289,101 +159,118 @@ export function Progressive3DLoader({
     });
   }, [component, ssr, fallback, className]);
 
-  // Handle reduced motion preference
-  if (reducedMotion && reducedMotionFallback) {
-    return <div ref={ref} className={className}>{reducedMotionFallback}</div>;
-  }
+  // Client-side capability detection
+  useEffect(() => {
+    setWebGLSupported(detectWebGLSupport());
+    setReducedMotion(detectReducedMotion());
+  }, []);
 
+  // CRITICAL: Force visibility on mount
+  // This handles the race condition where cached assets load instantly
+  useEffect(() => {
+    mountedRef.current = true;
+
+    // Immediately mark as loaded if document is ready
+    if (typeof document !== 'undefined') {
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setIsLoaded(true);
+      } else {
+        // Wait for DOMContentLoaded
+        const handleLoaded = () => {
+          if (mountedRef.current) {
+            setIsLoaded(true);
+          }
+        };
+        document.addEventListener('DOMContentLoaded', handleLoaded);
+
+        // Safety timeout - force load after forceTimeout ms regardless
+        timeoutRef.current = setTimeout(() => {
+          if (mountedRef.current) {
+            setIsLoaded(true);
+          }
+        }, forceTimeout);
+
+        return () => {
+          document.removeEventListener('DOMContentLoaded', handleLoaded);
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
+      }
+    }
+
+    return () => {
+      mountedRef.current = false;
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [forceTimeout]);
+
+  // Trigger fade-in after content is loaded
+  useEffect(() => {
+    if (isLoaded) {
+      // Small delay to ensure DOM has rendered before triggering transition
+      const fadeTimer = setTimeout(() => {
+        if (mountedRef.current) {
+          setShowContent(true);
+        }
+      }, 50);
+
+      return () => clearTimeout(fadeTimer);
+    }
+    return undefined; // Explicit return for all code paths
+  }, [isLoaded]);
+
+  // Handle reduced motion preference
   if (reducedMotion) {
     return (
-      <div ref={ref} className={className}>
+      <div className={`w-full h-full min-h-[300px] ${className || ''}`}>
         <ReducedMotionFallback className="w-full h-full" />
       </div>
     );
   }
 
-  // Static Image Mode (Hybrid)
-  if (showStatic && staticImage) {
+  // Handle WebGL not supported
+  if (!webGLSupported) {
     return (
-      <div ref={ref} className={`relative ${className}`}>
-        {/* Render static image for LCP */}
-        <img
-          src={staticImage}
-          alt={staticImageAlt}
-          className="w-full h-full object-cover transition-opacity duration-500"
-          width={800} // Reasonable default
-          height={600}
-          fetchPriority={priority === 'immediate' ? 'high' : 'auto'}
-        />
-        {/* Optional: Add a "Interact to load" badge if desired, but auto-swap is smoother */}
-      </div>
-    );
-  }
-
-  // Handle WebGL requirement
-  if (requireWebGL && !webGLSupported) {
-    return (
-      <div ref={ref} className={className}>
-        <div className="w-full h-full flex items-center justify-center p-8 bg-cosmic-900/40 rounded-lg border border-cosmic-700/40">
-          <div className="text-center space-y-4">
-            <div className="text-4xl">🖥️</div>
-            <p className="text-cosmic-300 text-sm">
-              WebGL not supported<br />
-              <span className="text-cosmic-500">Static content shown</span>
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't load until conditions are met
-  if (!shouldLoad) {
-    return (
-      <div ref={ref} className={className}>
-        {staticImage ? (
-          <img
-            src={staticImage}
-            alt={staticImageAlt}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          fallback || <Default3DFallback className="w-full h-full" />
-        )}
+      <div className={`w-full h-full min-h-[300px] ${className || ''}`}>
+        <NoWebGLFallback className="w-full h-full" />
       </div>
     );
   }
 
   return (
-    <div ref={ref} className={className}>
-      <Suspense fallback={fallback || <Default3DFallback className="w-full h-full" />}>
-        <DynamicComponent {...componentProps} />
-      </Suspense>
+    <div className={`relative w-full h-full min-h-[300px] ${className || ''}`}>
+      {/* Static image layer (shown initially, fades out) */}
+      {staticImage && (
+        <div
+          className={`absolute inset-0 z-10 transition-opacity duration-500 ${showContent ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        >
+          <img
+            src={staticImage}
+            alt={staticImageAlt}
+            className="w-full h-full object-cover"
+            width={800}
+            height={600}
+            fetchPriority="high"
+          />
+        </div>
+      )}
+
+      {/* 3D Content layer - always rendered, fades in */}
+      <div
+        className={`absolute inset-0 z-20 w-full h-full transition-opacity duration-500 ${showContent ? 'opacity-100' : 'opacity-0'}`}
+        style={{ minHeight: '300px' }}
+      >
+        <Suspense fallback={fallback || <Default3DFallback className="w-full h-full min-h-[300px]" />}>
+          <DynamicComponent {...componentProps} />
+        </Suspense>
+      </div>
+
+      {/* Fallback when not yet showing content and no static image */}
+      {!showContent && !staticImage && (
+        <div className="absolute inset-0 z-5">
+          {fallback || <Default3DFallback className="w-full h-full min-h-[300px]" />}
+        </div>
+      )}
     </div>
-  );
-}
-
-/**
- * Convenience hook for creating optimized 3D loaders
- */
-export function use3DLoader(
-  componentPath: string,
-  options: Partial<Progressive3DLoaderProps> = {}
-) {
-  const component = React.useCallback(
-    () => import(componentPath),
-    [componentPath]
-  );
-
-  return React.useCallback(
-    (props: Record<string, unknown> = {}) => (
-      <Progressive3DLoader
-        component={component}
-        componentProps={props}
-        {...options}
-      />
-    ),
-    [component, options]
   );
 }
 
@@ -395,9 +282,8 @@ export const Optimized3DLoaders = {
     <Progressive3DLoader
       component={() => import('@/three/HeroScene')}
       componentProps={props}
-      priority="immediate"
-      className="w-full h-full"
-      performanceThreshold={16.67}
+      className="w-full h-full min-h-[500px]"
+      forceTimeout={50}
     />
   ),
 
@@ -405,9 +291,8 @@ export const Optimized3DLoaders = {
     <Progressive3DLoader
       component={() => import('@/three/HexagonalPrism')}
       componentProps={props}
-      priority="viewport"
-      className="w-full h-full"
-      performanceThreshold={33.33} // 30fps for less critical 3D
+      className="w-full h-full min-h-[300px]"
+      forceTimeout={100}
     />
   ),
 };

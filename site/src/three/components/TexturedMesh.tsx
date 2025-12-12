@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -34,7 +34,7 @@ export function TexturedMesh({
   animate = false,
 }: TexturedMeshProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
-  
+
   // Load texture with KTX2/BasisU compression
   const texture = useKTX2Texture(texturePath, {
     wrapS: THREE.RepeatWrapping,
@@ -50,7 +50,7 @@ export function TexturedMesh({
   // Create material with texture
   const material = useMemo(() => {
     if (!texture) return null;
-    
+
     return new THREE.MeshStandardMaterial({
       map: texture,
       metalness: 0.3,
@@ -122,5 +122,4 @@ export function TexturedMesh({
   );
 }
 
-// Add useEffect import
-import { useEffect } from 'react';
+

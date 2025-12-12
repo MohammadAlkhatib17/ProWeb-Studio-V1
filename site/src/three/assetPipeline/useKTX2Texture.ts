@@ -36,7 +36,7 @@ export function useKTX2Texture(
     const load = async () => {
       try {
         const tex = await loadTexture(path, gl, options);
-        
+
         if (!disposed) {
           setTexture(tex);
           textureMemoryMonitor.add(path, tex);
@@ -54,11 +54,13 @@ export function useKTX2Texture(
 
     return () => {
       disposed = true;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       if (texture) {
         texture.dispose();
         textureMemoryMonitor.remove(path);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path, gl]); // Intentionally omit options to prevent reloading
 
   if (error) {
@@ -96,20 +98,20 @@ export function useKTX2Textures(
       const promises = paths.map(async (path, index) => {
         try {
           const tex = await loadTexture(path, gl, options);
-          
+
           if (!disposed) {
             loadedTextures[index] = tex;
             textureMemoryMonitor.add(path, tex);
-            
+
             setTextures((prev) => {
               const next = [...prev];
               next[index] = tex;
               return next;
             });
-            
+
             setLoadedCount((prev) => prev + 1);
           }
-          
+
           return tex;
         } catch (err) {
           console.error(`Failed to load texture: ${path}`, err);
@@ -131,6 +133,7 @@ export function useKTX2Textures(
         }
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paths.join(','), gl]); // Use join for stable dependency
 
   return {
@@ -160,7 +163,7 @@ export function useKTX2Environment(path: string | null): THREE.Texture | null {
     const load = async () => {
       try {
         const env = await loadPMREMEnvironment(path, gl);
-        
+
         if (!disposed) {
           setEnvMap(env);
           textureMemoryMonitor.add(`${path}_pmrem`, env);
@@ -179,6 +182,7 @@ export function useKTX2Environment(path: string | null): THREE.Texture | null {
         textureMemoryMonitor.remove(`${path}_pmrem`);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path, gl]);
 
   return envMap;

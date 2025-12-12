@@ -58,7 +58,15 @@ export default function HeroCanvas({ children, className }: Props) {
           canvas.addEventListener('webglcontextlost', onLost as EventListener, { passive: false } as AddEventListenerOptions);
           // Note: three will attempt to restore automatically; nothing else to do here.
         }}
-        style={{ background: 'transparent' }}
+        style={{
+          background: 'transparent',
+          width: '100%',
+          height: '100%',
+          display: 'block',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
       >
         <Suspense fallback={null}>
           {children}

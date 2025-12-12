@@ -12,6 +12,8 @@ import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 
 import { Button } from '@/components/Button';
+import { BentoGrid, BentoGridItem } from '@/components/ui/BentoGrid';
+import { Rocket, Palette, TrendingUp, ShieldCheck, CheckCircle2, MapPin, Building2, CircuitBoard } from 'lucide-react';
 import DutchMarketFAQ from '@/components/DutchMarketFAQ';
 import FAQSection from '@/components/sections/FAQSection';
 import SEOSchema from '@/components/SEOSchema';
@@ -387,275 +389,172 @@ export default function HomePage() {
       {/* Enhanced SEO Content Section with Proper Semantic Structure */}
       <section
         id="seo-content"
-        className="py-section px-4 sm:px-6 lg:px-8 bg-cosmic-900/30"
+        className="py-section px-4 sm:px-6 lg:px-8 bg-cosmic-900/30 relative"
       >
-        <div className="max-w-5xl mx-auto">
-          <article className="prose prose-invert prose-lg max-w-none">
-            <header>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-center gradient-text">
-                Website Laten Maken Nederland: Uw Expert Partner voor Digitale Groei
-              </h2>
-              <p className="text-xl text-center text-slate-200 mb-12 max-w-3xl mx-auto">
-                ProWeb Studio transformeert uw bedrijfsvisie in krachtige digitale ervaringen.
-                Of u nu een <strong>professionele website wilt laten maken</strong>, uw bestaande site wilt vernieuwen,
-                of een complete <strong>webshop laten ontwikkelen</strong> – wij zijn uw strategische partner
-                voor meetbare online groei in Nederland. Van Amsterdam tot Maastricht, van startup tot enterprise:
-                <strong>website laten maken</strong> door ervaren Nederlandse webdesign specialisten.
-              </p>
-            </header>
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-50" />
 
-            <section>
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
-                Waarom ProWeb Studio Kiezen om Uw Website te Laten Maken?
-              </h3>
+        <div className="max-w-7xl mx-auto">
+          {/* Header Section */}
+          <div className="text-center mb-16 max-w-4xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 gradient-text leading-tight">
+              Website Laten Maken Nederland: Uw Expert Partner voor Digitale Groei
+            </h2>
+            <p className="text-xl text-slate-300 mb-12 leading-relaxed">
+              ProWeb Studio transformeert uw bedrijfsvisie in krachtige digitale ervaringen.
+              Of u nu een <strong>professionele website wilt laten maken</strong>, of een complete <Link href="/diensten" className="text-cyan-300 hover:text-cyan-200 decoration-cyan-500/30 underline underline-offset-4">webshop</Link> nodig heeft –
+              wij zijn uw strategische partner voor meetbare online groei.
+            </p>
+          </div>
 
-              <div className="grid md:grid-cols-2 gap-8 mb-12">
-                <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                    🚀 Nederlandse Webdesign Excellence
-                  </h4>
-                  <p className="text-slate-200">
-                    Als leading <strong>webdesign bureau Nederland</strong> behalen onze websites perfecte Core Web Vitals scores
-                    en laden binnen 1 seconde. Dit betekent betere Google rankings, hogere conversies en tevreden bezoekers
-                    die langer op uw site blijven. <strong>Website laten maken</strong> betekent bij ons investeren in performance.
-                  </p>
-                </div>
+          {/* Why Choose Us - Bento Grid */}
+          <section className="mb-24">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-10 text-center text-white">
+              Waarom ProWeb Studio Kiezen?
+            </h3>
+            <BentoGrid>
+              <BentoGridItem
+                title="Google Core Web Vitals"
+                description="Wij bouwen websites die binnen 1 seconde laden. Snellere websites betekenen hogere Google rankings, meer bezoekers en betere conversies voor uw bedrijf."
+                header={<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20" />}
+                icon={<Rocket className="h-8 w-8 text-green-400" />}
+                className="md:col-span-2"
+              />
+              <BentoGridItem
+                title="3D & WebGL Magic"
+                description="Onderscheid u van de concurrentie met interactieve 3D elementen en productvisualisaties die bezoekers omver blazen."
+                header={<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-magenta-500/20 to-purple-500/20" />}
+                icon={<Palette className="h-8 w-8 text-magenta-400" />}
+                className="md:col-span-1"
+              />
+              <BentoGridItem
+                title="SEO Dominantie"
+                description="Technische SEO zit in ons DNA. Van structuur tot sitemap: wij optimaliseren alles zodat u gevonden wordt door uw ideale klant."
+                header={<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20" />}
+                icon={<TrendingUp className="h-8 w-8 text-cyan-400" />}
+                className="md:col-span-1"
+              />
+              <BentoGridItem
+                title="Veilig & Schaalbaar"
+                description="Enterprise-grade beveiliging met geavanceerde headers en CSP. Gebouwd om met uw bedrijf mee te groeien, van startup tot multinational."
+                header={<div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-slate-500/20 to-slate-700/20" />}
+                icon={<ShieldCheck className="h-8 w-8 text-slate-300" />}
+                className="md:col-span-2"
+              />
+            </BentoGrid>
+          </section>
 
-                <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                    🎨 Innovatieve 3D Web Ervaringen
-                  </h4>
-                  <p className="text-slate-200">
-                    Van interactieve productconfigurators tot meeslepende WebGL-animaties –
-                    wij creëren <strong>moderne websites</strong> die uw bezoekers verbazen en uw merk onvergetelijk maken.
-                    Ontdek waarom steeds meer Nederlandse bedrijven kiezen voor onze unieke
-                    <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300 ml-1">
-                      3D website ontwikkeling diensten
-                    </Link>.
-                  </p>
-                </div>
-
-                <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                    📈 SEO & Marketing Geoptimaliseerde Websites
-                  </h4>
-                  <p className="text-slate-200">
-                    Elke regel code schrijven we met zoekmachine-optimalisatie in gedachten.
-                    Van technische SEO tot contentstructuur – uw <strong>professionele website</strong> wordt gevonden
-                    door uw ideale klanten. Lokale SEO voor Nederlandse markten is onze specialiteit.
-                  </p>
-                </div>
-
-                <div className="bg-cosmic-800/40 p-6 rounded-xl border border-cosmic-700/60">
-                  <h4 className="text-xl font-semibold mb-3 text-cyan-300">
-                    🛡️ Veilige & Schaalbare Website Architectuur
-                  </h4>
-                  <p className="text-slate-200">
-                    Met geavanceerde beveiligingsprotocollen, CSP-headers en continue monitoring
-                    zorgen we dat uw <strong>zakelijke website</strong> en klantgegevens optimaal beschermd zijn.
-                    Gebouwd voor groei: onze websites schalen mee met uw bedrijfssucces.
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            <section>
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
-                Website Ontwikkeling Nederland: Van Concept tot Conversie
-              </h3>
-              <p className="text-slate-200 mb-6">
-                Als specialist in <strong>website laten maken</strong> hanteren wij een bewezen
-                methodiek die uw succes garandeert. Of u nu een <strong>responsive website</strong>,
-                <strong>webshop</strong>, of <strong>corporate website</strong> nodig heeft –
-                onze gestructureerde aanpak zorgt voor resultaten. Ontdek hoe wij uw digitale ambities
-                realiseren in onze gedetailleerde{' '}
-                <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300">
-                  werkwijze en projectaanpak voor website ontwikkeling
-                </Link>.
-              </p>
-
-              <div className="bg-gradient-to-r from-cosmic-800/40 to-cosmic-700/40 p-6 rounded-xl border border-cosmic-600/60 mb-8">
-                <h4 className="text-xl font-semibold mb-4 text-cyan-300">
-                  Complete Website Laten Maken Dienstverlening:
-                </h4>
-                <ul className="grid md:grid-cols-2 gap-3 text-slate-200">
-                  <li>✓ Strategische digitale consultancy & marktanalyse</li>
-                  <li>✓ Gebruiksvriendelijk UX/UI design & prototyping</li>
-                  <li>✓ Frontend & backend website ontwikkeling</li>
-                  <li>✓ E-commerce en professionele webshop oplossingen</li>
-                  <li>✓ Interactieve 3D visualisaties en WebGL animaties</li>
-                  <li>✓ SEO optimalisatie en technische performance</li>
-                  <li>✓ Betrouwbare hosting en website beheer Nederland</li>
-                  <li>✓ Conversie-optimalisatie (CRO) en A/B testing</li>
-                  <li>✓ Responsive design voor mobiel en desktop</li>
-                  <li>✓ Website onderhoud en veiligheidsmonitoring</li>
-                  <li>✓ Integraties met Nederlandse betaalsystemen</li>
-                  <li>✓ GDPR-compliant website implementatie</li>
-                </ul>
-              </div>
-
-              <p className="text-slate-200 mb-8">
-                Bekijk ons complete overzicht van{' '}
-                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">
-                  professionele webdesign en website ontwikkeling diensten Nederland
-                </Link>{' '}
-                om te ontdekken hoe wij uw specifieke doelen kunnen realiseren met een
-                <strong> op maat gemaakte website</strong>.
-              </p>
-            </section>
-
-            <section>
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
-                Website Laten Maken: Voor Elk Type Nederlandse Organisatie
-              </h3>
-
-              <div className="space-y-8 mb-12">
-                <div>
-                  <h4 className="text-xl font-semibold mb-3 text-white">
-                    🏢 MKB & Nederlandse Ondernemers
-                  </h4>
-                  <p className="text-slate-200">
-                    Wilt u een <strong>professionele website laten maken</strong> die uw lokale
-                    of nationale markt verovert? Wij specialiseren ons in <strong>zakelijke websites</strong> en <strong>bedrijfswebsites</strong> voor het
-                    Nederlandse MKB die direct impact hebben op uw digitale aanwezigheid, omzet en merkbekendheid. Van Amsterdam,
-                    Rotterdam en Utrecht tot Groningen, Eindhoven en Maastricht – uw online etalage versterken met een <strong>responsive website</strong>
-                    en toekomstgerichte webtechnologie is onze passie.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-xl font-semibold mb-3 text-white">
-                    🚀 Startups & Scale-ups Nederland
-                  </h4>
-                  <p className="text-slate-200">
-                    Voor ambitieuze Nederlandse startups die snel willen groeien, ontwikkelen wij schaalbare
-                    digitale platforms die meegroeien met uw succes. Van MVP en <strong>startup website</strong> tot enterprise-oplossing –
-                    wij denken strategisch mee in uw groei-roadmap. <strong>Moderne websites</strong> en innovatieve web applicaties die investeerders
-                    imponeren en klanten converteren, geoptimaliseerd voor de Nederlandse markt en internationale expansie.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-xl font-semibold mb-3 text-white">
-                    🏭 Enterprise & Corporates
-                  </h4>
-                  <p className="text-slate-200">
-                    Complexe <strong>corporate websites</strong> en digitale ecosystemen zijn onze specialiteit.
-                    Wij integreren naadloos met uw bestaande systemen en processen voor een
-                    toekomstbestendige digitale infrastructuur. Van multinationals tot Nederlandse marktleiders –
-                    <strong>enterprise website ontwikkeling</strong> die voldoet aan de hoogste beveiligings- en compliance eisen.
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-xl font-semibold mb-3 text-white">
-                    🛍️ E-commerce & Webshop Ontwikkeling
-                  </h4>
-                  <p className="text-slate-200">
-                    <strong>Webshop laten maken</strong> die daadwerkelijk verkoopt? Onze e-commerce specialisten
-                    ontwikkelen krachtige online winkels geoptimaliseerd voor de Nederlandse consument.
-                    Integraties met Mollie, Adyen, iDEAL, en andere Nederlandse betaalmethoden zijn standaard.
-                    Van kleine webwinkels tot enterprise e-commerce platforms.
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-8 rounded-xl border border-cyan-500/20 mb-8">
-                <h4 className="text-xl font-semibold mb-4 text-cyan-300">
-                  🗺️ Website Laten Maken in Heel Nederland
-                </h4>
-                <p className="text-slate-200 mb-4">
-                  Als Nederlands <strong>webdesign bureau</strong> bedienen wij klanten door het hele land.
-                  Van de Randstad tot de provincies – onze lokale marktkennis zorgt voor websites
-                  die aansluiten bij uw doelgroep:
+          {/* Services List - Horizontal Cards */}
+          <section className="mb-24">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-white">
+                  Website Ontwikkeling: Van Concept tot Conversie
+                </h3>
+                <p className="text-slate-300 mb-8 text-lg">
+                  Onze gestructureerde aanpak garandeert resultaat. Wij combineren creativiteit met keiharde data om websites te bouwen die werken.
                 </p>
-                <div className="grid md:grid-cols-3 gap-4 text-sm text-slate-200">
-                  <div>
-                    <strong className="text-cyan-300">Randstad:</strong>
-                    <ul className="mt-2 space-y-1">
-                      <li>• Website maken Amsterdam</li>
-                      <li>• Webdesign Rotterdam</li>
-                      <li>• Website laten maken Utrecht</li>
-                      <li>• Webdevelopment Den Haag</li>
-                      <li>• Website Haarlem & Leiden</li>
-                    </ul>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {[
+                    "Strategische digitale consultancy", "UX/UI design & prototyping",
+                    "Frontend & backend development", "E-commerce oplossingen",
+                    "Interactieve 3D visualisaties", "SEO & Performance",
+                    "Betrouwbare hosting", "Conversie-optimalisatie",
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-2 text-slate-300">
+                      <CheckCircle2 className="h-5 w-5 text-cyan-400 flex-shrink-0" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-8">
+                  <Link href="/diensten" className="text-cyan-300 hover:text-cyan-200 font-semibold group flex items-center gap-2">
+                    Bekijk alle diensten <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </Link>
+                </div>
+              </div>
+              <div className="bg-cosmic-800/30 rounded-2xl p-8 border border-cosmic-700/50 backdrop-blur-sm relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10">
+                  <CircuitBoard className="w-64 h-64 text-cyan-500" />
+                </div>
+                <h4 className="text-xl font-bold text-white mb-6 relative z-10">Voor Elk Type Organisatie</h4>
+                <div className="space-y-6 relative z-10">
+                  <div className="flex gap-4">
+                    <div className="bg-cyan-500/20 p-3 rounded-lg h-fit">
+                      <Building2 className="w-6 h-6 text-cyan-300" />
+                    </div>
+                    <div>
+                      <h5 className="font-bold text-slate-200">MKB & Ondernemers</h5>
+                      <p className="text-sm text-slate-400 mt-1">Directe impact op uw digitale aanwezigheid en omzet.</p>
+                    </div>
                   </div>
-                  <div>
-                    <strong className="text-cyan-300">Noord & Oost:</strong>
-                    <ul className="mt-2 space-y-1">
-                      <li>• Webdesign Groningen</li>
-                      <li>• Website maken Enschede</li>
-                      <li>• Webdevelopment Arnhem</li>
-                      <li>• Website Nijmegen & Apeldoorn</li>
-                      <li>• Webdesign Zwolle & Almere</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <strong className="text-cyan-300">Zuid Nederland:</strong>
-                    <ul className="mt-2 space-y-1">
-                      <li>• Website Eindhoven</li>
-                      <li>• Webdesign Tilburg</li>
-                      <li>• Website maken Maastricht</li>
-                      <li>• Webdevelopment Breda</li>
-                      <li>• Website &apos;s-Hertogenbosch</li>
-                    </ul>
+                  <div className="flex gap-4">
+                    <div className="bg-magenta-500/20 p-3 rounded-lg h-fit">
+                      <Rocket className="w-6 h-6 text-magenta-300" />
+                    </div>
+                    <div>
+                      <h5 className="font-bold text-slate-200">Startups & Scale-ups</h5>
+                      <p className="text-sm text-slate-400 mt-1">Schaalbare platforms die investeerders imponeren.</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </section>
+            </div>
+          </section>
 
-            <FAQSection title="Veelgestelde Vragen">
-              <DutchMarketFAQ />
-            </FAQSection>
+          {/* Region Coverage */}
+          <section className="mb-24 text-center">
+            <h3 className="text-2xl sm:text-3xl font-bold mb-10 text-white">
+              Actief in Heel Nederland
+            </h3>
+            <div className="flex flex-wrap justify-center gap-4">
+              {[
+                "Amsterdam", "Rotterdam", "Utrecht", "Den Haag", "Eindhoven",
+                "Groningen", "Tilburg", "Almere", "Breda", "Nijmegen",
+                "Enschede", "Haarlem", "Arnhem", "Amersfoort", "Zwolle"
+              ].map((city) => (
+                <Link
+                  key={city}
+                  href={`/steden/${city.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="px-4 py-2 rounded-full bg-cosmic-800/50 border border-cosmic-700 hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-all text-slate-300 hover:text-cyan-300 text-sm flex items-center gap-2"
+                >
+                  <MapPin className="w-3 h-3" />
+                  {city}
+                </Link>
+              ))}
+            </div>
+            <p className="mt-6 text-slate-400 text-sm">
+              En vele andere regio&apos;s. <Link href="/steden" className="text-cyan-400 hover:underline">Bekijk volledig overzicht</Link>.
+            </p>
+          </section>
 
-            <section>
-              <h3 className="text-2xl sm:text-3xl font-bold mb-6 text-cyan-300">
-                Over ProWeb Studio: Uw Digitale Partner in Nederland
-              </h3>
-              <p className="text-slate-200 mb-6">
-                Als Nederlandse website specialist met internationale expertise combineren wij
-                lokale marktkennis met wereldklasse technologie. Ons team van ervaren developers,
-                designers en strategen heeft één doel: uw digitale succes realiseren door
-                <strong> websites te laten maken</strong> die daadwerkelijk resultaat opleveren
-                voor Nederlandse bedrijven.
-              </p>
+          <FAQSection title="Veelgestelde Vragen">
+            <DutchMarketFAQ />
+          </FAQSection>
 
-              <p className="text-slate-200 mb-8">
-                Leer meer{' '}
-                <Link href="/over-ons" className="text-cyan-300 hover:text-cyan-300">
-                  over ons team, onze missie en Nederlandse webdesign expertise
-                </Link>{' '}
-                om Nederlandse bedrijven te helpen groeien met innovatieve webtechnologie.
-                Bekijk ook onze <Link href="/werkwijze" className="text-cyan-300 hover:text-cyan-300">
-                  gestructureerde ontwikkelingsmethodiek
-                </Link> en{' '}
-                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">
-                  uitgebreide service portfolio
-                </Link>.
-              </p>
-            </section>
+          {/* About & Final CTA */}
+          <section className="mt-24 bg-gradient-to-br from-cosmic-800/50 to-cosmic-900/50 rounded-3xl p-8 sm:p-12 border border-cosmic-700/50 text-center relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-magenta-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-            <footer className="bg-gradient-to-r from-cyan-500/10 to-magenta-500/10 p-8 rounded-xl border border-cyan-500/20 text-center">
-              <h3 className="text-2xl font-bold mb-4 text-white">
+            <div className="relative z-10 max-w-3xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-white">
                 Klaar om Jouw Digitale Verhaal te Schrijven?
-              </h3>
-              <p className="text-slate-200 mb-6">
-                Laten we samen ontdekken hoe jouw <strong>website laten maken project</strong> een game-changer wordt voor je business.
-                In een gratis strategiegesprek verkennen we jouw doelen, dromen en mogelijkheden voor digitale groei.
-                Ontdek waarom ambitieuze ondernemers door heel Nederland kiezen voor onze
-                <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300 ml-1">innovatieve webdesign aanpak</Link>.
+              </h2>
+              <p className="text-lg text-slate-300 mb-8">
+                Uw website is uw belangrijkste medewerker. Zorg dat hij presteert.
+                Laten we in een vrijblijvend gesprek ontdekken hoe wij uw ambities kunnen realiseren.
               </p>
               <Button
                 href="/contact"
                 variant="primary"
                 size="large"
-                className="gap-2"
+                className="gap-2 shadow-lg shadow-cyan-500/20"
               >
-                Start met een gratis strategiegesprek
+                Start met een gratis strategiesessie
                 <span>✨</span>
               </Button>
-            </footer>
-          </article>
+            </div>
+          </section>
+
         </div>
       </section>
     </main>
