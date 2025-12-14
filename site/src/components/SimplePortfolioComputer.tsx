@@ -8,7 +8,7 @@ import { Group } from 'three'
 
 function SimpleLaptopModel() {
   const groupRef = useRef<Group>(null)
-  
+
   useFrame((state) => {
     if (groupRef.current) {
       groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1
@@ -26,7 +26,7 @@ function SimpleLaptopModel() {
       >
         <meshStandardMaterial color="#2c3e50" metalness={0.6} roughness={0.4} />
       </RoundedBox>
-      
+
       {/* Laptop Screen */}
       <RoundedBox
         args={[2.8, 1.8, 0.1]}
@@ -37,12 +37,12 @@ function SimpleLaptopModel() {
       >
         <meshStandardMaterial color="#1a1a1a" metalness={0.1} roughness={0.9} />
       </RoundedBox>
-      
+
       {/* Screen Content */}
       <Box args={[2.6, 1.6, 0.02]} position={[0, 0.9, -0.84]} rotation={[-0.1, 0, 0]}>
         <meshStandardMaterial color="#000" emissive="#0066cc" emissiveIntensity={0.3} />
       </Box>
-      
+
       {/* Screen Text */}
       <Html
         transform
@@ -78,13 +78,13 @@ function SimpleScene() {
         autoRotate
         autoRotateSpeed={0.5}
       />
-      
+
       <ambientLight intensity={0.4} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
       <pointLight position={[-10, -10, -10]} intensity={0.3} />
-      
+
       <SimpleLaptopModel />
-      
+
       <Environment preset="city" />
     </>
   )
@@ -92,8 +92,8 @@ function SimpleScene() {
 
 export default function SimplePortfolioComputer({ className = '' }: { className?: string }) {
   return (
-    <div className={`w-full h-64 md:h-80 lg:h-96 ${className}`}>
-      <Suspense 
+    <div className={`w-full h-full ${className}`}>
+      <Suspense
         fallback={
           <div className="w-full h-full bg-gradient-to-br from-blue-600/20 to-purple-700/20 rounded-lg flex items-center justify-center border border-blue-500/30">
             <div className="text-center text-white">

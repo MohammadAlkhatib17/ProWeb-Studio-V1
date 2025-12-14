@@ -1,9 +1,11 @@
 'use client';
 
 import { useRef, useMemo } from 'react';
+
 import { Sphere, Trail, Line } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+
 import Scene3D from '@/components/Scene3D';
 
 interface PlanetProps {

@@ -20,7 +20,6 @@ const routeTranslations: Record<string, string> = {
   'over-ons': 'Over Ons',
   'contact': 'Contact',
   'werkwijze': 'Werkwijze',
-  'speeltuin': 'Speeltuin',
   'overzicht': 'Overzicht',
   'overzicht-site': 'Site Overzicht',
   'privacy': 'Privacy',
@@ -59,10 +58,10 @@ const routeTranslations: Record<string, string> = {
 
 export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
   const pathname = usePathname();
-  
+
   // Generate breadcrumb items from pathname if not provided
   const breadcrumbItems = items || generateBreadcrumbItems(pathname);
-  
+
   // Don't show breadcrumbs on homepage
   if (pathname === '/' || breadcrumbItems.length <= 1) {
     return null;
@@ -94,7 +93,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
           __html: JSON.stringify(breadcrumbSchema),
         }}
       />
-      
+
       {/* Breadcrumb Navigation */}
       <nav
         aria-label="Breadcrumbs"
@@ -104,7 +103,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
           <ol className="flex items-center space-x-2 text-sm">
             {breadcrumbItems.map((item, index) => {
               const isLast = index === breadcrumbItems.length - 1;
-              
+
               return (
                 <li key={item.href} className="flex items-center">
                   {index > 0 && (
@@ -112,7 +111,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
                       →
                     </span>
                   )}
-                  
+
                   {index === 0 ? (
                     <Link
                       href={item.href}
@@ -123,7 +122,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
                       <span className="sr-only">{item.title}</span>
                     </Link>
                   ) : isLast ? (
-                    <span 
+                    <span
                       className="text-white font-medium"
                       aria-current="page"
                     >
@@ -154,12 +153,12 @@ function generateBreadcrumbItems(pathname: string): BreadcrumbItem[] {
   ];
 
   let currentPath = '';
-  
+
   pathSegments.forEach((segment) => {
     currentPath += `/${segment}`;
-    const title = routeTranslations[segment] || 
+    const title = routeTranslations[segment] ||
       segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
-    
+
     breadcrumbs.push({
       title,
       href: currentPath,

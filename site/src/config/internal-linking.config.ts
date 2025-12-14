@@ -99,7 +99,6 @@ export const footerLinkGroups: LinkGroup[] = [
       { title: 'Nederlandse Webdesign Experts', href: '/over-ons', priority: 'medium' },
       { title: 'Website Ontwikkeling Proces', href: '/werkwijze', priority: 'medium' },
       { title: 'Onze Webdesign Case Studies', href: '/portfolio', priority: 'medium' },
-      { title: '3D Website Innovaties', href: '/speeltuin', priority: 'low' },
       { title: 'Website Project Starten', href: '/contact', priority: 'high' }
     ]
   },
@@ -124,7 +123,6 @@ export const contentSuggestions: Record<string, Array<{ title: string; href: str
   ],
   '/portfolio': [
     { title: 'Onze Diensten', href: '/diensten', description: 'Ontdek wat wij voor u kunnen betekenen' },
-    { title: 'Speeltuin', href: '/speeltuin', description: 'Ervaar interactieve 3D website elementen' },
     { title: 'Plan Een Gesprek', href: '/contact', description: 'Bespreek uw project ideeën met ons team' }
   ],
   '/over-ons': [

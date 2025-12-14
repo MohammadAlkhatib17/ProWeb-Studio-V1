@@ -1,22 +1,22 @@
-import type { Metadata } from 'next';
+import dynamicImport from 'next/dynamic';
+import Link from 'next/link';
 
+import { Rocket, Palette, TrendingUp, ShieldCheck, CheckCircle2, MapPin, Building2, CircuitBoard } from 'lucide-react';
+
+import { Button } from '@/components/Button';
+import DutchMarketFAQ from '@/components/DutchMarketFAQ';
+import FAQSection from '@/components/sections/FAQSection';
+import SEOSchema from '@/components/SEOSchema';
+import { BentoGrid, BentoGridItem } from '@/components/ui/BentoGrid';
 import { generatePageMetadata } from '@/lib/metadata';
+
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const revalidate = 3600; // 1 hour - homepage updates frequently
 export const fetchCache = 'force-cache';
 
 export const metadata: Metadata = generatePageMetadata('home');
-
-import dynamicImport from 'next/dynamic';
-import Link from 'next/link';
-
-import { Button } from '@/components/Button';
-import { BentoGrid, BentoGridItem } from '@/components/ui/BentoGrid';
-import { Rocket, Palette, TrendingUp, ShieldCheck, CheckCircle2, MapPin, Building2, CircuitBoard } from 'lucide-react';
-import DutchMarketFAQ from '@/components/DutchMarketFAQ';
-import FAQSection from '@/components/sections/FAQSection';
-import SEOSchema from '@/components/SEOSchema';
 
 const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
   ssr: false,
@@ -111,7 +111,7 @@ export default function HomePage() {
         {/* Hero content with enhanced typography */}
         <div className="relative z-10 text-center max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-section">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-extrabold text-shadow-sharp tracking-tight leading-tight mb-8 motion-safe:animate-fade-in">
-            Website Laten Maken die Indruk Maakt. En Converteert.
+            Website Laten Maken: <span className="block text-cyan-300 mt-2">Uw Digitale Universum.</span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-cyan-100 mb-12 max-w-4xl mx-auto motion-safe:animate-slide-up">
             In het digitale tijdperk is uw website meer dan een visitekaartje — het is uw universum. Daarom transformeren wij uw idee tot een razendsnelle, interactieve
@@ -200,8 +200,8 @@ export default function HomePage() {
               title="3D Ervaringen: Het Onmogelijke Mogelijk"
               metric="Interactieve WebGL & R3F"
               desc="In een wereld vol standaardwebsites creëren wij digitale wonderen. Onze 3D-productvisualisaties en interactieve ervaringen transformeren gewone bezoekers in betrokken klanten die uw merk nooit vergeten."
-              linkText="Ervaar de 3D magie zelf"
-              linkHref="/speeltuin"
+              linkText="Bekijk onze 3D projecten"
+              linkHref="/portfolio"
             />
             <CaseCard
               title="Webshop Laten Maken: Verkopen Herontdacht"
@@ -246,7 +246,7 @@ export default function HomePage() {
               <p className="text-slate-400">
                 Hier ontstaat de magie tussen psychologie en pixels. Van eerste wireframes tot adembenemende designs creëren wij UI/UX ervaringen die niet alleen converteren,
                 maar uw merkidentiteit versterken en gebruikers raken. Ontdek onze <Link href="/diensten" className="text-cyan-300 hover:text-cyan-300">webdesign service</Link> en
-                <Link href="/speeltuin" className="text-cyan-300 hover:text-cyan-300 ml-1">creatieve 3D design voorbeelden</Link>.
+                <Link href="/portfolio" className="text-cyan-300 hover:text-cyan-300 ml-1">onze creatieve projecten</Link>.
               </p>
             </div>
             <div className="text-center group">
@@ -338,11 +338,11 @@ export default function HomePage() {
 
           <div className="text-center">
             <Button
-              href="/speeltuin"
+              href="/portfolio"
               variant="secondary"
               className="gap-2 hover:gap-4 group"
             >
-              Bekijk 3D website voorbeelden
+              Bekijk 3D cases in portfolio
               <span className="group-hover:translate-x-1 transition-transform duration-300">
                 →
               </span>

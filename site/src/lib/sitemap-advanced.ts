@@ -12,11 +12,11 @@
 
 import { MetadataRoute } from 'next';
 
-import { steden } from '@/config/steden.config';
 import { diensten } from '@/config/diensten.config';
+import { steden } from '@/config/steden.config';
 
-// Performance: Edge runtime for faster cold starts
-export const runtime = 'edge';
+// Update runtime to Node.js to support FS operations for MDX
+export const runtime = 'nodejs';
 
 /**
  * Base site URL normalized
@@ -72,6 +72,17 @@ export function generatePagesSegment(): SitemapEntry[] {
       alternates: {
         languages: {
           'nl-NL': `${baseUrl}/diensten`,
+        },
+      },
+    },
+    {
+      url: `${baseUrl}/engineering`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+      alternates: {
+        languages: {
+          'nl-NL': `${baseUrl}/engineering`,
         },
       },
     },
@@ -200,7 +211,32 @@ export function generateLocationsSegment(): SitemapEntry[] {
     };
   });
 
-  return [locationsIndex, ...locationPages];
+  // Feature: Generate City + Service combination pages
+  // e.g., /steden/amsterdam/website-laten-maken
+  const locationServicePages: SitemapEntry[] = [];
+
+  steden.forEach((stad) => {
+    diensten.forEach((dienst) => {
+      // Basic priority logic
+      let priority = 0.6;
+      if (stad.population > 200000) priority += 0.1;
+      if (['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'].includes(dienst.slug)) priority += 0.1;
+
+      locationServicePages.push({
+        url: `${baseUrl}/steden/${stad.slug}/${dienst.slug}`,
+        lastModified: locationUpdateDate,
+        changeFrequency: 'weekly',
+        priority: Math.min(priority, 1.0), // Cap at 1.0
+        alternates: {
+          languages: {
+            'nl-NL': `${baseUrl}/steden/${stad.slug}/${dienst.slug}`,
+          }
+        }
+      });
+    });
+  });
+
+  return [locationsIndex, ...locationPages, ...locationServicePages];
 }
 
 /**
@@ -234,6 +270,36 @@ export function generateServicesSegment(): SitemapEntry[] {
   });
 }
 
+import { getAllArticles } from '@/lib/mdx';
+
+/**
+ * Engineering Blog Segment
+ */
+export function generateEngineeringSegment(): SitemapEntry[] {
+  try {
+    const baseUrl = getSiteUrl();
+    const now = new Date();
+
+    const articles = getAllArticles();
+
+    return articles.map(article => ({
+      url: `${baseUrl}/engineering/${article.slug}`,
+      lastModified: new Date(article.publishedAt || now),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+      alternates: {
+        languages: {
+          'nl-NL': `${baseUrl}/engineering/${article.slug}`,
+        }
+      }
+    }));
+  } catch (error) {
+    console.error('Error generating engineering sitemap segment:', error);
+    // Return empty array instead of crashing the entire sitemap
+    return [];
+  }
+}
+
 /**
  * Generate complete sitemap with all segments
  * Used by app/sitemap.ts
@@ -242,8 +308,9 @@ export function generateCompleteSitemap(): MetadataRoute.Sitemap {
   const pages = generatePagesSegment();
   const services = generateServicesSegment();
   const locations = generateLocationsSegment();
+  const engineering = generateEngineeringSegment();
 
-  return [...pages, ...services, ...locations];
+  return [...pages, ...services, ...locations, ...engineering];
 }
 
 /**

@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
+import PricingSection from '@/components/sections/PricingSection';
 import {
   getDienstBySlug,
   getRelatedDiensten,
@@ -43,7 +44,7 @@ export async function generateStaticParams() {
   for (const stadSlug of stadSlugs) {
     for (const dienstSlug of dienstSlugs) {
       // Only generate pages for valid combinations
-      if (isDienstAvailableInStad(dienstSlug, stadSlug)) {
+      if (isDienstAvailableInStad()) {
         combinations.push({
           stad: stadSlug,
           dienst: dienstSlug,
@@ -75,7 +76,7 @@ export default function StadDienstPage({ params }: StadDienstPageProps) {
   const dienst = getDienstBySlug(params.dienst);
 
   // 404 if either stad or dienst not found, or if service not available in city
-  if (!stad || !dienst || !isDienstAvailableInStad(dienst.slug, stad.slug)) {
+  if (!stad || !dienst || !isDienstAvailableInStad()) {
     notFound();
   }
 
@@ -230,54 +231,11 @@ export default function StadDienstPage({ params }: StadDienstPageProps) {
 
       {/* Packages / Pricing Models - Render if available */}
       {dienst.packages && (
-        <section className="relative z-10 px-4 sm:px-6 lg:px-8 py-section bg-cosmic-900/50">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                Pakketten &{' '}
-                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                  Prijzen
-                </span>
-              </h2>
-              <p className="text-lg text-slate-200 max-w-3xl mx-auto">
-                Transparante tarieven voor {stad.name}. Kies het pakket dat bij u past.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {dienst.packages.map((pkg, index) => (
-                <div
-                  key={index}
-                  className="bg-cosmic-800/40 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-6 hover:border-primary-500/50 transition-all duration-300 hover:scale-105"
-                >
-                  <div className="text-center">
-                    <h3 className="text-xl font-semibold text-white mb-3">{pkg.name}</h3>
-                    <p className="text-slate-200 text-sm mb-4">{pkg.description}</p>
-                    <div className="text-2xl font-bold text-cyan-300 mb-4">
-                      Vanaf {pkg.price}
-                    </div>
-                    <ul className="space-y-2 mb-6 text-left">
-                      {pkg.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="text-xs text-slate-400 flex items-center">
-                          <span className="text-cyan-300 mr-2">✓</span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                    <Button
-                      href="/contact"
-                      variant="secondary"
-                      size="normal"
-                      className="w-full"
-                    >
-                      Kies Pakket
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <PricingSection
+          title={`Pakketten voor ${dienst.name} in ${stad.name}`}
+          subtitle={`Transparante tarieven voor ${stad.name}. Kies het pakket dat bij u past.`}
+          tiers={dienst.packages}
+        />
       )}
 
       {/* Process Section - Render if available */}
@@ -380,49 +338,7 @@ export default function StadDienstPage({ params }: StadDienstPageProps) {
         </div>
       </section>
 
-      {/* Pricing Info */}
-      <section className="py-section">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-400/20 rounded-2xl p-8 md:p-10">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Investering & Planning
-              </h2>
-              <p className="text-slate-400">
-                Transparante prijzen voor {dienst.name} in {stad.name}
-              </p>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="text-center">
-                <div className="text-5xl font-bold text-cyan-300 mb-2">
-                  {dienst.pricing.from}
-                </div>
-                <p className="text-slate-400">{dienst.pricing.model}</p>
-              </div>
-              <div className="text-center">
-                <div className="text-5xl font-bold text-blue-300 mb-2">
-                  {dienst.deliveryTime}
-                </div>
-                <p className="text-slate-400">Gemiddelde oplevering</p>
-              </div>
-            </div>
-
-            <div className="mt-8 text-center">
-              <Button
-                href="/contact"
-                variant="primary"
-                size="large"
-              >
-                Vraag Gratis Offerte Aan
-              </Button>
-              <p className="text-slate-400 text-sm mt-4">
-                Vrijblijvend advies voor uw project in {stad.name}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Related Services */}
       {relatedDiensten.length > 0 && (

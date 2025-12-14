@@ -1,17 +1,20 @@
-import Breadcrumbs from '@/components/Breadcrumbs';
-import { Button } from '@/components/Button';
-import { siteConfig } from '@/config/site.config';
-import PortfolioHero from '../../components/portfolio/PortfolioHero';
-import PortfolioSchema from '../../components/portfolio/PortfolioSchema';
-import SimplePortfolioComputer from '@/components/SimplePortfolioComputer';
-import SimpleEcommerceShowcase from '@/components/SimpleEcommerceShowcase';
-import SimpleBrandIdentityModel from '@/components/SimpleBrandIdentityModel';
 import {
   Code2, ShoppingBag, Palette,
   Layers, Globe,
   CheckCircle2
 } from 'lucide-react';
+
+import Breadcrumbs from '@/components/Breadcrumbs';
+import { Button } from '@/components/Button';
+import SimpleBrandIdentityModel from '@/components/SimpleBrandIdentityModel';
+import SimpleEcommerceShowcase from '@/components/SimpleEcommerceShowcase';
+import SimplePortfolioComputer from '@/components/SimplePortfolioComputer';
+import { siteConfig } from '@/config/site.config';
+
+import InnovationLabs from '../../components/portfolio/InnovationLabs';
 import MobileShowcase from '../../components/portfolio/MobileShowcase';
+import PortfolioHero from '../../components/portfolio/PortfolioHero';
+import PortfolioSchema from '../../components/portfolio/PortfolioSchema';
 
 import type { Metadata } from 'next';
 
@@ -123,7 +126,7 @@ export default function PortfolioPage() {
 
                 {/* 3D Side */}
                 <div className="lg:w-1/2 w-full order-1 lg:order-2">
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/20 border border-cyan-500/20 group">
+                  <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/20 border border-cyan-500/20 group">
                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 z-0" />
                     <div className="relative z-10 w-full h-full">
                       <SimplePortfolioComputer />
@@ -145,7 +148,7 @@ export default function PortfolioPage() {
               <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
                 {/* 3D Side (Left) */}
                 <div className="lg:w-1/2 w-full order-1">
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-magenta-500/20 border border-magenta-500/20">
+                  <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-magenta-500/20 border border-magenta-500/20">
                     <div className="absolute inset-0 bg-gradient-to-tr from-magenta-500/10 to-purple-500/10 z-0" />
                     <div className="relative z-10 w-full h-full">
                       <SimpleEcommerceShowcase />
@@ -209,7 +212,7 @@ export default function PortfolioPage() {
                     <div className="flex flex-wrap gap-3 pt-4">
                       <span className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm">Motion Design</span>
                       <span className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm">Sound Design</span>
-                      <span className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm">Interactive Logo's</span>
+                      <span className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm">Interactive Logo&apos;s</span>
                       <span className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm">Digital Art Direction</span>
                     </div>
                   </div>
@@ -217,7 +220,7 @@ export default function PortfolioPage() {
 
                 {/* 3D Side */}
                 <div className="lg:w-1/2 w-full order-1 lg:order-2">
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-green-500/20 border border-green-500/20">
+                  <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-green-500/20 border border-green-500/20">
                     <div className="absolute inset-0 bg-gradient-to-bl from-green-500/10 to-emerald-500/10 z-0" />
                     <div className="relative z-10 w-full h-full">
                       <SimpleBrandIdentityModel />
@@ -231,6 +234,9 @@ export default function PortfolioPage() {
           {/* Mobile-Responsive Design Showcase */}
           <MobileShowcase />
         </section>
+
+        {/* Innovation Labs (Formerly Speeltuin) */}
+        <InnovationLabs />
 
         {/* Call to Action */}
         {/* Premium Call to Action */}

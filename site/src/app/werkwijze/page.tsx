@@ -1,14 +1,14 @@
-import type { Metadata } from 'next';
-
-export const dynamic = 'force-static';
-export const revalidate = 60 * 60 * 24;
-
 import Link from 'next/link';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
 import DynamicOrbitSystem from '@/components/dynamic/DynamicOrbitSystem';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
+
+import type { Metadata } from 'next';
+
+export const dynamic = 'force-static';
+export const revalidate = 60 * 60 * 24;
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -63,7 +63,7 @@ export default function Werkwijze() {
           <div className="text-center mb-16">
             <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-6 gradient-text leading-tight">
               Website Laten Maken: <br className="hidden md:block" />
-              Van Visie tot Virtuoze Realiteit
+              Van Concept naar Conversie in 5 Stappen
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-cyan-200 max-w-3xl mx-auto leading-relaxed">
               Geen standaard templates, maar een architecturaal proces voor digitale dominantie.

@@ -20,6 +20,10 @@ export interface Stad {
     lat: number;
     lng: number;
   };
+  // NEW SEO FIELDS
+  digitalEconomy: string;
+  localIndustries: string[];
+  uniqueSellingPoint: string;
 }
 
 /**
@@ -38,6 +42,9 @@ export const steden: Stad[] = [
     nearbySteden: ['haarlem', 'almere', 'zaanstad', 'hoofddorp'],
     keywords: ['website laten maken amsterdam', 'webdesign amsterdam', 'website amsterdam', 'webshop amsterdam', 'seo amsterdam'],
     coordinates: { lat: 52.3676, lng: 4.9041 },
+    digitalEconomy: 'Amsterdam is de onbetwiste tech-hoofdstad van Europa. Met een ecosysteem dat bruist van unicorns (zoals Ayden en Booking.com), creatieve bureaus en fintech-startups, ligt de lat hier hoger dan waar ook. De digitale economie in Amsterdam vraagt niet om "gewoon een website", maar om platforms die internationaal kunnen concurreren op snelheid, user experience en brand identity.',
+    localIndustries: ['FinTech', 'Creative Industries', 'SaaS & Tech', 'Tourism', 'E-commerce'],
+    uniqueSellingPoint: 'In een stad met de hoogste bureau-dichtheid van Nederland onderscheidt u zich alleen met digitale perfectie. Onze 3D-websites geven u die cruciale "Wow-factor" die nodig is om Amsterdams talent en kapitaal aan te trekken.'
   },
   {
     name: 'Rotterdam',
@@ -50,6 +57,9 @@ export const steden: Stad[] = [
     nearbySteden: ['den-haag', 'schiedam', 'capelle-aan-den-ijssel', 'barendrecht'],
     keywords: ['website laten maken rotterdam', 'webdesign rotterdam', 'website rotterdam', 'webshop rotterdam', 'seo rotterdam'],
     coordinates: { lat: 51.9244, lng: 4.4777 },
+    digitalEconomy: 'Rotterdam is de stad van doeners en innovatie. De transitie van havenstad naar tech-hub is in volle gang, met plekken als RDM Rotterdam en het Cambridge Innovation Center (CIC) als bewijs. Hier draait het om Smart Port oplossingen, Clean Tech en logistieke innovatie. Uw digitale aanwezigheid moet diezelfde robuustheid en efficiëntie uitstralen.',
+    localIndustries: ['Maritime & Logistics', 'Clean Tech', 'Architecture', 'Smart Industry', 'Corporate Services'],
+    uniqueSellingPoint: 'Rotterdammers prikken direct door bluf heen. Wij bouwen websites die "niet lullen maar poetsen": razendsnel, technisch onverwoestbaar en gericht op meetbare conversie in plaats van alleen mooie plaatjes.'
   },
   {
     name: 'Utrecht',
@@ -62,6 +72,9 @@ export const steden: Stad[] = [
     nearbySteden: ['amersfoort', 'nieuwegein', 'zeist', 'houten'],
     keywords: ['website laten maken utrecht', 'webdesign utrecht', 'website utrecht', 'webshop utrecht', 'seo utrecht'],
     coordinates: { lat: 52.0907, lng: 5.1214 },
+    digitalEconomy: 'Utrecht is het kloppende hart van de Nederlandse IT-dienstverlening en Gaming industrie. Met de Jaarbeurs en Utrecht Science Park als ankers, heerst hier een klimaat van kennisintensieve innovatie. Het is de gezondste en snelst groeiende regio, waar gebruikersgemak (UX) en toegankelijkheid hoog in het vaandel staan.',
+    localIndustries: ['Software & IT', 'Gaming & New Media', 'Health & Life Sciences', 'Business Services', 'Education'],
+    uniqueSellingPoint: 'Utrechtse bedrijven opereren vaak op het snijvlak van kennis en commercie. Wij vertalen complexe diensten naar heldere, interactieve websites die uw expert-status direct bevestigen.'
   },
   {
     name: 'Den Haag',
@@ -74,6 +87,9 @@ export const steden: Stad[] = [
     nearbySteden: ['rotterdam', 'delft', 'zoetermeer', 'leiden'],
     keywords: ['website laten maken den haag', 'webdesign den haag', 'website den haag', 'webshop den haag', 'seo den haag'],
     coordinates: { lat: 52.0705, lng: 4.3007 },
+    digitalEconomy: 'Den Haag is uniek als Impact City. Hier staat "Tech for Good", cyber security en legal tech centraal. De aanwezigheid van internationale tribunalen, ministeries en ambassades schept een verwachting van autoriteit, veiligheid en meertaligheid. Een website hier moet vertrouwen en statuur uitstralen.',
+    localIndustries: ['Cyber Security', 'Legal & GovTech', 'International NGO', 'Impact Economy', 'Hospitality'],
+    uniqueSellingPoint: 'Security by design is onze standaard. Voor de Haagse markt bouwen wij digitale vestingen die er elegant uitzien: volledig WCAG-toegankelijk, AVG-proof en voorzien van enterprise-grade beveiliging.'
   },
   {
     name: 'Eindhoven',
@@ -86,6 +102,9 @@ export const steden: Stad[] = [
     nearbySteden: ['tilburg', 'helmond', 'veldhoven', 'best'],
     keywords: ['website laten maken eindhoven', 'webdesign eindhoven', 'website eindhoven', 'webshop eindhoven', 'seo eindhoven'],
     coordinates: { lat: 51.4416, lng: 5.4697 },
+    digitalEconomy: 'Eindhoven Brainport is de slimste regio ter wereld. Hier wordt de toekomst van ASML, Philips en duizenden deep-tech startups gemaakt. De standaard voor digitale presentatie ligt hier torenhoog: als uw product cutting-edge is, mag uw website niet uit 2015 komen. Design en Techniek zijn hier één.',
+    localIndustries: ['High Tech Systems', 'Automotive', 'Industrial Design', 'MedTech', 'Manufacturing'],
+    uniqueSellingPoint: 'U bouwt de technologie van morgen; wij bouwen uw website. Met onze expertise in WebGL en 3D-rendering visualiseren wij complexe high-tech producten op een manier die investeerders en engineers direct overtuigt.'
   },
   {
     name: 'Tilburg',
@@ -98,6 +117,9 @@ export const steden: Stad[] = [
     nearbySteden: ['eindhoven', 'breda', 'den-bosch', 'waalwijk'],
     keywords: ['website laten maken tilburg', 'webdesign tilburg', 'website tilburg', 'webshop tilburg', 'seo tilburg'],
     coordinates: { lat: 51.5555, lng: 5.0913 },
+    digitalEconomy: 'Tilburg transformeert in rap tempo van textielstad naar kennisstad en logistieke hotspot. De Spoorzone en Logistics House zijn trekpleisters voor nieuwe media en e-fulfilment. Tilburgse bedrijven zijn pragmatisch maar ambitieus; ze zoeken schaalbare oplossingen voor groei.',
+    localIndustries: ['Logistics & Supply Chain', 'Manufacturing', 'New Media', 'Education', 'SME (MKB)'],
+    uniqueSellingPoint: 'Onze e-commerce en corporate websites zijn gebouwd voor groei. Wij snappen de Tilburgse handelsgeest: uw website is geen kostenpost, maar een investering die zichzelf moet terugverdienen via leads en sales.'
   },
   {
     name: 'Groningen',
@@ -110,6 +132,9 @@ export const steden: Stad[] = [
     nearbySteden: ['assen', 'leeuwarden', 'emmen', 'hoogezand'],
     keywords: ['website laten maken groningen', 'webdesign groningen', 'website groningen', 'webshop groningen', 'seo groningen'],
     coordinates: { lat: 53.2194, lng: 6.5665 },
+    digitalEconomy: 'Groningen is de jongste stad van Nederland en "Digital City" van het Noorden. Met de RUG en Hanzehogeschool is er een continue stroom van IT-talent en startups (Founded in Groningen). De focus ligt op Energie, Healthy Ageing en Digital Society. Een website hier moet fris, snel en mobiel-perfect zijn.',
+    localIndustries: ['Energy & Sustainability', 'Life Sciences', 'Digital Agencies', 'Education', 'AgriTech'],
+    uniqueSellingPoint: 'Wij spreken de taal van de nieuwe generatie. Onze ' + 'mobile-first' + ' aanpak en PWA-technologieën zorgen ervoor dat u de jonge, digitaal-geletterde doelgroep in Groningen perfect bereikt.'
   },
   {
     name: 'Almere',
@@ -122,6 +147,9 @@ export const steden: Stad[] = [
     nearbySteden: ['amsterdam', 'lelystad', 'hilversum', 'huizen'],
     keywords: ['website laten maken almere', 'webdesign almere', 'website almere', 'webshop almere', 'seo almere'],
     coordinates: { lat: 52.3508, lng: 5.2647 },
+    digitalEconomy: 'Almere is pionier in moderne stadsontwikkeling en duurzaamheid. Het is een magneet voor forenzen en nieuwe ondernemers die de ruimte zoeken buiten Amsterdam. De economie is jong, divers en sterk gericht op constructie, retail en zakelijke dienstverlening. Online zichtbaarheid is cruciaal om niet te verdwijnen in de schaduw van de hoofdstad.',
+    localIndustries: ['Construction & Real Estate', 'Retail & E-commerce', 'Business Services', 'ICT', 'Logistics'],
+    uniqueSellingPoint: 'Schaalbaarheid is key in Almere. Wij bouwen modulaire Next.js websites die moeiteloos met uw bedrijf meegroeien, van lokale starter tot nationale speler. Geen limieten aan uw digitale ambitie.'
   },
   {
     name: 'Breda',
@@ -134,6 +162,9 @@ export const steden: Stad[] = [
     nearbySteden: ['tilburg', 'roosendaal', 'etten-leur', 'oosterhout'],
     keywords: ['website laten maken breda', 'webdesign breda', 'website breda', 'webshop breda', 'seo breda'],
     coordinates: { lat: 51.5719, lng: 4.7683 },
+    digitalEconomy: 'Breda excelleert in Applied Technology en Creatieve Industrie (Game City). Het is een logistiek knooppunt tussen Rotterdam en Antwerpen, maar ook een stad van levensgenieters. Digitalisering in Breda betekent: processen optimaliseren aan de achterkant, maar de  klantbeleving warm en persoonlijk houden aan de voorkant.',
+    localIndustries: ['Logistics', 'Gaming & Robotics', 'Hospitality', 'Retail', 'Maintenance'],
+    uniqueSellingPoint: 'Wij brengen de "Bredase kwaliteit van leven" naar het scherm. Door storytelling en sfeervolle interacties (micro-animaties) zorgen we dat bezoekers niet alleen kijken, maar zich thuis voelen op uw website.'
   },
   {
     name: 'Nijmegen',
@@ -146,6 +177,9 @@ export const steden: Stad[] = [
     nearbySteden: ['arnhem', 'den-bosch', 'oss', 'tiel'],
     keywords: ['website laten maken nijmegen', 'webdesign nijmegen', 'website nijmegen', 'webshop nijmegen', 'seo nijmegen'],
     coordinates: { lat: 51.8126, lng: 5.8372 },
+    digitalEconomy: 'Nijmegen is de Health & High Tech hotspot van Gelderland. Met Novio Tech Campus en Radboudumc, focust de regio op Semiconductor, Health en Chip Integration. Hier wordt gewerkt aan innovaties die de wereld veranderen. Uw website moet die wetenschappelijke autoriteit en precisie weerspiegelen.',
+    localIndustries: ['Health & High Tech', 'Semiconductors', 'Education & Research', 'Public Sector', 'Culture'],
+    uniqueSellingPoint: 'Voor de Nijmeegse kenniseconomie is accuratesse en snelheid vitaal. Wij bouwen razendsnelle, statische gegenereerde sites (SSG) die complexe informatie kristalhelder presenteren aan een kritisch publiek.'
   },
   {
     name: 'Haarlem',
@@ -158,6 +192,9 @@ export const steden: Stad[] = [
     nearbySteden: ['amsterdam', 'heemstede', 'zandvoort', 'bloemendaal'],
     keywords: ['website laten maken haarlem', 'webdesign haarlem', 'website haarlem', 'webshop haarlem', 'seo haarlem'],
     coordinates: { lat: 52.3874, lng: 4.6462 },
+    digitalEconomy: 'Haarlem heeft een sterke reputatie in de media- en uitgeverijsector, en groeit als vestigingsplaats voor hoogwaardige zakelijke dienstverlening en niche-retail. Het publiek is koopkrachtig en kwaliteitsbewust. Een standaard template werkt hier niet; esthetiek en gebruiksgemak (UX) moeten van "boutique" niveau zijn.',
+    localIndustries: ['Media & Publishing', 'High-end Retail', 'Cultural Sector', 'Business Services', 'Tourism'],
+    uniqueSellingPoint: 'Esthetiek staat voorop in Haarlem. Ons team van designers en 3D-artists creëert digitale kunstwerken die naadloos aansluiten bij de verfijnde smaak van uw Haarlemse clientèle.'
   },
   {
     name: 'Arnhem',
@@ -170,6 +207,9 @@ export const steden: Stad[] = [
     nearbySteden: ['nijmegen', 'apeldoorn', 'ede', 'wageningen'],
     keywords: ['website laten maken arnhem', 'webdesign arnhem', 'website arnhem', 'webshop arnhem', 'seo arnhem'],
     coordinates: { lat: 51.9851, lng: 5.8987 },
+    digitalEconomy: 'Arnhem is Energy City en Modestad. Industriepark Kleefse Waard (IPKW) is broedplaats voor clean mobility en energie-tech, terwijl ArtEZ zorgt voor een constante stroom creatieven. De synergie tussen techniek en design is hier de norm. Uw website moet "Sustainable Chic" zijn: groen gehost, efficiënt gecodeerd, prachtig ontworpen.',
+    localIndustries: ['Energy & Environmental Tech', 'Fashion & Design', 'E-commerce', 'Consultancy', 'Manufacturing'],
+    uniqueSellingPoint: 'Wij spreken zowel de taal van de engineer als de designer. Onze websites zijn technisch geoptimaliseerd voor minimale CO2-footprint (Green Web) en voorzien van high-end visualisaties die passen bij Arnhems design-DNA.'
   },
   {
     name: 'Amersfoort',
@@ -182,6 +222,9 @@ export const steden: Stad[] = [
     nearbySteden: ['utrecht', 'hilversum', 'apeldoorn', 'barneveld'],
     keywords: ['website laten maken amersfoort', 'webdesign amersfoort', 'website amersfoort', 'webshop amersfoort', 'seo amersfoort'],
     coordinates: { lat: 52.1561, lng: 5.3878 },
+    digitalEconomy: 'Amersfoort is de ideale uitvalsbasis voor landelijke spelers. Het is een sterke groeistad met focus op Geo-informatie, zakelijke dienstverlening en hoofdkantoren van grote retailers en corporaties. Betrouwbaarheid, bereikbaarheid en data-integratie zijn sleutelwoorden. Uw website moet functioneren als een centraal hub voor uw organisatie.',
+    localIndustries: ['Geo-ICT', 'Corporate Headquarters', 'Healthcare', 'Logistics', 'Financial Services'],
+    uniqueSellingPoint: 'Voor Amersfoortse hubs bouwen wij integratie-vriendelijke platforms. Onze Headless CMS oplossingen koppelen naadloos met uw CRM, ERP of voorraadbeheer, zodat uw website het centrale zenuwstelsel van uw bedrijf wordt.'
   },
   {
     name: 'Zaanstad',
@@ -194,6 +237,9 @@ export const steden: Stad[] = [
     nearbySteden: ['amsterdam', 'alkmaar', 'purmerend', 'hoorn'],
     keywords: ['website laten maken zaanstad', 'webdesign zaanstad', 'website zaandam', 'webshop zaanstad', 'seo zaanstad'],
     coordinates: { lat: 52.4389, lng: 4.8258 },
+    digitalEconomy: 'De Zaanstreek is een powerhouse van Food & Industry. Hier zitten wereldspelers in cacao en logistiek naast hypermoderne maakindustrie. De mentaliteit is: hard werken en kwaliteit leveren. Websites moeten hier niet "fancy" doen, maar presteren. B2B leadgeneratie en employer branding (personeel werven) zijn top prioriteiten.',
+    localIndustries: ['Food Industry', 'Manufacturing', 'Wholesale', 'Construction', 'Process Tech'],
+    uniqueSellingPoint: 'Wij helpen de Zaanse industrie digitaliseren. Van B2B portalen tot wervingssites: wij bouwen robuuste online tools die uw sales teams ondersteunen en technisch personeel aantrekken.'
   },
   {
     name: 'Den Bosch',
@@ -201,11 +247,29 @@ export const steden: Stad[] = [
     region: 'Brabant',
     province: 'Noord-Brabant',
     population: 157486,
-    description: 'Bourgondische gastvrijheid, digitale innovatie. Van de Sint-Janskathedraal tot het Paleisquartier, van de Tramkade tot de binnenstad - Den Bosch combineert historie met data-driven ondernemerschap. Wij bouwen websites, webshops en 3D-ervaringen die net zo karaktervol zijn als de stad zelf. Voor horeca-iconen, zakelijke dienstverleners en creatieve startups. Razendsnelle techniek verpakt in sfeervol design. Omdat een Bossche bol ook niet alleen maar lucht is.',
+    description: 'Bourgondische gastvrijheid, digitale innovatie. Van de Sint-Janskathedraal tot het Paleisquartier, van de Tramkade tot de binnenstad - Den Bosch combineert historie met data-driven ondernemerschap. Wij bouwen websites, webshops en 3D-ervaringen die net zo karaktervol zijn als de stad zelf. Voor horeca, retail, en data-science startups (JADS). Razendsnelle techniek verpakt in sfeervol design. Omdat een Bossche bol ook niet alleen maar lucht is.',
     shortDescription: 'Websites, webshops en 3D-ervaringen voor Den Bosch - karaktervol en innovatief.',
     nearbySteden: ['tilburg', 'eindhoven', 'nijmegen', 'oss'],
     keywords: ['website laten maken den bosch', 'webdesign den bosch', 'website s-hertogenbosch', 'webshop den bosch', 'seo den bosch'],
     coordinates: { lat: 51.6978, lng: 5.3037 },
+    digitalEconomy: 'Den Bosch is de Data-stad van Brabant, home van JADS (Data Science Academy) en toonaangevende ICT-dienstverleners. Maar het is óók een stad van retail en gastvrijheid. De kunst is om Big Data te combineren met een warme "human touch". Uw website moet slim zijn aan de achterkant, maar vriendelijk aan de voorkant.',
+    localIndustries: ['Data Science & IT', 'Public Sector', 'Retail & Hospitality', 'Construction', 'Marketing Agencies'],
+    uniqueSellingPoint: 'Wij maken big data menselijk. Voor de Bossche markt ontwikkelen wij websites met slimme personalisatie en data-visualisaties, verpakt in een warm, uitnodigend design dat past bij de Brabantse gastvrijheid.'
+  },
+  {
+    name: 'Zwolle',
+    slug: 'zwolle',
+    region: 'Oost-Nederland',
+    province: 'Overijssel',
+    population: 130668,
+    description: 'Hanzestad met digitale handelsgeest. Van de Peperbus tot het Hanzeland, van de Diezerstraat tot Hessenpoort - Zwolle is de economische motor van de regio. Wij bouwen websites, webshops en 3D-ervaringen die deZwollenaar aanspreken: nuchter, betrouwbaar, maar met ambitie. Voor logistiek, e-commerce, maakindustrie en dienstverlening. Geavanceerde techniek zonder gedoe. Uw digitale visitekaartje voor heel Noordoost-Nederland.',
+    shortDescription: 'Websites, webshops en 3D-platforms voor Zwolle - Hanzestad innovatie.',
+    nearbySteden: ['amsterdam', 'groningen', 'amersfoort', 'arnhem'],
+    keywords: ['website laten maken zwolle', 'webdesign zwolle', 'website zwolle', 'webshop zwolle', 'seo zwolle'],
+    coordinates: { lat: 52.5168, lng: 6.0830 },
+    digitalEconomy: 'Regio Zwolle is de vierde economische topregio van Nederland. Een knooppunt van transport, kunststoffen (Polymer Science) en e-commerce. Zwolse ondernemers zijn aanpakkers die groeien door samenwerking. Uw website moet functioneel, snel en extreem gebruiksvriendelijk zijn om deze doelgroep te overtuigen.',
+    localIndustries: ['Logistics & Transport', 'E-commerce', 'Polymer & Manufacturing', 'Business Services', 'Healthcare'],
+    uniqueSellingPoint: 'Wij spreken de taal van de Hanzestad 2.0. Geen loze beloftes, maar meetbaar resultaat. Onze conversie-gerichte websites zijn de perfecte digitale motor voor Zwolse handelsondernemingen die willen opschalen.'
   },
 ];
 
@@ -216,7 +280,7 @@ export const steden: Stad[] = [
  * @param _stadSlug - City slug (unused, kept for API consistency)
  * @returns Array of all service slugs from diensten.config.ts
  */
-export function getServicesForStad(_stadSlug?: string): string[] {
+export function getServicesForStad(): string[] {
   return getAllDienstSlugs();
 }
 

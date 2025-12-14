@@ -1,7 +1,8 @@
 'use client';
 
-import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+
 import ParallaxRig from './ParallaxRig';
 import StarsShell from './StarsShell';
 

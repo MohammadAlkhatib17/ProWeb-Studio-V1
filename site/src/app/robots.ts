@@ -10,13 +10,13 @@ import type { MetadataRoute } from 'next';
  */
 export default function robots(): MetadataRoute.Robots {
   const SITE_URL = (
-    process.env.SITE_URL ?? 
-    process.env.NEXT_PUBLIC_SITE_URL ?? 
+    process.env.SITE_URL ??
+    process.env.NEXT_PUBLIC_SITE_URL ??
     (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000')
   ).replace(/\/+$/, '');
-  
+
   const isPreview = process.env.VERCEL_ENV === 'preview';
-  
+
   if (isPreview) {
     // For preview deployments: block all crawlers completely
     return {
@@ -38,7 +38,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: ['/'],
         disallow: [
-          '/speeltuin/',      // Playground area - not for public indexing
+
           '/_next/',          // Next.js internal files
           '/api/',            // API routes
           '/admin/',          // Admin areas if any
@@ -56,7 +56,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Googlebot',
         allow: ['/'],
         disallow: [
-          '/speeltuin/',
+
           '/_next/',
           '/api/',
           '/admin/',
@@ -69,7 +69,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Googlebot-Image',
         allow: ['/'],
         disallow: [
-          '/speeltuin/',
+
           '/_next/static/', // Allow optimized images but not internal static files
         ],
       },
@@ -78,7 +78,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Bingbot',
         allow: ['/'],
         disallow: [
-          '/speeltuin/',
+
           '/_next/',
           '/api/',
           '/admin/',
@@ -90,17 +90,17 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: 'facebookexternalhit',
         allow: ['/'],
-        disallow: ['/speeltuin/', '/_next/', '/api/', '/admin/'],
+        disallow: ['/_next/', '/api/', '/admin/'],
       },
       {
         userAgent: 'Twitterbot',
         allow: ['/'],
-        disallow: ['/speeltuin/', '/_next/', '/api/', '/admin/'],
+        disallow: ['/_next/', '/api/', '/admin/'],
       },
       {
         userAgent: 'LinkedInBot',
         allow: ['/'],
-        disallow: ['/speeltuin/', '/_next/', '/api/', '/admin/'],
+        disallow: ['/_next/', '/api/', '/admin/'],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

@@ -1,15 +1,15 @@
+import { Rocket, ShieldCheck, Zap, Users, Trophy, Sparkles, ArrowRight } from 'lucide-react';
+
+import Breadcrumbs from '@/components/Breadcrumbs';
+import { Button } from '@/components/Button';
+import DynamicFlowingRibbons from '@/components/dynamic/DynamicFlowingRibbons';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import SEOSchema from '@/components/SEOSchema';
+
 import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const revalidate = 60 * 60 * 24;
-
-import { Rocket, ShieldCheck, Zap, Users, Trophy, Sparkles, ArrowRight } from 'lucide-react';
-
-import Breadcrumbs from '@/components/Breadcrumbs';
-import DynamicFlowingRibbons from '@/components/dynamic/DynamicFlowingRibbons';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import SEOSchema from '@/components/SEOSchema';
-import { Button } from '@/components/Button';
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -62,7 +62,7 @@ export default function OverOnsPage() {
               </h1>
 
               <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl mb-10">
-                Wij nemen geen genoegen met 'goed genoeg'. ProWeb Studio is opgericht met één doel: het definiëren van de absolute top in het Nederlandse digitale landschap. Wij bouwen niet zomaar websites; wij smeden digitale dominantie.
+                Wij nemen geen genoegen met &apos;goed genoeg&apos;. ProWeb Studio is opgericht met één doel: het definiëren van de absolute top in het Nederlandse digitale landschap. Wij bouwen niet zomaar websites; wij smeden digitale dominantie.
               </p>
 
               <div className="flex flex-wrap gap-4">

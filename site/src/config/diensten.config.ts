@@ -77,7 +77,7 @@ export const diensten: Dienst[] = [
     relatedDiensten: ['webshop-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen', 'onderhoud-support'],
     targetAudience: ['MKB', 'ZZP\'ers', 'Startups', 'Corporate', 'Non-profit'],
     pricing: {
-      from: '€2.500',
+      from: '€1.495',
       model: 'Vaste prijs of maandelijks abonnement',
     },
     deliveryTime: '4-8 weken',
@@ -127,28 +127,22 @@ export const diensten: Dienst[] = [
     ],
     packages: [
       {
-        name: 'Landingspagina',
-        description: 'Geoptimaliseerde landingspagina voor marketing',
-        features: ['Conversie optimalisatie', 'A/B testing setup', 'Analytics integratie', 'Lead capture forms'],
-        price: '€750'
+        name: 'Kickstart Website',
+        description: 'Perfect voor startups en ZZP\'ers',
+        features: ['One-pager of tot 5 pagina\'s', 'Razendsnelle prestaties', 'Contactformulier', 'Basis SEO'],
+        price: '€1.495'
       },
       {
-        name: 'Bedrijfswebsite',
-        description: 'Professionele corporate website',
-        features: ['Corporate branding', 'Team pagina\'s', 'Nieuwsmodule', 'Contact formulieren'],
-        price: '€2.500'
+        name: 'Scale-up Website',
+        description: 'Complete bedrijfswebsite met CMS',
+        features: ['10+ Pagina\'s', 'Headless CMS (beheer zelf)', 'Uitgebreide SEO', 'Analytics Dashboard'],
+        price: '€2.995'
       },
       {
-        name: 'Portfolio Website',
-        description: 'Creatieve portfolio voor creators',
-        features: ['Galerij functionaliteit', 'Project showcases', 'Client testimonials', 'Social media integratie'],
-        price: '€1.500'
-      },
-      {
-        name: 'Blog Platform',
-        description: 'Content-gerichte website',
-        features: ['CMS integratie', 'SEO tools', 'Social sharing', 'Comment systeem'],
-        price: '€1.200'
+        name: 'Enterprise',
+        description: 'Maatwerk voor grote organisaties',
+        features: ['Complexe functionaliteiten', 'API Integraties', 'Meertaligheid', 'SLA Support'],
+        price: 'Maatwerk'
       }
     ],
     process: [
@@ -209,21 +203,21 @@ export const diensten: Dienst[] = [
     packages: [
       {
         name: 'Kickstart Webshop',
-        description: 'Ideaal voor startende ondernemers',
-        features: ['Tot 50 producten', 'iDEAL betalingen', 'Basis design', 'Google Shopping feed'],
-        price: '€5.000'
+        description: 'Snel online verkopen',
+        features: ['Tot 50 producten', 'iDEAL & Bancontact', 'Standaard design', 'Basis voorraadbeheer'],
+        price: '€4.995'
       },
       {
-        name: 'Professional',
-        description: 'Voor groeiende e-commerce bedrijven',
-        features: ['Onbeperkt producten', 'Advanced filtering', 'Uniek design', 'Koppelingen (Bol.com)'],
-        price: '€8.500'
+        name: 'Scale-up Webshop',
+        description: 'Voor serieuze e-commerce',
+        features: ['Onbeperkt producten', 'Koppeling boekhouding', 'Maatwerk design', 'Geavanceerde filters'],
+        price: '€8.995'
       },
       {
-        name: 'Enterprise',
-        description: 'Maatwerk voor grote volumes',
-        features: ['B2B portal functionaliteit', 'ERP koppeling', 'Multi-store setup', 'Custom features'],
-        price: '€15.000+'
+        name: 'Enterprise Commerce',
+        description: 'Complex e-commerce platform',
+        features: ['B2B Portals', 'ERP Koppelingen', 'Multi-store setup', 'High-traffic optimalisatie'],
+        price: 'Maatwerk'
       }
     ],
     process: [
@@ -247,7 +241,7 @@ export const diensten: Dienst[] = [
     relatedDiensten: ['website-laten-maken', 'seo-optimalisatie', '3d-website-ervaringen', 'onderhoud-support'],
     targetAudience: ['Retailers', 'Groothandel', 'Producenten', 'MKB', 'Startups'],
     pricing: {
-      from: '€5.000',
+      from: '€4.995',
       model: 'Vaste prijs + transactiekosten',
     },
     deliveryTime: '6-12 weken',
@@ -314,22 +308,22 @@ export const diensten: Dienst[] = [
     ],
     packages: [
       {
-        name: 'Local SEO',
-        description: 'Voor lokale zichtbaarheid',
-        features: ['Google Mijn Bedrijf setup', 'Lokale zoekwoorden', '5 landingspagina\'s', 'Maandelijkse rapportage'],
+        name: 'Kickstart SEO',
+        description: 'Lokale zichtbaarheid boosten',
+        features: ['Google Mijn Bedrijf', 'Lokale zoekwoorden', 'Technische audit', 'Maandelijkse rapportage'],
         price: '€750/m'
       },
       {
-        name: 'National Growth',
-        description: 'Voor landelijk bereik',
-        features: ['Uitgebreid zoekwoordenonderzoek', 'Content creatie (4 blogs/m)', 'Technische audit', 'Linkbuilding'],
+        name: 'Scale-up SEO',
+        description: 'Nationale dominantie',
+        features: ['Uitgebreide content strategie', 'Authority linkbuilding', '4 SEO-blogs p/m', 'Conversie optimalisatie'],
         price: '€1.500/m'
       },
       {
-        name: 'E-commerce SEO',
-        description: 'Voor webshops',
-        features: ['Productpagina optimalisatie', 'Categorie structuur', 'Technical health check', 'Conversie optimalisatie'],
-        price: '€2.500/m'
+        name: 'Enterprise SEO',
+        description: 'Internationaal & E-commerce',
+        features: ['Meertalige SEO', 'E-commerce optimalisatie', 'Digital PR campagnes', 'Dedicated specialist'],
+        price: 'Maatwerk'
       }
     ],
     process: [
@@ -419,22 +413,22 @@ export const diensten: Dienst[] = [
     ],
     packages: [
       {
-        name: '3D Product Viewer',
-        description: 'Interactief product in 3D',
+        name: '3D Viewer',
+        description: 'Interactieve product presentatie',
         features: ['1 High-poly model', '360 graden rotatie', 'Zoom functie', 'Mobiel geoptimaliseerd'],
         price: '€3.500'
       },
       {
-        name: 'Product Configurator',
-        description: 'Zelf samenstellen',
-        features: ['Meerdere opties/kleuren', 'Logica & regels', 'Offerte tool integratie', 'UI/UX design'],
+        name: 'Configurator',
+        description: 'Laat klanten zelf samenstellen',
+        features: ['Meerdere opties & kleuren', 'Dynamische prijsberekening', 'Offerte generator', 'UI interface'],
         price: '€7.500'
       },
       {
-        name: 'Immersive Website',
-        description: 'Volledige 3D website ervaring',
-        features: ['Custom 3D wereld', 'Award-winning design', 'Sound design', 'Unieke navigatie'],
-        price: '€12.500+'
+        name: 'Immersive World',
+        description: 'Volledige 3D website',
+        features: ['Complete 3D omgeving', 'Scrollytelling', 'Custom WebGL shaders', 'Award-winning design'],
+        price: 'Maatwerk'
       }
     ],
     process: [
@@ -524,21 +518,21 @@ export const diensten: Dienst[] = [
     ],
     packages: [
       {
-        name: 'Basic',
-        description: 'Essentieel onderhoud',
-        features: ['Technische updates', 'Dagelijkse backups', 'Uptime monitoring', 'Email support'],
+        name: 'Essential',
+        description: 'Basis zekerheid',
+        features: ['Technische updates', 'Dagelijkse backups', '24/7 Monitoring', 'Email support'],
         price: '€95/m'
       },
       {
-        name: 'Pro',
-        description: 'Voor actieve websites',
-        features: ['Content updates (2u)', 'Priority support', 'Security scans', 'Performance rapport'],
+        name: 'Professional',
+        description: 'Actieve ondersteuning',
+        features: ['Inclusief 2u development', 'Priority support', 'Security scans', 'Performance checks'],
         price: '€195/m'
       },
       {
         name: 'Enterprise',
         description: 'Volledige ontzorging',
-        features: ['Onbeperkt klein onderhoud', '24/7 noodnummer', 'Strategisch advies', 'Dedicated developer'],
+        features: ['Onbeperkt klein onderhoud', 'Noodnummer', 'Strategisch kwartaaloverleg', 'Dedicated team'],
         price: '€495/m'
       }
     ],
@@ -629,7 +623,7 @@ export function searchDiensten(query: string): Dienst[] {
  * Check if a service is available in a specific city
  * All services are available in all cities by default
  */
-export function isDienstAvailableInStad(_dienstSlug: string, _stadSlug: string): boolean {
+export function isDienstAvailableInStad(): boolean {
   // All services are available in all cities
   // This can be customized later if needed
   return true;

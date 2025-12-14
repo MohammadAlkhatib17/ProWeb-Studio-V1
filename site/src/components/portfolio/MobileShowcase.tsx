@@ -1,12 +1,15 @@
 'use client';
 
+import * as React from 'react';
 import { Suspense, useRef } from 'react';
+
 import { Float, OrbitControls, Environment } from '@react-three/drei';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { motion } from 'framer-motion';
-import * as THREE from 'three';
-import { Button } from '@/components/Button';
 import { Smartphone, Check, Globe, Laptop } from 'lucide-react';
+import * as THREE from 'three';
+
+import { Button } from '@/components/Button';
 
 function MobileDevices() {
   const phoneRef = useRef<THREE.Group>(null);
@@ -153,9 +156,31 @@ function MobileDevices() {
   );
 }
 
+function AdjustCamera() {
+  const { camera, size } = useThree();
+
+  React.useEffect(() => {
+    const aspect = size.width / size.height;
+    if (camera instanceof THREE.PerspectiveCamera) {
+      if (aspect < 1) {
+        // Mobile/Portrait: Increase FOV to fit wide scene (approx width 7 units)
+        // Optimized for aspect 0.5 (mobile standard)
+        camera.fov = 85;
+      } else {
+        // Desktop/Landscape
+        camera.fov = 60;
+      }
+      camera.updateProjectionMatrix();
+    }
+  }, [camera, size]);
+
+  return null;
+}
+
 function MobileScene() {
   return (
     <group>
+      <AdjustCamera />
       <Environment preset="dawn" />
       <ambientLight intensity={0.4} />
       <directionalLight position={[5, 5, 5]} intensity={0.8} />
@@ -174,12 +199,12 @@ export default function MobileShowcase() {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-cyan-900/20 z-0" />
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="container mx-auto px-safe relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* 3D Scene */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="h-96 lg:h-[500px] order-2 lg:order-1"
@@ -202,8 +227,8 @@ export default function MobileShowcase() {
 
           {/* Content */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="order-1 lg:order-2"
@@ -242,18 +267,18 @@ export default function MobileShowcase() {
 
             {/* Glassmorphic Stats Card */}
             <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 mb-8">
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
                 <div>
-                  <div className="text-2xl font-bold text-white">95%</div>
-                  <div className="text-xs sm:text-sm text-blue-200/70 mt-1">Mobile Users NL</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white">95%</div>
+                  <div className="text-[10px] sm:text-xs text-blue-200/70 mt-1">Mobile Users NL</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-white">&lt; 2s</div>
-                  <div className="text-xs sm:text-sm text-blue-200/70 mt-1">Mobile Load Time</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white">&lt; 2s</div>
+                  <div className="text-[10px] sm:text-xs text-blue-200/70 mt-1">Mobile Load Time</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-white">+68%</div>
-                  <div className="text-xs sm:text-sm text-blue-200/70 mt-1">Mobile Conversie</div>
+                  <div className="text-xl sm:text-2xl font-bold text-white">+68%</div>
+                  <div className="text-[10px] sm:text-xs text-blue-200/70 mt-1">Mobile Conversie</div>
                 </div>
               </div>
             </div>

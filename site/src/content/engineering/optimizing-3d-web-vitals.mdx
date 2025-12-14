@@ -1,0 +1,47 @@
+---
+title: 'Three.js Optimaliseren voor Core Web Vitals'
+description: 'Hoe wij een 99 Performance Score behaalden terwijl we complexe 3D-scenes renderen met R3F en Next.js.'
+publishedAt: '2025-12-12'
+author: 'Chief Engineer'
+tags: ['Three.js', 'Performance', 'Next.js', 'WebGL']
+featured: true
+---
+
+# De 3D Performance Paradox
+
+Het bouwen van immersieve 3D-websites komt vaak met een zware prijs: **Performance**. Het laden van megabytes aan texturen, geometries en shaders in de hoofddraad ('main thread') vermoordt vaak de LCP (Largest Contentful Paint) en INP (Interaction to Next Paint) scores.
+
+Bij ProWeb Studio weigerden we compromissen te sluiten. Wij wilden cinematische 3D-ervaringen *én* perfecte Google-scores. Hier leest u hoe wij onze weg naar een 99 Performance score hebben ge-engineerd.
+
+## 1. De "Viewport Aware" Laadstrategie
+
+Wij laden de 3D-scene niet direct. In plaats daarvan gebruiken we een techniek die wij "Progressive Hydration" noemen. We wachten tot de gebruiker daadwerkelijk kan zien wat we willen tonen, of tot de browser 'idle' (in rust) is.
+
+```tsx
+// Geoptimaliseerd Component
+const HeroCanvas = dynamic(() => import('@/components/HeroCanvas'), {
+  ssr: false,
+  loading: () => <div className="h-screen bg-cosmic-900" />,
+});
+```
+
+Maar we gaan dieper. We initialiseren de WebGL-context pas wanneer de main thread volledig vrij is, zodat het kritieke renderpad voor HTML/CSS nooit geblokkeerd wordt.
+
+## 2. InstancedMesh is je Vriend
+
+In plaats van 1000 losse mesh-objecten te maken voor onze particles (deeltjes), gebruiken we `InstancedMesh`. Dit reduceert het aantal 'draw calls' van 1000 naar **1**.
+
+```jsx
+<instancedMesh ref={meshRef} args={[null, null, 1000]}>
+  <sphereGeometry args={[0.1, 16, 16]} />
+  <meshStandardMaterial color="#00ffff" />
+</instancedMesh>
+```
+
+## 3. Shader-Based Animaties
+
+CPU-gebaseerde animaties (posities updaten in een `useFrame` loop in Javascript) zijn duur voor de processor. Wij hebben al onze orbitale berekeningen verplaatst naar de GPU met behulp van vertex shaders. Hierdoor blijft de CPU vrij voor interactiviteit en scroll-events.
+
+## Conclusie
+
+Performance is geen bijzaak; het is een ontwerpvoorwaarde. Door respect te hebben voor de main thread van de browser en de GPU slim in te zetten, leveren wij 3D-magie zonder de wachttijd.

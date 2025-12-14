@@ -43,7 +43,7 @@ export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
   deps: React.DependencyList = []
 ): (...args: Parameters<T>) => void {
   const timeoutRef = useRef<NodeJS.Timeout>();
-  
+
   // Clean up on unmount
   useEffect(() => {
     return () => {
@@ -62,5 +62,6 @@ export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
     timeoutRef.current = setTimeout(() => {
       callback(...args);
     }, delay);
-  }, [delay, ...deps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [callback, delay, ...deps]);
 }

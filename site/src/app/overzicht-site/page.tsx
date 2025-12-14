@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: 'Volledig overzicht van ProWeb Studio. Vind gemakkelijk alle pagina&apos;s, diensten, portfolio en contactinformatie voor professionele webdevelopment in Nederland.',
   alternates: {
     canonical: '/overzicht-site',
-    languages: { 
+    languages: {
       'nl-NL': '/overzicht-site',
       'x-default': '/overzicht-site'
     },
@@ -56,7 +56,6 @@ const sitemapSections = [
     icon: '🎨',
     links: [
       { href: '/portfolio', title: 'Portfolio', description: 'Bekijk onze gerealiseerde webprojecten en case studies' },
-      { href: '/speeltuin', title: '3D Technologie Speeltuin', description: 'Interactieve demonstraties van moderne webtechnologie' },
     ]
   },
   {
@@ -117,7 +116,7 @@ export default function SitemapPage() {
   return (
     <main className="content-safe-top pt-20 md:pt-24">
       <Breadcrumbs />
-      
+
       <SEOSchema
         pageType="generic"
         pageTitle={metadata.title as string}
@@ -131,7 +130,7 @@ export default function SitemapPage() {
             Site Overzicht ProWeb Studio
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl mx-auto mb-8">
-            Navigeer gemakkelijk door alle pagina&apos;s van ProWeb Studio. Van diensten tot portfolio, 
+            Navigeer gemakkelijk door alle pagina&apos;s van ProWeb Studio. Van diensten tot portfolio,
             van technische showcases tot contactinformatie - vind hier alles wat u zoekt.
           </p>
         </div>
@@ -154,11 +153,11 @@ export default function SitemapPage() {
                     </p>
                   </div>
                 </div>
-                
+
                 <ul className="space-y-4">
                   {section.links.map((link, linkIndex) => (
                     <li key={linkIndex}>
-                      <Link 
+                      <Link
                         href={link.href}
                         className="block p-4 rounded-lg bg-cosmic-800/40 border border-cosmic-700/60 hover:border-cyan-500/60 transition-all duration-300 group"
                       >
@@ -189,10 +188,10 @@ export default function SitemapPage() {
             Onze Expertisegebieden
           </h2>
           <p className="text-slate-200 text-center mb-12 max-w-3xl mx-auto">
-            ProWeb Studio specialiseert zich in diverse aspecten van moderne webdevelopment. 
+            ProWeb Studio specialiseert zich in diverse aspecten van moderne webdevelopment.
             Ontdek onze kerncompetenties en hoe wij uw digitale ambities kunnen realiseren.
           </p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {keywordCategories.map((category, index) => (
               <div key={index} className="glass p-6 rounded-xl">
@@ -222,27 +221,22 @@ export default function SitemapPage() {
           <p className="text-slate-200 mb-8">
             Weet u al wat u zoekt? Spring direct naar de meest populaire pagina&apos;s.
           </p>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link 
+            <Link
               href="/contact"
               className="p-4 bg-gradient-to-r from-cyan-500 to-magenta-500 rounded-lg font-semibold hover:scale-105 transition-all duration-300 hover:shadow-xl"
             >
               Contact Opnemen
             </Link>
-            <Link 
+            <Link
               href="/diensten"
               className="p-4 border-2 border-cyan-400/60 text-cyan-100 rounded-lg hover:bg-cyan-400/10 transition-all duration-300"
             >
               Bekijk Diensten
             </Link>
-            <Link 
-              href="/speeltuin"
-              className="p-4 border-2 border-magenta-400/60 text-magenta-100 rounded-lg hover:bg-magenta-400/10 transition-all duration-300"
-            >
-              3D Showcases
-            </Link>
-            <Link 
+
+            <Link
               href="/portfolio"
               className="p-4 border-2 border-gray-600 text-gray-100 rounded-lg hover:bg-white/10 transition-all duration-300"
             >
@@ -259,7 +253,7 @@ export default function SitemapPage() {
             Klaar om uw Website Project te Starten?
           </h2>
           <p className="text-slate-200 mb-6">
-            Van concept tot conversie - ProWeb Studio realiseert digitale oplossingen 
+            Van concept tot conversie - ProWeb Studio realiseert digitale oplossingen
             die uw bedrijf naar het volgende niveau tillen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

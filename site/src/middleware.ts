@@ -239,7 +239,7 @@ export async function middleware(req: NextRequest) {
     "default-src 'self'",
     // script-src: Allow self, unsafe-inline for Next.js hydration, and specific domains
     // This is less strict than nonce-based but necessary without proper Next.js nonce integration
-    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://va.vercel-scripts.com https://*.vercel-scripts.com`,
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://va.vercel-scripts.com https://*.vercel-scripts.com https://www.google.com https://www.gstatic.com`,
     // style-src: Allow inline styles for Next.js + Google Fonts
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
     // img-src: allow data URIs and HTTPS images
@@ -253,7 +253,7 @@ export async function middleware(req: NextRequest) {
     "base-uri 'self'",
     // frame-ancestors: prevent clickjacking
     "frame-ancestors 'none'",
-    "frame-src 'self'",
+    "frame-src 'self' https://www.google.com https://maps.google.com",
     "form-action 'self'",
     "upgrade-insecure-requests",
   ];
@@ -288,10 +288,7 @@ export async function middleware(req: NextRequest) {
     response.headers.set('X-Cache-Strategy', 'dutch-optimized');
   }
 
-  // 8. Apply X-Robots-Tag for speeltuin route and error pages
-  if (path === '/speeltuin' || path.startsWith('/speeltuin/')) {
-    response.headers.set('X-Robots-Tag', 'noindex, follow');
-  }
+
 
   // Apply X-Robots-Tag for error pages (404, 500, etc.)
   if (path === '/not-found' || path === '/error' || path.includes('/_error') ||

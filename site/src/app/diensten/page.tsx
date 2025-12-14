@@ -1,18 +1,13 @@
-import type { Metadata } from 'next';
-
-import { generatePageMetadata } from '@/lib/metadata';
-
-import dynamicImport from 'next/dynamic';
-
-export const dynamic = 'force-static';
-export const revalidate = 7200; // 2 hours - services content is fairly stable
-export const fetchCache = 'force-cache';
-
-export const metadata: Metadata = generatePageMetadata('services');
-
 import { Suspense } from 'react';
 
+import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
+
+import {
+  Rocket, Target, TrendingUp, Code2, Cpu, Server,
+  Zap, Search, Layout, Database,
+  Laptop, CheckCircle2, ArrowRight
+} from 'lucide-react';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
@@ -22,14 +17,19 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { DutchBusinessInfo, LocalBusinessJSON } from '@/components/local-seo';
 import RelatedServices from '@/components/RelatedServices';
 import FAQSection from '@/components/sections/FAQSection';
+import PricingSection from '@/components/sections/PricingSection';
 import SEOSchema from '@/components/SEOSchema';
-import { steden } from '@/config/steden.config';
 import { BentoGrid, BentoGridItem } from '@/components/ui/BentoGrid';
-import {
-  Rocket, Target, TrendingUp, Code2, Cpu, Server,
-  Zap, Search, Layout, Database,
-  CheckCircle2, ArrowRight, Laptop
-} from 'lucide-react';
+import { steden } from '@/config/steden.config';
+import { generatePageMetadata } from '@/lib/metadata';
+
+import type { Metadata } from 'next';
+
+export const dynamic = 'force-static';
+export const revalidate = 7200; // 2 hours - services content is fairly stable
+export const fetchCache = 'force-cache';
+
+export const metadata: Metadata = generatePageMetadata('services');
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -45,40 +45,40 @@ const services = [
   {
     title: 'Fundamenten voor Digitale Dominantie',
     description:
-      'Uw website is het hart van uw digitale ecosysteem. Wij bouwen razendsnelle, veilige en schaalbare platformen die niet alleen vandaag indruk maken, maar ook klaar zijn voor de ambities van morgen.',
+      'Uw website is het strategische wapen van uw bedrijf. Wij smeden razendsnelle, veilige en schaalbare platformen die uw concurrentie irrelevant maken.',
     features: [
-      'Next.js & React Ontwikkeling',
-      'Headless CMS Integratie',
-      'Core Web Vitals Optimalisatie',
-      'Responsive Design',
+      'Next.js & React Architectuur',
+      'Headless CMS Vrijheid',
+      'Instant Laadtijden',
+      'Mobile-First Perfectie',
     ],
     icon: <Rocket className="w-8 h-8 text-cyan-400" />,
     iconBg: "bg-cyan-500/20",
     id: "website"
   },
   {
-    title: 'Meeslepende 3D Ervaringen',
+    title: 'Meeslepende 3D Revolutie',
     description:
-      'Differentieer uw merk met interactieve 3D-technologie. Wij gebruiken WebGL om producten tot leven te brengen en een onvergetelijke connectie met uw publiek te smeden.',
+      'Stop met scrollen, start met ervaren. Wij gebruiken WebGL technologie om uw producten en verhaal tot leven te wekken op een manier die klanten nooit vergeten.',
     features: [
-      'WebGL & Three.js Experiences',
+      'WebGL & Three.js Meesterwerken',
       'Interactieve Product Configurators',
-      'Real-time 3D Visualisaties',
-      'Performance Optimalisatie',
+      'Filmische Web Ervaringen',
+      'Performance zonder Compromis',
     ],
     icon: <Target className="w-8 h-8 text-magenta-400" />,
     iconBg: "bg-magenta-500/20",
     id: "3d-web"
   },
   {
-    title: 'Data-gedreven Groei',
+    title: 'Wetenschappelijke Groei',
     description:
-      'Een prachtige website is slechts het begin. Wij analyseren, testen en optimaliseren continu om bezoekers in klanten te transformeren en uw ROI te maximaliseren.',
+      'Wij gokken niet. Wij meten. Door datapunten te analyseren en gebruikersgedrag te ontleden, transformeren wij bezoekers in loyale ambassadeurs.',
     features: [
-      'Gebruikersdata Analyse',
-      'A/B Testing & Conversie',
-      'SEO & Content Strategie',
-      'Analytics & Tracking',
+      'Conversie Optimalisatie (CRO)',
+      'Neuro-marketing Principes',
+      'SEO Dominantie Strategie',
+      'Real-time Analytics',
     ],
     icon: <TrendingUp className="w-8 h-8 text-green-400" />,
     iconBg: "bg-green-500/20",
@@ -135,7 +135,7 @@ export default function Diensten() {
 
       {/* Hero section with 3D elements */}
       <section className="relative min-h-[75svh] md:min-h-[70vh] overflow-hidden flex items-center content-safe-top">
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-cosmic-900/20 to-cosmic-900/40" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/60 via-transparent to-transparent" />
 
         <Suspense
           fallback={<div className="absolute inset-0 bg-cosmic-900/50" />}
@@ -147,12 +147,15 @@ export default function Diensten() {
 
         <div className="relative z-10 w-full">
           <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-8 glow-text leading-tight max-w-5xl mx-auto animate-fade-in">
-              Meer dan Code. Oplossingen die Groeien.
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold mb-8 glow-text leading-tight max-w-6xl mx-auto animate-fade-in tracking-tight">
+              Website Maken & Meer: <br />
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                Technologie die Winst Genereert.
+              </span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-cyan-300 max-w-4xl mx-auto leading-relaxed animate-slide-up">
-              Ontdek onze complete oplossingen voor professionele websites,
-              van moderne webdesign tot geavanceerde functionaliteiten.
+            <p className="text-lg sm:text-xl md:text-2xl text-slate-200 max-w-4xl mx-auto leading-relaxed animate-slide-up font-light drop-shadow-md">
+              Wij bouwen geen websites. Wij bouwen digitale ecosystemen die uw marktpositie veroveren.
+              Ontdek de kracht van Next.js, 3D en strategisch design.
             </p>
           </div>
         </div>
@@ -181,7 +184,7 @@ export default function Diensten() {
                     {service.title}
                   </h3>
 
-                  <p className="text-slate-300 mb-8 leading-relaxed flex-grow">
+                  <p className="text-slate-300 mb-8 leading-relaxed flex-grow text-base">
                     {service.description}
                   </p>
 
@@ -197,7 +200,7 @@ export default function Diensten() {
                   </div>
 
                   <div className="mt-8 pt-6 border-t border-white/5 flex items-center text-cyan-400 font-medium group/link">
-                    Ontdek meer
+                    Ontdek strategie
                     <ArrowRight className="w-4 h-4 ml-2 group-hover/link:translate-x-1 transition-transform" />
                   </div>
                 </div>
@@ -208,67 +211,68 @@ export default function Diensten() {
       </section>
 
       {/* Tech Stack Section with Bento Grid */}
-      <section className="py-section px-4 sm:px-6 bg-cosmic-800/10 border-y border-cosmic-700/30">
+      <section className="py-section px-4 sm:px-6 bg-black/20 backdrop-blur-sm border-y border-white/5">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight gradient-text">
-              Onze Technologische Kern
+              Het Arsenaal van de Winnaar
             </h2>
             <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-              Wij kiezen compromisloos voor de beste tools. Een moderne, performante en schaalbare stack die u een oneerlijk voordeel geeft.
+              In de digitale arena telt elke milliseconde. Wij bewapenen uw bedrijf met een technologische voorsprong
+              waar uw concurrenten alleen van kunnen dromen.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-cyan-500/30 transition-all duration-300 group">
+            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-cyan-500/30 transition-all duration-300 group hover:bg-cosmic-800/50">
               <div className="w-12 h-12 bg-cyan-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-500/20 transition-colors">
                 <Code2 className="w-6 h-6 text-cyan-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">Frontend</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Frontend Elite</h3>
               <ul className="space-y-2 text-slate-400 text-sm">
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> Next.js 14+</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> React</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> TypeScript</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_cyan]" /> Next.js 14+</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> React Server Components</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> Strict TypeScript</li>
                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-cyan-500" /> Tailwind CSS</li>
               </ul>
             </div>
 
-            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-magenta-500/30 transition-all duration-300 group">
+            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-magenta-500/30 transition-all duration-300 group hover:bg-cosmic-800/50">
               <div className="w-12 h-12 bg-magenta-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-magenta-500/20 transition-colors">
                 <Layout className="w-6 h-6 text-magenta-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">3D & Animatie</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Immersive Core</h3>
               <ul className="space-y-2 text-slate-400 text-sm">
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> WebGL / R3F</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> Three.js</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> GSAP</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500 shadow-[0_0_8px_magenta]" /> WebGL / R3F</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> Three.js shaders</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> GSAP Animations</li>
                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-magenta-500" /> Framer Motion</li>
               </ul>
             </div>
 
-            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-blue-500/30 transition-all duration-300 group">
+            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-blue-500/30 transition-all duration-300 group hover:bg-cosmic-800/50">
               <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
                 <Database className="w-6 h-6 text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">Backend & CMS</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Scalable Backend</h3>
               <ul className="space-y-2 text-slate-400 text-sm">
                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Headless CMS</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Node.js</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Postgres / Edge</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> GraphQL</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Edge Functions</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Postgres SQL</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> GraphQL API</li>
               </ul>
             </div>
 
-            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-green-500/30 transition-all duration-300 group">
+            <div className="bg-cosmic-800/30 backdrop-blur-sm p-6 rounded-2xl border border-cosmic-700/50 hover:border-green-500/30 transition-all duration-300 group hover:bg-cosmic-800/50">
               <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
                 <Server className="w-6 h-6 text-green-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">Infra</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Global Infra</h3>
               <ul className="space-y-2 text-slate-400 text-sm">
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> Vercel Edge</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> AWS Cloud</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> CDN Global</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> CI/CD Pipelines</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_green]" /> Vercel Edge Network</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> CI/CD Automation</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> DDoS Protection</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500" /> 99.9% Uptime SLA</li>
               </ul>
             </div>
           </div>
@@ -279,7 +283,7 @@ export default function Diensten() {
       <section className="py-12 sm:py-section px-4 sm:px-6">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-12 text-center gradient-text">
-            Ontdek Meer van ProWeb Studio
+            Ontdek het ProWeb Universum
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12">
@@ -291,8 +295,8 @@ export default function Diensten() {
                 Onze Werkwijze
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
-                Ontdek hoe wij van idee naar realisatie werken. Van strategische planning
-                tot technische implementatie en doorlopende optimalisatie.
+                Transparantie is onze standaard. Zie hoe wij van een vaag idee
+                naar een marktleidend product werken in duidelijke sprints.
               </p>
               <Link
                 href="/werkwijze"
@@ -303,36 +307,36 @@ export default function Diensten() {
               </Link>
             </div>
 
-            <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group text-center hover:scale-105">
+            <div className="glass p-6 rounded-xl hover:border-magenta-500/60 transition-all duration-300 group text-center hover:scale-105">
               <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
-                🎮
+                🚀
               </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
-                3D Technologie Speeltuin
+                Portfolio
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
-                Ervaar de kracht van moderne webtechnologie. Interactieve 3D-ervaringen,
-                WebGL-experimenten en innovatieve gebruikersinterfaces.
+                Geen woorden, maar resultaten. Bekijk de projecten waar wij trots op zijn
+                en die onze klanten groei hebben gebracht.
               </p>
               <Link
-                href="/speeltuin"
+                href="/portfolio"
                 className="inline-flex items-center text-cyan-300 hover:text-cyan-300 transition-colors text-sm font-medium"
               >
-                Ontdek onze 3D showcases
+                Zie onze resultaten
                 <span className="ml-1">→</span>
               </Link>
             </div>
 
             <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group text-center hover:scale-105">
               <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
-                👥
+                👤
               </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
                 Over ProWeb Studio
               </h3>
               <p className="text-slate-200 mb-4 text-sm leading-relaxed">
-                Leer het team kennen achter de innovatieve weboplossingen. Onze missie,
-                visie en de expertise die we inzetten voor uw digitale succes.
+                Leer het elite team kennen achter de code. Onze missie is simpel:
+                Nederlandse bedrijven digitaal onverslaanbaar maken.
               </p>
               <Link
                 href="/over-ons"
@@ -347,11 +351,11 @@ export default function Diensten() {
           {/* Conversion-focused CTA */}
           <div className="text-center">
             <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white">
-              Klaar voor een Website die Indruk Maakt?
+              Genoeg Theorie. Tijd voor Actie.
             </h3>
             <p className="text-slate-200 mb-6 max-w-2xl mx-auto">
-              Van concept tot conversie - wij realiseren digitale oplossingen die uw bedrijf
-              naar het volgende niveau tillen. Plan een gratis strategiesessie en ontdek de mogelijkheden.
+              Uw concurrenten zitten niet stil. Waarom u wel?
+              Plan vandaag nog een strategiegesprek en claim uw plek in de markt.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -359,78 +363,41 @@ export default function Diensten() {
                 variant="primary"
                 size="large"
               >
-                Plan Gratis Strategiesessie
+                Plan Gratis Strategie Call
               </Button>
               <Button
                 href="/portfolio"
                 variant="secondary"
                 size="large"
               >
-                Bekijk Portfolio
+                Bekijk Bewezen Resultaat
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Call to action */}
-      <section className="py-section px-4 sm:px-6 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none -z-10 bg-gradient-to-b from-transparent via-cosmic-900/15 to-transparent" />
-        <div className="absolute inset-0 pointer-events-none -z-10 portal-gradient opacity-40" />
-        <div className="max-w-4xl mx-auto text-center glass rounded-2xl p-6 sm:p-8 md:p-10">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 leading-tight">
-            Op maat gemaakte oplossingen
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl mb-12 text-slate-200 max-w-3xl mx-auto leading-relaxed">
-            Elk project is uniek. Laten we samen jouw perfecte oplossing bouwen
-            die jouw verwachtingen overtreft.
-          </p>
-          <div className="flex gap-6 justify-center flex-wrap">
-            <Button
-              href="/contact"
-              variant="primary"
-            >
-              Plan een intake
-            </Button>
-            <Button
-              href="/speeltuin"
-              variant="secondary"
-              className="flex items-center gap-2"
-            >
-              Ervaar onze technologie
-              <svg
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5-5 5M6 12h12"
-                />
-              </svg>
-            </Button>
-          </div>
+      {/* Pricing Section (Unified) */}
+      <section id="pricing" className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-cosmic-900/30 relative">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+        <div className="max-w-7xl mx-auto">
+          <PricingSection />
         </div>
       </section>
 
-      {/* SEO Content Section - Replaced with Bento Grid */}
+      {/* SEO Content Section - Bento Grid */}
       <section
         id="seo-content"
-        className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-cosmic-900/30 relative"
+        className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 relative"
       >
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
-
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 max-w-4xl mx-auto">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 gradient-text leading-tight">
-              Diensten die Groei Versnellen
+              Dominantie door Design & Data
             </h2>
             <p className="text-xl text-slate-300 mb-8 leading-relaxed">
-              Een professionele website laten maken is slechts het begin.
-              Wij transformeren uw digitale aanwezigheid met een complete suite van premium services.
+              Wij geloven niet in &apos;mooie plaatjes&apos;. Wij geloven in systemen die renderen.
+              Elk pixel, elke regel code heeft één doel: uw bedrijf laten groeien.
             </p>
           </div>
 
@@ -489,17 +456,6 @@ export default function Diensten() {
               </p>
             </div>
           </div>
-
-          <div className="text-center mt-12">
-            <Button
-              href="/contact"
-              variant="primary"
-              size="large"
-              className="shadow-lg shadow-cyan-500/20"
-            >
-              Vraag een gratis groeiscan aan
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -508,11 +464,10 @@ export default function Diensten() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Contact & Bedrijfsinformatie
+              Klaar om de Markt te Veroveren?
             </h2>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-              Professionele webdevelopment diensten voor Nederlandse bedrijven.
-              Neem contact op voor een vrijblijvend gesprek.
+              Wij werken het liefst met ambitieuze Nederlandse bedrijven die willen groeien.
             </p>
           </div>
 
@@ -526,7 +481,7 @@ export default function Diensten() {
         </div>
       </section>
 
-      <FAQSection title="Vragen over onze Diensten">
+      <FAQSection title="Veelgestelde Vragen over Onze Diensten">
         <DutchMarketFAQ />
       </FAQSection>
 

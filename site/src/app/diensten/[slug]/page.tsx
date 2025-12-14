@@ -10,6 +10,7 @@ import FAQSection from '@/components/sections/FAQSection';
 import SEOSchema from '@/components/SEOSchema';
 import { getAllDienstSlugs, getDienstBySlug, diensten } from '@/config/diensten.config';
 import { generateMetadata as generateMetadataUtil } from '@/lib/metadata';
+import PricingSection from '@/components/sections/PricingSection';
 
 import type { Metadata } from 'next';
 
@@ -146,7 +147,7 @@ export default function ServicePage({ params }: ServicePageProps) {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {dienst.featuresDetail?.map((feature, idx) => (
-                            <div key={idx} className="group relative p-8 rounded-3xl bg-cosmic-800/40 border border-white/5 backdrop-blur-sm hover:bg-cosmic-800/60 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                            <div key={idx} className="group relative p-8 rounded-3xl bg-black/20 border border-white/5 backdrop-blur-sm hover:bg-white/5 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
                                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-900/40 to-blue-900/40 flex items-center justify-center text-3xl mb-6 border border-white/10 text-cyan-400 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-cyan-900/20">
                                     {feature.icon}
                                 </div>
@@ -168,50 +169,11 @@ export default function ServicePage({ params }: ServicePageProps) {
 
             {/* 2. Pricing Packages (If available) */}
             {dienst.packages && (
-                <section className="relative z-10 py-section bg-cosmic-900/50">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-16">
-                            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-                                Transparante <span className="text-cyan-400">Pakketten</span>
-                            </h2>
-                            <p className="text-xl text-slate-400">Kies de oplossing die bij uw ambitie past.</p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {dienst.packages.map((pkg, idx) => (
-                                <div key={idx} className={`relative flex flex-col p-8 rounded-3xl border transition-all duration-300 hover:-translate-y-2 ${idx === 1 ? 'bg-gradient-to-b from-cosmic-800 to-cosmic-900 border-cyan-500/50 shadow-2xl shadow-cyan-900/20 scale-105 z-10' : 'bg-cosmic-800/20 border-white/5 hover:border-white/10'}`}>
-                                    {idx === 1 && (
-                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-cyan-500 text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-lg">
-                                            Meest Gekozen
-                                        </div>
-                                    )}
-                                    <div className="mb-6">
-                                        <h3 className="text-2xl font-bold text-white mb-2">{pkg.name}</h3>
-                                        <p className="text-slate-400 text-sm">{pkg.description}</p>
-                                    </div>
-                                    <div className="mb-8 p-4 rounded-2xl bg-black/20 border border-white/5 text-center">
-                                        <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">{pkg.price}</span>
-                                    </div>
-                                    <ul className="space-y-4 mb-8 flex-grow">
-                                        {pkg.features.map((feat, i) => (
-                                            <li key={i} className="flex items-start text-sm text-slate-300">
-                                                <span className="text-cyan-400 mr-3 mt-0.5">✓</span>
-                                                {feat}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    <Button
-                                        href="/contact"
-                                        variant={idx === 1 ? 'primary' : 'secondary'}
-                                        className="w-full justify-center"
-                                    >
-                                        Kies {pkg.name}
-                                    </Button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+                <PricingSection
+                    title={`Prijzen voor ${dienst.name}`}
+                    subtitle={`Transparante tarieven voor ${dienst.name}. Kies het pakket dat bij u past.`}
+                    tiers={dienst.packages}
+                />
             )}
 
             {/* 3. Process Steps (Visual) */}
@@ -228,7 +190,7 @@ export default function ServicePage({ params }: ServicePageProps) {
                             {dienst.process.map((step, idx) => (
                                 <div key={idx} className="relative group">
                                     <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl opacity-20 blur group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                                    <div className="relative p-8 bg-cosmic-900 rounded-2xl border border-white/10 h-full flex flex-col items-center text-center hover:bg-cosmic-800 transition-colors">
+                                    <div className="relative p-8 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 h-full flex flex-col items-center text-center hover:bg-black/60 transition-colors">
                                         <div className="text-6xl font-black text-white/5 mb-4 group-hover:text-cyan-500/10 transition-colors">{step.step}</div>
                                         <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
                                         <p className="text-slate-400 text-sm mb-4 leading-relaxed">{step.description}</p>
@@ -282,12 +244,12 @@ export default function ServicePage({ params }: ServicePageProps) {
             </section>
 
             {/* Related Services Links */}
-            <section className="py-section bg-cosmic-900/50">
+            <section className="py-section bg-black/20 backdrop-blur-sm border-t border-white/5">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h2 className="text-2xl font-bold text-white mb-8 text-center">Gerelateerde Diensten</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {relatedServices.map((d) => (
-                            <Link key={d.slug} href={`/diensten/${d.slug}`} className="group p-6 rounded-2xl bg-cosmic-800/40 border border-white/5 hover:border-cyan-500/30 transition-all hover:-translate-y-1">
+                            <Link key={d.slug} href={`/diensten/${d.slug}`} className="group p-6 rounded-2xl bg-black/40 border border-white/5 hover:border-cyan-500/30 transition-all hover:-translate-y-1 backdrop-blur-sm">
                                 <div className="text-3xl mb-4">{d.icon}</div>
                                 <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">{d.name}</h3>
                                 <p className="text-sm text-slate-400">{d.shortDescription}</p>

@@ -24,7 +24,7 @@ export function useThrottle<T>(value: T, interval: number = 200): T {
       setThrottledValue(value);
       return;
     }
-    
+
     // Schedule update for when interval expires
     const timeoutId = setTimeout(() => {
       lastUpdated.current = Date.now();
@@ -77,7 +77,7 @@ export function useThrottledCallback<T extends (...args: never[]) => unknown>(
     } else if (!waiting.current) {
       // Schedule execution for when limit expires
       waiting.current = true;
-      
+
       const delay = limit - timeSinceLastCall;
       setTimeout(() => {
         // Use rAF for smooth visual updates
@@ -88,7 +88,8 @@ export function useThrottledCallback<T extends (...args: never[]) => unknown>(
         });
       }, delay);
     }
-  }, [limit, ...deps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [callback, limit, ...deps]);
 }
 
 /**
@@ -126,5 +127,6 @@ export function useRAFThrottle<T extends (...args: never[]) => unknown>(
         rafId.current = undefined;
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }

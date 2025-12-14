@@ -361,6 +361,22 @@ const nextConfig = {
         destination: `${siteUrl}/:path*`,
         permanent: true,
       },
+      // Fix for legacy 404s in GSC
+      {
+        source: '/diensten/3d-websites',
+        destination: '/diensten/3d-website-ervaringen',
+        permanent: true,
+      },
+      {
+        source: '/overzicht',
+        destination: '/overzicht-site',
+        permanent: true,
+      },
+      {
+        source: '/kennisbank',
+        destination: '/engineering', // Closest match
+        permanent: true,
+      },
     ];
   },
 };

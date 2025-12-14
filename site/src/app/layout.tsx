@@ -1,5 +1,3 @@
-import type { Metadata } from 'next';
-
 import './globals.css';
 import dynamic from 'next/dynamic';
 import { headers } from 'next/headers';
@@ -18,6 +16,8 @@ import { siteConfig } from '@/config/site.config';
 import { initProductionEnvValidation } from '@/lib/env.server';
 import { primaryFont } from '@/lib/fonts';
 import { generateResourcePreconnects } from '@/lib/preconnect';
+
+import type { Metadata } from 'next';
 
 // Lazy load heavy visual components to avoid delaying cookie banner hydration
 const CursorTrail = dynamic(() => import('@/components/CursorTrail'), {

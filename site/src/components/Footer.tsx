@@ -16,7 +16,7 @@ export default function Footer() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  
+
   // Debounce email validation to reduce unnecessary re-renders
   const debouncedEmail = useDebounce(email, 300);
 
@@ -47,7 +47,7 @@ export default function Footer() {
 
       let data;
       const contentType = response.headers.get('content-type');
-      
+
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
@@ -70,29 +70,30 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-cosmic-800/20 border-t border-cosmic-700 py-section px-4 sm:px-6">
-      <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8 mb-8">
+    <footer className="relative bg-cosmic-900/60 backdrop-blur-xl border-t border-white/5 py-12 sm:py-16 px-4 sm:px-6 overflow-hidden">
+      {/* Top Gradient Line */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+
+      <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-12 border-b border-white/5 pb-12">
           <div className="lg:col-span-2">
-            <div className="mb-3 transform hover:scale-105 transition-transform duration-300">
+            <div className="mb-4 transform hover:scale-105 transition-transform duration-300 origin-left">
               <Logo variant="full" size="lg" withGlow={true} animated={true} />
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed -mt-1 mb-6">
+            <p className="text-slate-400 text-sm leading-relaxed mb-8 max-w-sm">
               {siteConfig.tagline}
             </p>
-            
+
             {/* Newsletter signup */}
-            <div>
-              <h4 className="font-semibold mb-4 text-cyan-300">
-                Digitale Magie Direct in je Inbox
+            <div className="bg-white/5 rounded-xl p-6 border border-white/5">
+              <h4 className="font-bold mb-3 text-cyan-300 flex items-center gap-2">
+                <span>✨</span> Digitale Magie in je Inbox
               </h4>
-              <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-                Wil je weten hoe de toekomst van het web eruitziet? Ontvang maandelijks 
-                onze nieuwste inzichten over webdesign, 3D-innovaties en digitale trends 
-                die jouw business vooruit helpen. Geen spam, alleen waardevolle kennis.
+              <p className="text-slate-400 text-xs mb-4 leading-relaxed">
+                Ontvang maandelijks onze nieuwste inzichten over webdesign, 3D-innovaties en digitale trends.
               </p>
               <form className="space-y-3" onSubmit={handleSubmit}>
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-col gap-3">
                   <label htmlFor="newsletter-email" className="sr-only">
                     E-mailadres voor nieuwsbrief
                   </label>
@@ -101,7 +102,7 @@ export default function Footer() {
                     id="newsletter-email"
                     name="email"
                     placeholder="jouw@email.nl"
-                    className="sm:flex-1 px-4 py-3 min-h-[44px] bg-cosmic-800/60 border border-cosmic-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500"
+                    className="w-full px-4 py-2.5 bg-black/40 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all duration-300 placeholder-slate-600"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -111,22 +112,17 @@ export default function Footer() {
                     as="button"
                     type="submit"
                     variant="primary"
-                    className="whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed sm:min-w-[140px]"
+                    className="w-full justify-center text-sm py-2.5"
                     disabled={status === 'sending'}
                   >
                     {status === 'sending' ? 'Bezig...' : 'Inschrijven'}
                   </Button>
                 </div>
                 {status === 'success' && (
-                  <p className="text-xs text-green-400">{successMessage}</p>
+                  <p className="text-xs text-green-400 font-medium animate-fade-in">✓ {successMessage}</p>
                 )}
                 {status === 'error' && (
-                  <p className="text-xs text-red-400">{errorMessage}</p>
-                )}
-                {status === 'idle' && (
-                  <p className="text-xs text-gray-500">
-                    We respecteren je inbox. Uitschrijven doe je met één klik.
-                  </p>
+                  <p className="text-xs text-red-400 font-medium animate-fade-in">! {errorMessage}</p>
                 )}
               </form>
             </div>
@@ -134,19 +130,18 @@ export default function Footer() {
 
           {/* Strategic Link Groups */}
           {footerLinkGroups.map((group) => (
-            <div key={group.title}>
-              <h4 className="font-semibold mb-4">{group.title}</h4>
+            <div key={group.title} className="pt-2">
+              <h4 className="font-bold text-white mb-6 uppercase tracking-wider text-xs">{group.title}</h4>
               <nav aria-label={`${group.title} navigation`}>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {group.links.map((link) => (
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className={`text-sm min-h-[44px] inline-flex items-center py-2 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded ${
-                          link.priority === 'high' 
-                            ? 'text-white hover:text-cyan-300 font-medium' 
-                            : 'text-slate-400 hover:text-cyan-300'
-                        }`}
+                        className={`text-sm block transition-all duration-200 hover:translate-x-1 ${link.priority === 'high'
+                          ? 'text-slate-200 hover:text-cyan-300 font-medium'
+                          : 'text-slate-400 hover:text-cyan-300'
+                          }`}
                       >
                         {link.title}
                       </Link>
@@ -158,100 +153,44 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Legal & Company Information Section */}
-        <div className="mt-8 pt-8 border-t border-cosmic-700/50">
-          {/* Legal Links */}
-          <nav aria-label="Juridische informatie" className="mb-6">
-            <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-slate-400 hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded underline-offset-4 hover:underline"
-                >
-                  Privacybeleid
-                </Link>
-              </li>
-              <li aria-hidden="true" className="text-cosmic-600">•</li>
-              <li>
-                <Link
-                  href="/cookiebeleid"
-                  className="text-slate-400 hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded underline-offset-4 hover:underline"
-                >
-                  Cookiebeleid
-                </Link>
-              </li>
-              <li aria-hidden="true" className="text-cosmic-600">•</li>
-              <li>
-                <Link
-                  href="/voorwaarden"
-                  className="text-slate-400 hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded underline-offset-4 hover:underline"
-                >
-                  Algemene voorwaarden
-                </Link>
-              </li>
-              <li aria-hidden="true" className="text-cosmic-600">•</li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-slate-400 hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded underline-offset-4 hover:underline"
-                >
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </nav>
+        {/* Contact & Company Info - Bottom Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-0">
 
-          {/* Contact & Company Info */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="flex flex-col sm:flex-row gap-4 text-sm text-slate-400">
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-              >
-                {siteConfig.email}
-              </a>
-              <span className="hidden sm:inline text-cosmic-600">•</span>
-              <a
-                href={`tel:${siteConfig.phone}`}
-                className="hover:text-cyan-300 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cosmic-900 rounded"
-              >
-                {siteConfig.phone}
-              </a>
-            </div>
+          {/* Copyright & Legal */}
+          <div className="flex flex-col md:flex-row items-center gap-4 text-xs text-slate-500 order-2 md:order-1">
+            <span className="text-center md:text-left">&copy; {new Date().getFullYear()} {siteConfig.name}</span>
+            <span className="hidden md:inline text-slate-700">•</span>
+            <span className="text-center md:text-left flex items-center gap-1">
+              Gemaakt met <span className="text-red-500 animate-pulse">❤</span> in Nederland
+            </span>
           </div>
 
-          {/* Dutch Company Registration Info - Only show when env vars are present */}
-          {(process.env.NEXT_PUBLIC_KVK || process.env.NEXT_PUBLIC_BTW) && (
-            <div 
-              className="mt-4 text-xs text-slate-500"
-              data-testid="company-registration-info"
-            >
-              <p className="flex flex-wrap gap-x-3 gap-y-1">
-                {process.env.NEXT_PUBLIC_KVK && (
-                  <span data-testid="kvk-info">
-                    <strong>KVK:</strong> {process.env.NEXT_PUBLIC_KVK}
-                  </span>
-                )}
-                {process.env.NEXT_PUBLIC_KVK && process.env.NEXT_PUBLIC_BTW && (
-                  <span aria-hidden="true">•</span>
-                )}
-                {process.env.NEXT_PUBLIC_BTW && (
-                  <span data-testid="btw-info">
-                    <strong>BTW/VAT:</strong> {process.env.NEXT_PUBLIC_BTW}
-                  </span>
-                )}
-              </p>
-            </div>
-          )}
+          {/* Socials / Contact Quick Links */}
+          <div className="flex items-center gap-6 text-sm font-medium order-1 md:order-2">
+            <a href={`mailto:${siteConfig.email}`} className="text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-2">
+              <span>✉️</span> <span className="hidden sm:inline">{siteConfig.email}</span>
+            </a>
+            <a href={`tel:${siteConfig.phone}`} className="text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-2">
+              <span>📞</span> <span className="hidden sm:inline">{siteConfig.phone}</span>
+            </a>
+          </div>
+
+          {/* Settings */}
+          <div className="order-3">
+            <CookieSettingsButton />
+          </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/70">
-          <span>&copy; {new Date().getFullYear()} {siteConfig.name}. Met trots gemaakt in Nederland.</span>
-          <span aria-hidden>•</span>
-          <span>Gebouwd met passie voor de digitale toekomst ❤️</span>
-          <span aria-hidden>•</span>
-          <CookieSettingsButton />
-        </div>
+        {/* Legal Details (KVK/BTW) - Subtle at very bottom */}
+        {(process.env.NEXT_PUBLIC_KVK || process.env.NEXT_PUBLIC_BTW) && (
+          <div className="mt-8 pt-8 border-t border-white/5 text-center md:text-left">
+            <p className="text-[10px] uppercase tracking-widest text-slate-600 font-medium">
+              {process.env.NEXT_PUBLIC_KVK && `KVK: ${process.env.NEXT_PUBLIC_KVK}`}
+              {process.env.NEXT_PUBLIC_KVK && process.env.NEXT_PUBLIC_BTW && <span className="mx-2 opacity-30">|</span>}
+              {process.env.NEXT_PUBLIC_BTW && `BTW: ${process.env.NEXT_PUBLIC_BTW}`}
+            </p>
+          </div>
+        )}
       </div>
     </footer>
   );

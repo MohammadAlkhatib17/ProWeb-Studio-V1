@@ -3,10 +3,10 @@ import { MetadataRoute } from 'next';
 import { generateCompleteSitemap } from '@/lib/sitemap-advanced';
 
 // Edge runtime configuration for better performance and region distribution
-export const runtime = 'edge';
-export const dynamic = 'force-dynamic';
-// Primary EU regions matching Vercel Function Regions configuration: Paris, London, Frankfurt
-export const preferredRegion = ['cdg1', 'lhr1', 'fra1'];
+// Node.js runtime required for FS access (MDX blog posts)
+export const runtime = 'nodejs';
+// Revalidate sitemap every 24 hours (86400 seconds)
+export const revalidate = 86400;
 
 /**
  * Main sitemap.xml generator

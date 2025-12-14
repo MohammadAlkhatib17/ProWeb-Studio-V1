@@ -1,12 +1,13 @@
 import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
+import LocalMapEmbed from '@/components/LocalMapEmbed';
+import SEOSchema from '@/components/SEOSchema';
 import { getDienstBySlug } from '@/config/diensten.config';
 import {
   getStadBySlug,
@@ -14,8 +15,9 @@ import {
   getAllStadSlugs,
   getServicesForStad,
 } from '@/config/steden.config';
-import SEOSchema from '@/components/SEOSchema';
 import { generateStadMetadata, generateStadSchema } from '@/lib/seo/steden-metadata';
+
+import type { Metadata } from 'next';
 
 // Dynamic imports for 3D elements to avoid SSR issues
 const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
@@ -66,8 +68,8 @@ export default function StadPage({ params }: StadPageProps) {
     notFound();
   }
 
-  // Get all available services for this city
-  const availableDiensten = getServicesForStad(stadSlug)
+  // Get available services for this city
+  const availableDiensten = getServicesForStad()
     .map(slug => getDienstBySlug(slug))
     .filter((dienst): dienst is NonNullable<typeof dienst> => dienst !== undefined);
 
@@ -101,7 +103,7 @@ export default function StadPage({ params }: StadPageProps) {
             <CityHeroScene citySlug={stad.slug} />
           </HeroCanvas>
           {/* Overlay to ensure text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-cosmic-900/40 via-cosmic-900/60 to-cosmic-900 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-cosmic-900/40 via-cosmic-900/60 to-transparent pointer-events-none" />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
@@ -204,50 +206,98 @@ export default function StadPage({ params }: StadPageProps) {
         </div>
       </section>
 
-      {/* Why Choose Us Section - Modernized */}
-      <section className="py-section bg-cosmic-900 relative overflow-hidden">
+      {/* Why Choose Us Section - Modernized & Localized */}
+      <section className="py-section bg-black/20 backdrop-blur-sm border-y border-white/5 relative overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Waarom ProWeb Studio in {stad.name}?
-            </h2>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Landelijke expertise, lokaal hart. Wij kennen de markt in {stad.region}.
-            </p>
+
+          {/* NEW: Digital Economy & Local Impact */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-300 text-sm font-medium mb-6">
+                <span className="animate-pulse">●</span>
+                Digitale Economie {stad.name}
+              </div>
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                Wij Begrijpen de <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Markt in {stad.name}</span>
+              </h2>
+              <p className="text-lg text-slate-300 mb-8 leading-relaxed">
+                {stad.digitalEconomy || `Als ondernemer in ${stad.name} weet u dat de concurrentie niet stilzit. De digitale lat ligt hoog. Wij helpen u niet alleen aan een website, maar aan een strategisch voordeel.`}
+              </p>
+
+              {/* USP Box */}
+              <div className="bg-gradient-to-br from-cosmic-800 to-black p-6 rounded-2xl border-l-4 border-cyan-500 shadow-lg">
+                <h4 className="text-cyan-400 font-bold mb-2 flex items-center gap-2">
+                  <span>💡</span> Onze Belofte aan {stad.name}
+                </h4>
+                <p className="text-slate-300 italic">
+                  &quot;{stad.uniqueSellingPoint || `Wij leveren websites die net zo hard werken als u. Geen jargon, wel resultaat.`}&quot;
+                </p>
+              </div>
+
+              {/* Industries Tags */}
+              {stad.localIndustries && stad.localIndustries.length > 0 && (
+                <div className="mt-8">
+                  <h4 className="text-sm uppercase tracking-wider text-slate-500 mb-4 font-semibold">Wij zijn gespecialiseerd in:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {stad.localIndustries.map((industry, idx) => (
+                      <span key={idx} className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 text-sm hover:bg-white/10 transition-colors cursor-default">
+                        {industry}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Map Component */}
+            <div className="relative h-[500px] w-full rounded-3xl overflow-hidden shadow-2xl shadow-cyan-900/20 border border-white/10">
+              <LocalMapEmbed
+                cityName={stad.name}
+                lat={stad.coordinates?.lat}
+                lng={stad.coordinates?.lng}
+              />
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {/* Standard Benefits Grid (Retained but refined) */}
+          <div className="text-center mb-16">
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              De ProWeb Studio Standaard
+            </h3>
+            <p className="text-slate-400">Universele kwaliteit, lokaal toegepast.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                title: 'Lokale Marktkennis',
-                desc: `Wij spreken de taal van ${stad.name}. Uw website voelt vertrouwd voor uw klanten.`,
-                icon: '🏙️'
-              },
-              {
-                title: 'Nummer 1 in Google',
-                desc: `Onze SEO-strategieën zijn getuned op de concurrentie in ${stad.region}.`,
+                title: 'Lokale SEO Expert',
+                desc: `Nummer 1 posities in ${stad.region}`,
                 icon: '🚀'
               },
               {
-                title: 'Geen Uurtje-Factuurtje',
-                desc: 'Transparante vaste prijzen. U weet vooraf precies waar u aan toe bent.',
-                icon: '💎'
+                title: 'Razendsnel',
+                desc: 'Websites die laden in < 0.5s',
+                icon: '⚡'
               },
               {
-                title: 'Bewezen Track Record',
-                desc: `Sluit u aan bij succesvolle ondernemers in ${stad.province} die voor kwaliteit kozen.`,
-                icon: '⭐'
+                title: '3D & Interactief',
+                desc: 'Onderscheid u van de massa',
+                icon: '🎮'
+              },
+              {
+                title: 'Transparant',
+                desc: 'Vaste prijzen, geen verrassingen',
+                icon: '💎'
               }
             ].map((item, i) => (
-              <div key={i} className="group flex gap-6 p-8 rounded-3xl bg-cosmic-800/40 border border-white/5 backdrop-blur-sm hover:bg-cosmic-800/80 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-900/20">
-                <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-900/20 to-blue-900/20 flex items-center justify-center text-3xl border border-white/10 text-cyan-400 group-hover:scale-110 transition-transform duration-300">
+              <div key={i} className="group p-6 rounded-2xl bg-cosmic-800/20 border border-white/5 hover:bg-cosmic-800/60 hover:border-cyan-500/30 transition-all duration-300 text-center">
+                <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-cyan-900/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                   {item.icon}
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">{item.title}</h3>
-                  <p className="text-slate-400 leading-relaxed font-light group-hover:text-slate-300 transition-colors">{item.desc}</p>
-                </div>
+                <h3 className="font-bold text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-slate-400">{item.desc}</p>
               </div>
             ))}
           </div>

@@ -1,12 +1,46 @@
 'use client'
 
-import React, { Suspense, useRef, useState } from 'react'
+import React, { Suspense, useRef, useState, useEffect } from 'react'
 import { Box, Cylinder, OrbitControls, Environment, Float } from '@react-three/drei'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import * as THREE from 'three'
 import { Group } from 'three'
 import { Smartphone, Watch, Headphones } from 'lucide-react'
 
 type ProductType = 'phone' | 'watch' | 'headphones'
+
+function AdjustCamera() {
+  const { camera, size } = useThree()
+
+  useEffect(() => {
+    // Initial setup
+    const updateCamera = () => {
+      const aspect = size.width / size.height
+      if (aspect < 1) {
+        // Widen FOV for portrait mode
+        // 45 is default. We want vertical coverage to feel similar to horizontal coverage
+        // At aspect 0.5, we need nearly double the FOV horizontally? 
+        // Let's try boosting it. 
+        // An FOV of 70 works well for portrait 3D product lovers.
+        // Dynamic formula: 
+        const targetFov = 45 + (1 - aspect) * 40
+        if (camera instanceof THREE.PerspectiveCamera) {
+          camera.fov = targetFov
+          camera.updateProjectionMatrix()
+        }
+      } else {
+        // Reset to default on desktop
+        if (camera instanceof THREE.PerspectiveCamera) {
+          camera.fov = 45
+          camera.updateProjectionMatrix()
+        }
+      }
+    }
+    updateCamera()
+  }, [camera, size]) // Update when size changes
+
+  return null
+}
 
 function ProductDisplay({ position, productType, active }: { position: [number, number, number], productType: ProductType, active: boolean }) {
   const groupRef = useRef<Group>(null)
@@ -136,6 +170,8 @@ function EcommerceScene({ activeProduct }: { activeProduct: ProductType }) {
         autoRotateSpeed={1}
       />
 
+      <AdjustCamera />
+
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, 7]} intensity={2} />
       <pointLight position={[-10, 0, -10]} intensity={1} color="#cyan" />
@@ -154,7 +190,7 @@ export default function SimpleEcommerceShowcase({ className = '' }: { className?
   const [activeProduct, setActiveProduct] = useState<ProductType>('phone')
 
   return (
-    <div className={`w-full h-[500px] relative ${className} group`}>
+    <div className={`w-full h-full relative ${className} group`}>
       {/* UI Overlay */}
       <div className="absolute top-4 left-0 right-0 z-10 flex justify-center gap-4">
         <button
