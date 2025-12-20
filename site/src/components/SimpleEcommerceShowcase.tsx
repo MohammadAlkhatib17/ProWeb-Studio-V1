@@ -1,7 +1,7 @@
 'use client'
 
 import React, { Suspense, useRef, useState, useEffect } from 'react'
-import { Box, Cylinder, OrbitControls, Environment, Float } from '@react-three/drei'
+import { Box, Cylinder, OrbitControls, Environment, Float, RoundedBox } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { Group } from 'three'
@@ -140,11 +140,20 @@ function ProductDisplay({ position, productType, active }: { position: [number, 
 }
 
 // Helpers for geometry
-function RoundedRect({ args, position = [0, 0, 0], color, metalness = 0.5, roughness = 0.5 }: any) {
+interface RoundedRectProps {
+  args: [number, number, number]
+  position?: [number, number, number]
+  color: string
+  metalness?: number
+  roughness?: number
+  radius?: number
+}
+
+function RoundedRect({ args, position = [0, 0, 0], color, metalness = 0.5, roughness = 0.5, radius = 0.1 }: RoundedRectProps) {
   return (
-    <Box args={args} position={position}>
+    <RoundedBox args={args} position={position} radius={radius} smoothness={4}>
       <meshStandardMaterial color={color} metalness={metalness} roughness={roughness} />
-    </Box>
+    </RoundedBox>
   )
 }
 
@@ -174,8 +183,8 @@ function EcommerceScene({ activeProduct }: { activeProduct: ProductType }) {
 
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 10, 7]} intensity={2} />
-      <pointLight position={[-10, 0, -10]} intensity={1} color="#cyan" />
-      <pointLight position={[10, 0, 10]} intensity={1} color="#magenta" />
+      <pointLight position={[-10, 0, -10]} intensity={1} color="#00D9FF" />
+      <pointLight position={[10, 0, 10]} intensity={1} color="#FF2BD6" />
 
       <ProductDisplay position={[0, 0, 0]} productType="phone" active={activeProduct === 'phone'} />
       <ProductDisplay position={[0, 0, 0]} productType="watch" active={activeProduct === 'watch'} />

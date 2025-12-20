@@ -11,7 +11,7 @@ import SimpleEcommerceShowcase from '@/components/SimpleEcommerceShowcase';
 import SimplePortfolioComputer from '@/components/SimplePortfolioComputer';
 import { siteConfig } from '@/config/site.config';
 
-import InnovationLabs from '../../components/portfolio/InnovationLabs';
+import DigitalGalaxyLabs from '../../components/portfolio/DigitalGalaxyLabs';
 import MobileShowcase from '../../components/portfolio/MobileShowcase';
 import PortfolioHero from '../../components/portfolio/PortfolioHero';
 import PortfolioSchema from '../../components/portfolio/PortfolioSchema';
@@ -235,8 +235,8 @@ export default function PortfolioPage() {
           <MobileShowcase />
         </section>
 
-        {/* Innovation Labs (Formerly Speeltuin) */}
-        <InnovationLabs />
+        {/* Digital Galaxy Labs - Interactive 3D Service Showcase */}
+        <DigitalGalaxyLabs />
 
         {/* Call to Action */}
         {/* Premium Call to Action */}

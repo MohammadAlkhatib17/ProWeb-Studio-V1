@@ -249,6 +249,8 @@ export async function middleware(req: NextRequest) {
     // connect-src: API endpoints, analytics, and 3D assets (drei HDR environments from GitHub)
     `connect-src 'self' https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://raw.githack.com https://*.githack.com https://raw.githubusercontent.com https://*.githubusercontent.com${isDev ? ' ws://localhost:*' : ''}`,
     "media-src 'self' https: blob:",
+    // worker-src: Allow blob workers for Three.js/React Three Fiber
+    "worker-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",
     // frame-ancestors: prevent clickjacking

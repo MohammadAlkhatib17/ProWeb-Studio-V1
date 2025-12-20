@@ -66,11 +66,11 @@ export function usePerformanceMonitor(
   sampleSize: number = 60
 ) {
   const { capabilities, optimizedSettings } = useDeviceCapabilities();
-  
+
   // Initialize with device-optimized settings
-  const initialQuality = capabilities.isLowEndDevice ? 'low' : 
-                        capabilities.isMobile ? 'medium' : 'high';
-  
+  const initialQuality = capabilities.isLowEndDevice ? 'low' :
+    capabilities.isMobile ? 'medium' : 'high';
+
   const [performanceState, setPerformanceState] = useState<PerformanceState>({
     metrics: { fps: 60, frameTime: 16.67 },
     qualityLevel: initialQuality,
@@ -100,8 +100,8 @@ export function usePerformanceMonitor(
       let isThrottled = prev.isThrottled;
 
       // Respect device capabilities - don't upgrade beyond device limits
-      const maxQualityForDevice = capabilities.isLowEndDevice ? 'low' : 
-                                  capabilities.isMobile ? 'medium' : 'high';
+      const maxQualityForDevice = capabilities.isLowEndDevice ? 'low' :
+        capabilities.isMobile ? 'medium' : 'high';
 
       // Downgrade quality if FPS is too low
       if (fps < targetFPS * 0.8) { // 80% of target FPS
@@ -155,8 +155,9 @@ export function usePerformanceMonitor(
       }
 
       if (newQualityLevel !== prev.qualityLevel) {
-        console.log(`Performance: Adjusting quality from ${prev.qualityLevel} to ${newQualityLevel} (FPS: ${fps.toFixed(1)})`);
-        
+        // Log quality change in development only if needed, or remove for production
+        // console.debug(`Performance: Adjusting quality from ${prev.qualityLevel} to ${newQualityLevel} (FPS: ${fps.toFixed(1)})`);
+
         return {
           ...prev,
           qualityLevel: newQualityLevel,

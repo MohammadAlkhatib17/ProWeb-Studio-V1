@@ -18,6 +18,9 @@ export * from './components'
 // Demo scene
 export { default as KTX2DemoScene } from './KTX2DemoScene'
 
+// Digital Galaxy Scene
+export { default as DigitalGalaxyScene } from './DigitalGalaxyScene'
+
 interface OptimizedPortfolioComputerProps {
   className?: string
 }
@@ -28,8 +31,8 @@ export function OptimizedPortfolioComputer({ className }: OptimizedPortfolioComp
       {/* SEO Content */}
       <div className="sr-only">
         <h3>Interactive 3D Portfolio Showcase</h3>
-        <p>Explore our web development portfolio in an immersive 3D laptop visualization. 
-           Features responsive design, modern animations, and interactive elements.</p>
+        <p>Explore our web development portfolio in an immersive 3D laptop visualization.
+          Features responsive design, modern animations, and interactive elements.</p>
         <ul>
           <li>Custom 3D laptop model with realistic materials</li>
           <li>Smooth animations and auto-rotation</li>
@@ -52,8 +55,8 @@ export function OptimizedEcommerceShowcase({ className }: OptimizedEcommerceShow
       {/* SEO Content */}
       <div className="sr-only">
         <h3>3D E-commerce Product Visualization</h3>
-        <p>Interactive 3D showcase of e-commerce solutions including mobile apps, 
-           wearable technology, and audio products with realistic 3D models.</p>
+        <p>Interactive 3D showcase of e-commerce solutions including mobile apps,
+          wearable technology, and audio products with realistic 3D models.</p>
         <ul>
           <li>Mobile application development and design</li>
           <li>Wearable technology integration</li>
@@ -76,8 +79,8 @@ export function OptimizedBrandIdentityModel({ className }: OptimizedBrandIdentit
       {/* SEO Content */}
       <div className="sr-only">
         <h3>3D Brand Identity and Logo Design</h3>
-        <p>Dynamic 3D visualization of brand identity elements including logo design, 
-           visual identity systems, and brand guidelines development.</p>
+        <p>Dynamic 3D visualization of brand identity elements including logo design,
+          visual identity systems, and brand guidelines development.</p>
         <ul>
           <li>Custom logo design and development</li>
           <li>Complete brand identity packages</li>
@@ -104,7 +107,7 @@ interface ThreeJSShowcaseProps {
   className?: string
 }
 
-export function ThreeJSShowcase({ 
+export function ThreeJSShowcase({
   components = ['portfolio', 'ecommerce', 'brand'],
   layout = 'stack',
   className = ''
@@ -115,7 +118,7 @@ export function ThreeJSShowcase({
     brand: OptimizedBrandIdentityModel
   }
 
-  const layoutClass = layout === 'grid' 
+  const layoutClass = layout === 'grid'
     ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
     : 'space-y-8'
 
@@ -124,10 +127,10 @@ export function ThreeJSShowcase({
       {/* SEO Structure */}
       <div className="sr-only">
         <h2>Interactive 3D Portfolio Showcase</h2>
-        <p>Discover our capabilities through immersive 3D visualizations showcasing 
-           web development, e-commerce solutions, and brand identity design.</p>
+        <p>Discover our capabilities through immersive 3D visualizations showcasing
+          web development, e-commerce solutions, and brand identity design.</p>
       </div>
-      
+
       {components.map((componentType) => {
         const Component = componentMap[componentType]
         return (
