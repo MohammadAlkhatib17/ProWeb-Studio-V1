@@ -54,7 +54,7 @@ export function useThrottledCallback<T extends (...args: never[]) => unknown>(
 ): (...args: Parameters<T>) => void {
   const waiting = useRef(false);
   const lastCallTime = useRef(0);
-  const rafId = useRef<number>();
+  const rafId = useRef<number | undefined>(undefined);
 
   // Clean up on unmount
   useEffect(() => {
@@ -105,8 +105,8 @@ export function useRAFThrottle<T extends (...args: never[]) => unknown>(
   callback: T,
   deps: React.DependencyList = []
 ): (...args: Parameters<T>) => void {
-  const rafId = useRef<number>();
-  const latestArgs = useRef<Parameters<T>>();
+  const rafId = useRef<number | undefined>(undefined);
+  const latestArgs = useRef<Parameters<T> | undefined>(undefined);
 
   // Clean up on unmount
   useEffect(() => {

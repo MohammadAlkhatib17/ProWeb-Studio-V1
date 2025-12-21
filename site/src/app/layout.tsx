@@ -1,5 +1,4 @@
 import './globals.css';
-import dynamic from 'next/dynamic';
 import { headers } from 'next/headers';
 
 import ConsentAwareAnalytics from '@/components/cookies/ConsentAwareAnalytics';
@@ -19,21 +18,8 @@ import { generateResourcePreconnects } from '@/lib/preconnect';
 
 import type { Metadata } from 'next';
 
-// Lazy load heavy visual components to avoid delaying cookie banner hydration
-const CursorTrail = dynamic(() => import('@/components/CursorTrail'), {
-  ssr: false,
-  loading: () => null
-});
-
-const DutchPerformanceMonitor = dynamic(() => import('@/components/DutchPerformanceMonitor'), {
-  ssr: false,
-  loading: () => null
-});
-
-const WebVitalsReporter = dynamic(() => import('@/components/WebVitalsReporter').then(mod => ({ default: mod.WebVitalsReporter })), {
-  ssr: false,
-  loading: () => null
-});
+// Client-side components wrapper (handles dynamic imports with ssr:false internally)
+import ClientLayoutComponents from '@/components/layout/ClientLayoutComponents';
 
 // Initialize environment validation for production deployments
 initProductionEnvValidation();
@@ -223,12 +209,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = headers();
+  const headersList = await headers();
   const nonce = headersList.get('x-nonce') || '';
 
   return (
@@ -313,14 +299,10 @@ export default function RootLayout({
         <Footer />
 
         {/* Heavy visual components - lazy loaded to avoid blocking cookie banner */}
-        <CursorTrail />
+        <ClientLayoutComponents />
 
         <SEOSchema nonce={nonce} pageType="generic" />
         <PWAServiceWorker />
-
-        {/* Performance monitors - lazy loaded */}
-        <DutchPerformanceMonitor />
-        <WebVitalsReporter />
       </body>
     </html>
   );

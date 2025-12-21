@@ -122,9 +122,15 @@ const nextConfig = {
   // Disable powered by header for security
   poweredByHeader: false,
 
-  // Enable React 18 features
+  // Enable React 19 features
   experimental: {
     optimizePackageImports: ['@react-three/fiber', '@react-three/drei', 'three'],
+  },
+
+  // Turbopack configuration
+  turbopack: {
+    // Set root to current directory (absolute path) to silence workspace lockfile warning
+    root: import.meta.dirname,
   },
 
   // Remove console.log in production (keep error, warn, info)
@@ -134,11 +140,8 @@ const nextConfig = {
     } : false,
   },
 
-  // i18n configuration - enforce nl-NL as default locale
-  i18n: {
-    locales: ['nl-NL'],
-    defaultLocale: 'nl-NL',
-  },
+  // Note: i18n is handled via middleware for App Router
+  // Default locale nl-NL is enforced through metadata and middleware
 
   // Image optimization
   images: {
@@ -168,8 +171,9 @@ const nextConfig = {
 
   // PWA and Service Worker: serve /public/sw.js directly as /sw.js
 
-  // Webpack optimization
-  webpack: (config, { dev, isServer }) => {
+  // Webpack optimization (skipped when using Turbopack)
+  // Turbopack has its own optimized chunk splitting strategy
+  webpack: process.env.TURBOPACK ? undefined : (config, { dev, isServer }) => {
     // Optimize chunk splitting
     if (!dev && !isServer) {
       config.optimization.splitChunks = {

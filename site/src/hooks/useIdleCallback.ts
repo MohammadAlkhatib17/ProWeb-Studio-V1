@@ -31,7 +31,7 @@ export function useIdleCallback(
 ) {
   const { enabled = true, timeout = 2000, deps = [] } = options;
   const callbackRef = useRef(callback);
-  const idleIdRef = useRef<number>();
+  const idleIdRef = useRef<number | undefined>(undefined);
 
   // Keep callback ref up to date
   useEffect(() => {
@@ -117,7 +117,7 @@ export function useIdleScheduler(timeout: number = 2000) {
  */
 export function useIdleValue<T>(value: T, timeout: number = 1000): T {
   const [deferredValue, setDeferredValue] = React.useState(value);
-  const idleIdRef = useRef<number>();
+  const idleIdRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     // Cancel any pending update

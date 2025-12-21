@@ -6,7 +6,7 @@ import { generateMetadata as generateMetadataUtil } from '@/lib/metadata';
 import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 86400; // 24 hours ISR
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataUtil({

@@ -9,7 +9,7 @@ import type { Metadata } from 'next';
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
 
 export const dynamic = 'force-static';
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 86400; // 24 hours ISR
 
 export const metadata: Metadata = {
   title: 'Site Overzicht – Alle pagina&apos;s van ProWeb Studio | Website navigatie',

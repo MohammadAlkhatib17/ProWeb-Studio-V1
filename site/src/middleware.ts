@@ -41,7 +41,7 @@ function getClientIP(req: NextRequest): string {
   if (xRealIp) return xRealIp;
   if (cfConnectingIp) return cfConnectingIp;
 
-  return req.ip || 'unknown';
+  return 'unknown';
 }
 
 async function isRateLimitedEdge(ip: string, path: string) {

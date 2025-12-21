@@ -18,16 +18,18 @@ export async function generateStaticParams() {
     }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const { meta } = await getArticleBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const { meta } = await getArticleBySlug(slug);
     return {
         title: `${meta.title} | ProWeb Engineering`,
         description: meta.description,
     };
 }
 
-export default async function ArticlePage({ params }: { params: { slug: string } }) {
-    const { meta, content } = await getArticleBySlug(params.slug);
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const { meta, content } = await getArticleBySlug(slug);
 
     return (
         <main className="relative min-h-screen pt-24 pb-24">

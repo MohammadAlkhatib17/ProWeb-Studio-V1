@@ -164,7 +164,7 @@ function Aperture({
   const c2 = useMemo(() => new THREE.Color('#b14df0'), []);
 
   const bladeNodes = useMemo(() => {
-    const nodes: JSX.Element[] = [];
+    const nodes: React.JSX.Element[] = [];
     const TWO_PI = Math.PI * 2;
     for (let i = 0; i < blades; i++) {
       // تذبذب طفيف في الزاوية والعرض لإحساس عضوي

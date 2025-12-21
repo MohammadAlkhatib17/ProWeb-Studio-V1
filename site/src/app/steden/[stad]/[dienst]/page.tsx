@@ -28,10 +28,10 @@ export const dynamic = 'force-static';
 export const revalidate = 259200; // 72 hours ISR
 
 interface StadDienstPageProps {
-  params: {
+  params: Promise<{
     stad: string;
     dienst: string;
-  };
+  }>;
 }
 
 // Generate static params for all city+service combinations
@@ -58,8 +58,9 @@ export async function generateStaticParams() {
 
 // Generate metadata for each city+service page
 export async function generateMetadata({ params }: StadDienstPageProps): Promise<Metadata> {
-  const stad = getStadBySlug(params.stad);
-  const dienst = getDienstBySlug(params.dienst);
+  const { stad: stadSlug, dienst: dienstSlug } = await params;
+  const stad = getStadBySlug(stadSlug);
+  const dienst = getDienstBySlug(dienstSlug);
 
   if (!stad || !dienst) {
     return {
@@ -71,9 +72,10 @@ export async function generateMetadata({ params }: StadDienstPageProps): Promise
   return generateStadDienstMetadata({ stad, dienst });
 }
 
-export default function StadDienstPage({ params }: StadDienstPageProps) {
-  const stad = getStadBySlug(params.stad);
-  const dienst = getDienstBySlug(params.dienst);
+export default async function StadDienstPage({ params }: StadDienstPageProps) {
+  const { stad: stadSlug, dienst: dienstSlug } = await params;
+  const stad = getStadBySlug(stadSlug);
+  const dienst = getDienstBySlug(dienstSlug);
 
   // 404 if either stad or dienst not found, or if service not available in city
   if (!stad || !dienst || !isDienstAvailableInStad()) {

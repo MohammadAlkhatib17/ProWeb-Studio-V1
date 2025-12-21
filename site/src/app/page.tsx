@@ -1,8 +1,8 @@
-import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 
 import { Rocket, Palette, TrendingUp, ShieldCheck, CheckCircle2, MapPin, Building2, CircuitBoard } from 'lucide-react';
 
+import { HeroCanvas, HeroScene, HexagonalPrism } from '@/components/3d/ClientScene';
 import { Button } from '@/components/Button';
 import DutchMarketFAQ from '@/components/DutchMarketFAQ';
 import FAQSection from '@/components/sections/FAQSection';
@@ -17,22 +17,6 @@ export const revalidate = 3600; // 1 hour - homepage updates frequently
 export const fetchCache = 'force-cache';
 
 export const metadata: Metadata = generatePageMetadata('home');
-
-const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
-  ssr: false,
-  loading: () => null,
-});
-
-const HeroScene = dynamicImport(() => import('@/three/HeroScene'), {
-  ssr: false,
-  loading: () => null,
-});
-
-// Dynamic import for 3D hexagonal prism scene with performance optimization
-const HexagonalPrism = dynamicImport(() => import('@/three/HexagonalPrism'), {
-  ssr: false,
-  loading: () => <div className="w-full h-full animate-pulse" />,
-});
 
 interface CaseCardProps {
   title: string;

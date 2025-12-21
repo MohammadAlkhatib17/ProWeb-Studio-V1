@@ -1,7 +1,7 @@
-import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { HeroCanvas, CityHeroScene } from '@/components/3d/ClientScene';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
@@ -19,24 +19,13 @@ import { generateStadMetadata, generateStadSchema } from '@/lib/seo/steden-metad
 
 import type { Metadata } from 'next';
 
-// Dynamic imports for 3D elements to avoid SSR issues
-const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
-  ssr: false,
-  loading: () => null,
-});
-
-const CityHeroScene = dynamicImport(() => import('@/three/CityHeroScene'), {
-  ssr: false,
-  loading: () => null,
-});
-
 export const dynamic = 'force-static';
 export const revalidate = 172800; // 48 hours ISR
 
 interface StadPageProps {
-  params: {
+  params: Promise<{
     stad: string;
-  };
+  }>;
 }
 
 // Generate static params for all cities
@@ -48,7 +37,8 @@ export async function generateStaticParams() {
 
 // Generate metadata for each city
 export async function generateMetadata({ params }: StadPageProps): Promise<Metadata> {
-  const stad = getStadBySlug(params.stad);
+  const { stad: stadSlug } = await params;
+  const stad = getStadBySlug(stadSlug);
 
   if (!stad) {
     return {
@@ -60,8 +50,8 @@ export async function generateMetadata({ params }: StadPageProps): Promise<Metad
   return generateStadMetadata({ stad });
 }
 
-export default function StadPage({ params }: StadPageProps) {
-  const { stad: stadSlug } = params;
+export default async function StadPage({ params }: StadPageProps) {
+  const { stad: stadSlug } = await params;
   const stad = getStadBySlug(stadSlug);
 
   if (!stad) {

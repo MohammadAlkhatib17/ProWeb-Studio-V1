@@ -7,21 +7,21 @@ import { useDeferredInit } from '@/hooks/useFirstInput';
 // Utility function to detect low-end devices
 function isLowEndDevice(): boolean {
   if (typeof window === 'undefined') return false;
-  
+
   // Check hardware concurrency (CPU cores)
   const cores = navigator.hardwareConcurrency || 0;
   if (cores > 0 && cores <= 2) return true;
-  
+
   // Check memory (if available)
   const memory = (navigator as { deviceMemory?: number }).deviceMemory;
   if (memory && memory <= 2) return true;
-  
+
   // Check connection type for mobile detection
   const connection = (navigator as { connection?: { effectiveType?: string } }).connection;
   if (connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')) {
     return true;
   }
-  
+
   return false;
 }
 
@@ -41,8 +41,8 @@ export default function CursorTrail() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particles = useRef<Array<{ x: number; y: number; life: number }>>([]);
   const mousePos = useRef({ x: 0, y: 0 });
-  const animationRef = useRef<number>();
-  const cleanupRef = useRef<() => void>();
+  const animationRef = useRef<number | undefined>(undefined);
+  const cleanupRef = useRef<(() => void) | undefined>(undefined);
 
   const initializeCursorTrail = useCallback(() => {
     if (typeof window === 'undefined') return;

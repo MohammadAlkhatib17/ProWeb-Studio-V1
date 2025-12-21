@@ -42,7 +42,7 @@ export function useDebouncedCallback<T extends (...args: never[]) => unknown>(
   delay: number = 300,
   deps: React.DependencyList = []
 ): (...args: Parameters<T>) => void {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Clean up on unmount
   useEffect(() => {

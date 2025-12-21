@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
-import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { HeroCanvas, ServiceHeroScene } from '@/components/3d/ClientScene';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -14,24 +14,13 @@ import PricingSection from '@/components/sections/PricingSection';
 
 import type { Metadata } from 'next';
 
-// Dynamic imports for 3D elements
-const HeroCanvas = dynamicImport(() => import('@/components/HeroCanvas'), {
-    ssr: false,
-    loading: () => null,
-});
-
-const ServiceHeroScene = dynamicImport(() => import('@/three/ServiceHeroScene'), {
-    ssr: false,
-    loading: () => null,
-});
-
 export const dynamic = 'force-static';
 export const revalidate = 86400; // 24 hours ISR
 
 interface ServicePageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 }
 
 export async function generateStaticParams() {
@@ -41,7 +30,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
-    const dienst = getDienstBySlug(params.slug);
+    const { slug } = await params;
+    const dienst = getDienstBySlug(slug);
 
     if (!dienst) {
         return {
@@ -58,8 +48,9 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
     });
 }
 
-export default function ServicePage({ params }: ServicePageProps) {
-    const dienst = getDienstBySlug(params.slug);
+export default async function ServicePage({ params }: ServicePageProps) {
+    const { slug } = await params;
+    const dienst = getDienstBySlug(slug);
 
     if (!dienst) {
         notFound();

@@ -4,11 +4,13 @@ import {
   CheckCircle2
 } from 'lucide-react';
 
+import {
+  SimpleBrandIdentityModel,
+  SimpleEcommerceShowcase,
+  SimplePortfolioComputer
+} from '@/components/3d/ClientScene';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
-import SimpleBrandIdentityModel from '@/components/SimpleBrandIdentityModel';
-import SimpleEcommerceShowcase from '@/components/SimpleEcommerceShowcase';
-import SimplePortfolioComputer from '@/components/SimplePortfolioComputer';
 import { siteConfig } from '@/config/site.config';
 
 import DigitalGalaxyLabs from '../../components/portfolio/DigitalGalaxyLabs';

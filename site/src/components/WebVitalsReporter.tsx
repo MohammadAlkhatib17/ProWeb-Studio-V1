@@ -2,33 +2,26 @@
 
 import { useReportWebVitals } from 'next/web-vitals';
 
-import { useWebVitals } from '@/lib/monitoring/useWebVitals';
 import { reportWebVitals } from '@/reportWebVitals';
 
 export function WebVitalsReporter() {
   const isProd = process.env.NODE_ENV === 'production';
   const enabled = process.env.NEXT_PUBLIC_ENABLE_WEB_VITALS === 'true';
-  
-  // Legacy vitals reporting to Plausible
+
+  // Vitals reporting to Plausible
   useReportWebVitals((metric) => {
     if (isProd && enabled) {
       reportWebVitals(metric);
     }
+
+    // Log to console in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Web Vitals] ${metric.name}:`, {
+        value: metric.value,
+        rating: metric.rating,
+      });
+    }
   });
-  
-  // New internal monitoring system (LCP, CLS, INP only)
-  useWebVitals({
-    enabled: true, // Will check env flags internally
-    onMetric: (metric) => {
-      // Optional: Log to console in development
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`[Vitals Monitor] ${metric.name}:`, {
-          value: metric.value,
-          rating: metric.rating,
-        });
-      }
-    },
-  });
-  
+
   return null;
 }

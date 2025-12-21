@@ -5,10 +5,18 @@
 
 import type { Dienst } from '@/config/diensten.config';
 import type { Stad } from '@/config/steden.config';
-
-import { SITE_URL, dutchMetadataDefaults } from '../metadata/defaults';
+import { siteConfig } from '@/config/site.config';
 
 import type { Metadata } from 'next';
+
+// Site URL from config
+const SITE_URL = siteConfig.url;
+
+// Dutch metadata defaults
+const dutchMetadataDefaults = {
+  locale: 'nl_NL',
+  language: 'nl-NL',
+};
 
 export interface StadMetadataOptions {
   stad: Stad;

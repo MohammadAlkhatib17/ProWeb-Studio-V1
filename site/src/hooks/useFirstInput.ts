@@ -25,7 +25,7 @@ export function useFirstInput() {
     window.addEventListener('pointerdown', handleFirstInput, { passive: true });
     window.addEventListener('keydown', handleFirstInput, { passive: true });
     window.addEventListener('touchstart', handleFirstInput, { passive: true });
-    
+
     listenerAdded.current = true;
 
     return () => {
@@ -53,7 +53,7 @@ export function useDeferredInit(
 ) {
   const hasFirstInput = useFirstInput();
   const initialized = useRef(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     if (initialized.current) return;

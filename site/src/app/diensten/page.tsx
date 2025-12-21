@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 
-import dynamicImport from 'next/dynamic';
 import Link from 'next/link';
 
 import {
@@ -9,6 +8,7 @@ import {
   Laptop, CheckCircle2, ArrowRight
 } from 'lucide-react';
 
+import { ServicesPolyhedra } from '@/components/3d/ClientScene';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
@@ -33,13 +33,6 @@ export const metadata: Metadata = generatePageMetadata('services');
 
 // Get canonical URL from environment with fallback
 const SITE_URL = (process.env.SITE_URL ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
-
-const ServicesPolyhedra = dynamicImport(() => import('@/three/ServicesPolyhedra'), {
-  ssr: false,
-  loading: () => (
-    <div className="h-96 bg-cosmic-900/50 animate-pulse rounded-lg" />
-  ),
-});
 
 const services = [
   {
