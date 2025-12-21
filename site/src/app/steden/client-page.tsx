@@ -8,6 +8,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
+import { Icon } from '@/components/ui/Icon';
 import { steden, getPopularSteden, getstedenByRegion } from '@/config/steden.config';
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL ?? 'https://prowebstudio.nl').replace(/\/+$/, '');
@@ -30,7 +31,7 @@ export default function StedenClientPage() {
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(stad => 
+      filtered = filtered.filter(stad =>
         stad.name.toLowerCase().includes(query) ||
         stad.province.toLowerCase().includes(query) ||
         stad.region.toLowerCase().includes(query)
@@ -68,7 +69,7 @@ export default function StedenClientPage() {
   return (
     <main className="pt-20 md:pt-24 relative overflow-hidden">
       <Breadcrumbs />
-      
+
       {/* Schema */}
       <script
         type="application/ld+json"
@@ -87,8 +88,8 @@ export default function StedenClientPage() {
             {' '}in Nederland
           </h1>
           <p className="text-xl md:text-2xl text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Lokale webdesign expertise in {steden.length} Nederlandse steden. 
-            Van Amsterdam tot Groningen, van Rotterdam tot Nijmegen - 
+            Lokale webdesign expertise in {steden.length} Nederlandse steden.
+            Van Amsterdam tot Groningen, van Rotterdam tot Nijmegen -
             professionele websites voor ondernemers in heel Nederland.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -133,7 +134,7 @@ export default function StedenClientPage() {
                   <h3 className="text-lg font-semibold text-white group-hover:text-cyan-300 transition-colors">
                     {stad.name}
                   </h3>
-                  <span className="text-2xl">🏛️</span>
+                  <Icon name="🏛️" className="w-6 h-6 text-cosmic-900" />
                 </div>
                 <p className="text-sm text-slate-400 mb-2">{stad.province}</p>
                 <p className="text-xs text-slate-500">
@@ -175,11 +176,10 @@ export default function StedenClientPage() {
             <div className="flex flex-wrap justify-center gap-2">
               <button
                 onClick={() => setSelectedRegion('all')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  selectedRegion === 'all'
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedRegion === 'all'
                     ? 'bg-cyan-500 text-cosmic-900'
                     : 'bg-cosmic-800/30 text-slate-400 hover:bg-cosmic-800/50 hover:text-white'
-                }`}
+                  }`}
               >
                 Alle Regio&apos;s ({steden.length})
               </button>
@@ -187,11 +187,10 @@ export default function StedenClientPage() {
                 <button
                   key={region}
                   onClick={() => setSelectedRegion(region)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    selectedRegion === region
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${selectedRegion === region
                       ? 'bg-cyan-500 text-cosmic-900'
                       : 'bg-cosmic-800/30 text-slate-400 hover:bg-cosmic-800/50 hover:text-white'
-                  }`}
+                    }`}
                 >
                   {region} ({getstedenByRegion(region).length})
                 </button>
@@ -215,7 +214,7 @@ export default function StedenClientPage() {
                       </h3>
                       <p className="text-xs text-slate-400">{stad.province}</p>
                     </div>
-                    <span className="text-xl">📍</span>
+                    <Icon name="📍" className="w-5 h-5 text-cyan-400" />
                   </div>
                   <p className="text-xs text-slate-500 mb-3">
                     {stad.population.toLocaleString('nl-NL')} inwoners
@@ -262,40 +261,40 @@ export default function StedenClientPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <div className="text-center">
-              <div className="w-16 h-16 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🗺️</span>
+              <div className="w-16 h-16 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4 text-cosmic-900">
+                <Icon name="🗺️" className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">
                 Lokale SEO Optimalisatie
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Word gevonden door klanten in uw regio met geoptimaliseerde 
+                Word gevonden door klanten in uw regio met geoptimaliseerde
                 lokale zoekwoorden en Google My Business integratie.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🤝</span>
+              <div className="w-16 h-16 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4 text-cosmic-900">
+                <Icon name="users" className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">
                 Persoonlijke Service
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Directe communicatie in het Nederlands, begrip van lokale markt 
+                Directe communicatie in het Nederlands, begrip van lokale markt
                 en bedrijfscultuur in uw regio.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">⚡</span>
+              <div className="w-16 h-16 bg-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4 text-cosmic-900">
+                <Icon name="⚡" className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">
                 Snelle Reactietijd
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Nederlandse kantooruren, snelle support en mogelijkheid voor 
+                Nederlandse kantooruren, snelle support en mogelijkheid voor
                 persoonlijke afspraken in uw regio.
               </p>
             </div>
@@ -311,12 +310,12 @@ export default function StedenClientPage() {
               Neem Contact Op
             </h2>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-              Klaar om uw online aanwezigheid te versterken? 
+              Klaar om uw online aanwezigheid te versterken?
               Neem contact op voor een vrijblijvend gesprek.
             </p>
           </div>
-          
-          <DutchBusinessInfo 
+
+          <DutchBusinessInfo
             variant="compact"
             showAddress={true}
             showOpeningHours={true}
@@ -327,7 +326,7 @@ export default function StedenClientPage() {
         </div>
       </section>
 
-      <ContentSuggestions 
+      <ContentSuggestions
         customSuggestions={[
           { title: 'Bekijk Onze Diensten', href: '/diensten', description: 'Ontdek wat wij voor uw bedrijf kunnen betekenen' },
           { title: 'Portfolio Bekijken', href: '/portfolio', description: 'Zie voorbeelden van ons werk voor Nederlandse bedrijven' },

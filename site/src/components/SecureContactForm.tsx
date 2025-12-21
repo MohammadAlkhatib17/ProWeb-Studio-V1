@@ -14,7 +14,7 @@ const contactSchema = z.object({
   name: z.string()
     .min(2, 'Naam moet minimaal 2 karakters zijn')
     .max(100, 'Naam mag niet langer zijn dan 100 karakters')
-    .regex(/^[a-zA-ZÀ-ÿ\s\-'\.]+$/, 'Naam bevat ongeldige karakters'),
+    .regex(/^[a-zA-ZÀ-ÿ\s\-'.]+$/, 'Naam bevat ongeldige karakters'),
   email: z.string()
     .email('Ongeldig e-mailadres')
     .max(254, 'E-mailadres te lang')
@@ -24,7 +24,7 @@ const contactSchema = z.object({
     }, 'Tijdelijke e-mailadressen zijn niet toegestaan'),
   phone: z.string()
     .optional()
-    .refine(phone => !phone || /^[\+]?[0-9\s\-\(\)]+$/.test(phone), 'Ongeldig telefoonnummer formaat'),
+    .refine(phone => !phone || /^[+]?[0-9\s\-()]+$/.test(phone), 'Ongeldig telefoonnummer formaat'),
   projectTypes: z
     .array(z.string())
     .min(1, 'Selecteer minimaal één projecttype')
@@ -118,7 +118,7 @@ export default function SecureContactForm() {
         }
       };
     }
-    
+
     // Return undefined for code paths without cleanup
     return undefined;
   }, []);
@@ -149,7 +149,7 @@ export default function SecureContactForm() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    
+
     // Basic input sanitization on client side
     const sanitizedValue = value
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove script tags
@@ -158,7 +158,7 @@ export default function SecureContactForm() {
 
     // Update form state immediately for responsive feel
     setForm(prev => ({ ...prev, [name]: sanitizedValue }));
-    
+
     // Debounce validation to avoid blocking input
     if (sanitizedValue && name !== 'website') {
       validateField(name, sanitizedValue);
@@ -263,7 +263,7 @@ export default function SecureContactForm() {
 
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'X-Requested-With': 'XMLHttpRequest', // CSRF protection
         },
@@ -276,7 +276,7 @@ export default function SecureContactForm() {
 
       let data;
       const contentType = response.headers.get('content-type');
-      
+
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
@@ -304,8 +304,8 @@ export default function SecureContactForm() {
       });
     } catch (error) {
       console.error('Submission failed:', error);
-      setErrors({ 
-        general: error instanceof Error ? error.message : 'Er is een onverwachte fout opgetreden. Probeer het later opnieuw.' 
+      setErrors({
+        general: error instanceof Error ? error.message : 'Er is een onverwachte fout opgetreden. Probeer het later opnieuw.'
       });
       setStatus('error');
     }
@@ -482,11 +482,10 @@ export default function SecureContactForm() {
                       key={type.id}
                       type="button"
                       onClick={() => onToggleType(type.id)}
-                      className={`p-3 rounded-lg border text-left transition-all min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-cosmic-900 ${
-                        form.projectTypes.includes(type.id)
+                      className={`p-3 rounded-lg border text-left transition-all min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-cosmic-900 ${form.projectTypes.includes(type.id)
                           ? 'bg-blue-500/30 border-blue-400 text-white'
                           : 'bg-white/5 border-white/20 text-slate-200 hover:bg-white/10'
-                      }`}
+                        }`}
                     >
                       <span className="text-sm font-medium">{type.label}</span>
                     </button>

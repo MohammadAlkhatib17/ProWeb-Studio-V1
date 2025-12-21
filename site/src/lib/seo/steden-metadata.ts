@@ -154,15 +154,29 @@ export function generateStadDienstMetadata({ stad, dienst }: { stad: Stad; diens
 
 /**
  * Generate LocalBusiness JSON-LD schema for city pages
+ * Enhanced for maximum local SEO impact with contact info, services, and opening hours
  */
 export function generateStadSchema(stad: Stad) {
+  // Get contact info from environment
+  const phone = process.env.NEXT_PUBLIC_PHONE || process.env.PHONE || '';
+  const email = process.env.NEXT_PUBLIC_CONTACT_INBOX || process.env.CONTACT_INBOX || 'contact@prowebstudio.nl';
+  const kvk = process.env.NEXT_PUBLIC_KVK || '';
+
   return {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': ['LocalBusiness', 'ProfessionalService'],
     '@id': `${SITE_URL}/steden/${stad.slug}#business`,
     name: `ProWeb Studio ${stad.name}`,
+    alternateName: `Webdesign Bureau ${stad.name}`,
     description: stad.description,
     url: `${SITE_URL}/steden/${stad.slug}`,
+    ...(phone && { telephone: phone }),
+    email: email,
+    priceRange: '€€€',
+    currenciesAccepted: 'EUR',
+    paymentAccepted: 'Bank Transfer, iDEAL, Credit Card',
+    image: `${SITE_URL}/og`,
+    logo: `${SITE_URL}/proweb-studio.png`,
     address: {
       '@type': 'PostalAddress',
       addressLocality: stad.name,
@@ -188,9 +202,58 @@ export function generateStadSchema(stad: Stad) {
         longitude: stad.coordinates.lng,
       },
     }),
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '17:00',
+      },
+    ],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: `Webdesign Diensten ${stad.name}`,
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: `Website Laten Maken ${stad.name}`,
+            description: `Professionele website ontwikkeling in ${stad.name}`,
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: `Webshop Laten Maken ${stad.name}`,
+            description: `E-commerce webshop ontwikkeling in ${stad.name}`,
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: `SEO Optimalisatie ${stad.name}`,
+            description: `Zoekmachine optimalisatie voor bedrijven in ${stad.name}`,
+          },
+        },
+      ],
+    },
+    ...(kvk && {
+      identifier: {
+        '@type': 'PropertyValue',
+        name: 'KVK-nummer',
+        value: kvk,
+      },
+    }),
     parentOrganization: {
       '@id': `${SITE_URL}#organization`,
     },
+    sameAs: [
+      'https://www.linkedin.com/company/proweb-studio',
+      'https://github.com/proweb-studio',
+    ],
   };
 }
 

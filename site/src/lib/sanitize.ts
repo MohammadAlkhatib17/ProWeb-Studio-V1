@@ -12,11 +12,11 @@ import type { Config } from 'dompurify';
 // Default configuration for sanitization
 const defaultConfig: Config = {
   ALLOWED_TAGS: [
-    'p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 
+    'p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li',
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre'
   ],
   ALLOWED_ATTR: ['href', 'title', 'target', 'rel'],
-  ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+  ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i,
   ALLOW_DATA_ATTR: false,
   ALLOW_UNKNOWN_PROTOCOLS: false,
   SAFE_FOR_TEMPLATES: true,
@@ -46,7 +46,7 @@ export function sanitizeHtml(
   if (!dirty || typeof dirty !== 'string') {
     return '';
   }
-  
+
   const sanitized = DOMPurify.sanitize(dirty, config);
   return typeof sanitized === 'string' ? sanitized : String(sanitized);
 }
@@ -72,9 +72,9 @@ export function sanitizeUrl(url: string): string {
   if (!url || typeof url !== 'string') {
     return '';
   }
-  
+
   const trimmed = url.trim().toLowerCase();
-  
+
   // Block dangerous protocols
   if (
     trimmed.startsWith('javascript:') ||
@@ -84,7 +84,7 @@ export function sanitizeUrl(url: string): string {
   ) {
     return '';
   }
-  
+
   return url.trim();
 }
 
@@ -100,10 +100,10 @@ export function sanitizeUserInput(input: string, maxLength: number = 10000): str
   if (!input || typeof input !== 'string') {
     return '';
   }
-  
+
   // Truncate if too long
   const truncated = input.length > maxLength ? input.substring(0, maxLength) : input;
-  
+
   // Remove all HTML tags and dangerous content
   return sanitizeText(truncated);
 }

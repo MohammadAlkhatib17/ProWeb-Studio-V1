@@ -10,6 +10,7 @@ import Logo from '@/components/Logo';
 import { footerLinkGroups } from '@/config/internal-linking.config';
 import { siteConfig } from '@/config/site.config';
 import { useDebounce } from '@/hooks/useDebounce';
+import { Sparkles, Mail, Phone, Heart } from 'lucide-react';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -87,7 +88,7 @@ export default function Footer() {
             {/* Newsletter signup */}
             <div className="bg-white/5 rounded-xl p-6 border border-white/5">
               <h4 className="font-bold mb-3 text-cyan-300 flex items-center gap-2">
-                <span>✨</span> Digitale Magie in je Inbox
+                <Sparkles className="w-4 h-4" /> Digitale Magie in je Inbox
               </h4>
               <p className="text-slate-400 text-xs mb-4 leading-relaxed">
                 Ontvang maandelijks onze nieuwste inzichten over webdesign, 3D-innovaties en digitale trends.
@@ -161,17 +162,17 @@ export default function Footer() {
             <span className="text-center md:text-left">&copy; {new Date().getFullYear()} {siteConfig.name}</span>
             <span className="hidden md:inline text-slate-700">•</span>
             <span className="text-center md:text-left flex items-center gap-1">
-              Gemaakt met <span className="text-red-500 animate-pulse">❤</span> in Nederland
+              Gemaakt met <Heart className="w-3 h-3 text-red-500 animate-pulse" /> in Nederland
             </span>
           </div>
 
           {/* Socials / Contact Quick Links */}
           <div className="flex items-center gap-6 text-sm font-medium order-1 md:order-2">
             <a href={`mailto:${siteConfig.email}`} className="text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-2">
-              <span>✉️</span> <span className="hidden sm:inline">{siteConfig.email}</span>
+              <Mail className="w-4 h-4" /> <span className="hidden sm:inline">{siteConfig.email}</span>
             </a>
             <a href={`tel:${siteConfig.phone}`} className="text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-2">
-              <span>📞</span> <span className="hidden sm:inline">{siteConfig.phone}</span>
+              <Phone className="w-4 h-4" /> <span className="hidden sm:inline">{siteConfig.phone}</span>
             </a>
           </div>
 

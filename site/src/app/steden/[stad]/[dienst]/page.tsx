@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
 import PricingSection from '@/components/sections/PricingSection';
+import { Icon } from '@/components/ui/Icon';
 import {
   getDienstBySlug,
   getRelatedDiensten,
@@ -117,7 +118,7 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
             </div>
 
             <div className="flex items-center gap-3 mb-6">
-              <span className="text-3xl">{dienst.icon}</span>
+              <Icon name={dienst.icon} className="w-8 h-8 text-cyan-400" />
               <span className="text-cyan-300 font-medium">{stad.name} • {stad.province}</span>
             </div>
 
@@ -173,7 +174,9 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
                   key={index}
                   className="bg-cosmic-800/30 backdrop-blur-sm border border-cosmic-700/30 rounded-xl p-8 hover:border-primary-500/50 transition-all duration-300"
                 >
-                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <div className="text-cyan-400 mb-4">
+                    <Icon name={feature.icon} className="w-10 h-10" />
+                  </div>
                   <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
                   <p className="text-slate-200 mb-6">{feature.description}</p>
                   <ul className="space-y-2">
@@ -312,7 +315,7 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
               <div className="space-y-3">
                 {dienst.targetAudience.map((audience, index) => (
                   <div key={index} className="flex items-center gap-3 bg-cosmic-800/30 rounded-lg p-4">
-                    <span className="text-2xl">👥</span>
+                    <Icon name="👥" className="w-6 h-6 text-cyan-400" />
                     <span className="text-white font-medium">{audience} in {stad.name}</span>
                   </div>
                 ))}
@@ -362,7 +365,9 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
                   href={`/steden/${stad.slug}/${relatedDienst.slug}`}
                   className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:bg-cosmic-800/50"
                 >
-                  <span className="text-3xl mb-4 block">{relatedDienst.icon}</span>
+                  <div className="mb-4 text-cyan-400">
+                    <Icon name={relatedDienst.icon} className="w-8 h-8" />
+                  </div>
                   <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors">
                     {relatedDienst.name}
                   </h3>
@@ -406,7 +411,7 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
                     <h3 className="text-lg font-semibold text-white group-hover:text-cyan-300 transition-colors">
                       {nearbyStad.name}
                     </h3>
-                    <span className="text-xl">📍</span>
+                    <Icon name="📍" className="w-5 h-5 text-cyan-400" />
                   </div>
                   <p className="text-sm text-slate-400 mb-4">
                     {dienst.name} in {nearbyStad.name}

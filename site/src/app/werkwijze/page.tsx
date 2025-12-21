@@ -4,6 +4,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import DynamicOrbitSystem from '@/components/dynamic/DynamicOrbitSystem';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import SEOSchema from '@/components/SEOSchema';
+import { Icon } from '@/components/ui/Icon';
 
 import type { Metadata } from 'next';
 
@@ -136,8 +137,8 @@ export default function Werkwijze() {
               { icon: '🤝', title: 'Partnership', desc: 'Wij bouwen geen projecten, wij bouwen relaties. Uw groei is ons succes.', color: 'magenta' }
             ].map((item, i) => (
               <div key={i} className="glass p-8 rounded-2xl text-center group hover:scale-105 transition-all duration-300 border border-white/5 hover:border-white/10">
-                <div className={`w-16 h-16 mx-auto mb-6 rounded-full bg-${item.color}-500/10 flex items-center justify-center text-3xl group-hover:bg-${item.color}-500/20 transition-colors duration-300 shadow-lg shadow-${item.color}-500/10`}>
-                  {item.icon}
+                <div className={`w-16 h-16 mx-auto mb-6 rounded-full bg-${item.color}-500/10 flex items-center justify-center text-${item.color === 'cyan' ? 'cyan-400' : 'magenta-400'} group-hover:bg-${item.color}-500/20 transition-colors duration-300 shadow-lg shadow-${item.color}-500/10`}>
+                  <Icon name={item.icon} className="w-8 h-8" />
                 </div>
                 <h3 className={`text-2xl font-bold mb-4 text-${item.color === 'cyan' ? 'cyan-300' : 'magenta-400'}`}>
                   {item.title}

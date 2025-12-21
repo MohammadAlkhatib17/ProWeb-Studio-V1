@@ -20,6 +20,7 @@ import FAQSection from '@/components/sections/FAQSection';
 import PricingSection from '@/components/sections/PricingSection';
 import SEOSchema from '@/components/SEOSchema';
 import { BentoGrid, BentoGridItem } from '@/components/ui/BentoGrid';
+import { Icon } from '@/components/ui/Icon';
 import { steden } from '@/config/steden.config';
 import { generatePageMetadata } from '@/lib/metadata';
 
@@ -281,8 +282,8 @@ export default function Diensten() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-12">
             <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group text-center hover:scale-105">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
-                🏗️
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition-colors duration-300">
+                <Icon name="code" className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
                 Onze Werkwijze
@@ -301,8 +302,8 @@ export default function Diensten() {
             </div>
 
             <div className="glass p-6 rounded-xl hover:border-magenta-500/60 transition-all duration-300 group text-center hover:scale-105">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
-                🚀
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-magenta-400 group-hover:bg-magenta-500/20 transition-colors duration-300">
+                <Icon name="rocket" className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
                 Portfolio
@@ -321,8 +322,8 @@ export default function Diensten() {
             </div>
 
             <div className="glass p-6 rounded-xl hover:border-cyan-500/60 transition-all duration-300 group text-center hover:scale-105">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
-                👤
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition-colors duration-300">
+                <Icon name="users" className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300 group-hover:text-cyan-200">
                 Over ProWeb Studio

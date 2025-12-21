@@ -8,6 +8,7 @@ import { Button } from '@/components/Button';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import FAQSection from '@/components/sections/FAQSection';
 import SEOSchema from '@/components/SEOSchema';
+import { Icon } from '@/components/ui/Icon';
 import { getAllDienstSlugs, getDienstBySlug, diensten } from '@/config/diensten.config';
 import { generateMetadata as generateMetadataUtil } from '@/lib/metadata';
 import PricingSection from '@/components/sections/PricingSection';
@@ -70,6 +71,28 @@ export default async function ServicePage({ params }: ServicePageProps) {
                 includeFAQ={!!dienst.faq}
             />
 
+            {/* FAQPage JSON-LD for Google SERP Rich Snippets */}
+            {dienst.faq && dienst.faq.length > 0 && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            '@context': 'https://schema.org',
+                            '@type': 'FAQPage',
+                            '@id': `https://prowebstudio.nl/diensten/${dienst.slug}#faq`,
+                            mainEntity: dienst.faq.map((item) => ({
+                                '@type': 'Question',
+                                name: item.question,
+                                acceptedAnswer: {
+                                    '@type': 'Answer',
+                                    text: item.answer,
+                                },
+                            })),
+                        }),
+                    }}
+                />
+            )}
+
             <Breadcrumbs />
 
             {/* Hero Section with 3D Background */}
@@ -86,7 +109,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/20 text-cyan-300 text-sm font-medium mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(34,211,238,0.2)] animate-fade-in">
-                        <span className="text-xl mr-1">{dienst.icon}</span>
+                        <Icon name={dienst.icon} className="w-5 h-5" />
                         <span className="uppercase tracking-wide text-xs">{dienst.deliveryTime} levertijd</span>
                     </div>
 
@@ -139,8 +162,8 @@ export default async function ServicePage({ params }: ServicePageProps) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {dienst.featuresDetail?.map((feature, idx) => (
                             <div key={idx} className="group relative p-8 rounded-3xl bg-black/20 border border-white/5 backdrop-blur-sm hover:bg-white/5 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-900/40 to-blue-900/40 flex items-center justify-center text-3xl mb-6 border border-white/10 text-cyan-400 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-cyan-900/20">
-                                    {feature.icon}
+                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-900/40 to-blue-900/40 flex items-center justify-center mb-6 border border-white/10 text-cyan-400 group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-cyan-900/20">
+                                    <Icon name={feature.icon} className="w-7 h-7" />
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">{feature.title}</h3>
                                 <p className="text-slate-400 text-sm leading-relaxed mb-4">{feature.description}</p>
@@ -241,7 +264,9 @@ export default async function ServicePage({ params }: ServicePageProps) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {relatedServices.map((d) => (
                             <Link key={d.slug} href={`/diensten/${d.slug}`} className="group p-6 rounded-2xl bg-black/40 border border-white/5 hover:border-cyan-500/30 transition-all hover:-translate-y-1 backdrop-blur-sm">
-                                <div className="text-3xl mb-4">{d.icon}</div>
+                                <div className="mb-4 text-cyan-400">
+                                    <Icon name={d.icon} className="w-8 h-8" />
+                                </div>
                                 <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">{d.name}</h3>
                                 <p className="text-sm text-slate-400">{d.shortDescription}</p>
                             </Link>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Rocket, Palette, TrendingUp, ShieldCheck, CheckCircle2, MapPin, Building2, CircuitBoard } from 'lucide-react';
+import { Rocket, Palette, TrendingUp, ShieldCheck, CheckCircle2, MapPin, Building2, CircuitBoard, Globe, Target, ShoppingCart, Sparkles, Zap, Gamepad2 } from 'lucide-react';
 
 import { HeroCanvas, HeroScene, HexagonalPrism } from '@/components/3d/ClientScene';
 import { Button } from '@/components/Button';
@@ -24,18 +24,19 @@ interface CaseCardProps {
   desc: string;
   linkText?: string;
   linkHref?: string;
+  icon: React.ReactNode;
 }
 
-function CaseCard({ title, metric, desc, linkText, linkHref }: CaseCardProps) {
+function CaseCard({ title, metric, desc, linkText, linkHref, icon }: CaseCardProps) {
   return (
     <article className="rounded-2xl border border-cosmic-700/60 bg-cosmic-800/40 p-6 sm:p-7 md:p-8 hover:bg-cosmic-800/60 transition-all duration-300 hover:border-cosmic-600/80 hover:shadow-2xl hover:shadow-cyan-500/10 group relative overflow-hidden flex flex-col h-full">
       {/* Subtle gradient overlay on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-magenta-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
       <div className="relative z-10 flex flex-col h-full">
-        {/* Icon placeholder for future enhancement - currently using emoji/text */}
-        <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-2xl">
-          {title.includes('3D') ? '🎯' : title.includes('Webshop') ? '🛒' : '🌐'}
+        {/* Icon using Lucide */}
+        <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-cyan-400">
+          {icon}
         </div>
 
         <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 group-hover:text-cyan-300 transition-colors duration-300 leading-tight text-center">
@@ -120,40 +121,33 @@ export default function HomePage() {
             </Button>
           </div>
 
-          {/* Limited Time Promotional Banner */}
+          {/* Professional Value Proposition Banner */}
           <div className="mt-8 motion-safe:animate-fade-in-delayed">
-            <div className="relative mx-auto max-w-md">
-              {/* Animated glow effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-magenta-500 to-cyan-500 rounded-lg blur opacity-75 animate-pulse"></div>
+            <div className="relative mx-auto max-w-lg">
+              {/* Subtle glow effect */}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/30 via-magenta-500/20 to-cyan-500/30 rounded-xl blur-sm" />
 
-              {/* Main promotional banner */}
-              <div className="relative bg-gradient-to-r from-cyan-500/20 to-magenta-500/20 backdrop-blur-sm border border-cyan-300/30 rounded-lg px-6 py-4 text-center">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <span className="text-yellow-400 text-sm font-bold">🎉 BEPERKTE TIJD</span>
-                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-bounce">HOT</span>
-                </div>
-
-                <div className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-magenta-300 mb-1">
-                  30% KORTING
-                </div>
-
-                <p className="text-sm text-cyan-200 font-medium mb-2">
-                  Op alle website projecten
-                </p>
-
-                <div className="flex items-center justify-center gap-2 text-xs text-slate-300">
-                  <span className="flex items-center gap-1">
-                    <svg className="w-3 h-3 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              {/* Main banner */}
+              <div className="relative bg-cosmic-900/80 backdrop-blur-sm border border-cosmic-700/50 rounded-xl px-6 py-5 text-center">
+                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm">
+                  <span className="flex items-center gap-2 text-slate-200">
+                    <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    Geldig 6 maanden
+                    <span>KVK-geregistreerd</span>
                   </span>
-                  <span className="text-slate-400">•</span>
-                  <span className="flex items-center gap-1">
-                    <svg className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                  <span className="flex items-center gap-2 text-slate-200">
+                    <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    Geen verborgen kosten
+                    <span>Next.js &amp; React</span>
+                  </span>
+                  <span className="flex items-center gap-2 text-slate-200">
+                    <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                    </svg>
+                    <span>100% Nederlands</span>
                   </span>
                 </div>
               </div>
@@ -174,24 +168,27 @@ export default function HomePage() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-stretch">
             <CaseCard
+              icon={<Globe className="w-6 h-6" />}
               title="Website Laten Maken: Waar Ambities Groeien"
               metric="Razendsnelle Next.js Websites"
-              desc="Elke **website laten maken** begint met uw visie. Wij architectureren op maat gemaakte, veilige en SEO-geoptimaliseerde digitale ecosystemen die de kern van uw ondernemingsstrategie vormen — gebouwd voor vandaag, klaar voor morgen."
-              linkText="Zie hoe wij dit voor jou realiseren"
+              desc="Elke website laten maken begint met uw visie. Wij architectureren op maat gemaakte, veilige en SEO-geoptimaliseerde digitale ecosystemen die de kern van uw ondernemingsstrategie vormen."
+              linkText="Bekijk onze diensten"
               linkHref="/diensten"
             />
             <CaseCard
+              icon={<Target className="w-6 h-6" />}
               title="3D Ervaringen: Het Onmogelijke Mogelijk"
               metric="Interactieve WebGL & R3F"
-              desc="In een wereld vol standaardwebsites creëren wij digitale wonderen. Onze 3D-productvisualisaties en interactieve ervaringen transformeren gewone bezoekers in betrokken klanten die uw merk nooit vergeten."
-              linkText="Bekijk onze 3D projecten"
+              desc="In een wereld vol standaardwebsites creëren wij digitale wonderen. Onze 3D-productvisualisaties en interactieve ervaringen transformeren bezoekers in betrokken klanten."
+              linkText="Bekijk portfolio"
               linkHref="/portfolio"
             />
             <CaseCard
+              icon={<ShoppingCart className="w-6 h-6" />}
               title="Webshop Laten Maken: Verkopen Herontdacht"
               metric="Conversiegerichte Webshops"
-              desc="Een **webshop laten maken** is meer dan technologie — het is psychologie in code. Wij creëren e-commerce ervaringen die niet alleen prachtig zijn, maar intuïtief begrijpen hoe uw klanten denken en kopen."
-              linkText="Ontdek het geheim van onze aanpak"
+              desc="Een webshop laten maken is meer dan technologie — het is psychologie in code. Wij creëren e-commerce ervaringen die intuïtief begrijpen hoe uw klanten denken en kopen."
+              linkText="Onze aanpak"
               linkHref="/werkwijze"
             />
           </div>
@@ -206,8 +203,8 @@ export default function HomePage() {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             <div className="text-center group">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/25">
-                🎯
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/25">
+                <Target className="w-10 h-10" />
               </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 group-hover:text-cyan-300 transition-colors duration-300">
                 Webdesign Strategie
@@ -221,8 +218,8 @@ export default function HomePage() {
               </p>
             </div>
             <div className="text-center group">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/25">
-                ✨
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/25">
+                <Sparkles className="w-10 h-10" />
               </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 group-hover:text-cyan-300 transition-colors duration-300">
                 UX/UI Design
@@ -234,8 +231,8 @@ export default function HomePage() {
               </p>
             </div>
             <div className="text-center group">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/25">
-                🚀
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/25">
+                <Rocket className="w-10 h-10" />
               </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 group-hover:text-cyan-300 transition-colors duration-300">
                 Website Ontwikkeling
@@ -247,8 +244,8 @@ export default function HomePage() {
               </p>
             </div>
             <div className="text-center group">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/25">
-                📈
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/25">
+                <TrendingUp className="w-10 h-10" />
               </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 group-hover:text-cyan-300 transition-colors duration-300">
                 SEO & Groei Optimalisatie
@@ -284,8 +281,8 @@ export default function HomePage() {
 
           <div className="grid lg:grid-cols-3 gap-6 mb-12">
             <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
-                ⚡
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition-colors duration-300">
+                <Zap className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300">
                 Real-time 3D Rendering
@@ -296,8 +293,8 @@ export default function HomePage() {
             </div>
 
             <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-2xl group-hover:bg-magenta-500/20 transition-colors duration-300">
-                🎮
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-magenta-500/10 flex items-center justify-center text-magenta-400 group-hover:bg-magenta-500/20 transition-colors duration-300">
+                <Gamepad2 className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300">
                 WebGL & Three.js
@@ -308,8 +305,8 @@ export default function HomePage() {
             </div>
 
             <div className="glass p-6 rounded-xl text-center group hover:scale-105 transition-transform duration-300">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-2xl group-hover:bg-cyan-500/20 transition-colors duration-300">
-                🚀
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition-colors duration-300">
+                <Rocket className="w-7 h-7" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-cyan-300">
                 Performance First
@@ -494,7 +491,7 @@ export default function HomePage() {
               {[
                 "Amsterdam", "Rotterdam", "Utrecht", "Den Haag", "Eindhoven",
                 "Groningen", "Tilburg", "Almere", "Breda", "Nijmegen",
-                "Enschede", "Haarlem", "Arnhem", "Amersfoort", "Zwolle"
+                "Haarlem", "Arnhem", "Amersfoort", "Zwolle", "Zaanstad"
               ].map((city) => (
                 <Link
                   key={city}
@@ -534,7 +531,7 @@ export default function HomePage() {
                 className="gap-2 shadow-lg shadow-cyan-500/20"
               >
                 Start met een gratis strategiesessie
-                <span>✨</span>
+                <Sparkles className="w-5 h-5" />
               </Button>
             </div>
           </section>

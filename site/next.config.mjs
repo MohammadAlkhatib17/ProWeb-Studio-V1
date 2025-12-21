@@ -113,7 +113,8 @@ validateProductionEnv();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true,
+    // ESLint enabled for production builds - code quality gate
+    ignoreDuringBuilds: false,
   },
   // Runtime & Region Configuration: See docs/ADR-runtime.md
   // Individual routes configure runtime (edge/nodejs) and preferredRegion at route level

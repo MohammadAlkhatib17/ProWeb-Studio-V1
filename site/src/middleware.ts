@@ -246,8 +246,8 @@ export async function middleware(req: NextRequest) {
     "img-src 'self' data: https: blob:",
     // font-src: Google Fonts CDN
     "font-src 'self' https://fonts.gstatic.com data:",
-    // connect-src: API endpoints, analytics, and 3D assets (drei HDR environments from GitHub)
-    `connect-src 'self' https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://raw.githack.com https://*.githack.com https://raw.githubusercontent.com https://*.githubusercontent.com${isDev ? ' ws://localhost:*' : ''}`,
+    // connect-src: API endpoints, analytics, 3D assets (drei HDR), and reCAPTCHA
+    `connect-src 'self' https://plausible.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://raw.githack.com https://*.githack.com https://raw.githubusercontent.com https://*.githubusercontent.com https://www.google.com https://www.gstatic.com${isDev ? ' ws://localhost:*' : ''}`,
     "media-src 'self' https: blob:",
     // worker-src: Allow blob workers for Three.js/React Three Fiber
     "worker-src 'self' blob:",

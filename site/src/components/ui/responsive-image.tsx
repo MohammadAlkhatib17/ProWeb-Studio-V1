@@ -51,7 +51,7 @@ export function ResponsiveImage({
 }: ResponsiveImageProps) {
   // Ensure dimensions are provided to prevent layout shift
   const hasExplicitDimensions = (width && height) || props.fill;
-  
+
   if (!hasExplicitDimensions && !aspectRatio) {
     console.warn(`ResponsiveImage: ${src} should have explicit width/height or aspectRatio to prevent layout shift`);
   }
@@ -81,7 +81,6 @@ export function ResponsiveImage({
     imageProps.alt = '';
   }
 
-  // eslint-disable-next-line jsx-a11y/alt-text
   return <Image {...imageProps} />;
 }
 
@@ -96,10 +95,10 @@ interface HeroImageProps extends Omit<ResponsiveImageProps, 'responsiveSizes' | 
  * Specialized component for hero/banner images
  * Optimized for above-the-fold content and LCP performance
  */
-export function HeroImage({ 
-  priority = true, 
+export function HeroImage({
+  priority = true,
   quality = 90,
-  ...props 
+  ...props
 }: HeroImageProps) {
   return (
     <ResponsiveImage
@@ -122,16 +121,16 @@ interface ThumbnailImageProps extends Omit<ResponsiveImageProps, 'responsiveSize
  * Optimized thumbnail component for cards, galleries, etc.
  * Requires explicit dimensions to prevent layout shift
  */
-export function ThumbnailImage({ 
+export function ThumbnailImage({
   size = 'md',
   quality = 80,
   width,
   height,
-  ...props 
+  ...props
 }: ThumbnailImageProps) {
   const sizeMap = {
     sm: '(max-width: 640px) 150px, 200px',
-    md: '(max-width: 640px) 200px, 300px', 
+    md: '(max-width: 640px) 200px, 300px',
     lg: '(max-width: 640px) 300px, 400px',
   };
 
@@ -158,12 +157,12 @@ interface BackgroundImageProps extends Omit<ResponsiveImageProps, 'fill' | 'size
  * Optimized background image component
  * Uses fill prop for absolute positioning
  */
-export function BackgroundImage({ 
+export function BackgroundImage({
   priority = false,
   quality = 75,
   className,
   alt = '',
-  ...props 
+  ...props
 }: BackgroundImageProps) {
   return (
     <ResponsiveImage
@@ -188,11 +187,11 @@ interface AvatarImageProps extends Omit<ResponsiveImageProps, 'responsiveSizes'>
 /**
  * Optimized avatar/profile image component
  */
-export function AvatarImage({ 
+export function AvatarImage({
   size = 64,
   quality = 85,
   aspectRatio = '1/1',
-  ...props 
+  ...props
 }: AvatarImageProps) {
   return (
     <ResponsiveImage

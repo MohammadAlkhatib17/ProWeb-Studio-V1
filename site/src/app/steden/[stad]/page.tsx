@@ -8,6 +8,7 @@ import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
 import LocalMapEmbed from '@/components/LocalMapEmbed';
 import SEOSchema from '@/components/SEOSchema';
+import { Icon } from '@/components/ui/Icon';
 import { getDienstBySlug } from '@/config/diensten.config';
 import {
   getStadBySlug,
@@ -98,7 +99,7 @@ export default async function StadPage({ params }: StadPageProps) {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/20 text-cyan-300 text-sm font-medium mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(34,211,238,0.2)] animate-fade-in">
-            <span className="text-base">📍</span>
+            <Icon name="📍" className="w-4 h-4" />
             <span className="uppercase tracking-wide text-xs">{stad.province} • {stad.region}</span>
           </div>
 
@@ -167,8 +168,8 @@ export default async function StadPage({ params }: StadPageProps) {
                 {/* Hover Gradient Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                <div className="relative z-10 mb-8 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-800 to-black border border-gray-700 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 group-hover:border-cyan-500/30">
-                  <span className="text-4xl filter drop-shadow-md">{dienst.icon}</span>
+                <div className="relative z-10 mb-8 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-800 to-black border border-gray-700 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 group-hover:border-cyan-500/30 text-cyan-400">
+                  <Icon name={dienst.icon} className="w-8 h-8" />
                 </div>
 
                 <h3 className="relative z-10 text-2xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors duration-300">
@@ -219,7 +220,7 @@ export default async function StadPage({ params }: StadPageProps) {
               {/* USP Box */}
               <div className="bg-gradient-to-br from-cosmic-800 to-black p-6 rounded-2xl border-l-4 border-cyan-500 shadow-lg">
                 <h4 className="text-cyan-400 font-bold mb-2 flex items-center gap-2">
-                  <span>💡</span> Onze Belofte aan {stad.name}
+                  <Icon name="💡" className="w-5 h-5" /> Onze Belofte aan {stad.name}
                 </h4>
                 <p className="text-slate-300 italic">
                   &quot;{stad.uniqueSellingPoint || `Wij leveren websites die net zo hard werken als u. Geen jargon, wel resultaat.`}&quot;
@@ -283,8 +284,8 @@ export default async function StadPage({ params }: StadPageProps) {
               }
             ].map((item, i) => (
               <div key={i} className="group p-6 rounded-2xl bg-cosmic-800/20 border border-white/5 hover:bg-cosmic-800/60 hover:border-cyan-500/30 transition-all duration-300 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-cyan-900/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                  {item.icon}
+                <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-cyan-900/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+                  <Icon name={item.icon} className="w-6 h-6" />
                 </div>
                 <h3 className="font-bold text-white mb-2">{item.title}</h3>
                 <p className="text-sm text-slate-400">{item.desc}</p>
@@ -318,7 +319,7 @@ export default async function StadPage({ params }: StadPageProps) {
                     <h3 className="text-lg font-semibold text-white group-hover:text-cyan-300 transition-colors">
                       {nearbyStad.name}
                     </h3>
-                    <span className="text-xl">📍</span>
+                    <Icon name="📍" className="w-5 h-5 text-cyan-400" />
                   </div>
                   <p className="text-sm text-slate-400 mb-3">{nearbyStad.province}</p>
                   <p className="text-sm text-slate-400 leading-relaxed mb-4">

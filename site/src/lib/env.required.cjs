@@ -1,3 +1,4 @@
+/* global module */
 /**
  * CommonJS version of environment variable constants
  * This allows JavaScript scripts to import the shared constants using require()
@@ -9,7 +10,7 @@
  */
 const CRITICAL_ENV_VARS = [
   'SITE_URL',
-  'NEXT_PUBLIC_PLAUSIBLE_DOMAIN', 
+  'NEXT_PUBLIC_PLAUSIBLE_DOMAIN',
   'CONTACT_INBOX',
   'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
   'RECAPTCHA_SECRET_KEY'
@@ -89,7 +90,7 @@ const DEVELOPMENT_ENV_VARS = [
  */
 const PLACEHOLDER_VALUES = [
   'your_site_url_here',
-  'your_domain_here', 
+  'your_domain_here',
   'your_email_here',
   'your_recaptcha_site_key_here',
   'your_recaptcha_secret_key_here',
