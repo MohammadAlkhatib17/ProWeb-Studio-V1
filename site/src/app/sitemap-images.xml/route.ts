@@ -21,7 +21,7 @@ interface ImageSitemapEntry {
 
 export async function GET() {
   const baseUrl = SITE_URL;
-  
+
   // Define all key images across the website with their metadata
   const imageSitemapEntries: ImageSitemapEntry[] = [
     {
@@ -130,6 +130,30 @@ export async function GET() {
         },
       ],
     },
+    {
+      url: `${baseUrl}/portfolio`,
+      lastModified: new Date().toISOString().split('T')[0],
+      images: [
+        {
+          loc: `${baseUrl}/assets/logo/logo-proweb-lockup.svg`,
+          caption: 'ProWeb Studio portfolio - Showcase van onze beste 3D websites en webshops',
+          title: 'ProWeb Studio Portfolio - 3D Web Experiences',
+          geoLocation: 'Netherlands',
+        },
+      ],
+    },
+    {
+      url: `${baseUrl}/steden`,
+      lastModified: new Date().toISOString().split('T')[0],
+      images: [
+        {
+          loc: `${baseUrl}/assets/logo/logo-proweb-lockup.svg`,
+          caption: 'Webdesign diensten in heel Nederland - Amsterdam, Rotterdam, Utrecht en meer',
+          title: 'ProWeb Studio Locaties - Website Laten Maken Nederland',
+          geoLocation: 'Netherlands',
+        },
+      ],
+    },
     // Additional pages can be added here as the site grows
   ];
 
@@ -138,19 +162,19 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${imageSitemapEntries
-  .map(
-    (entry) => `  <url>
+      .map(
+        (entry) => `  <url>
     <loc>${entry.url}</loc>${entry.lastModified ? `\n    <lastmod>${entry.lastModified}</lastmod>` : ''}
 ${entry.images
-  .map(
-    (image) => `    <image:image>
+            .map(
+              (image) => `    <image:image>
       <image:loc>${image.loc}</image:loc>${image.caption ? `\n      <image:caption><![CDATA[${image.caption}]]></image:caption>` : ''}${image.title ? `\n      <image:title><![CDATA[${image.title}]]></image:title>` : ''}${image.geoLocation ? `\n      <image:geo_location>${image.geoLocation}</image:geo_location>` : ''}${image.license ? `\n      <image:license>${image.license}</image:license>` : ''}
     </image:image>`
-  )
-  .join('\n')}
+            )
+            .join('\n')}
   </url>`
-  )
-  .join('\n')}
+      )
+      .join('\n')}
 </urlset>`;
 
   return new Response(xmlContent, {

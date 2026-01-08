@@ -38,7 +38,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: ['/'],
         disallow: [
-
+          '/locaties/',       // Legacy URLs - redirect via middleware (prevent crawl waste)
           '/_next/',          // Next.js internal files
           '/api/',            // API routes
           '/admin/',          // Admin areas if any
@@ -56,7 +56,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Googlebot',
         allow: ['/'],
         disallow: [
-
+          '/locaties/',       // Legacy URLs - redirect via middleware
           '/_next/',
           '/api/',
           '/admin/',
@@ -103,7 +103,10 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/_next/', '/api/', '/admin/'],
       },
     ],
-    sitemap: `${SITE_URL}/sitemap.xml`,
+    sitemap: [
+      `${SITE_URL}/sitemap.xml`,
+      `${SITE_URL}/sitemap-images.xml`,
+    ],
     host: SITE_URL,
   };
 }

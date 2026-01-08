@@ -269,12 +269,11 @@ export default async function RootLayout({
         <CookieSettingsModal />
 
         {/* Consent-aware analytics - only loads after user consent */}
-        {/* NOTE: Vercel Analytics disabled - enable in Vercel Dashboard first, then set to true */}
         <ConsentAwareAnalytics
           plausibleDomain={siteConfig.analytics.plausibleDomain}
           nonce={nonce}
-          enableVercelAnalytics={false}
-          enableSpeedInsights={false}
+          enableVercelAnalytics={true}
+          enableSpeedInsights={true}
         />
 
         <BackgroundLayer />

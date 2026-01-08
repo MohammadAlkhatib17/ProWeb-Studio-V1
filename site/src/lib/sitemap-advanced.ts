@@ -217,16 +217,42 @@ export function generateLocationsSegment(): SitemapEntry[] {
 
   steden.forEach((stad) => {
     diensten.forEach((dienst) => {
-      // Basic priority logic
-      let priority = 0.6;
-      if (stad.population > 200000) priority += 0.1;
-      if (['website-laten-maken', 'webshop-laten-maken', 'seo-optimalisatie'].includes(dienst.slug)) priority += 0.1;
+      // VIP Boost: website-laten-maken is our flagship service - golden assets
+      // These pages get maximum priority regardless of city size
+      if (dienst.slug === 'website-laten-maken') {
+        locationServicePages.push({
+          url: `${baseUrl}/steden/${stad.slug}/${dienst.slug}`,
+          lastModified: locationUpdateDate,
+          changeFrequency: 'weekly',
+          priority: 0.95, // VIP BOOST - flagship service
+          alternates: {
+            languages: {
+              'nl-NL': `${baseUrl}/steden/${stad.slug}/${dienst.slug}`,
+            }
+          }
+        });
+        return; // Skip normal calculation for this service
+      }
+
+      // Composite priority: population weight (60%) + service value weight (40%)
+      // This signals to Google which city+service combos are most strategically important
+      let populationScore = 0;
+      if (stad.population > 200000) populationScore = 0.15;
+      else if (stad.population > 100000) populationScore = 0.10;
+      else populationScore = 0.05;
+
+      let serviceScore = 0;
+      if (dienst.slug === 'webshop-laten-maken') serviceScore = 0.15;
+      else if (dienst.slug === 'seo-optimalisatie') serviceScore = 0.12;
+      else serviceScore = 0.08;
+
+      const priority = Math.min(0.5 + populationScore + serviceScore, 0.9);
 
       locationServicePages.push({
         url: `${baseUrl}/steden/${stad.slug}/${dienst.slug}`,
         lastModified: locationUpdateDate,
         changeFrequency: 'weekly',
-        priority: Math.min(priority, 1.0), // Cap at 1.0
+        priority: priority, // Dynamic composite priority
         alternates: {
           languages: {
             'nl-NL': `${baseUrl}/steden/${stad.slug}/${dienst.slug}`,

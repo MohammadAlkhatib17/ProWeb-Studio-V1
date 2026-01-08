@@ -15,20 +15,20 @@ const __dirname = path.dirname(__filename);
 // Import the sitemap functions (requires compilation)
 async function validateSitemapGeneration() {
   console.log('🔍 Validating ProWeb Studio Sitemap Implementation\n');
-  
+
   try {
     // Import sitemap module (this will need to be built first)
     const sitemapModule = await import('../src/app/sitemap.ts');
-    
+
     console.log('✓ Sitemap module loaded successfully');
-    
+
     // Generate sitemap
     const sitemap = await sitemapModule.default();
     console.log(`✓ Generated sitemap with ${sitemap.length} URLs`);
-    
+
     // Validate sitemap
     const validation = sitemapModule.validateSitemap(sitemap);
-    
+
     if (validation.isValid) {
       console.log('✅ Sitemap validation PASSED');
     } else {
@@ -37,14 +37,14 @@ async function validateSitemapGeneration() {
         console.log(`   ERROR: ${error}`);
       });
     }
-    
+
     if (validation.warnings.length > 0) {
       console.log('\n⚠️  Warnings:');
       validation.warnings.forEach(warning => {
         console.log(`   WARNING: ${warning}`);
       });
     }
-    
+
     // Check if sitemap index is needed
     const sitemapIndex = await sitemapModule.generateSitemapIndex();
     if (sitemapIndex) {
@@ -52,43 +52,43 @@ async function validateSitemapGeneration() {
     } else {
       console.log('\n📄 Single sitemap file is sufficient');
     }
-    
+
     // Analyze URL distribution
     console.log('\n📊 URL Analysis:');
     const priorities = {};
     const changeFreqs = {};
-    
+
     sitemap.forEach(entry => {
       const priority = entry.priority || 0;
       const changeFreq = entry.changeFrequency || 'unknown';
-      
+
       priorities[priority] = (priorities[priority] || 0) + 1;
       changeFreqs[changeFreq] = (changeFreqs[changeFreq] || 0) + 1;
     });
-    
+
     console.log('   Priority distribution:');
     Object.entries(priorities)
       .sort(([a], [b]) => parseFloat(b) - parseFloat(a))
       .forEach(([priority, count]) => {
         console.log(`     ${priority}: ${count} URLs`);
       });
-    
+
     console.log('   Change frequency distribution:');
     Object.entries(changeFreqs).forEach(([freq, count]) => {
       console.log(`     ${freq}: ${count} URLs`);
     });
-    
+
     // Show sample URLs by category
     console.log('\n🔗 Sample URLs by category:');
-    
+
     const categories = {
       'Core Pages (1.0)': sitemap.filter(entry => entry.priority === 1.0),
       'Services (0.95)': sitemap.filter(entry => entry.priority === 0.95),
       'High Priority (0.9)': sitemap.filter(entry => entry.priority === 0.9),
-      'Major Cities (0.8)': sitemap.filter(entry => entry.priority === 0.8 && entry.url.includes('/locaties/')),
+      'Major Cities (0.8)': sitemap.filter(entry => entry.priority === 0.8 && entry.url.includes('/steden/')),
       'Other Locations (0.7)': sitemap.filter(entry => entry.priority === 0.7),
     };
-    
+
     Object.entries(categories).forEach(([category, urls]) => {
       if (urls.length > 0) {
         console.log(`   ${category}: ${urls.length} URLs`);
@@ -100,7 +100,7 @@ async function validateSitemapGeneration() {
         }
       }
     });
-    
+
   } catch (error) {
     console.error('❌ Error validating sitemap:', error.message);
     process.exit(1);
@@ -150,7 +150,7 @@ async function main() {
   await validateSitemapGeneration();
   printGoogleRequirements();
   printManualChecklist();
-  
+
   console.log('\n🎉 Sitemap validation complete!');
 }
 

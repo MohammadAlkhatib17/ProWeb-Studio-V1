@@ -84,12 +84,12 @@ check_schema() {
 check_schema "$BASE_URL/diensten" "Services Page"
 
 # Test location pages
-check_schema "$BASE_URL/locaties/amsterdam" "Amsterdam Location Page"
-check_schema "$BASE_URL/locaties/rotterdam" "Rotterdam Location Page"
-check_schema "$BASE_URL/locaties/utrecht" "Utrecht Location Page"
+check_schema "$BASE_URL/steden/amsterdam" "Amsterdam Location Page"
+check_schema "$BASE_URL/steden/rotterdam" "Rotterdam Location Page"
+check_schema "$BASE_URL/steden/utrecht" "Utrecht Location Page"
 
 # Test locations index
-check_schema "$BASE_URL/locaties" "Locations Index Page"
+check_schema "$BASE_URL/steden" "Locations Index Page"
 
 echo "================================"
 echo "Validation complete!"
