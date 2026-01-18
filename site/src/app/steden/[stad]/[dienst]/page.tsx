@@ -5,7 +5,10 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import { Button } from '@/components/Button';
 import ContentSuggestions from '@/components/ContentSuggestions';
 import { DutchBusinessInfo } from '@/components/local-seo';
+import MarketInsightCards from '@/components/MarketInsightCards';
 import PricingSection from '@/components/sections/PricingSection';
+import StickyMobileCTA from '@/components/StickyMobileCTA';
+import TechTrustStrip from '@/components/TechTrustStrip';
 import { Icon } from '@/components/ui/Icon';
 import {
   getDienstBySlug,
@@ -164,6 +167,47 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
         </div>
       </section>
 
+      {/* PROGRAMMATIC SEO: City-Specific Content Section */}
+      {stad.serviceContent?.[dienst.slug] && (
+        <section className="py-section bg-gradient-to-b from-cyan-900/10 to-transparent">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-cyan-300 mb-6">
+              {stad.serviceContent[dienst.slug].localHeadline}
+            </h2>
+            <p className="text-xl text-slate-200 leading-relaxed mb-8">
+              {stad.serviceContent[dienst.slug].localParagraph}
+            </p>
+
+            {/* Local Stats Callout */}
+            {stad.serviceContent[dienst.slug].localStats && (
+              <div className="p-6 bg-cosmic-800/50 rounded-xl border-l-4 border-cyan-500 mb-8">
+                <div className="flex items-start gap-4">
+                  <Icon name="📊" className="w-6 h-6 text-cyan-400 flex-shrink-0 mt-1" />
+                  <p className="text-slate-300 italic">
+                    {stad.serviceContent[dienst.slug].localStats}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Local Case Study */}
+            {stad.serviceContent[dienst.slug].localCaseStudy && (
+              <div className="p-6 bg-cosmic-800/30 rounded-xl border border-cosmic-700/50 mb-8">
+                <div className="flex items-start gap-4">
+                  <Icon name="🏆" className="w-6 h-6 text-amber-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <span className="text-xs uppercase tracking-wider text-amber-400 font-medium">Resultaat in {stad.name}</span>
+                    <p className="text-slate-200 mt-2">
+                      {stad.serviceContent[dienst.slug].localCaseStudy}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* Service Details - Uses Rich Features if available, else standard list */}
       <section className="py-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -295,6 +339,21 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
                   <p className="text-slate-200 leading-relaxed">{item.answer}</p>
                 </div>
               ))}
+
+              {/* PROGRAMMATIC SEO: City-Specific FAQ Items */}
+              {stad.serviceContent?.[dienst.slug]?.localFAQ?.map((item, index) => (
+                <div key={`local-${index}`} className="bg-cosmic-800/30 backdrop-blur-sm border border-cyan-700/30 rounded-xl p-6">
+                  <div className="flex items-start gap-3">
+                    <span className="text-xs bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded-full flex-shrink-0 mt-1">
+                      {stad.name}
+                    </span>
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-3">{item.q}</h3>
+                      <p className="text-slate-200 leading-relaxed">{item.a}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -345,16 +404,25 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
 
 
 
-      {/* Related Services */}
+      {/* SPIDERWEB STRATEGY: Cross-Selling Internal Links */}
       {relatedDiensten.length > 0 && (
         <section className="py-section bg-cosmic-800/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
+              <span className="text-xs uppercase tracking-wider text-amber-400 font-medium mb-3 block">
+                🔗 Strategische Combinatie
+              </span>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                Gerelateerde Diensten in {stad.name}
+                Maximaliseer Uw Resultaat in {stad.name}
               </h2>
               <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-                Ontdek andere diensten die perfect combineren met {dienst.name}
+                {stad.localIndustries ? (
+                  <>
+                    Bedrijven in <span className="text-cyan-300">{stad.localIndustries[0]}</span> combineren {dienst.name.toLowerCase()} vaak met deze diensten
+                  </>
+                ) : (
+                  <>Ontdek diensten die perfect combineren met {dienst.name}</>
+                )}
               </p>
             </div>
 
@@ -363,40 +431,67 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
                 <Link
                   key={relatedDienst.slug}
                   href={`/steden/${stad.slug}/${relatedDienst.slug}`}
-                  className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:bg-cosmic-800/50"
+                  className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-xl p-6 hover:border-amber-400/50 transition-all duration-300 hover:bg-cosmic-800/50 hover:shadow-lg hover:shadow-amber-500/10"
                 >
-                  <div className="mb-4 text-cyan-400">
-                    <Icon name={relatedDienst.icon} className="w-8 h-8" />
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="text-amber-400">
+                      <Icon name={relatedDienst.icon} className="w-10 h-10" />
+                    </div>
+                    <span className="text-xs bg-amber-900/30 text-amber-300 px-2 py-1 rounded-full">
+                      + {dienst.name}
+                    </span>
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors">
+
+                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-amber-300 transition-colors">
                     {relatedDienst.name}
                   </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-4">
+
+                  <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-2">
                     {relatedDienst.shortDescription}
                   </p>
-                  <div className="flex items-center text-cyan-300 text-sm font-medium">
-                    Meer informatie
-                    <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
+
+                  {/* Cross-Sell Value Proposition */}
+                  <div className="text-xs text-slate-500 mb-4 p-3 bg-cosmic-900/50 rounded-lg">
+                    💡 {dienst.name} + {relatedDienst.name} = Complete digitale aanwezigheid
+                  </div>
+
+                  <div className="flex items-center text-amber-300 text-sm font-medium">
+                    Bekijk in {stad.name}
+                    <span className="ml-2 group-hover:translate-x-2 transition-transform duration-200">
                       →
                     </span>
                   </div>
                 </Link>
               ))}
             </div>
+
+            {/* Link to All Services in This City */}
+            <div className="text-center mt-8">
+              <Link
+                href={`/steden/${stad.slug}`}
+                className="inline-flex items-center gap-2 text-slate-400 hover:text-amber-300 transition-colors"
+              >
+                Bekijk alle 5 diensten in {stad.name}
+                <span>→</span>
+              </Link>
+            </div>
           </div>
         </section>
       )}
 
-      {/* Nearby Cities with Same Service */}
+      {/* SPIDERWEB STRATEGY: Geographic Internal Linking */}
       {nearbySteden.length > 0 && (
-        <section className="py-section">
+        <section className="py-section bg-gradient-to-b from-transparent to-cyan-900/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
+              <span className="text-xs uppercase tracking-wider text-cyan-400 font-medium mb-3 block">
+                🕸️ Regionaal Netwerk
+              </span>
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                {dienst.name} in Andere Steden
+                {dienst.name} in de Regio
               </h2>
               <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-                We bieden deze dienst ook aan in steden rondom {stad.name}
+                Ook actief in steden rondom {stad.name}? Ontdek onze lokale expertise.
               </p>
             </div>
 
@@ -405,25 +500,54 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
                 <Link
                   key={nearbyStad.slug}
                   href={`/steden/${nearbyStad.slug}/${dienst.slug}`}
-                  className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-lg p-6 hover:border-cyan-400/50 transition-all duration-300 hover:bg-cosmic-800/50"
+                  className="group bg-cosmic-800/30 border border-cosmic-700/50 rounded-xl p-6 hover:border-cyan-400/50 transition-all duration-300 hover:bg-cosmic-800/50 hover:shadow-lg hover:shadow-cyan-500/10"
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                    <h3 className="text-xl font-semibold text-white group-hover:text-cyan-300 transition-colors">
                       {nearbyStad.name}
                     </h3>
-                    <Icon name="📍" className="w-5 h-5 text-cyan-400" />
+                    <span className="text-xs bg-cosmic-700/50 px-2 py-1 rounded-full text-slate-300">
+                      {nearbyStad.province}
+                    </span>
                   </div>
-                  <p className="text-sm text-slate-400 mb-4">
-                    {dienst.name} in {nearbyStad.name}
+
+                  {/* Industry Context - Shows why this service is relevant */}
+                  {nearbyStad.localIndustries && nearbyStad.localIndustries.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {nearbyStad.localIndustries.slice(0, 3).map((industry, idx) => (
+                        <span
+                          key={idx}
+                          className="text-xs px-2 py-0.5 bg-cyan-900/30 text-cyan-300 rounded"
+                        >
+                          {industry}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <p className="text-sm text-slate-400 mb-4 line-clamp-2">
+                    {nearbyStad.shortDescription}
                   </p>
+
                   <div className="flex items-center text-cyan-300 text-sm font-medium">
-                    Bekijk details
-                    <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">
+                    {dienst.name} in {nearbyStad.name}
+                    <span className="ml-2 group-hover:translate-x-2 transition-transform duration-200">
                       →
                     </span>
                   </div>
                 </Link>
               ))}
+            </div>
+
+            {/* Deep Link to Main Cities Page */}
+            <div className="text-center mt-8">
+              <Link
+                href="/steden"
+                className="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-300 transition-colors"
+              >
+                Bekijk alle 16 steden waar we {dienst.name.toLowerCase()} aanbieden
+                <span>→</span>
+              </Link>
             </div>
           </div>
         </section>
@@ -471,6 +595,15 @@ export default async function StadDienstPage({ params }: StadDienstPageProps) {
           }
         ]}
       />
+
+      {/* COMPETENCE PROOF: Tech Trust Strip */}
+      <TechTrustStrip />
+
+      {/* COMPETENCE PROOF: Market Insight Cards */}
+      <MarketInsightCards stad={stad} dienst={dienst} />
+
+      {/* COMPETENCE PROOF: Sticky Mobile CTA */}
+      <StickyMobileCTA dienstName={dienst.name} stadName={stad.name} />
     </main>
   );
 }

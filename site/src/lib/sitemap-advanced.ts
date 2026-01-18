@@ -130,17 +130,7 @@ export function generatePagesSegment(): SitemapEntry[] {
         },
       },
     },
-    {
-      url: `${baseUrl}/overzicht-site`,
-      lastModified: new Date('2025-08-15'),
-      changeFrequency: 'yearly',
-      priority: 0.5,
-      alternates: {
-        languages: {
-          'nl-NL': `${baseUrl}/overzicht-site`,
-        },
-      },
-    },
+    // Note: /overzicht-site/ removed from sitemap - internal page blocked by robots.txt
     {
       url: `${baseUrl}/privacy`,
       lastModified: new Date('2025-08-01'),

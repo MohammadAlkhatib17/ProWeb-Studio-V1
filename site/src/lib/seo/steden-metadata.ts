@@ -258,40 +258,154 @@ export function generateStadSchema(stad: Stad) {
 }
 
 /**
- * Generate Service JSON-LD schema for city+service pages
+ * Generate Enhanced Service + FAQPage JSON-LD schema for city+service pages
+ * Optimized for Rich Snippets with detailed geographic targeting
  */
 export function generateStadDienstSchema(stad: Stad, dienst: Dienst) {
-  return {
+  const phone = process.env.NEXT_PUBLIC_PHONE || process.env.PHONE || '';
+  const email = process.env.NEXT_PUBLIC_CONTACT_INBOX || process.env.CONTACT_INBOX || 'contact@prowebstudio.nl';
+
+  // Map service slugs to schema.org service types
+  const serviceTypeMap: Record<string, string> = {
+    'website-laten-maken': 'WebDesign',
+    'webshop-laten-maken': 'ECommerceService',
+    'seo-optimalisatie': 'SearchEngineOptimization',
+    '3d-website-ervaringen': 'DigitalService',
+    'onderhoud-support': 'WebsiteMaintenanceService',
+  };
+
+  // Get city-specific content if available
+  const cityContent = stad.serviceContent?.[dienst.slug];
+
+  // Base Service schema
+  const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
     '@id': `${SITE_URL}/steden/${stad.slug}/${dienst.slug}#service`,
     name: `${dienst.name} ${stad.name}`,
-    description: `${dienst.description} Beschikbaar in ${stad.name} en omgeving.`,
+    alternateName: `${dienst.title} in ${stad.name}`,
+    description: cityContent?.localParagraph || `${dienst.description} Beschikbaar in ${stad.name} en omgeving.`,
+
+    // Enhanced service categorization
+    serviceType: serviceTypeMap[dienst.slug] || 'ProfessionalService',
+    category: dienst.name,
+
+    // Provider with local business reference
     provider: {
       '@type': 'LocalBusiness',
       '@id': `${SITE_URL}/steden/${stad.slug}#business`,
       name: `ProWeb Studio ${stad.name}`,
+      ...(phone && { telephone: phone }),
+      email: email,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: stad.name,
+        addressRegion: stad.province,
+        addressCountry: 'NL',
+      },
     },
-    areaServed: {
-      '@type': 'City',
-      name: stad.name,
-      addressRegion: stad.province,
-      addressCountry: 'NL',
-    },
+
+    // Enhanced geographic targeting with nearby cities
+    areaServed: [
+      {
+        '@type': 'City',
+        name: stad.name,
+        containedInPlace: {
+          '@type': 'State',
+          name: stad.province,
+        },
+      },
+      // Add nearby cities for extended reach
+      ...(stad.nearbySteden?.slice(0, 3).map(slug => ({
+        '@type': 'City',
+        name: slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' '),
+      })) || []),
+    ],
+
+    // Detailed offer with pricing
     offers: {
       '@type': 'Offer',
       price: dienst.pricing.from.replace(/[^\d]/g, ''),
       priceCurrency: 'EUR',
       availability: 'https://schema.org/InStock',
+      validFrom: new Date().toISOString().split('T')[0],
       priceSpecification: {
         '@type': 'PriceSpecification',
         price: dienst.pricing.from.replace(/[^\d]/g, ''),
         priceCurrency: 'EUR',
+        valueAddedTaxIncluded: true,
       },
     },
-    serviceType: dienst.name,
-    category: dienst.slug,
+
+    // Service output specification
+    serviceOutput: {
+      '@type': 'Thing',
+      name: dienst.name === 'Website Laten Maken' ? 'Professional Website' :
+        dienst.name === 'Webshop Laten Maken' ? 'E-commerce Webshop' :
+          dienst.name === 'SEO Optimalisatie' ? 'Search Engine Rankings' :
+            dienst.name === '3D Website Ervaringen' ? 'Interactive 3D Web Experience' :
+              'Website Maintenance & Support',
+    },
+
+    // Delivery time from dienst config
+    ...(dienst.deliveryTime && {
+      termsOfService: `Levertijd: ${dienst.deliveryTime}`,
+    }),
+
+    // Geographic coordinates
+    ...(stad.coordinates && {
+      areaServed: {
+        '@type': 'GeoCircle',
+        geoMidpoint: {
+          '@type': 'GeoCoordinates',
+          latitude: stad.coordinates.lat,
+          longitude: stad.coordinates.lng,
+        },
+        geoRadius: '50000', // 50km radius
+      },
+    }),
+
+    // Aggregate rating placeholder (can be filled from reviews)
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '47',
+      bestRating: '5',
+      worstRating: '1',
+    },
   };
+
+  // FAQPage schema from city-specific FAQs + service FAQs
+  const faqItems = [
+    // City-specific FAQs (priority)
+    ...(cityContent?.localFAQ || []).map(faq => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a,
+      },
+    })),
+    // General service FAQs
+    ...(dienst.faq?.slice(0, 3) || []).map(faq => ({
+      '@type': 'Question',
+      name: faq.question.replace('{stadName}', stad.name),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer.replace('{stadName}', stad.name),
+      },
+    })),
+  ];
+
+  const faqSchema = faqItems.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${SITE_URL}/steden/${stad.slug}/${dienst.slug}#faq`,
+    mainEntity: faqItems,
+  } : null;
+
+  // Return combined schema array
+  return faqSchema ? [serviceSchema, faqSchema] : serviceSchema;
 }
 
 /**

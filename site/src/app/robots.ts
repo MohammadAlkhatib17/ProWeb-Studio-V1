@@ -49,7 +49,7 @@ export default function robots(): MetadataRoute.Robots {
           '/.well-known/',    // Hidden directories (except specific public ones)
           '/manifest.json',   // PWA manifest
         ],
-        crawlDelay: 1,
+        // crawlDelay removed - allow fast crawling for better indexing
       },
       // Googlebot - most important for Dutch market
       {

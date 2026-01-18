@@ -144,9 +144,10 @@ const nextConfig = {
   // Note: i18n is handled via middleware for App Router
   // Default locale nl-NL is enforced through metadata and middleware
 
-  // Image optimization
+  // Image optimization - Performance focused
   images: {
     formats: ['image/avif', 'image/webp'],
+    qualities: [75, 85, 90, 100], // Define allowed quality values
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000, // 1 year
